@@ -60,6 +60,7 @@ import PaymentMethodService from '../../Settings/extras/PaymentMethodService';
 import SanctionLetter from './authLatter';
 import ReceiptIcon from '@mui/icons-material/Receipt';
 import { IPaymentMethod } from '../../Settings/extras/LanguageTypes';
+import formatAmount from '../../Common/formatcode';
 
 
 const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boolean }>) => {
@@ -528,7 +529,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                             <TableCell align="center">{item.narration}</TableCell>
                             <TableCell align="center">{item.quantity}</TableCell>
                             <TableCell align="center">{item.month}</TableCell>
-                            <TableCell align="center">{item.requestedAmount?.toFixed(2)}</TableCell>
+                            <TableCell align="center">{ formatAmount(item.requestedAmount?.toFixed(2))}</TableCell>
                             <TableCell align="center">
                               {item.sanctionedAmount !== undefined && item.sanctionedAmount !== null ?
                                 Number(item.sanctionedAmount).toFixed(2) :
@@ -548,7 +549,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                 <TextField
                   label="Requested Amount"
                   InputLabelProps={{ shrink: true }}
-                  value={totalRequestedAmount?.toFixed(2)}
+                  value={ formatAmount(totalRequestedAmount?.toFixed(2))}
                   // onChange={(e) =>
                   //   // eslint-disable-next-line @typescript-eslint/naming-convention
 

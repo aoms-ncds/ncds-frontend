@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import DashboardCardButton from '../../components/DashboardCardButton';
-import { Grid, Alert, CardContent, Card, Typography, Divider, Box, IconButton, Stack } from '@mui/material';
+import { Grid, Alert, CardContent, Card, Typography, Divider, Box, IconButton, Stack, MenuItem, TextField } from '@mui/material';
 import FRCountCard from './components/FRCountCard';
 import FRServices from './extras/FRServices';
 import FRLifeCycleStates from './extras/FRLifeCycleStates';
@@ -16,6 +16,7 @@ const frDashboard = () => {
   const [waitingForPresidentFrCount, setWaitingForPresidentFrCount] = useState<number | null>(null);
   const [waitingForAccountFrCount, setWaitingForAccountFrCount] = useState<number | null>(null);
   const [reverted, setReverted] = useState<number | null>(null);
+  const [resubmittedFrCount, setResubmittedFrCount] = useState<number | null>(null);
   const navigate = useNavigate();
   const [isCoordinator, setisCoordinator] = useState<any>(false);
 
@@ -72,6 +73,11 @@ const frDashboard = () => {
       .catch((error) => {
         console.log(error);
       });
+    FRServices.getCustomCount({ isReSubmitted: true, status: FRLifeCycleStates.WAITING_FOR_ACCOUNTS })
+      .then((res) => setResubmittedFrCount(res.data))
+      .catch((error) => {
+        console.log(error);
+      });
     DivisionsServices.isCoordinator()
       .then((res) => {
         setisCoordinator(res.data);
@@ -80,9 +86,106 @@ const frDashboard = () => {
         console.log(res);
       });
   }, []);
+  const getFinancialYear = (date = new Date()) => {
+    const year = date.getFullYear();
+    const month = date.getMonth(); // Jan = 0
 
+    // Financial year starts in April
+    const startYear = month >= 3 ? year : year - 1;
+    const endYear = startYear + 1;
+
+    return `${startYear}-${String(endYear).slice(2)}`;
+  };
+  const [year, setYear] = useState(getFinancialYear());
+  const currentFYStartYear =
+  new Date().getMonth() >= 3 ?
+    new Date().getFullYear() :
+    new Date().getFullYear() - 1;
+
+  const years = Array.from({ length: 5 }, (_, i) => {
+    const start = currentFYStartYear - i;
+    return `${start}-${String(start + 1).slice(2)}`;
+  });
   return (
     <CommonPageLayout title="FR Dashboard">
+      <Box sx={{ display: 'flex', justifyContent: 'flex-end', pb: 2 }}>
+
+        <TextField
+          select
+          size="small"
+          value={year}
+          onClick={(e) => e.stopPropagation()}
+          onMouseDown={(e) => e.stopPropagation()}
+          onChange={(e) => {
+            e.stopPropagation();
+            setYear(e.target.value);
+          }}
+          sx={{
+            'minWidth': 120,
+
+            /* SELECT TEXT (important fix) */
+            '& .MuiSelect-select': {
+              display: 'flex',
+              justifyContent: 'flex-end',
+              textAlign: 'right',
+              paddingRight: '32px !important', // space for arrow
+              paddingLeft: '8px',
+            },
+
+            /* DROPDOWN ICON */
+            '& .MuiSelect-icon': {
+              color: '#3B32E6',
+              right: 6,
+            },
+
+            /* OUTER BOX */
+            '& .MuiOutlinedInput-root': {
+              'height': 32,
+              'fontSize': 12,
+              'fontWeight': 600,
+              'borderRadius': 8,
+              'color': '#3B32E6',
+              'background': 'linear-gradient(135deg, #F4F6FF, #FFFFFF)',
+              'boxShadow': '0 2px 6px rgba(59,50,230,0.15)',
+              'transition': 'all 0.2s ease',
+
+              '& fieldset': {
+                borderColor: '#3B32E6',
+              },
+
+              '&:hover': {
+                background: '#EEF1FF',
+                boxShadow: '0 4px 10px rgba(59,50,230,0.25)',
+              },
+
+              '&.Mui-focused': {
+                background: '#FFFFFF',
+                boxShadow: '0 0 0 2px rgba(59,50,230,0.25)',
+              },
+
+              '&.Mui-focused fieldset': {
+                borderColor: '#3B32E6',
+              },
+            },
+          }}
+        >
+         
+          {years.map((yr) => (
+            <MenuItem
+              key={yr}
+              value={yr}
+              sx={{
+                // justifyContent: 'flex-end',
+                // textAlign: 'right',
+                fontSize: 12,
+                fontWeight: 600,
+              }}
+            >
+             Financial Year -  {yr}
+            </MenuItem>
+          ))}
+        </TextField>
+      </Box>
       <PermissionChecks
         permissions={['READ_FR']}
         granted={(
@@ -93,6 +196,7 @@ const frDashboard = () => {
               <CardContent> */}
 
             <Grid container spacing={1}>
+
               <Grid item xs={12} sm={6} md={3} xl={2}>                <FRCountCard icon={<img src="/mod_icons/APPLIED.png" alt="Logo" style={{ width: '50px', height: '50px' }} />}
                 count={appliedFrCount?.toString()} secondaryText="Total Applied" color="#0feb21"
                 onClick={()=>{
@@ -155,6 +259,7 @@ const frDashboard = () => {
                 />
               </Grid>
               <Grid item xs={12} sm={6} md={3} xl={2}>
+
                 <FRCountCard
                   icon={
                     <img
@@ -163,7 +268,7 @@ const frDashboard = () => {
                       style={{ width: '50px', height: '50px' }}
                     />
                   }
-                  count={reverted?.toString()}
+                  count={resubmittedFrCount?.toString()}
                   secondaryText="Re-Submitted"
                   color="#0f82e0"
                   onClick={() => navigate('/fr/resubmitted')}

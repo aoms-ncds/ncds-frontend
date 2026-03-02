@@ -1661,63 +1661,58 @@ const WorkerSupportPage = () => {
                   />
                 </Grid>
                 <Grid item xs={12}>
-                  <div style={{ float: 'left' }}>
-
-                    {/* <Button
-                    variant="contained"
-                    color="info"
-                    onClick={()=> file && FileUploaderServices.uploadFile(file, undefined, 'FR', file.name).then((res) => {
-                    })}
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 1.5, // space between buttons
+                      flexWrap: 'wrap', // optional: wrap on very small screens
+                    }}
                   >
-                     Upload File
-                  </Button> */}
-                  &nbsp;
                     <PermissionChecks
                       permissions={['WRITE_FR']}
                       granted={
-
                         <Button
                           variant="contained"
                           color="info"
-                          type='submit'
+                          type="submit"
                           onClick={() => {
-                            if (requisition.purpose !== undefined && requisition.division !== undefined && requisition.designationParticular !== undefined) {
+                            if (
+                              requisition.purpose !== undefined &&
+              requisition.division !== undefined &&
+              requisition.designationParticular !== undefined
+                            ) {
                               setFrAction('add');
                             }
                           }}
                         >
-                        Raise FR
+          Raise FR
                         </Button>
-
                       }
-
                     />
-                  &nbsp;
+
                     <PermissionChecks
                       permissions={['WRITE_FR']}
                       granted={
-
                         <Button
+                          variant="contained"
                           sx={{ backgroundColor: 'orange' }}
-                          onClick={() =>{
-                            if (requisition.purpose !== undefined && requisition.division !== undefined && requisition.designationParticular !== undefined) {
+                          type="submit"
+                          onClick={() => {
+                            if (
+                              requisition.purpose !== undefined &&
+              requisition.division !== undefined &&
+              requisition.designationParticular !== undefined
+                            ) {
                               setFrAction('multi');
                             }
-                          } }
-
-                          variant="contained"
-                          color="info"
-                          type='submit'
+                          }}
                         >
-                        Raise FR ( Multiple narration )
+          Raise FR ( Multiple narration )
                         </Button>
-
                       }
-
                     />
-                    {/* <br /> */}
-                    {/* <Typography sx={{ fontSize: '12px', color: '#8c8d8f' }} >(Before raising the FR, click on Attach File to export as a sheet and attach with the FR )</Typography> */}
-                  </div>
+                  </Box>
                 </Grid>
               </Grid>
             </CardContent>

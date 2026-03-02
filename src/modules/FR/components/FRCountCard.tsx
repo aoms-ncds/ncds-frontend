@@ -79,40 +79,7 @@ const FRCountCard = (props: {
             {props.secondaryText}
           </Typography>
 
-          <TextField
-            select
-            size="small"
-            value={year}
-            onClick={(e) => e.stopPropagation()} // ✅ blocks card click
-            onMouseDown={(e) => e.stopPropagation()} // ✅ mobile fix
-            onChange={(e) => {
-              e.stopPropagation(); // ✅ blocks bubbling
-              setYear(Number(e.target.value));
-            }}
-            sx={{
-              'minWidth': 80,
-              '& .MuiOutlinedInput-root': {
-                'height': 30,
-                'fontSize': 12,
-                'borderRadius': 2,
-                'color': '#3B32E6',
-                'fontWeight': 600,
-                // 'border': '1px solid #3B32E6',
-                '&:hover fieldset': {
-                  borderColor: '#3B32E6',
-                },
-                '&.Mui-focused fieldset': {
-                  borderColor: '#3B32E6',
-                },
-              },
-            }}
-          >
-            {years.map((yr) => (
-              <MenuItem key={yr} value={yr}>
-                {yr}
-              </MenuItem>
-            ))}
-          </TextField>
+        
         </Box>
 
         <Box

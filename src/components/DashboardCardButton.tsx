@@ -36,13 +36,13 @@ const DashboardCardButton = (props: { primaryText: string;icon?: React.ReactNode
       }}
     >
       {/* LEFT COLOR STRIP */}
-      <Box
+      {/* <Box
         sx={{
           width: 4,
-          backgroundColor: '#0f45f7',
+          backgroundColor: '#ffffff',
           borderRadius: '2px 0 0 2px',
         }}
-      />
+      /> */}
 
       {/* CONTENT */}
       <CardContent
@@ -91,7 +91,7 @@ const DashboardCardButton = (props: { primaryText: string;icon?: React.ReactNode
         </Box>
 
         {/* GO BUTTON – bottom right */}
-        <Button
+        {/* <Button
           size="small"
           variant="contained"
           sx={{
@@ -114,7 +114,7 @@ const DashboardCardButton = (props: { primaryText: string;icon?: React.ReactNode
           }}
         >
           <KeyboardDoubleArrowRightOutlinedIcon fontSize="small" />
-        </Button>
+        </Button> */}
       </CardContent>
     </Card>
   );

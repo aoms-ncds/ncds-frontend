@@ -29,7 +29,7 @@ import { Link } from 'react-router-dom';
 import IROTemplateCustom from './components/IROTemplateCustom';
 import TransactionLogDialog from '../FR/components/TransactionLogDialog';
 
-const CustomIROTab = () => {
+const CustomIROTab = (props:any) => {
   const [reconciliationIRO, setReconcilationIRO] = useState<IROrder[]>();
   const user = useAuth();
   const [viewFileUploader, setViewFileUploader] = useState(false);
@@ -185,7 +185,7 @@ const CustomIROTab = () => {
   useEffect(() => {
     // if (permissions?.FCRA_ACCOUNTS_ACCESS) {
     console.log('FRDD');
-    IROServices.getAllCustom({ dateRange: dateRange })
+    IROServices.getAllCustom({ dateRange: props.dateRange })
         .then((res) => {
           setReconcilationIRO(() => [...res.data]);
         })
@@ -261,7 +261,7 @@ const CustomIROTab = () => {
     //   .catch((res) => {
     //     console.log(res);
     //   });
-  }, [attachment, dateRange, selectedIRO]);
+  }, [attachment, props.dateRange, selectedIRO]);
 
   const columns: GridColDef<IROrder>[] = [
     {

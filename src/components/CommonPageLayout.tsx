@@ -197,9 +197,9 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string; hi
                             textDecoration: 'none',
                           } :
                           {
-                            color: isDark ? 'black' : 'white',
+                            color: isDark ? 'white' : 'black',
                             textDecoration: 'none',
-                            backgroundColor: theme.palette.primary.main,
+                            backgroundColor: 'rgb(224, 224, 224)',
                           }
                       }
                     >

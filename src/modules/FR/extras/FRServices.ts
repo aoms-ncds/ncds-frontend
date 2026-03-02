@@ -7,6 +7,7 @@ export default {
 
 
   getCount: (conditions?: unknown) => getStandardResponse<number>(axios.get('/fr/count', { params: conditions, headers: { ...getAuthHeader() } })),
+  getCustomCount: (conditions?: unknown) => getStandardResponse<number>(axios.get('/fr/ReSubmittedCount', { params: conditions, headers: { ...getAuthHeader() } })),
 
   imageget: () => getStandardResponse<FR>(axios.get('/image', { headers: { ...getAuthHeader() } })),
   reopen: (fRId:string) => getStandardResponse<FR>(axios.post(`/fr/${fRId}/reopen`, { headers: { ...getAuthHeader() } })),

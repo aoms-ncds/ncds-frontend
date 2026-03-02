@@ -1389,7 +1389,7 @@ const CustomFR = () => {
         />
 
       ):(
-        <CustomIROTab />
+        <CustomIROTab dateRange={dateRange} />
       )}
       {frId&&<TransactionLogDialog open={openLog} onClose={()=>setOpenLog(false)} TRId={frId}/>}
 

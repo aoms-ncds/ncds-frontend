@@ -14,6 +14,7 @@ import { DataGrid, GridCellParams, GridColDef } from '@mui/x-data-grid';
 import PaymentMethodService from '../../Settings/extras/PaymentMethodService';
 import { IPaymentMethod } from '../../Settings/extras/LanguageTypes';
 import DropdownButton from '../../../components/DropDownButton';
+import formatAmount from '../../Common/formatcode';
 
 // import FileUploader from '../../components/FileUploader/FileUploader';
 // import FileUploaderServices from '../../components/FileUploader/extras/FileUploaderServices';
@@ -282,7 +283,7 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
               // to: `/fr/${(params.row as any).FR}/view`,
               onClick: () => {
                 console.log(params.row.FR, '89854');
-                
+
                 window.open( `/fr/${(params.row as any).FR}/view`, '_blank');
               },
 
@@ -390,9 +391,12 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
               <Grid item xs={12}>
                 <TextField
                   label="Release Amount"
-                  type="number"
-                  value={releaseAmount?.releaseAmount != 0 ? releaseAmount?.releaseAmount?.toFixed(2) : ''}
-                  onChange={(e) =>
+                  type="tel"
+                  value={
+                    releaseAmount?.releaseAmount != null ?
+                      formatAmount(releaseAmount.releaseAmount.toFixed(2)) :
+                      ''
+                  } onChange={(e) =>
                     // eslint-disable-next-line @typescript-eslint/naming-convention
                     setReleaseAmount(() => ({
                       ...releaseAmount,
@@ -414,8 +418,8 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
               <Grid item xs={12} md={6}>
                 <TextField
                   label="Amount Transferred"
-                  type="number"
-                  value={releaseAmount?.transferredAmount != 0 ? releaseAmount?.transferredAmount : ''}
+                  type="tel"
+                  value={releaseAmount?.transferredAmount != 0 ? formatAmount(releaseAmount?.transferredAmount) : ''}
                   onChange={(e) =>
                     Number(e.target.value) <= (releaseAmount.releaseAmount ?? 0) &&
                     setReleaseAmount(() => ({

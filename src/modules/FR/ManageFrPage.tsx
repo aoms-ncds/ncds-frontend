@@ -41,6 +41,7 @@ import FRReceiptTemplatePrev from './components/FRReceiptTemplatePrev';
 import FRReceiptTempForHelhiDevisionPrev from './components/FRReceiptTempForHelhiDevisionPrev';
 import TransactionLogDialog from './components/TransactionLogDialog';
 import SanctionLetter from './components/authLatter';
+import formatAmount from '../Common/formatcode';
 
 const ManageFrPage = () => {
   const location = useLocation();
@@ -632,7 +633,7 @@ const ManageFrPage = () => {
           return clsx('status-cell1');
         case ' FR_REJECTED':
           return clsx('status-cell', 'red');
-        case 'PENDING APPROV.':
+        case 'AWAITING APPROV.':
           return clsx('status-cell', 'Appr');
         case 'RE-SUBMITTED':
           return clsx('status-cell', 're-sum');
@@ -670,7 +671,7 @@ const ManageFrPage = () => {
           }
           break;
         case 'WAITING_FOR_PRESIDENT':
-          statusName = 'PENDING APPROV.';
+          statusName = 'AWAITING APPROV.';
           break;
         case 'FR_REJECTED':
           statusName = 'FR DISAPPROVED';
@@ -747,46 +748,46 @@ const ManageFrPage = () => {
       renderHeader: () => <b>{'Sub-Division'}</b>,
       valueGetter: (params) => params.row.purposeSubdivision?.name,
     },
-   {
-  field: 'mainCategory',
-  headerClassName: 'super-app-theme--cell',
-  renderHeader: () => <b>Main Category</b>,
-  width: 240,
-  align: 'center',
-  headerAlign: 'center',
+    {
+      field: 'mainCategory',
+      headerClassName: 'super-app-theme--cell',
+      renderHeader: () => <b>Main Category</b>,
+      width: 240,
+      align: 'center',
+      headerAlign: 'center',
 
-  renderCell: (params) => {
-    const mainCategory =
+      renderCell: (params) => {
+        const mainCategory =
       params.row?.particulars?.[0]?.mainCategory
         ?.split(' ')
         ?.at(0) ?? '';
 
-    const { subCategory1, subCategory2, subCategory3 } =
+        const { subCategory1, subCategory2, subCategory3 } =
       params.row?.particulars?.[0] || {};
 
-    let subCategory = subCategory1;
+        let subCategory = subCategory1;
 
-    if (subCategory3 && subCategory3 !== 'Select' && subCategory3 !== '.') {
-      subCategory = subCategory3;
-    } else if (subCategory2 && subCategory2 !== 'Select') {
-      subCategory = subCategory2;
-    }
+        if (subCategory3 && subCategory3 !== 'Select' && subCategory3 !== '.') {
+          subCategory = subCategory3;
+        } else if (subCategory2 && subCategory2 !== 'Select') {
+          subCategory = subCategory2;
+        }
 
-    return (
-      <p
-        style={{
-          maxWidth: 240,
-          whiteSpace: 'normal',
-          wordBreak: 'break-word',
-          textAlign: 'center',
-          margin: 0,
-        }}
-      >
-        {mainCategory} / {subCategory}
-      </p>
-    );
-  },
-},
+        return (
+          <p
+            style={{
+              maxWidth: 240,
+              whiteSpace: 'normal',
+              wordBreak: 'break-word',
+              textAlign: 'center',
+              margin: 0,
+            }}
+          >
+            {mainCategory} / {subCategory}
+          </p>
+        );
+      },
+    },
     // {
     //   field: 'subCategory',
     //   headerClassName: 'super-app-theme--cell',
@@ -832,7 +833,7 @@ const ManageFrPage = () => {
       valueGetter(params) {
         const frRequest = params.row as FR;
         const particularAmount = frRequest.particulars?.reduce((total, particular) => total + Number(particular.requestedAmount), 0);
-        return particularAmount.toFixed(2);
+        return formatAmount(particularAmount.toFixed(2));
       },
     },
     // {
@@ -953,14 +954,14 @@ const ManageFrPage = () => {
       return true;
     }
     // Check for subcategories within the particulars
-    // const subCategoryMatch = row.particulars?.some((particular) =>
-    //   (particular?.subCategory1?.toLowerCase().includes(searchTextLower) || '') ||
-    //   (particular?.subCategory2?.toLowerCase().includes(searchTextLower) || '') ||
-    //   (particular?.subCategory3?.toLowerCase().includes(searchTextLower) || ''),
-    // );
-    // if (subCategoryMatch) {
-    //   return true;
-    // }
+    const subCategoryMatch = row.particulars?.some((particular) =>
+      (particular?.subCategory1?.toLowerCase().includes(searchTextLower) || '') ||
+      (particular?.subCategory2?.toLowerCase().includes(searchTextLower) || '') ||
+      (particular?.subCategory3?.toLowerCase().includes(searchTextLower) || ''),
+    );
+    if (subCategoryMatch) {
+      return true;
+    }
     // Main filter logic
 
     // Fallback: Check if any other row value matches the search text
