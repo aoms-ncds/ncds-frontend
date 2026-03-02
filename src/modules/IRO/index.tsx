@@ -294,7 +294,7 @@ const IRODashboard = () => {
               permissions={['CUSTOM_FR_IRO']}
               granted={(
                 <Grid item xs={12} md={4} xl={3}>
-                  <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '50px', height: '50px' }} />} primaryText="Custom IRO" color="#fff" targetRoute="/iro/custom" />
+                  <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '50px', height: '50px' }} />} primaryText="Custom IRO/FR" color="#fff" targetRoute="/fr/CustomFR" />
                 </Grid>
               )} />
           </Grid>

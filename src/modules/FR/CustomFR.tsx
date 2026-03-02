@@ -824,7 +824,7 @@ const CustomFR = () => {
 
   return (
     <CommonPageLayout
-      title="Custom FR"
+      title="Custom FR/IRO"
       momentFilter={{
         dateRange: dateRange,
         onChange: (newDateRange) => {

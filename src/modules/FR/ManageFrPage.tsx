@@ -54,6 +54,7 @@ const ManageFrPage = () => {
   const [openRemarks, toggleOpenRemarks] = useState(false);
   const [sendNotification, toggleSendNotification] = useState(false);
   const [selectedFR, setSelectedFR] = useState<string | null>(null);
+  const [selectedFRData, setSelectedFRData] = useState<FR | null>(null);
   const [data, setData] = useState<FR | null>(null);
   const [data2, setData2] = useState<FR | null>(null);
   const [data4, setData4] = useState<FR | null>(null);
@@ -87,7 +88,7 @@ const ManageFrPage = () => {
   } | null>(null);
   const [supportAttachment, setSupportAttachment] = useState<boolean>(false);
   const [supportAttachmentChild, setSupportAttachmentChild] = useState<boolean>(false);
-
+  const [openReason, setOpenReason] = useState(false);
   const [remarks, setRemarks] = useState<Remark[]>([]);
   const [remark, setRemark] = useState<CreatableRemark>({
     remark: '',
@@ -424,6 +425,17 @@ const ManageFrPage = () => {
                         message: error.message,
                       });
                     });
+              },
+              icon: EditNoteIcon,
+            },
+            {
+              id: 'resaons',
+              text: 'View Reasons',
+              component: Link,
+              // to: '/fr/view_FR/' + props.row._id,
+              onClick: () => {
+                setOpenReason(true);
+                setSelectedFRData(props.row);
               },
               icon: EditNoteIcon,
             },
@@ -1481,6 +1493,99 @@ const ManageFrPage = () => {
             Ok
                 </Button>
               </DialogActions>
+            </Dialog>
+            <Dialog
+              open={openReason}
+              onClose={() => setOpenReason(false)}
+              maxWidth="sm"
+              fullWidth
+              PaperProps={{
+                sx: {
+                  borderRadius: 3,
+                  p: 2,
+                },
+              }}
+            >
+              {/* HEADER */}
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  mb: 1,
+                }}
+              >
+                <Typography fontWeight={700} fontSize={18}>
+      FR REASON
+                </Typography>
+
+                <IconButton onClick={() => setOpenReason(false)}>
+                  <CloseIcon />
+                </IconButton>
+              </Box>
+
+              <Divider />
+
+              {/* CONTENT */}
+              <Box sx={{ mt: 2 }}>
+                <Typography fontSize={14} mb={1}>
+                  <b>FR No:</b> {selectedFRData?.FRno}
+                </Typography>
+
+                {/* REVERT REASON */}
+                {selectedFRData?.reasonForSentBack && (
+                  <Box
+                    sx={{
+                      backgroundColor: '#FFF6D8',
+                      p: 1.5,
+                      borderRadius: 1.5,
+                      mb: 2,
+                    }}
+                  >
+                    <Typography fontWeight={600} fontSize={14}>
+          Reason for Revert:
+                    </Typography>
+                    <Typography fontSize={13} fontWeight={600}>
+                      {selectedFRData?.reasonForSentBack}
+                    </Typography>
+                    <Typography fontSize={12}>
+                 Info: Resubmit the FR within 3 days
+                    </Typography>
+                  </Box>
+                )}
+
+                {/* REJECT REASON */}
+                {selectedFRData?.reasonForReject && (
+                  <Box sx={{
+                    backgroundColor: '#FFF6D8',
+                    p: 1.5,
+                    borderRadius: 1.5,
+                    mb: 2,
+                  }}>
+                    <Typography fontWeight={600} fontSize={14}>
+          Reason for Reject:
+                    </Typography>
+                    <Typography fontSize={13}>
+                      {selectedFRData?.reasonForReject}
+                    </Typography>
+                  </Box>
+                )}
+              </Box>
+
+              {/* FOOTER */}
+              <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3 }}>
+                <Button
+                  variant="contained"
+                  sx={{
+                    backgroundColor: '#5B4BEB',
+                    borderRadius: 2,
+                    px: 3,
+                  }}
+                  onClick={() => setOpenReason(false)}
+                >
+      Close
+                </Button>
+              </Box>
             </Dialog>
             <Dialog open={supportAttachmentChild} onClose={() => setSupportAttachmentChild(false)} maxWidth="xs" fullWidth>
               <DialogTitle> Signature Attachment </DialogTitle>

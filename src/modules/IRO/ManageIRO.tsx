@@ -1742,18 +1742,77 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                       }}
                     >
                       <CardContent sx={{ pb: '20px !important' }}>
+                        {hasPermissions(['MANAGE_IRO']) && (
+                          <Grid item xs={12} md="auto" sx={{
+                            display: 'flex',
+                            alignItems: 'center', // ✅ vertical center
+                          }}>
+                            <FormControl
+                              sx={{
+                                'minWidth': 150,
+                                '& .MuiOutlinedInput-root': {
+                                  height: 45, // ✅ control select height
+                                  fontSize: 13,
+                                  borderRadius: 1.5,
+                                },
+                              }}
+                            >
+                              <InputLabel id="division-label">
+  Division
+                              </InputLabel>
+                              <Select
+                                multiple
+                                value={selectedDivisions}
+                                label="Division"
+                                onChange={handleDivisionChange}
+                                renderValue={(selected) =>
+                                  selected.length === 0 ? 'None' : selected.join(', ')
+                                }
+                                MenuProps={{
+                                  PaperProps: {
+                                    style: { maxHeight: 300, width: 250 },
+                                  },
+                                }}
+                              >
+                                <ListSubheader>
+                                  <TextField
+                                    size="small"
+                                    placeholder="Search division..."
+                                    fullWidth
+                                    autoFocus
+                                    value={divisionSearch}
+                                    onChange={(e) => setDivisionSearch(e.target.value)}
+                                    onKeyDown={(e) => e.stopPropagation()}
+                                  />
+                                </ListSubheader>
+
+                                <MenuItem value="__ALL__">
+                                  <Checkbox checked={selectedDivisions.length === 0} />
+                                  <ListItemText primary="None" />
+                                </MenuItem>
+
+                                {filteredDivisions.map((name) => (
+                                  <MenuItem key={name} value={name}>
+                                    <Checkbox checked={selectedDivisions.includes(name)} />
+                                    <ListItemText primary={name} />
+                                  </MenuItem>
+                                ))}
+                              </Select>
+                            </FormControl>
+                          </Grid>
+                        )}
+                        <br />
                         <Grid
                           container
                           spacing={2}
                           alignItems="center"
                           wrap="wrap"
                         >
-
                           {/* ================= MANAGE MODE ================= */}
                           {props.action === 'manage' && (
                             <>
                               {/* LEFT STATUS FILTER */}
-                              <Grid item xs={12} lg={9}>
+                              <Grid item xs={12} lg={12}>
                                 <ToggleButtonGroup
                                   exclusive
                                   size="small"
@@ -1761,8 +1820,12 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                                     exstatusFilter.includes(69) ? 'NonBankTransfers' :
                                       statusFilter.includes(IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE) ? 'WFA' :
                                         statusFilter.includes(IROLifeCycleStates.AMOUNT_RELEASED) ? 'AMT' :
-                                          statusFilter.includes(IROLifeCycleStates.REVERTED_TO_DIVISION) ? 'RTD' :
-                                            'ALL'
+                                          statusFilter.includes(IROLifeCycleStates.WAITING_FOR_OFFICE_MNGR) ? 'WFORA' :
+                                            statusFilter.includes(IROLifeCycleStates.IRO_CLOSED) ? 'CLS' :
+                                              statusFilter.includes(IROLifeCycleStates.REJECTED) ? 'DIS' :
+                                                statusFilter.includes(IROLifeCycleStates.REOPENED) ? 'REOPN' :
+                                                  statusFilter.includes(IROLifeCycleStates.REVERTED_TO_DIVISION) ? 'RTD' :
+                                                    'ALL'
                                   }
                                   onChange={(_, value) => {
                                     if (!value) return;
@@ -1776,6 +1839,18 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                                     } else if (value === 'AMT') {
                                       setExStatusFilter([]);
                                       setStatusFilter([IROLifeCycleStates.AMOUNT_RELEASED]);
+                                    } else if (value === 'WFORA') {
+                                      setExStatusFilter([]);
+                                      setStatusFilter([IROLifeCycleStates.WAITING_FOR_OFFICE_MNGR]);
+                                    } else if (value === 'CLS') {
+                                      setExStatusFilter([]);
+                                      setStatusFilter([IROLifeCycleStates.IRO_CLOSED]);
+                                    } else if (value === 'DIS') {
+                                      setExStatusFilter([]);
+                                      setStatusFilter([IROLifeCycleStates.REJECTED]);
+                                    } else if (value === 'REOPN') {
+                                      setExStatusFilter([]);
+                                      setStatusFilter([IROLifeCycleStates.REOPENED]);
                                     } else if (value === 'NonBankTransfers') {
                                       setExStatusFilter([69]);
                                       setStatusFilter([]);
@@ -1787,10 +1862,15 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                                   sx={toggleSx}
                                 >
                                   <ToggleButton value="ALL">ALL</ToggleButton>
-                                  <ToggleButton value="WFA">IRO APPRO.</ToggleButton>
-                                  <ToggleButton value="RTD">REVERTED TO DIVISION</ToggleButton>
-                                  <ToggleButton value="AMT">AMOUNT RELEASED</ToggleButton>
-                                  <ToggleButton value="NonBankTransfers">NON BANK TRANSFERS</ToggleButton>
+                                  <ToggleButton value="WFORA">WAITING APPROV.</ToggleButton>
+                                  <ToggleButton value="WFA">APPROVED</ToggleButton>
+                                  <ToggleButton value="INP">IN PROCESS</ToggleButton>
+                                  <ToggleButton value="AMT">AMT RELEASED</ToggleButton>
+                                  <ToggleButton value="RTD">REVERTED</ToggleButton>
+                                  <ToggleButton value="CLS">CLOSED</ToggleButton>
+                                  <ToggleButton value="DIS">DISPROVED</ToggleButton>
+                                  <ToggleButton value="REOPN">REOPENED</ToggleButton>
+                                  <ToggleButton value="NonBankTransfers">NBT</ToggleButton>
                                 </ToggleButtonGroup>
                               </Grid>
 
@@ -1816,9 +1896,9 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                               }}
                               sx={toggleSx}
                             >
+                              <ToggleButton value="All">All</ToggleButton>
                               <ToggleButton value="Support">SUPPORT</ToggleButton>
                               <ToggleButton value="Expanse">EXPENSE</ToggleButton>
-                              <ToggleButton value="All">BOTH</ToggleButton>
                               <ToggleButton value="Custom">Custom IRO</ToggleButton>
                             </ToggleButtonGroup>
                           </Grid>
@@ -1850,53 +1930,9 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                               </Grid>
 
                               {/* DIVISION FILTER */}
-                              {hasPermissions(['MANAGE_IRO']) && (
-                                <Grid item xs={12} md="auto">
-                                  <FormControl sx={{ minWidth: 150 }}>
-                                    <InputLabel>Division</InputLabel>
-                                    <Select
-                                      multiple
-                                      value={selectedDivisions}
-                                      label="Division"
-                                      onChange={handleDivisionChange}
-                                      renderValue={(selected) =>
-                                        selected.length === 0 ? 'None' : selected.join(', ')
-                                      }
-                                      MenuProps={{
-                                        PaperProps: {
-                                          style: { maxHeight: 300, width: 250 },
-                                        },
-                                      }}
-                                    >
-                                      <ListSubheader>
-                                        <TextField
-                                          size="small"
-                                          placeholder="Search division..."
-                                          fullWidth
-                                          autoFocus
-                                          value={divisionSearch}
-                                          onChange={(e) => setDivisionSearch(e.target.value)}
-                                          onKeyDown={(e) => e.stopPropagation()}
-                                        />
-                                      </ListSubheader>
-
-                                      <MenuItem value="__ALL__">
-                                        <Checkbox checked={selectedDivisions.length === 0} />
-                                        <ListItemText primary="None" />
-                                      </MenuItem>
-
-                                      {filteredDivisions.map((name) => (
-                                        <MenuItem key={name} value={name}>
-                                          <Checkbox checked={selectedDivisions.includes(name)} />
-                                          <ListItemText primary={name} />
-                                        </MenuItem>
-                                      ))}
-                                    </Select>
-                                  </FormControl>
-                                </Grid>
-                              )}
                             </>
                           )}
+
 
                         </Grid>
                       </CardContent>
