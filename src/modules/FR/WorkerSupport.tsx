@@ -1207,7 +1207,7 @@ const WorkerSupportPage = () => {
       <Card
         sx={{
           width: {
-            xs: '8%', // mobile
+            xs: '7.5%', // mobile
             sm: '10%', // tablet
             md: '30%', // desktop
           },
@@ -1219,7 +1219,7 @@ const WorkerSupportPage = () => {
 
           <Card sx={{
             width: {
-              xs: '100%', // mobile
+              xs: '95%', // mobile
               sm: '100%', // tablet
               md: '50%', // desktop
             },

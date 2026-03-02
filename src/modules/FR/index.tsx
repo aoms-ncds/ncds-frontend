@@ -169,7 +169,7 @@ const frDashboard = () => {
             },
           }}
         >
-         
+
           {years.map((yr) => (
             <MenuItem
               key={yr}
@@ -197,16 +197,17 @@ const frDashboard = () => {
 
             <Grid container spacing={1}>
 
-              <Grid item xs={12} sm={6} md={3} xl={2}>                <FRCountCard icon={<img src="/mod_icons/APPLIED.png" alt="Logo" style={{ width: '50px', height: '50px' }} />}
-                count={appliedFrCount?.toString()} secondaryText="Total Applied" color="#0feb21"
-                onClick={()=>{
-                  if (isCoordinator) {
-                    navigate('/fr/manageForDivision/');
-                  } else {
-                    navigate('/fr/manage/');
-                  }
-                }}
-              />
+              <Grid item xs={12} sm={6} md={3} xl={2}>
+                <FRCountCard icon={<img src="/mod_icons/APPLIED.png" alt="Logo" style={{ width: '50px', height: '50px' }} />}
+                  count={appliedFrCount?.toString()} secondaryText="Total Applied" color="#0feb21"
+                  onClick={()=>{
+                    if (isCoordinator) {
+                      navigate('/fr/manageForDivision/');
+                    } else {
+                      navigate('/fr/manage/');
+                    }
+                  }}
+                />
               </Grid>
               <Grid item xs={12} sm={6} md={3} xl={2}>
                 <FRCountCard icon={<img src="/mod_icons/VERIFIED.png" alt="Logo" style={{ width: '50px', height: '50px' }} />}
@@ -216,7 +217,7 @@ const frDashboard = () => {
                     } else {
                       navigate(`/fr/manage/?id=${1}`); // Pass numbers as query string
                     }
-                  }} count={approvedFrCount?.toString()} secondaryText={'Total Verified'} color={'#e01414'} />
+                  }} count={approvedFrCount?.toString()} secondaryText={'Total Verified'} color={'#269811'} />
               </Grid>
               <Grid item xs={12} sm={6} md={3} xl={2}>
                 <FRCountCard icon={<img src="/mod_icons/Waiting for President Sanction.png" alt="Logo" style={{ width: '50px', height: '50px' }} />}
@@ -229,11 +230,11 @@ const frDashboard = () => {
                       navigate(`/fr/manage/?id=${2}`); // Pass numbers as query string
                     }
                   }}
-                  color={'#ca1594'} />
+                  color={'#0b57d0'} />
               </Grid>
               <Grid item xs={12} sm={6} md={3} xl={2}>
                 <FRCountCard icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '50px', height: '50px' }} />}
-                  count={waitingForAccountFrCount?.toString()} secondaryText={'Pending Verif.'} color={'#e4bd11'}
+                  count={waitingForAccountFrCount?.toString()} secondaryText={'Pending Verif.'} color={'#889bfe'}
                   onClick={()=>{
                     if (isCoordinator) {
                       navigate(`/fr/manageForDivision/?id=${3}`); // Pass numbers as query string
@@ -254,7 +255,7 @@ const frDashboard = () => {
                   }
                   count={reverted?.toString()}
                   secondaryText="Reverted"
-                  color="#0f82e0"
+                  color="#fca017"
                   onClick={() => navigate('/fr/sentBack')}
                 />
               </Grid>
@@ -270,7 +271,7 @@ const frDashboard = () => {
                   }
                   count={resubmittedFrCount?.toString()}
                   secondaryText="Re-Submitted"
-                  color="#0f82e0"
+                  color="#4DB6AC"
                   onClick={() => navigate('/fr/resubmitted')}
                 />
               </Grid>
@@ -289,15 +290,14 @@ const frDashboard = () => {
             <Card
               sx={{
                 borderRadius: 4,
-                p: { xs: 2, sm: 3 },
+                p: { xs: 2, sm: 1 },
                 background: '#fff',
               }}
             >
-              <Typography variant="h6" fontWeight={600} color="text.primary">
+              <Typography variant="h6" fontWeight={600} color="text.primary" pb={2}>
                 Quick Actions
                 {/* <Divider /> */}
               </Typography>
-
               <Stack
                 direction={{ xs: 'column', sm: 'row' }}
                 spacing={2}
@@ -456,7 +456,7 @@ const frDashboard = () => {
                     granted={(
                       <Grid item xs={12} md={4} xl={3}>
                         <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '50px', height: '50px' }} />}
-                          primaryText="Custom FR" secondaryText="FRs" color="#fff" targetRoute="/fr/CustomFR" />
+                          primaryText="Custom FR/IRO" secondaryText="FRs" color="#fff" targetRoute="/fr/CustomFR" />
                       </Grid>
                     )} />
 

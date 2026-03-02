@@ -1135,6 +1135,8 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
           return clsx('orange-light');
         case 'RE-SUBMITTED':
           return clsx('status-cell', 're-sum');
+        case 'CUSTOM IRO':
+          return clsx('status-cell', 're-sum');
         case 'WAITING FOR RELEASE AMOUNT':
           return clsx('orange-dark');
         case 'AMOUNT RELEASED':
@@ -1159,7 +1161,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
         const iscustom = (params.row as any)?.isCustom;
 
         if (iscustom === true) {
-          statusName = 'RE-SUBMITTED';
+          statusName = 'CUSTOM IRO';
         } else {
           console.log(statusName, 'sjhivi');
           switch (statusName) {
@@ -1167,7 +1169,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
             statusName = 'REVERTED';
             break;
           case iscustom:
-            statusName = 'RE-Submited';
+            statusName = 'CUSTOM IRO';
             break;
           case 'FR_APPROVED':
             statusName = 'FR VERIFIED'; // Change to whatever new name you want

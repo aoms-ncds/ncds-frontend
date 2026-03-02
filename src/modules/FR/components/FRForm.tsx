@@ -1716,54 +1716,65 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
                   )}
                   &nbsp;
 
-                  {props.action === 'add' || props.action === 'multi'|| props.action === 'edit' || props.action === 'custom' || props.action === 'customIRO' ||props.action === 'customEdit' ? (
-                    <>
-                      {/* Only display buttons if props.action is 'view' */}
-                      <PermissionChecks
-                        permissions={['WRITE_FR']}
-                        granted={
-                          <Button
-                            variant="contained"
-                            color="info"
-                            disabled={props.actionAdi=='view'}
-                            type="submit"
-                            onClick={() => {
-                              if (props.value.status == FRLifeCycleStates.REOPENED) {
-                                setSubmit(3);
-                              } else {
-                                setSubmit(1);
-                              }
-                            }}
-                          // disabled={particulars.length==0}
-                          >
-                            Submit{' '}
-                          </Button>
-                        }
-
-                      />
-                      &nbsp;
-                      &nbsp;
-                      {FRLifeCycleStates.REOPENED !== props.value.status&& props.action !=='custom'&& props.action !=='customIRO'&& props.action !== 'customEdit' ? (
-
+                  {(
+                    props.action === 'add' ||
+  props.action === 'multi' ||
+  props.action === 'edit' ||
+  props.action === 'custom' ||
+  props.action === 'customIRO' ||
+  props.action === 'customEdit'
+                  ) ? (
+                      <Box
+                        sx={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: 1.5, // spacing between buttons
+                          flexWrap: 'wrap', // optional: wrap on very small screens
+                        }}
+                      >
                         <PermissionChecks
                           permissions={['WRITE_FR']}
                           granted={
                             <Button
                               variant="contained"
-                              color="warning"
+                              color="info"
+                              disabled={props.actionAdi === 'view'}
                               type="submit"
-                              // disabled={particulars.length==0}
                               onClick={() => {
-                                setSubmit(2);
+                                if (props.value.status === FRLifeCycleStates.REOPENED) {
+                                  setSubmit(3);
+                                } else {
+                                  setSubmit(1);
+                                }
                               }}
                             >
-                              Submit to President
+          Submit
                             </Button>
                           }
                         />
-                      ):[]}
-                    </>
-                  ) : null}
+
+                        {FRLifeCycleStates.REOPENED !== props.value.status &&
+      props.action !== 'custom' &&
+      props.action !== 'customIRO' &&
+      props.action !== 'customEdit' && (
+                          <PermissionChecks
+                            permissions={['WRITE_FR']}
+                            granted={
+                              <Button
+                                variant="contained"
+                                color="warning"
+                                type="submit"
+                                onClick={() => {
+                                  setSubmit(2);
+                                }}
+                              >
+              Submit to President
+                              </Button>
+                            }
+                          />
+                        )}
+                      </Box>
+                    ) : null}
                 </div>
               </Grid>
             </Grid>
@@ -1884,7 +1895,7 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
                     }}
                     renderInput={(params) => <TextField {...params} label="Sub Category 3" />}
                     fullWidth
-                    
+
                   />
                 </Grid>
                 <Grid item md={12}>
@@ -2057,7 +2068,7 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
                       }))
                     }
                     fullWidth
-                    
+
                   />
                 </Grid>
                 <Grid item md={12}>
@@ -2808,17 +2819,17 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
         //   }));
         //   return FileUploaderServices.renameFile(fileId, newName);
         // }}
-        
-deleteFile={(fileId: string) => {
-  props.onChange({
-    ...props.value,
-    CoordinatorSign: (props.value.CoordinatorSign ?? []).filter(
-      (file: any) => file._id !== fileId
-    ),
-  });
 
-  return FileUploaderServices.deleteFile(fileId);
-}}
+        deleteFile={(fileId: string) => {
+          props.onChange({
+            ...props.value,
+            CoordinatorSign: (props.value.CoordinatorSign ?? []).filter(
+              (file: any) => file._id !== fileId,
+            ),
+          });
+
+          return FileUploaderServices.deleteFile(fileId);
+        }}
       />
       <FileUploader
         title="Attachments"
@@ -2854,7 +2865,7 @@ deleteFile={(fileId: string) => {
         //   return FileUploaderServices.renameFile(fileId, newName);
         // }}
         deleteFile={(fileId: string) => {
-          console.log('call came')
+          console.log('call came');
           props.onChange({
             ...props.value,
             attachment: props.value.attachment.filter((file: any) => file._id !== fileId),
@@ -2895,16 +2906,16 @@ deleteFile={(fileId: string) => {
         //   }));
         //   return FileUploaderServices.renameFile(fileId, newName);
         // }}
-          deleteFile={(fileId: string) => {
-    props.onChange({
-      ...props.value,
-      jrLeaderSign: (props.value.jrLeaderSign ?? []).filter(
-        (file: any) => file._id !== fileId
-      ),
-    });
+        deleteFile={(fileId: string) => {
+          props.onChange({
+            ...props.value,
+            jrLeaderSign: (props.value.jrLeaderSign ?? []).filter(
+              (file: any) => file._id !== fileId,
+            ),
+          });
 
-    return FileUploaderServices.deleteFile(fileId);
-  }}
+          return FileUploaderServices.deleteFile(fileId);
+        }}
       />
       <FileUploader
         title="Attachments"
@@ -2947,16 +2958,16 @@ deleteFile={(fileId: string) => {
         //   return FileUploaderServices.deleteFile(fileId);
         // }}
 
-          deleteFile={(fileId: string) => {
-    props.onChange({
-      ...props.value,
-      srLeaderSign: (props.value.srLeaderSign ?? []).filter(
-        (file: any) => file._id !== fileId
-      ),
-    });
+        deleteFile={(fileId: string) => {
+          props.onChange({
+            ...props.value,
+            srLeaderSign: (props.value.srLeaderSign ?? []).filter(
+              (file: any) => file._id !== fileId,
+            ),
+          });
 
-    return FileUploaderServices.deleteFile(fileId);
-  }}
+          return FileUploaderServices.deleteFile(fileId);
+        }}
       />
       <FileUploader
         title="Attachments"
@@ -2999,18 +3010,18 @@ deleteFile={(fileId: string) => {
         //   return FileUploaderServices.deleteFile(fileId);
         // }}
 
-         deleteFile={(fileId: string) => {
-  props.onChange({
-    ...props.value,
-    presidentSign: (props.value.presidentSign ?? []).filter(
-      (file: any) => file._id !== fileId
-    ),
-  });
+        deleteFile={(fileId: string) => {
+          props.onChange({
+            ...props.value,
+            presidentSign: (props.value.presidentSign ?? []).filter(
+              (file: any) => file._id !== fileId,
+            ),
+          });
 
-  return FileUploaderServices.deleteFile(fileId);
-}}
+          return FileUploaderServices.deleteFile(fileId);
+        }}
 
-        
+
       />
       <FileUploader
         title="Attachments"
