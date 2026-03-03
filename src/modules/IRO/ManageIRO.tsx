@@ -109,23 +109,25 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   console.log(releaseAmountIROs, 'exstatusFilter');
   const [openLog, setOpenLog] = useState(false);
   const toggleSx = {
-    'border': '1px solid #dcdcdc',
-    'borderRadius': 1,
-    'overflow': 'hidden',
-    'flexWrap': 'wrap',
+    'display': 'flex',
+    'flexWrap': 'wrap', // ✅ allow natural wrapping
+    'gap': 1, // spacing between buttons
+
     '& .MuiToggleButton-root': {
-      'border': 'none',
-      'borderRight': '1px solid #dcdcdc',
+      'border': '1px solid #dcdcdc',
+      'borderRadius': 2,
       'textTransform': 'none',
       'fontSize': '0.85rem',
       'fontWeight': 500,
       'px': 2.5,
-      '&:last-of-type': {
-        borderRight: 'none',
-      },
+      'py': 1,
+      'minWidth': 'fit-content', // ✅ important
+      'whiteSpace': 'nowrap', // prevent text break
+
       '&.Mui-selected': {
         backgroundColor: '#eaeaea',
         color: '#000',
+        fontWeight: 600,
       },
     },
   };
@@ -373,6 +375,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     signature: {},
     specialsanction: '',
   });
+  const [openReason, setOpenReason] = useState(false);
 
   const [openReleaseConform, setOpenReleaseConform] = useState(false);
   const [selectedIROId, setSelectedIROId] = useState<string | null>(null);
@@ -391,6 +394,8 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   const [printIroLoading, setPrintIroLoading] = useState(false);
   const [openPrintIro, setOpenPrintIro] = useState(false);
   const [deleteModel, setDeleteModel] = useState(false);
+  const [selectedIROData, setSelectedIROData] = useState<IROrder | null>(null);
+
   let total = 0;
   selectedIRO?.particulars?.forEach((particular) => {
     if (particular?.sanctionedAmount) {
@@ -565,7 +570,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
         setIROrder(res.data.filter((iro) => iro.IRODate.isSameOrAfter(dateRange.startDate) && iro.IRODate.isSameOrBefore(dateRange.endDate)));
       });
     }
-  }, [statusFilter1, statusFilter, finder]);
+  }, [statusFilter1, finder]);
 
   const [selectedSignature, setSignature] = useState<Esignature>({
     _id: '',
@@ -870,6 +875,20 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
               },
 
             },
+            ...(params.row.reasonForRejectIRO || (params.row as any).reasonForRevertToDivision ?
+              [
+                {
+                  id: 'resaons',
+                  text: 'View Reasons',
+                  component: Link,
+                  // to: '/fr/view_FR/' + props.row._id,
+                  onClick: () => {
+                    setOpenReason(true);
+                    setSelectedIROData(params.row);
+                  },
+                  icon: EditNoteIcon,
+                },
+              ]:[]),
             ...(props.action != 'manage' && (hasPermissions(['ACCOUNTS_MNGR_ACCESS']) || hasPermissions(['FCRA_ACCOUNTS_ACCESS']) || hasPermissions(['LOCAL_ACCOUNT_ACCESS']) ||hasPermissions(['ADMIN_ACCESS'])) || IROLifeCycleStates.REVERTED_TO_DIVISION ==params.row.status&& !isCoordinator ?
               [
                 {
@@ -1744,66 +1763,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                       }}
                     >
                       <CardContent sx={{ pb: '20px !important' }}>
-                        {hasPermissions(['MANAGE_IRO']) && (
-                          <Grid item xs={12} md="auto" sx={{
-                            display: 'flex',
-                            alignItems: 'center', // ✅ vertical center
-                          }}>
-                            <FormControl
-                              sx={{
-                                'minWidth': 150,
-                                '& .MuiOutlinedInput-root': {
-                                  height: 45, // ✅ control select height
-                                  fontSize: 13,
-                                  borderRadius: 1.5,
-                                },
-                              }}
-                            >
-                              <InputLabel id="division-label">
-  Division
-                              </InputLabel>
-                              <Select
-                                multiple
-                                value={selectedDivisions}
-                                label="Division"
-                                onChange={handleDivisionChange}
-                                renderValue={(selected) =>
-                                  selected.length === 0 ? 'None' : selected.join(', ')
-                                }
-                                MenuProps={{
-                                  PaperProps: {
-                                    style: { maxHeight: 300, width: 250 },
-                                  },
-                                }}
-                              >
-                                <ListSubheader>
-                                  <TextField
-                                    size="small"
-                                    placeholder="Search division..."
-                                    fullWidth
-                                    autoFocus
-                                    value={divisionSearch}
-                                    onChange={(e) => setDivisionSearch(e.target.value)}
-                                    onKeyDown={(e) => e.stopPropagation()}
-                                  />
-                                </ListSubheader>
 
-                                <MenuItem value="__ALL__">
-                                  <Checkbox checked={selectedDivisions.length === 0} />
-                                  <ListItemText primary="None" />
-                                </MenuItem>
-
-                                {filteredDivisions.map((name) => (
-                                  <MenuItem key={name} value={name}>
-                                    <Checkbox checked={selectedDivisions.includes(name)} />
-                                    <ListItemText primary={name} />
-                                  </MenuItem>
-                                ))}
-                              </Select>
-                            </FormControl>
-                          </Grid>
-                        )}
-                        <br />
                         <Grid
                           container
                           spacing={2}
@@ -1820,14 +1780,17 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                                   size="small"
                                   value={
                                     exstatusFilter.includes(69) ? 'NonBankTransfers' :
-                                      statusFilter.includes(IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE) ? 'WFA' :
-                                        statusFilter.includes(IROLifeCycleStates.AMOUNT_RELEASED) ? 'AMT' :
-                                          statusFilter.includes(IROLifeCycleStates.WAITING_FOR_OFFICE_MNGR) ? 'WFORA' :
-                                            statusFilter.includes(IROLifeCycleStates.IRO_CLOSED) ? 'CLS' :
-                                              statusFilter.includes(IROLifeCycleStates.REJECTED) ? 'DIS' :
-                                                statusFilter.includes(IROLifeCycleStates.REOPENED) ? 'REOPN' :
-                                                  statusFilter.includes(IROLifeCycleStates.REVERTED_TO_DIVISION) ? 'RTD' :
-                                                    'ALL'
+                                      exstatusFilter.includes(70) ? 'Custom' :
+                                        statusFilter.includes(IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE) ? 'WFA' :
+                                          statusFilter.includes(IROLifeCycleStates.AMOUNT_RELEASED) ? 'AMT' :
+                                            statusFilter.includes(IROLifeCycleStates.WAITING_FOR_OFFICE_MNGR) ? 'WFORA' :
+                                              statusFilter.includes(IROLifeCycleStates.IRO_CLOSED) ? 'CLS' :
+                                                statusFilter.includes(IROLifeCycleStates.REJECTED) ? 'DIS' :
+                                                  statusFilter.includes(IROLifeCycleStates.REOPENED) ? 'REOPN' :
+                                                    statusFilter.includes(IROLifeCycleStates.IRO_IN_PROCESS) ? 'INP' :
+                                                      statusFilter.includes(IROLifeCycleStates.WAITTING_FOR_RELEASE_AMOUNT) ? 'WR' :
+                                                        statusFilter.includes(IROLifeCycleStates.REVERTED_TO_DIVISION) ? 'RTD' :
+                                                          'ALL'
                                   }
                                   onChange={(_, value) => {
                                     if (!value) return;
@@ -1853,6 +1816,15 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                                     } else if (value === 'REOPN') {
                                       setExStatusFilter([]);
                                       setStatusFilter([IROLifeCycleStates.REOPENED]);
+                                    } else if (value === 'INP') {
+                                      setExStatusFilter([]);
+                                      setStatusFilter([IROLifeCycleStates.IRO_IN_PROCESS]);
+                                    } else if (value === 'WR') {
+                                      setExStatusFilter([]);
+                                      setStatusFilter([IROLifeCycleStates.WAITTING_FOR_RELEASE_AMOUNT]);
+                                    } else if (value === 'Custom') {
+                                      setExStatusFilter([70]);
+                                      setStatusFilter([]);
                                     } else if (value === 'NonBankTransfers') {
                                       setExStatusFilter([69]);
                                       setStatusFilter([]);
@@ -1867,12 +1839,14 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                                   <ToggleButton value="WFORA">WAITING APPROV.</ToggleButton>
                                   <ToggleButton value="WFA">APPROVED</ToggleButton>
                                   <ToggleButton value="INP">IN PROCESS</ToggleButton>
+                                  <ToggleButton value="WR">WAITING RELEASE</ToggleButton>
                                   <ToggleButton value="AMT">AMT RELEASED</ToggleButton>
                                   <ToggleButton value="RTD">REVERTED</ToggleButton>
                                   <ToggleButton value="CLS">CLOSED</ToggleButton>
                                   <ToggleButton value="DIS">DISPROVED</ToggleButton>
                                   <ToggleButton value="REOPN">REOPENED</ToggleButton>
-                                  <ToggleButton value="NonBankTransfers">NBT</ToggleButton>
+                                  <ToggleButton value="Custom">CUSTOM</ToggleButton>
+                                  <ToggleButton value="NonBankTransfers">NON BANK TRANSFERS</ToggleButton>
                                 </ToggleButtonGroup>
                               </Grid>
 
@@ -1901,9 +1875,13 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                               <ToggleButton value="All">All</ToggleButton>
                               <ToggleButton value="Support">SUPPORT</ToggleButton>
                               <ToggleButton value="Expanse">EXPENSE</ToggleButton>
-                              <ToggleButton value="Custom">Custom IRO</ToggleButton>
+                              <ToggleButton value="Sanctioned">SANCTIONED</ToggleButton>
+                              {/* <ToggleButton value="NonBankTransfers">Non Bank Transfers</ToggleButton> */}
+
+                              {/* <ToggleButton value="Custom">Custom IRO</ToggleButton> */}
                             </ToggleButtonGroup>
                           </Grid>
+
 
                           {/* ================= RELEASE MODE ================= */}
                           {props.action === 'release' && (
@@ -1928,13 +1906,72 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                                 >
                                   <ToggleButton value="All">ALL</ToggleButton>
                                   <ToggleButton value="NonBankTransfers">NON BANK TRANSFERS</ToggleButton>
+                                  <ToggleButton value="BANK TRANS.">BANK TRANS.</ToggleButton>
                                 </ToggleButtonGroup>
                               </Grid>
 
                               {/* DIVISION FILTER */}
                             </>
                           )}
+                          {hasPermissions(['MANAGE_IRO']) && (
+                            <Grid item xs={12} md="auto" sx={{
+                              display: 'flex',
+                              alignItems: 'center', // ✅ vertical center
+                            }}>
+                              <FormControl
+                                sx={{
+                                  'minWidth': 150,
+                                  '& .MuiOutlinedInput-root': {
+                                    height: 45, // ✅ control select height
+                                    fontSize: 13,
+                                    borderRadius: 1.5,
+                                  },
+                                }}
+                              >
+                                <InputLabel id="division-label">
+  Division
+                                </InputLabel>
+                                <Select
+                                  multiple
+                                  value={selectedDivisions}
+                                  label="Division"
+                                  onChange={handleDivisionChange}
+                                  renderValue={(selected) =>
+                                    selected.length === 0 ? 'None' : selected.join(', ')
+                                  }
+                                  MenuProps={{
+                                    PaperProps: {
+                                      style: { maxHeight: 300, width: 250 },
+                                    },
+                                  }}
+                                >
+                                  <ListSubheader>
+                                    <TextField
+                                      size="small"
+                                      placeholder="Search division..."
+                                      fullWidth
+                                      autoFocus
+                                      value={divisionSearch}
+                                      onChange={(e) => setDivisionSearch(e.target.value)}
+                                      onKeyDown={(e) => e.stopPropagation()}
+                                    />
+                                  </ListSubheader>
 
+                                  <MenuItem value="__ALL__">
+                                    <Checkbox checked={selectedDivisions.length === 0} />
+                                    <ListItemText primary="None" />
+                                  </MenuItem>
+
+                                  {filteredDivisions.map((name) => (
+                                    <MenuItem key={name} value={name}>
+                                      <Checkbox checked={selectedDivisions.includes(name)} />
+                                      <ListItemText primary={name} />
+                                    </MenuItem>
+                                  ))}
+                                </Select>
+                              </FormControl>
+                            </Grid>
+                          )}
 
                         </Grid>
                       </CardContent>
@@ -2288,7 +2325,219 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                 </DialogContent>
               </Dialog>
             </Grid>
+            <Dialog
+              open={openReason}
+              onClose={() => setOpenReason(false)}
+              maxWidth="sm"
+              fullWidth
+              PaperProps={{
+                sx: {
+                  borderRadius: 3,
+                  p: 2,
+                },
+              }}
+            >
+              {/* HEADER */}
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  mb: 1,
+                }}
+              >
+                <Typography fontWeight={700} fontSize={18}>
+                  {(selectedIROData as any)?.reasonForRevertToDivision? 'IRO REASON FOR REVERT': 'IRO REASON FOR DISAPPROVE'}
+                </Typography>
 
+                <IconButton onClick={() => setOpenReason(false)}>
+                  <CloseIcon />
+                </IconButton>
+              </Box>
+
+              <Divider />
+
+              {/* CONTENT */}
+              <Box sx={{ mt: 2 }}>
+                <Typography fontSize={14} mb={1}>
+                  <b>FR No:</b> {selectedIROData?.IROno}
+                </Typography>
+
+                {/* REVERT REASON */}
+                {(selectedIROData as any)?.reasonForRevertToDivision && (
+                  <Box
+                    sx={{
+                      backgroundColor: '#FFF9E6',
+                      borderLeft: '5px solid #FFA000',
+                      p: 2,
+                      borderRadius: 2,
+                      mb: 2,
+                      boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+                    }}
+                  >
+                    {/* Reason Row */}
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        mb: 1,
+                      }}
+                    >
+                      <Typography
+                        sx={{
+                          fontWeight: 700,
+                          fontSize: 14,
+                          minWidth: 140,
+                          color: '#333',
+                        }}
+                      >
+        Reason for Revert:
+                      </Typography>
+
+                      <Typography
+                        sx={{
+                          fontSize: 14,
+                          fontWeight: 600,
+                          color: '#D84315',
+                        }}
+                      >
+                        {(selectedIROData as any)?.reasonForRevertToDivision}
+                      </Typography>
+                    </Box>
+
+                    {/* Reverted By Row */}
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        mb: 1,
+                      }}
+                    >
+                      <Typography
+                        sx={{
+                          fontWeight: 700,
+                          fontSize: 14,
+                          minWidth: 140,
+                          color: '#333',
+                        }}
+                      >
+        Reverted By:
+                      </Typography>
+
+                      <Typography
+                        sx={{
+                          fontSize: 14,
+                          fontWeight: 600,
+                          color: '#1976D2',
+                        }}
+                      >
+                        {(selectedIROData as any)?.revertedBy || 'Admin'}
+                      </Typography>
+                    </Box>
+
+                    {/* Info */}
+                    <Typography
+                      sx={{
+                        fontSize: 13,
+                        fontWeight: 500,
+                        color: '#1976D2',
+                        mt: 1,
+                      }}
+                    >
+      ℹ️ Info: Resubmit the FR within 3 days
+                    </Typography>
+                  </Box>
+                )}
+
+                {/* REJECT REASON */}
+                {selectedIROData?.reasonForRejectIRO && (
+                  <Box
+                    sx={{
+                      backgroundColor: '#FFF5F5',
+                      borderLeft: '5px solid #D32F2F',
+                      p: 2,
+                      borderRadius: 2,
+                      mb: 2,
+                      boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+                    }}
+                  >
+                    {/* Reason Row */}
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        mb: 1,
+                      }}
+                    >
+                      <Typography
+                        sx={{
+                          fontWeight: 700,
+                          fontSize: 14,
+                          minWidth: 140,
+                          color: '#333',
+                        }}
+                      >
+        Reason for Disapprove:
+                      </Typography>
+
+                      <Typography
+                        sx={{
+                          fontSize: 14,
+                          fontWeight: 600,
+                          color: '#D32F2F',
+                        }}
+                      >
+                        {(selectedIROData as any)?.reasonForRejectIRO}
+                      </Typography>
+                    </Box>
+
+                    {/* Disapproved By Row */}
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                      }}
+                    >
+                      <Typography
+                        sx={{
+                          fontWeight: 700,
+                          fontSize: 14,
+                          minWidth: 140,
+                          color: '#333',
+                        }}
+                      >
+        Disapproved By:
+                      </Typography>
+
+                      <Typography
+                        sx={{
+                          fontSize: 14,
+                          fontWeight: 600,
+                          color: '#1976D2',
+                        }}
+                      >
+                        {(selectedIROData as any)?.disapprovedBy || 'ASL'}
+                      </Typography>
+                    </Box>
+                  </Box>
+                )}
+              </Box>
+
+              {/* FOOTER */}
+              <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3 }}>
+                <Button
+                  variant="contained"
+                  sx={{
+                    backgroundColor: '#5B4BEB',
+                    borderRadius: 2,
+                    px: 3,
+                  }}
+                  onClick={() => setOpenReason(false)}
+                >
+      Close
+                </Button>
+              </Box>
+            </Dialog>
             <Dialog open={openRemarks} fullWidth maxWidth="md">
               <DialogTitle>Remarks</DialogTitle>
               <DialogContent>

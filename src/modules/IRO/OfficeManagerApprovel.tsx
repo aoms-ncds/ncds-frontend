@@ -983,6 +983,8 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
                         <ToggleButton value="NonBankTransfers">
           NON BANK TRANSFERS
                         </ToggleButton>
+                        <ToggleButton value="NonBankTransfers">
+          BANK TRANS.               </ToggleButton>
                       </ToggleButtonGroup>
 
                       {/* -------- CATEGORY FILTER -------- */}
@@ -1003,9 +1005,10 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
                         }}
                         sx={toggleSx}
                       >
+                        <ToggleButton value="All">ALL </ToggleButton>
                         <ToggleButton value="Support">SUPPORT</ToggleButton>
                         <ToggleButton value="Expanse">EXPENSE</ToggleButton>
-                        <ToggleButton value="All">BOTH </ToggleButton>
+                        <ToggleButton value="Expanse">SANCTIONED</ToggleButton>
                       </ToggleButtonGroup>
                     </Box>
                   </Grid>

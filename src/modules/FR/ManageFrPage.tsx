@@ -1519,7 +1519,7 @@ const ManageFrPage = () => {
                 }}
               >
                 <Typography fontWeight={700} fontSize={18}>
-      FR REASON
+                  {selectedFRData?.reasonForSentBack? 'FR REASON FOR REVERT': 'FR REASON FOR DISAPPROVE'}
                 </Typography>
 
                 <IconButton onClick={() => setOpenReason(false)}>
@@ -1539,42 +1539,158 @@ const ManageFrPage = () => {
                 {selectedFRData?.reasonForSentBack && (
                   <Box
                     sx={{
-                      backgroundColor: '#FFF6D8',
-                      p: 1.5,
-                      borderRadius: 1.5,
+                      backgroundColor: '#FFF9E6',
+                      borderLeft: '5px solid #FFA000',
+                      p: 2,
+                      borderRadius: 2,
                       mb: 2,
+                      boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
                     }}
                   >
-                    <Typography fontWeight={600} fontSize={14}>
-          Reason for Revert:
-                    </Typography>
-                    <Typography fontSize={13} fontWeight={600}>
-                      {selectedFRData?.reasonForSentBack}
-                    </Typography>
-                    <Typography fontWeight={600} fontSize={14}>
-          Reverted By:
-                    </Typography>
+                    {/* Reason Row */}
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        mb: 1,
+                      }}
+                    >
+                      <Typography
+                        sx={{
+                          fontWeight: 700,
+                          fontSize: 14,
+                          minWidth: 140,
+                          color: '#333',
+                        }}
+                      >
+        Reason for Revert:
+                      </Typography>
 
-                    <Typography fontSize={12}>
-                 Info: Resubmit the FR within 3 days
+                      <Typography
+                        sx={{
+                          fontSize: 14,
+                          fontWeight: 600,
+                          color: '#D84315',
+                        }}
+                      >
+                        {selectedFRData?.reasonForSentBack}
+                      </Typography>
+                    </Box>
+
+                    {/* Reverted By Row */}
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        mb: 1,
+                      }}
+                    >
+                      <Typography
+                        sx={{
+                          fontWeight: 700,
+                          fontSize: 14,
+                          minWidth: 140,
+                          color: '#333',
+                        }}
+                      >
+        Reverted By:
+                      </Typography>
+
+                      <Typography
+                        sx={{
+                          fontSize: 14,
+                          fontWeight: 600,
+                          color: '#1976D2',
+                        }}
+                      >
+                        {(selectedFRData as any)?.revertedBy || 'Admin'}
+                      </Typography>
+                    </Box>
+
+                    {/* Info */}
+                    <Typography
+                      sx={{
+                        fontSize: 13,
+                        fontWeight: 500,
+                        color: '#1976D2',
+                        mt: 1,
+                      }}
+                    >
+      ℹ️ Info: Resubmit the FR within 3 days
                     </Typography>
                   </Box>
                 )}
 
                 {/* REJECT REASON */}
                 {selectedFRData?.reasonForReject && (
-                  <Box sx={{
-                    backgroundColor: '#FFF6D8',
-                    p: 1.5,
-                    borderRadius: 1.5,
-                    mb: 2,
-                  }}>
-                    <Typography fontWeight={600} fontSize={14}>
-          Reason for Reject:
-                    </Typography>
-                    <Typography fontSize={13}>
-                      {selectedFRData?.reasonForReject}
-                    </Typography>
+                  <Box
+                    sx={{
+                      backgroundColor: '#FFF5F5',
+                      borderLeft: '5px solid #D32F2F',
+                      p: 2,
+                      borderRadius: 2,
+                      mb: 2,
+                      boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+                    }}
+                  >
+                    {/* Reason Row */}
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        mb: 1,
+                      }}
+                    >
+                      <Typography
+                        sx={{
+                          fontWeight: 700,
+                          fontSize: 14,
+                          minWidth: 140,
+                          color: '#333',
+                        }}
+                      >
+        Reason for Disapprove:
+                      </Typography>
+
+                      <Typography
+                        sx={{
+                          fontSize: 14,
+                          fontWeight: 600,
+                          color: '#D32F2F',
+                        }}
+                      >
+                        {selectedFRData?.reasonForReject}
+                      </Typography>
+                    </Box>
+
+                    {/* Disapproved By Row */}
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                      }}
+                    >
+                      <Typography
+                        sx={{
+                          fontWeight: 700,
+                          fontSize: 14,
+                          minWidth: 140,
+                          color: '#333',
+                        }}
+                      >
+        Disapproved By:
+                      </Typography>
+
+                      <Typography
+                        sx={{
+                          fontSize: 14,
+                          fontWeight: 600,
+                          color: '#1976D2',
+                        }}
+                      >
+                        {(selectedFRData as any)?.disapprovedBy || 'ASL'}
+                      </Typography>
+                    </Box>
                   </Box>
                 )}
               </Box>
