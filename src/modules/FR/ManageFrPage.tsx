@@ -900,57 +900,57 @@ const ManageFrPage = () => {
       align: 'center',
       headerAlign: 'center',
     },
-    {
-      field: 'reasonForSentBack',
-      headerClassName: 'super-app-theme--cell',
-      renderHeader: () => <b>Reason For Revert</b>,
-      renderCell: (props) => (
-        <p
-          style={{
-            maxWidth: 200,
-            whiteSpace: 'normal',
-            wordBreak: 'break-word',
-            justifyContent: 'center',
-            textAlign: 'center',
-          }}
-        >
-          {props.row.reasonForSentBack}
-        </p>
-      ),
-      width: 200,
-      align: 'center',
-      headerAlign: 'center',
-    },
-    {
-      field: 'reasonForReject',
-      headerClassName: 'super-app-theme--cell',
-      renderHeader: () => <b>Reason For Reject</b>,
-      renderCell: (props) => (
-        <p
-          style={{
-            maxWidth: 200,
-            whiteSpace: 'normal',
-            wordBreak: 'break-word',
-            justifyContent: 'center',
-            textAlign: 'center',
-          }}
-        >
-          {props.row.reasonForReject}
-        </p>
-      ),
-      width: 200,
-      align: 'center',
-      headerAlign: 'center',
-    },
-    {
-      field: 'updatedAt',
-      headerClassName: 'super-app-theme--cell',
-      renderHeader: () => <b>Last Updated</b>,
-      valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
-      width: 130,
-      align: 'center',
-      headerAlign: 'center',
-    },
+    // {
+    //   field: 'reasonForSentBack',
+    //   headerClassName: 'super-app-theme--cell',
+    //   renderHeader: () => <b>Reason For Revert</b>,
+    //   renderCell: (props) => (
+    //     <p
+    //       style={{
+    //         maxWidth: 200,
+    //         whiteSpace: 'normal',
+    //         wordBreak: 'break-word',
+    //         justifyContent: 'center',
+    //         textAlign: 'center',
+    //       }}
+    //     >
+    //       {props.row.reasonForSentBack}
+    //     </p>
+    //   ),
+    //   width: 200,
+    //   align: 'center',
+    //   headerAlign: 'center',
+    // },
+    // {
+    //   field: 'reasonForReject',
+    //   headerClassName: 'super-app-theme--cell',
+    //   renderHeader: () => <b>Reason For Reject</b>,
+    //   renderCell: (props) => (
+    //     <p
+    //       style={{
+    //         maxWidth: 200,
+    //         whiteSpace: 'normal',
+    //         wordBreak: 'break-word',
+    //         justifyContent: 'center',
+    //         textAlign: 'center',
+    //       }}
+    //     >
+    //       {props.row.reasonForReject}
+    //     </p>
+    //   ),
+    //   width: 200,
+    //   align: 'center',
+    //   headerAlign: 'center',
+    // },
+    // {
+    //   field: 'updatedAt',
+    //   headerClassName: 'super-app-theme--cell',
+    //   renderHeader: () => <b>Last Updated</b>,
+    //   valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
+    //   width: 130,
+    //   align: 'center',
+    //   headerAlign: 'center',
+    // },
   ];
   const handleSearchChange = (event: { target: { value: SetStateAction<string> } }) => {
     setSearchText(event.target.value);
