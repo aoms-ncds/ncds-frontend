@@ -428,17 +428,20 @@ const ManageFrPage = () => {
               },
               icon: EditNoteIcon,
             },
-            {
-              id: 'resaons',
-              text: 'View Reasons',
-              component: Link,
-              // to: '/fr/view_FR/' + props.row._id,
-              onClick: () => {
-                setOpenReason(true);
-                setSelectedFRData(props.row);
-              },
-              icon: EditNoteIcon,
-            },
+            ...(props.row.reasonForReject || props.row.reasonForSentBack ?
+              [
+                {
+                  id: 'resaons',
+                  text: 'View Reasons',
+                  component: Link,
+                  // to: '/fr/view_FR/' + props.row._id,
+                  onClick: () => {
+                    setOpenReason(true);
+                    setSelectedFRData(props.row);
+                  },
+                  icon: EditNoteIcon,
+                },
+              ]:[]),
             {
               id: 'notification',
               text: 'Send notification',
@@ -942,15 +945,15 @@ const ManageFrPage = () => {
     //   align: 'center',
     //   headerAlign: 'center',
     // },
-    // {
-    //   field: 'updatedAt',
-    //   headerClassName: 'super-app-theme--cell',
-    //   renderHeader: () => <b>Last Updated</b>,
-    //   valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
-    //   width: 130,
-    //   align: 'center',
-    //   headerAlign: 'center',
-    // },
+    {
+      field: 'updatedAt',
+      headerClassName: 'super-app-theme--cell',
+      renderHeader: () => <b>Last Updated</b>,
+      valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
+      width: 130,
+      align: 'center',
+      headerAlign: 'center',
+    },
   ];
   const handleSearchChange = (event: { target: { value: SetStateAction<string> } }) => {
     setSearchText(event.target.value);
@@ -1548,6 +1551,10 @@ const ManageFrPage = () => {
                     <Typography fontSize={13} fontWeight={600}>
                       {selectedFRData?.reasonForSentBack}
                     </Typography>
+                    <Typography fontWeight={600} fontSize={14}>
+          Reverted By:
+                    </Typography>
+
                     <Typography fontSize={12}>
                  Info: Resubmit the FR within 3 days
                     </Typography>

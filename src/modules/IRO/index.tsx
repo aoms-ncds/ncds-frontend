@@ -235,7 +235,7 @@ const IRODashboard = () => {
               permissions={['OFFICE_MNGR_ACCESS']}
               granted={(
                 <Grid item xs={12} md={4} xl={3}>
-                  <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '50px', height: '50px' }} />} primaryText="Awaiting Approval" secondaryText="Approval" color="#fff" targetRoute="/IRO/office_approve" />
+                  <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '50px', height: '50px' }} />} primaryText="Awaiting for Approval (P1)" secondaryText="Approval" color="#fff" targetRoute="/IRO/office_approve" />
                 </Grid>
               )} />
             <PermissionChecks
@@ -243,14 +243,11 @@ const IRODashboard = () => {
               granted={(
                 <>
                   <Grid item xs={12} md={4} xl={3}>
-                    <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '50px', height: '50px' }} />} primaryText="Release Amount " color="#fff" targetRoute="/iro/release_amount" />
+                    <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '50px', height: '50px' }} />} primaryText="Release Amount (P2) " color="#fff" targetRoute="/iro/release_amount" />
                   </Grid>
                   {/* <Grid item xs={12} md={4} xl={3}>
                 <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '50px', height: '50px' }} />} primaryText="Release Amount FM Request" color="#fff" targetRoute="/iro/release_amount_fm_request" />
               </Grid> */}
-                  <Grid item xs={12} md={4} xl={3}>
-                    <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '50px', height: '50px' }} />} primaryText="For Reconciliation " color="#fff" targetRoute="/iro/reconciliation" />
-                  </Grid>
 
                 </>
               )} />
@@ -259,11 +256,42 @@ const IRODashboard = () => {
               granted={(
                 <>
                   <Grid item xs={12} md={4} xl={3}>
-                    <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '50px', height: '50px' }} />} primaryText="Release Amount FM Request" color="#fff" targetRoute="/iro/release_amount_fm_request" />
+                    <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '50px', height: '50px' }} />} primaryText="Verify Release Amount (P3)" color="#fff" targetRoute="/iro/release_amount_fm_request" />
                   </Grid>
 
                 </>
               )} />
+            <PermissionChecks
+              permissions={['MANAGE_IRO']}
+              granted={(
+
+                <Grid item xs={12} md={4} xl={3}>
+                  <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '50px', height: '50px' }} />} primaryText="Pending Reconciliation (P4) " color="#fff" targetRoute="/iro/reconciliation" />
+                </Grid>
+              )} />
+
+
+            <Grid item xs={12} md={4} xl={3}>
+              <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '50px', height: '50px' }} />} primaryText="Closed IRO (P5)" color="#fff" targetRoute="/iro/closed" />
+            </Grid>
+            <PermissionChecks
+              permissions={['CUSTOM_FR_IRO']}
+              granted={(
+                <Grid item xs={12} md={4} xl={3}>
+                  <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '50px', height: '50px' }} />} primaryText="Custom IRO/FR" color="#fff" targetRoute="/fr/CustomFR" />
+                </Grid>
+              )} />
+            <PermissionChecks
+              permissions={[]}
+              granted={(
+                <Grid item xs={12} md={4} xl={3}>
+                  <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '50px', height: '50px' }} />}
+                    primaryText="Re Opened" secondaryText="IRO" color="#fff" targetRoute="/iro/reopened" />
+                </Grid>
+              )} />
+            <Grid item xs={12} md={4} xl={3}>
+              <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '50px', height: '50px' }} />} primaryText="Dissaproved IRO" color="#fff" targetRoute="/iro/disapproved" />
+            </Grid>
             <PermissionChecks
               permissions={['AUDIT_VIEW']}
               granted={(
@@ -276,27 +304,10 @@ const IRODashboard = () => {
               )} />
 
             <Grid item xs={12} md={4} xl={3}>
-              <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '50px', height: '50px' }} />} primaryText="Closed IRO" color="#fff" targetRoute="/iro/closed" />
-            </Grid>
-            <Grid item xs={12} md={4} xl={3}>
               <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '50px', height: '50px' }} />} primaryText="Rejected IRO" color="#fff" targetRoute="/iro/rejected" />
             </Grid>
-            <PermissionChecks
-              permissions={[]}
-              granted={(
-                <Grid item xs={12} md={4} xl={3}>
-                  <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '50px', height: '50px' }} />}
-                    primaryText="Re Opened" secondaryText="IRO" color="#fff" targetRoute="/iro/reopened" />
-                </Grid>
-              )} />
 
-            <PermissionChecks
-              permissions={['CUSTOM_FR_IRO']}
-              granted={(
-                <Grid item xs={12} md={4} xl={3}>
-                  <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '50px', height: '50px' }} />} primaryText="Custom IRO/FR" color="#fff" targetRoute="/fr/CustomFR" />
-                </Grid>
-              )} />
+
           </Grid>
         </CardContent>
 

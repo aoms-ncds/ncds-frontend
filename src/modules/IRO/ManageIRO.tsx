@@ -60,6 +60,7 @@ import FRLifeCycleStates from '../FR/extras/FRLifeCycleStates';
 import DivisionsServices from '../Divisions/extras/DivisionsServices';
 import TransactionLogDialog from '../FR/components/TransactionLogDialog';
 import SanctionLetter from '../FR/components/authLatter';
+import formatAmount from '../Common/formatcode';
 
 
 type BankDetails = {
@@ -1299,7 +1300,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       valueGetter(params) {
         const IRORequest = params.row as IROrder;
         const particularAmount = IRORequest.particulars?.reduce((total, particular) => total + Number(particular.requestedAmount), 0);
-        return particularAmount.toFixed(2);
+        return formatAmount(particularAmount.toFixed(2));
       },
     },
     // {
@@ -1338,13 +1339,14 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       renderHeader: () => <b>Sanctioned Amount</b>,
       valueGetter: (params) => {
         if (params.row.sanctionedAmount !== undefined) {
-          return params.row.sanctionedAmount;
+          return formatAmount(params.row.sanctionedAmount as number);
         }
         if (Array.isArray(params.row.particulars)) {
-          return params.row.particulars.reduce(
-            (sum, item) => sum + (Number(item.sanctionedAmount) || 0),
-            0,
-          ).toFixed(2);
+          return formatAmount(
+            params.row.particulars.reduce(
+              (sum, item) => sum + (Number(item.sanctionedAmount) || 0),
+              0,
+            ).toFixed(2));
         }
         return 0; // or return a suitable default value
       }, align: 'center',

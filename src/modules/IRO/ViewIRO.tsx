@@ -60,6 +60,7 @@ import FileUploaderServices from '../../components/FileUploader/extras/FileUploa
 import ReceiptIcon from '@mui/icons-material/Receipt';
 import SanctionLetter from '../FR/components/authLatter';
 import FRServices from '../FR/extras/FRServices';
+import formatAmount from '../Common/formatcode';
 
 
 const ViewIRO = (props: any) => {
@@ -650,8 +651,8 @@ const ViewIRO = (props: any) => {
                                     <TableCell align="center">{item.narration}</TableCell>
                                     <TableCell align="center">{item.quantity}</TableCell>
                                     <TableCell align="center">{item.month}</TableCell>
-                                    <TableCell align="center">{item.requestedAmount?.toFixed(2)}</TableCell>
-                                    <TableCell align="center">{(item as any).sanctionedAmount?.toFixed(2)}</TableCell>
+                                    <TableCell align="center">{ formatAmount(item.requestedAmount?.toFixed(2))}</TableCell>
+                                    <TableCell align="center">{formatAmount((item as any).sanctionedAmount?.toFixed(2))}</TableCell>
                                     <TableCell align="center">{item.sanctionedAsPer}</TableCell>
                                     <TableCell align="center">{item.applicationReferenceNo}</TableCell>
                                     {(item as any).presidentSanctionAmt && <TableCell align="center">{(item as any).presidentSanctionAmt}</TableCell> }
@@ -668,14 +669,14 @@ const ViewIRO = (props: any) => {
                         </Grid>
                       ):[]}
                       <Grid item xs={12} md={6}>
-                        <TextField label="Requested Amount" InputLabelProps={{ shrink: true }} value={totalRequestedAmount.toFixed(2)} fullWidth disabled />
+                        <TextField label="Requested Amount" InputLabelProps={{ shrink: true }} value={formatAmount(totalRequestedAmount.toFixed(2))} fullWidth disabled />
                       </Grid>
 
                       <Grid item xs={12} md={6}>
                         <TextField
                           label="Sanctioned Amount"
                           type={'number'}
-                          value={IRO.sanctionedAmount ?? total.toFixed(2)}
+                          value={ IRO.sanctionedAmount ?? total.toFixed(2)}
                           onChange={(e) => {
                             if (IRO) {
                               // eslint-disable-next-line @typescript-eslint/naming-convention

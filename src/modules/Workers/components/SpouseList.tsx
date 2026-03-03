@@ -94,7 +94,6 @@ const SpouseListPage = (props: FormComponentProps<Spouse[], { status?: 'reject' 
         setId(res.data._id);
         navigate(`/users/worker/${res.data._id}/2`);
         window.open(`/users/worker/${res.data._id}/2`, '_blank');
-
       })
       .catch((error) => {
         console.error('Error fetching user:', error);
@@ -121,11 +120,13 @@ const SpouseListPage = (props: FormComponentProps<Spouse[], { status?: 'reject' 
 
   const filteredRows = (props.value ?? []).filter((row) => {
     const spouseFullName = `${row.spouseOf?.basicDetails?.firstName || ''} ${row.spouseOf?.basicDetails?.lastName || ''}`.toLowerCase();
+    // console.log(row.division.details.name, 'yuiyuiy');
 
     if ((row.firstName && row.firstName.toLowerCase().includes(searchText.toLowerCase())) ||
      (row.lastName && row.lastName.toLowerCase().includes(searchText.toLowerCase())) ||
      (row.email && row.email.toLowerCase().includes(searchText.toLowerCase())) ||
      (row.phone && row.phone.toLowerCase().includes(searchText.toLowerCase())) ||
+     ((row as any).division.details.name && (row as any).division.details.name.toLowerCase().includes(searchText.toLowerCase())) ||
       (row.dateOfBirth && moment(row.dateOfBirth).isValid() && moment(row.dateOfBirth).format('DD/MM/YYYY').includes(searchText.toLowerCase())) ||
      (row.qualification && row.qualification.toLowerCase().includes(searchText.toLowerCase())) ||
      (spouseFullName && spouseFullName.includes(searchText.toLowerCase())) ||
@@ -391,62 +392,62 @@ const SpouseListPage = (props: FormComponentProps<Spouse[], { status?: 'reject' 
             style={{ width: '25%', alignItems: 'start' }}
           />
 
-           {/* Export Button */}
-                <Button
-  onClick={async () => {
-    const dataToExport = filteredRows.length > 0 ? filteredRows : (props.value || []);
-    const sheet = dataToExport.map((spouse: any) => [
-      spouse.spouseCode || '-',
-      spouse.firstName || '-',
-      spouse.lastName || '-',
-      spouse.division?.details?.name || '-',
-      spouse.phone || '-',
-      spouse.dateOfBirth && moment(spouse.dateOfBirth).isValid() 
-        ? moment(spouse.dateOfBirth).format('DD/MM/YYYY') 
-        : '-',
-      spouse.qualification || '-',
-      `${spouse.spouseOf?.basicDetails?.firstName || ''} ${spouse.spouseOf?.basicDetails?.lastName || ''}`.trim() || '-',
-      spouse.email || '-',
-      spouse.reasonForDeactivation || '-',
-      spouse.deactivationDate && moment(spouse.deactivationDate).isValid()
-        ? moment(spouse.deactivationDate).format('DD/MM/YYYY')
-        : '-',
-    ]);
+          {/* Export Button */}
+          <Button
+            onClick={async () => {
+              const dataToExport = filteredRows.length > 0 ? filteredRows : (props.value || []);
+              const sheet = dataToExport.map((spouse: any) => [
+                spouse.spouseCode || '-',
+                spouse.firstName || '-',
+                spouse.lastName || '-',
+                spouse.division?.details?.name || '-',
+                spouse.phone || '-',
+                spouse.dateOfBirth && moment(spouse.dateOfBirth).isValid() ?
+                  moment(spouse.dateOfBirth).format('DD/MM/YYYY') :
+                  '-',
+                spouse.qualification || '-',
+                `${spouse.spouseOf?.basicDetails?.firstName || ''} ${spouse.spouseOf?.basicDetails?.lastName || ''}`.trim() || '-',
+                spouse.email || '-',
+                spouse.reasonForDeactivation || '-',
+                spouse.deactivationDate && moment(spouse.deactivationDate).isValid() ?
+                  moment(spouse.deactivationDate).format('DD/MM/YYYY') :
+                  '-',
+              ]);
 
-    const headers = [
-      'Spouse Code',
-      'First Name',
-      'Last Name',
-      'Division',
-      'Mobile No',
-      'DOB',
-      'Qualification',
-      'Spouse Of',
-      'Email ID',
-      'Reason for Deactivation',
-      'Deactivation Date',
-    ];
+              const headers = [
+                'Spouse Code',
+                'First Name',
+                'Last Name',
+                'Division',
+                'Mobile No',
+                'DOB',
+                'Qualification',
+                'Spouse Of',
+                'Email ID',
+                'Reason for Deactivation',
+                'Deactivation Date',
+              ];
 
-    const worksheet = XLSX.utils.aoa_to_sheet([headers, ...sheet]);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'Spouses');
-    
-    const colWidths = [
-      { wch: 15 }, { wch: 15 }, { wch: 15 }, { wch: 20 }, 
-      { wch: 15 }, { wch: 12 }, { wch: 15 }, { wch: 25 }, 
-      { wch: 25 }, { wch: 25 }, { wch: 20 }
-    ];
-    worksheet['!cols'] = colWidths;
+              const worksheet = XLSX.utils.aoa_to_sheet([headers, ...sheet]);
+              const workbook = XLSX.utils.book_new();
+              XLSX.utils.book_append_sheet(workbook, worksheet, 'Spouses');
 
-    XLSX.writeFile(workbook, 'Spouses_Report.xlsx');
-  }}
-  startIcon={<DownloadIcon />}
-  color="primary"
-  variant="contained"
-  sx={{ marginRight: 10 }}
->
+              const colWidths = [
+                { wch: 15 }, { wch: 15 }, { wch: 15 }, { wch: 20 },
+                { wch: 15 }, { wch: 12 }, { wch: 15 }, { wch: 25 },
+                { wch: 25 }, { wch: 25 }, { wch: 20 },
+              ];
+              worksheet['!cols'] = colWidths;
+
+              XLSX.writeFile(workbook, 'Spouses_Report.xlsx');
+            }}
+            startIcon={<DownloadIcon />}
+            color="primary"
+            variant="contained"
+            sx={{ marginRight: 10 }}
+          >
   Export
-</Button>
+          </Button>
 
         </Grid>
       </Grid>

@@ -50,6 +50,7 @@ const ManageFrForDivision = () => {
   const [openRemarks, toggleOpenRemarks] = useState(false);
   const [sendNotification, toggleSendNotification] = useState(false);
   const [selectedFR, setSelectedFR] = useState<string | null>(null);
+  const [selectedFRData, setSelectedFRData] = useState<FR | null>(null);
   const [data, setData] = useState<FR | null>(null);
   const [data2, setData2] = useState<FR | null>(null);
   const [dateRange, setDateRange] = useState<DateRange>({
@@ -57,6 +58,8 @@ const ManageFrForDivision = () => {
     endDate: moment().endOf('M'),
     rangeType: 'months',
   });
+  const [openReason, setOpenReason] = useState(false);
+
   const [data3, setData3] = useState<FR | null>(null);
   const [pdfProps, setPdfProps] = useState<{
     purpose: FRPurpose | null;
@@ -330,6 +333,20 @@ const ManageFrForDivision = () => {
               },
               icon: EditNoteIcon,
             },
+               ...(props.row.reasonForReject || props.row.reasonForSentBack ?
+              [
+                {
+                  id: 'resaons',
+                  text: 'View Reasons',
+                  component: Link,
+                  // to: '/fr/view_FR/' + props.row._id,
+                  onClick: () => {
+                    setOpenReason(true);
+                    setSelectedFRData(props.row);
+                  },
+                  icon: EditNoteIcon,
+                },
+              ]:[]),
 
             // {
             //   id: 'print',
@@ -732,27 +749,27 @@ const ManageFrForDivision = () => {
       align: 'center',
       headerAlign: 'center',
     },
-    {
-      field: 'reasonForSentBack',
-      headerClassName: 'super-app-theme--cell',
-      renderHeader: () => <b>Reason For Revert</b>,
-      renderCell: (props) => (
-        <p
-          style={{
-            maxWidth: 200,
-            whiteSpace: 'normal',
-            wordBreak: 'break-word',
-            justifyContent: 'center',
-            textAlign: 'center',
-          }}
-        >
-          {props.row.reasonForSentBack}
-        </p>
-      ),
-      width: 200,
-      align: 'center',
-      headerAlign: 'center',
-    },
+    // {
+    //   field: 'reasonForSentBack',
+    //   headerClassName: 'super-app-theme--cell',
+    //   renderHeader: () => <b>Reason For Revert</b>,
+    //   renderCell: (props) => (
+    //     <p
+    //       style={{
+    //         maxWidth: 200,
+    //         whiteSpace: 'normal',
+    //         wordBreak: 'break-word',
+    //         justifyContent: 'center',
+    //         textAlign: 'center',
+    //       }}
+    //     >
+    //       {props.row.reasonForSentBack}
+    //     </p>
+    //   ),
+    //   width: 200,
+    //   align: 'center',
+    //   headerAlign: 'center',
+    // },
   ];
   const handleSearchChange = (event: { target: { value: SetStateAction<string> } }) => {
     setSearchText(event.target.value);
@@ -1107,6 +1124,103 @@ const ManageFrForDivision = () => {
                       </Grid> */}
                   </Grid>
                 </DialogContent>
+              </Dialog>
+              <Dialog
+                open={openReason}
+                onClose={() => setOpenReason(false)}
+                maxWidth="sm"
+                fullWidth
+                PaperProps={{
+                  sx: {
+                    borderRadius: 3,
+                    p: 2,
+                  },
+                }}
+              >
+                {/* HEADER */}
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    mb: 1,
+                  }}
+                >
+                  <Typography fontWeight={700} fontSize={18}>
+      FR REASON
+                  </Typography>
+
+                  <IconButton onClick={() => setOpenReason(false)}>
+                    <CloseIcon />
+                  </IconButton>
+                </Box>
+
+                <Divider />
+
+                {/* CONTENT */}
+                <Box sx={{ mt: 2 }}>
+                  <Typography fontSize={14} mb={1}>
+                    <b>FR No:</b> {selectedFRData?.FRno}
+                  </Typography>
+
+                  {/* REVERT REASON */}
+                  {selectedFRData?.reasonForSentBack && (
+                    <Box
+                      sx={{
+                        backgroundColor: '#FFF6D8',
+                        p: 1.5,
+                        borderRadius: 1.5,
+                        mb: 2,
+                      }}
+                    >
+                      <Typography fontWeight={600} fontSize={14}>
+          Reason for Revert:
+                      </Typography>
+                      <Typography fontSize={13} fontWeight={600}>
+                        {selectedFRData?.reasonForSentBack}
+                      </Typography>
+                      <Typography fontWeight={600} fontSize={14}>
+          Reverted By:
+                      </Typography>
+
+                      <Typography fontSize={12}>
+                 Info: Resubmit the FR within 3 days
+                      </Typography>
+                    </Box>
+                  )}
+
+                  {/* REJECT REASON */}
+                  {selectedFRData?.reasonForReject && (
+                    <Box sx={{
+                      backgroundColor: '#FFF6D8',
+                      p: 1.5,
+                      borderRadius: 1.5,
+                      mb: 2,
+                    }}>
+                      <Typography fontWeight={600} fontSize={14}>
+          Reason for Reject:
+                      </Typography>
+                      <Typography fontSize={13}>
+                        {selectedFRData?.reasonForReject}
+                      </Typography>
+                    </Box>
+                  )}
+                </Box>
+
+                {/* FOOTER */}
+                <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3 }}>
+                  <Button
+                    variant="contained"
+                    sx={{
+                      backgroundColor: '#5B4BEB',
+                      borderRadius: 2,
+                      px: 3,
+                    }}
+                    onClick={() => setOpenReason(false)}
+                  >
+      Close
+                  </Button>
+                </Box>
               </Dialog>
               <Dialog open={openRemarks} fullWidth maxWidth="md">
                 <DialogTitle>Remarks</DialogTitle>

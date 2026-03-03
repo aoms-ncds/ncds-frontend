@@ -126,6 +126,7 @@ const ChildListPage = (props: FormComponentProps<Child[], { status?: 'reject' | 
 
     if ((row.firstName && row.firstName.toLowerCase().includes(searchText.toLowerCase())) ||
         (row.lastName && row.lastName.toLowerCase().includes(searchText.toLowerCase())) ||
+        ((row as any).division.details.name && (row as any).division.details.name.toLowerCase().includes(searchText.toLowerCase())) ||
         (row.dateOfBirth && moment(row.dateOfBirth).isValid() && moment(row.dateOfBirth).format('DD/MM/YYYY').includes(searchText.toLowerCase())) ||
         (row.childSupport.name && row.childSupport.name.toLowerCase().includes(searchText.toLowerCase())) ||
         (searchPattern.test(childOfFullName)) ||
