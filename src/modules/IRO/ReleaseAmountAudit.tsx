@@ -3,7 +3,7 @@
 /* eslint-disable no-constant-condition */
 import { SetStateAction, useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import { Grid, Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Alert, Typography, Divider, Box, Container, Tooltip, FormControl, FormControlLabel, Radio, RadioGroup, Chip, Popover, ToggleButton, ToggleButtonGroup } from '@mui/material';
+import { Grid, Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Alert, Typography, Divider, Box, Container, Tooltip, FormControl, FormControlLabel, Radio, RadioGroup, Chip, Popover, ToggleButton, ToggleButtonGroup, Checkbox, InputLabel, ListItemText, ListSubheader, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 // eslint-disable-next-line max-len
 import {
   Print as PrintIcon,
@@ -47,6 +47,7 @@ import FRServices from '../FR/extras/FRServices';
 // import IROTemplate from './components/IROTemplate';
 import InfoIcon from '@mui/icons-material/Info';
 import TransactionLogDialog from '../FR/components/TransactionLogDialog';
+import DivisionsServices from '../Divisions/extras/DivisionsServices';
 
 const ReleaseAmountAudit = (props: { action: 'manage' | 'release' }) => {
   const [openRemarks, toggleOpenRemarks] = useState(false);
@@ -73,7 +74,30 @@ const ReleaseAmountAudit = (props: { action: 'manage' | 'release' }) => {
   const [statusFilter, setStatusFilter] = useState([]); // default WFA: Waiting for access or Reverted
   const [exstatusFilter, setExStatusFilter] = useState<any>([]); // default WFA: Waiting for access or Reverted
   const [openLog, setOpenLog] = useState(false);
+  const [divisions, setDivisions] = useState<string[]>([]);
+  const [divisionSearch, setDivisionSearch] = useState('');
+  const [selectedDivisions, setSelectedDivisions] = useState<string[]>([]);
 
+  useEffect(() => {
+    DivisionsServices.getDivisions().then((res) => {
+      const names = res.data.map((d: any) => d.details.name);
+      setDivisions(names);
+    });
+  }, []);
+  const filteredDivisions = divisions.filter((name) =>
+    name
+    .toLowerCase()
+    .replace(/\s/g, '') // remove spaces
+    .includes(divisionSearch.toLowerCase().replace(/\s/g, '')),
+  );
+  const handleDivisionChange = (event: SelectChangeEvent<string[]>) => {
+    const value = event.target.value as string[];
+    if (value.includes('__ALL__')) {
+      ([]); // empty = show all
+      return;
+    }
+    setSelectedDivisions(value);
+  };
   const [selectedIRO, setSelectedIRO] = useState<IROrder>({
     _id: '',
     IROno: '',
@@ -1152,16 +1176,33 @@ const ReleaseAmountAudit = (props: { action: 'manage' | 'release' }) => {
   };
 
   const filteredRows = (flattenedData ?? []).filter((row: IROrder) => {
-    if ((row.IROno && row.IROno.toLowerCase().includes(searchText.toLowerCase())) ||
-      (row.IRODate && row.IRODate.format('DD/MM/YYYY').toLowerCase().includes(searchText.toLowerCase())) ||
-      // (row.particulars[0]?.subCategory1 && row.particulars[0]?.subCategory1.toLowerCase().includes(searchText.toLowerCase())) ||
-      // (row.particulars[0]?.subCategory2 && row.particulars[0]?.subCategory2.toLowerCase().includes(searchText.toLowerCase())) ||
-      // (row.particulars[0]?.subCategory3 && row.particulars[0]?.subCategory3.toLowerCase().includes(searchText.toLowerCase())) ||
-      (row.division?.details?.name && row.division?.details?.name.toLowerCase().includes(searchText.toLowerCase()))
-    ) {
-      return true;
-    }
-    return Object.values(row).some((value) => value && value.toString().toLowerCase().includes(searchText.toLowerCase()));
+    const divisionMatch = selectedDivisions.length === 0 ||
+    selectedDivisions.includes(row?.division?.details.name ?? '');
+
+    if (!searchText) return divisionMatch;
+
+    const searchLower = searchText.toLowerCase();
+
+    // Check all searchable fields
+    const searchMatch =
+    (row.IROno && row.IROno.toLowerCase().includes(searchLower)) ||
+    (row.IRODate && row.IRODate.format('DD/MM/YYYY').toLowerCase().includes(searchLower)) ||
+    (row.division?.details.name && row.division?.details.name.toLowerCase().includes(searchLower)) ||
+    (row.purposeSubdivision?.name && row.purposeSubdivision.name.toLowerCase().includes(searchLower)) ||
+    // Add subCategory search
+    (row.particulars && row.particulars.some((particular:any) =>
+      (particular.subCategory1 && particular.subCategory1.toLowerCase().includes(searchLower)) ||
+      (particular.subCategory2 && particular.subCategory2.toLowerCase().includes(searchLower)) ||
+      (particular.subCategory3 && particular.subCategory3.toLowerCase().includes(searchLower)),
+    )) ||
+    // Add mainCategory search
+    (row.particulars && row.particulars.some((particular:any) =>
+      particular.mainCategory && particular.mainCategory.toLowerCase().includes(searchLower),
+    )) ||
+    // Add beneficiary name search
+    (row.sanctionedBank && row.sanctionedBank.toLowerCase().includes(searchLower));
+
+    return divisionMatch && searchMatch;
   });
   if (searchText && filteredRows.length ===0) {
     enqueueSnackbar({
@@ -1213,9 +1254,70 @@ const ReleaseAmountAudit = (props: { action: 'manage' | 'release' }) => {
                   />
                   {/* </div> */}
                 </Grid>
+                <Grid item xs={3}>
+                  {hasPermissions(['MANAGE_IRO']) && (
+                    <Grid item xs={12} md="auto" sx={{
+                      display: 'flex',
+                      alignItems: 'center', // ✅ vertical center
+                    }}>
+                      <FormControl
+                        sx={{
+                          'minWidth': 200,
+                          '& .MuiOutlinedInput-root': {
+                            // height: 45, // ✅ control select height
+                            fontSize: 13,
+                            borderRadius: 1.5,
+                          },
+                        }}
+                      >
+                        <InputLabel id="division-label">
+  Division
+                        </InputLabel>
+                        <Select
+                          multiple
+                          value={selectedDivisions}
+                          label="Division"
+                          onChange={handleDivisionChange}
+                          renderValue={(selected) =>
+                            selected.length === 0 ? 'None' : selected.join(', ')
+                          }
+                          MenuProps={{
+                            PaperProps: {
+                              style: { maxHeight: 300, width: 250 },
+                            },
+                          }}
+                        >
+                          <ListSubheader>
+                            <TextField
+                              size="small"
+                              placeholder="Search division..."
+                              fullWidth
+                              autoFocus
+                              value={divisionSearch}
+                              onChange={(e) => setDivisionSearch(e.target.value)}
+                              onKeyDown={(e) => e.stopPropagation()}
+                            />
+                          </ListSubheader>
+
+                          <MenuItem value="__ALL__">
+                            <Checkbox checked={selectedDivisions.length === 0} />
+                            <ListItemText primary="None" />
+                          </MenuItem>
+
+                          {filteredDivisions.map((name) => (
+                            <MenuItem key={name} value={name}>
+                              <Checkbox checked={selectedDivisions.includes(name)} />
+                              <ListItemText primary={name} />
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
+                    </Grid>
+                  )}
+                </Grid>
                 <>
                   {/* ===== STATUS FILTER ===== */}
-                    <Grid item>
+                  <Grid item>
                     <ToggleButtonGroup
                       exclusive
                       size="small"
@@ -1263,7 +1365,7 @@ const ReleaseAmountAudit = (props: { action: 'manage' | 'release' }) => {
                   </Grid>
 
                   {/* ===== CATEGORY FILTER ===== */}
-                
+
                 </>
                 <Grid item xs={12}>
                   <Card
@@ -1321,6 +1423,11 @@ const ReleaseAmountAudit = (props: { action: 'manage' | 'release' }) => {
                           getRowId={(row) => row._id}
                           checkboxSelection={props.action === 'release'}
                           disableRowSelectionOnClick={props.action === 'release'}
+                          isRowSelectable={(params:any) =>
+                            selectedDivisions.length === 0 ?
+                              true :
+                              selectedDivisions.includes(params?.row?.division?.details?.name)
+                          }
                           onRowSelectionModelChange={(newRowSelectionModel) => {
                             console.log(newRowSelectionModel, 'newRowSelectionModel');
                             const selectedRow = flattenedData.find((iro: IROrder) => iro._id === newRowSelectionModel[0] );

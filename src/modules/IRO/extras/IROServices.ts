@@ -45,7 +45,7 @@ export default {
         }:undefined,
       })),
     ),
-  getAllOptimizedSuportEx: (conditions?: { Exstatus?:any; status?: number[]| number;dateRange?: DateRange; sourceOfAccount?: string; support?: 'Expanse' | 'Support'|'All'| 'Custom'| null}): Promise<StandardResponse<IROrder[]>> =>
+  getAllOptimizedSuportEx: (conditions?: { Exstatus?:any; status?: number[]| number;dateRange?: DateRange; sourceOfAccount?: string; support?: 'Expanse' | 'Support'|'All'| 'Custom'| 'Sanctioned'| null}): Promise<StandardResponse<IROrder[]>> =>
     getStandardResponse<IROrder[]>(axios.get('/iro/optimizedEx-support', { params: conditions, headers: { ...getAuthHeader() } }), (IROrders: IROrder[]) =>
       IROrders.map((IRO) => ({
         ...IRO,

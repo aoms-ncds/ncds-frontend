@@ -11,7 +11,7 @@ import {
   Delete as DeleteIcon,
 } from '@mui/icons-material';
 // eslint-disable-next-line max-len
-import { Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Grid, Box, Container, Typography, FormControl, FormControlLabel, Radio, RadioGroup, Divider, ListItemIcon, ListItemText, Menu, MenuItem, ToggleButton, ToggleButtonGroup } from '@mui/material';
+import { Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Grid, Box, Container, Typography, FormControl, FormControlLabel, Radio, RadioGroup, Divider, ListItemIcon, ListItemText, Menu, MenuItem, ToggleButton, ToggleButtonGroup, SelectChangeEvent, Checkbox, InputLabel, ListSubheader, Select } from '@mui/material';
 // eslint-disable-next-line no-duplicate-imports
 import { Send as SendIcon, Edit as EditIcon, Preview as PreviewIcon, Print as PrintIcon, Download as DownloadIcon } from '@mui/icons-material';
 import { DataGrid, GridCellParams, GridColDef } from '@mui/x-data-grid';
@@ -154,6 +154,30 @@ const ReconciliationIRO = () => {
     signature: {},
     specialsanction: '',
   });
+  const [divisions, setDivisions] = useState<string[]>([]);
+  const [divisionSearch, setDivisionSearch] = useState('');
+  const [selectedDivisions, setSelectedDivisions] = useState<string[]>([]);
+
+  useEffect(() => {
+    DivisionsServices.getDivisions().then((res) => {
+      const names = res.data.map((d: any) => d.details.name);
+      setDivisions(names);
+    });
+  }, []);
+  const filteredDivisions = divisions.filter((name) =>
+    name
+      .toLowerCase()
+      .replace(/\s/g, '') // remove spaces
+      .includes(divisionSearch.toLowerCase().replace(/\s/g, '')),
+  );
+  const handleDivisionChange = (event: SelectChangeEvent<string[]>) => {
+    const value = event.target.value as string[];
+    if (value.includes('__ALL__')) {
+      ([]); // empty = show all
+      return;
+    }
+    setSelectedDivisions(value);
+  };
   const [loading, setLoading] = useState(false);
   const [iroData, setIroData] = useState<IROrder | null>(null);
   const [FrData, setFrData] = useState<FR | null>(null);
@@ -312,16 +336,33 @@ const ReconciliationIRO = () => {
   };
 
   const filteredRows = (reconciliationIRO ?? []).filter((row) => {
-    if ((row.IROno && row.IROno.toLowerCase().includes(searchText.toLowerCase())) ||
-      (row.IRODate && row.IRODate.format('DD/MM/YYYY').toLowerCase().includes(searchText.toLowerCase())) ||
-      // (row.particulars[0]?.subCategory1 && row.particulars[0]?.subCategory1.toLowerCase().includes(searchText.toLowerCase())) ||
-      // (row.particulars[0]?.subCategory2 && row.particulars[0]?.subCategory2.toLowerCase().includes(searchText.toLowerCase())) ||
-      // (row.particulars[0]?.subCategory3 && row.particulars[0]?.subCategory3.toLowerCase().includes(searchText.toLowerCase())) ||
-      (row.division?.details.name && row.division?.details.name.toLowerCase().includes(searchText.toLowerCase()))
-    ) {
-      return true;
-    }
-    return Object.values(row).some((value) => value && value.toString().toLowerCase().includes(searchText.toLowerCase()));
+    const divisionMatch = selectedDivisions.length === 0 ||
+    selectedDivisions.includes(row?.division?.details.name ?? '');
+
+    if (!searchText) return divisionMatch;
+
+    const searchLower = searchText.toLowerCase();
+
+    // Check all searchable fields
+    const searchMatch =
+    (row.IROno && row.IROno.toLowerCase().includes(searchLower)) ||
+    (row.IRODate && row.IRODate.format('DD/MM/YYYY').toLowerCase().includes(searchLower)) ||
+    (row.division?.details.name && row.division?.details.name.toLowerCase().includes(searchLower)) ||
+    (row.purposeSubdivision?.name && row.purposeSubdivision.name.toLowerCase().includes(searchLower)) ||
+    // Add subCategory search
+    (row.particulars && row.particulars.some((particular:any) =>
+      (particular.subCategory1 && particular.subCategory1.toLowerCase().includes(searchLower)) ||
+      (particular.subCategory2 && particular.subCategory2.toLowerCase().includes(searchLower)) ||
+      (particular.subCategory3 && particular.subCategory3.toLowerCase().includes(searchLower)),
+    )) ||
+    // Add mainCategory search
+    (row.particulars && row.particulars.some((particular:any) =>
+      particular.mainCategory && particular.mainCategory.toLowerCase().includes(searchLower),
+    )) ||
+    // Add beneficiary name search
+    (row.sanctionedBank && row.sanctionedBank.toLowerCase().includes(searchLower));
+
+    return divisionMatch && searchMatch;
   });
   if (searchText && filteredRows.length ===0) {
     enqueueSnackbar({
@@ -604,27 +645,27 @@ const ReconciliationIRO = () => {
         );
       },
     },
-    {
-      field: 'status',
-      renderHeader: () => (<b>Status</b>),
-      // renderCell: (props) => (
-      //   <p
-      //     style={{
-      //       maxWidth: 205,
-      //       whiteSpace: 'normal',
-      //       wordBreak: 'break-word',
-      //     }}
-      //   >
-      //     {IROLifeCycleStates.getStatusNameByCodeTransaction(props.value).replaceAll('_', ' ')}
-      //   </p>
-      // ),
-      align: 'center',
-      width: 250,
-      headerAlign: 'center',
-      valueGetter: (params) => {
-        return IROLifeCycleStates.getStatusNameByCodeTransaction(params.value).replaceAll('_', ' ');
-      },
-    },
+    // {
+    //   field: 'status',
+    //   renderHeader: () => (<b>Status</b>),
+    //   // renderCell: (props) => (
+    //   //   <p
+    //   //     style={{
+    //   //       maxWidth: 205,
+    //   //       whiteSpace: 'normal',
+    //   //       wordBreak: 'break-word',
+    //   //     }}
+    //   //   >
+    //   //     {IROLifeCycleStates.getStatusNameByCodeTransaction(props.value).replaceAll('_', ' ')}
+    //   //   </p>
+    //   // ),
+    //   align: 'center',
+    //   width: 250,
+    //   headerAlign: 'center',
+    //   valueGetter: (params) => {
+    //     return IROLifeCycleStates.getStatusNameByCodeTransaction(params.value).replaceAll('_', ' ');
+    //   },
+    // },
     { field: 'IROno', headerName: 'IRO No', width: 130, renderHeader: () => (<b>IRO No</b>), align: 'center', headerAlign: 'center' },
     {
       field: 'IRODate', headerName: 'IRO Date', width: 130, renderHeader: () => (<b>IRO Date</b>),
@@ -812,7 +853,7 @@ const ReconciliationIRO = () => {
     },
   ];
   return (
-    <CommonPageLayout title="For Reconciliation" momentFilter={
+    <CommonPageLayout status='AMOUNT RELEASED' title="For Reconciliation" momentFilter={
 
       {
         dateRange: dateRange,
@@ -842,7 +883,67 @@ const ReconciliationIRO = () => {
                 />
                 {/* Count Box with Reset Button */}
 
+                <Grid item xs={3}>
+                  {hasPermissions(['MANAGE_IRO']) && (
+                    <Grid item xs={12} md="auto" sx={{
+                      display: 'flex',
+                      alignItems: 'center', // ✅ vertical center
+                    }}>
+                      <FormControl
+                        sx={{
+                          'minWidth': 200,
+                          '& .MuiOutlinedInput-root': {
+                            // height: 45, // ✅ control select height
+                            fontSize: 13,
+                            borderRadius: 1.5,
+                          },
+                        }}
+                      >
+                        <InputLabel id="division-label">
+  Division
+                        </InputLabel>
+                        <Select
+                          multiple
+                          value={selectedDivisions}
+                          label="Division"
+                          onChange={handleDivisionChange}
+                          renderValue={(selected) =>
+                            selected.length === 0 ? 'None' : selected.join(', ')
+                          }
+                          MenuProps={{
+                            PaperProps: {
+                              style: { maxHeight: 300, width: 250 },
+                            },
+                          }}
+                        >
+                          <ListSubheader>
+                            <TextField
+                              size="small"
+                              placeholder="Search division..."
+                              fullWidth
+                              autoFocus
+                              value={divisionSearch}
+                              onChange={(e) => setDivisionSearch(e.target.value)}
+                              onKeyDown={(e) => e.stopPropagation()}
+                            />
+                          </ListSubheader>
 
+                          <MenuItem value="__ALL__">
+                            <Checkbox checked={selectedDivisions.length === 0} />
+                            <ListItemText primary="None" />
+                          </MenuItem>
+
+                          {filteredDivisions.map((name) => (
+                            <MenuItem key={name} value={name}>
+                              <Checkbox checked={selectedDivisions.includes(name)} />
+                              <ListItemText primary={name} />
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
+                    </Grid>
+                  )}
+                </Grid>
                 {/* Export Button */}
                 <Button
                   onClick={async () => {
@@ -895,6 +996,7 @@ const ReconciliationIRO = () => {
                 </Button>
 
               </Box>
+
               <br />
               <Grid
                 container
@@ -1004,6 +1106,7 @@ const ReconciliationIRO = () => {
 
           </Grid>
 
+
           <Grid item xs={12}>
             <Box
               sx={{
@@ -1032,12 +1135,18 @@ const ReconciliationIRO = () => {
                 },
               }}
             >
-              <DataGrid rows={filteredRows ?? []} columns={columns} getRowId={(row) => row._id} style={{ height: '70vh', width: '100%' }} getRowClassName={(params) => {
-                if (params.row.specialsanction == 'Yes') {
-                  return 'special-sanction'; // Class for rows with special sanction
+              <DataGrid rows={filteredRows ?? []} columns={columns} getRowId={(row) => row._id} style={{ height: '70vh', width: '100%' }}
+                isRowSelectable={(params:any) =>
+                  selectedDivisions.length === 0 ?
+                    true :
+                    selectedDivisions.includes(params?.row?.division?.details?.name)
                 }
-                return params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'; // Default classes
-              }}
+                getRowClassName={(params) => {
+                  if (params.row.specialsanction == 'Yes') {
+                    return 'special-sanction'; // Class for rows with special sanction
+                  }
+                  return params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'; // Default classes
+                }}
               />
 
             </Box>

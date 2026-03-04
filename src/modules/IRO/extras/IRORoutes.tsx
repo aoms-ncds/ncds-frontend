@@ -16,6 +16,8 @@ import EditIROForRevert from '../EditIROForRevert';
 import AccountApprove from '../AccountApprovel';
 import EditForCustom from '../EditForCustom';
 import EditIROCustom from '../EditIROCustom';
+import RevertedIRO from '../Reverted';
+import DisapprovedIRO from '../Disapproved';
 
 
 const iroPageRoutes: ModuleRoute = {
@@ -99,6 +101,20 @@ const iroPageRoutes: ModuleRoute = {
       title: 'Rejected IRO',
       path: '/rejected',
       element: <RejectedIRO />,
+      private: true,
+      requiredAccessRights: ['READ_IRO'],
+    },
+    {
+      title: 'Rejected IRO',
+      path: '/disapproved',
+      element: <DisapprovedIRO />,
+      private: true,
+      requiredAccessRights: ['READ_IRO'],
+    },
+    {
+      title: 'Rejected IRO',
+      path: '/reverted',
+      element: <RevertedIRO />,
       private: true,
       requiredAccessRights: ['READ_IRO'],
     },

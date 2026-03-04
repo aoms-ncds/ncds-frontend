@@ -47,6 +47,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import PDFTemplateCustom from './components/PDFTemplateCustom';
 import PDFTemplateCustomFR from './components/PDFTemplateCustomFR';
 import PDFTemplateCustomFRAll from './components/PDFTemplateCustomFRAll';
+import formatAmount from '../Common/formatcode';
 
 const CustomFooter = () => (
   <Box sx={{ display: 'flex', justifyContent: 'space-between', padding: '10px', background: '#f0f0f0', fontWeight: 'bold', borderTop: '1px solid black' }}>
@@ -1605,7 +1606,7 @@ const CustomReportFRFilterPage = () => {
                           selectedData.includes('Date') && iro.FRdate,
                           selectedData.includes('Division') && iro.divisionData?.details?.name,
                           selectedData.includes('Narration') && iro.particularsData?.narration,
-                          selectedData.includes('Sanction Amount') && iro.particularsData?.sanctionedAmount,
+                          selectedData.includes('Sanction Amount') && formatAmount(iro.particularsData?.sanctionedAmount),
                           selectedData.includes('Sanction as per') && iro.particularsData?.sanctionedAsPer,
                           selectedData.includes('IRO No') && iro.IROdata?.IROno,
                           selectedData.includes('Status') && IROLifeCycleStates.getStatusNameByCodeTransaction(iro.status).replaceAll('_', ' '),
@@ -1748,16 +1749,16 @@ const CustomReportFRFilterPage = () => {
               <Box sx={{ display: 'flex', justifyContent: 'space-between', padding: '10px', background: '#f0f0f0', fontWeight: 'bold', borderTop: '1px solid black' }}>
                 <span>Total:</span>
                 <span>
-                  {`Requested amt : ₹${data?.reduce(
+                  {`Requested amt : ₹${ formatAmount(data?.reduce(
                     (total, e) => total + (e.particularsData?.requestedAmount ? Number(e.particularsData.requestedAmount) : 0),
                     0,
-                  ).toFixed(2)}`}
+                  ).toFixed(2))}`}
 
                 </span>
                 <span>{`Sanctioned amt : ₹${
-                  data?.reduce((total, e) =>
+                  formatAmount(data?.reduce((total, e) =>
                     total + (e.particularsData?.sanctionedAmount ? Number(e.particularsData.sanctionedAmount) : 0)
-                  , 0).toFixed(2)}`}</span>
+                  , 0).toFixed(2))}`}</span>
               </Box>
               {/* <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
                 <Button

@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 import { SetStateAction, useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import { Grid, Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Alert, Typography, Divider, Box, Tooltip, FormControl, FormControlLabel, Radio, RadioGroup, ToggleButton, ToggleButtonGroup } from '@mui/material';
+import { Grid, Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Alert, Typography, Divider, Box, Tooltip, FormControl, FormControlLabel, Radio, RadioGroup, ToggleButton, ToggleButtonGroup, Checkbox, InputLabel, ListItemText, ListSubheader, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 // eslint-disable-next-line max-len
 import {
   Edit as EditIcon,
@@ -34,6 +34,7 @@ import EditNoteIcon from '@mui/icons-material/EditNote';
 import * as XLSX from 'xlsx';
 import clsx from 'clsx';
 import TransactionLogDialog from '../FR/components/TransactionLogDialog';
+import DivisionsServices from '../Divisions/extras/DivisionsServices';
 
 const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
   const [openRemarks, toggleOpenRemarks] = useState(false);
@@ -51,7 +52,7 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
   const [addSignature, toggleAddSignature] = useState(false);
   const [searchText, setSearchText] = useState('');
   const [openLog, setOpenLog] = useState(false);
-  const [statusFilter1, setStatusFilter1] = useState<'Support' |'All' | 'Expanse'| null>('All'); // default WFA: Waiting for access or Reverted
+  const [statusFilter1, setStatusFilter1] = useState<'Support' |'All' | 'Expanse'| 'Sanctioned'| null>('All'); // default WFA: Waiting for access or Reverted
   const toggleSx = {
     'border': '1px solid #dcdcdc',
     'borderRadius': 1,
@@ -75,6 +76,9 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
       },
     },
   };
+  const [selectedDivisions, setSelectedDivisions] = useState<string[]>([]);
+  const [divisionSearch, setDivisionSearch] = useState('');
+
   const [selectedIRO, setSelectedIRO] = useState<IROrder>({
     _id: '',
     IROno: '',
@@ -347,8 +351,27 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
   const [fileUploaderAction, setFileUploaderAction] = useState<'add' | 'manage'>('add');
   const [statusFilter, setStatusFilter] = useState([IROLifeCycleStates.WAITING_FOR_OFFICE_MNGR, IROLifeCycleStates.IRO_IN_PROCESS]); // default WFA: Waiting for access or Reverted
   const [exstatusFilter, setExStatusFilter] = useState<any>([]); // default WFA: Waiting for access or Reverted
-
-
+  const [divisions, setDivisions] = useState<string[]>([]);
+  useEffect(() => {
+    DivisionsServices.getDivisions().then((res) => {
+      const names = res.data.map((d: any) => d.details.name);
+      setDivisions(names);
+    });
+  }, []);
+  const handleDivisionChange = (event: SelectChangeEvent<string[]>) => {
+    const value = event.target.value as string[];
+    if (value.includes('__ALL__')) {
+      setSelectedDivisions([]); // empty = show all
+      return;
+    }
+    setSelectedDivisions(value);
+  };
+  const filteredDivisions = divisions.filter((name) =>
+    name
+    .toLowerCase()
+    .replace(/\s/g, '') // remove spaces
+    .includes(divisionSearch.toLowerCase().replace(/\s/g, '')),
+  );
   // const userPermissions = (user.user as User)?.permissions;
   //   useEffect(() => {
   //     if (props.action === 'release') {
@@ -400,16 +423,30 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
   };
 
   const filteredRows = (IROrder ?? []).filter((row) => {
-    if ((row.IROno && row.IROno.toLowerCase().includes(searchText.toLowerCase())) ||
-      (row.IRODate && row.IRODate.format('DD/MM/YYYY').toLowerCase().includes(searchText.toLowerCase())) ||
-      // (row.particulars[0]?.subCategory1 && row.particulars[0]?.subCategory1.toLowerCase().includes(searchText.toLowerCase())) ||
-      // (row.particulars[0]?.subCategory2 && row.particulars[0]?.subCategory2.toLowerCase().includes(searchText.toLowerCase())) ||
-      // (row.particulars[0]?.subCategory3 && row.particulars[0]?.subCategory3.toLowerCase().includes(searchText.toLowerCase())) ||
-      (row.division?.details.name && row.division?.details.name.toLowerCase().includes(searchText.toLowerCase()))
-    ) {
-      return true;
-    }
-    return Object.values(row).some((value) => value && value.toString().toLowerCase().includes(searchText.toLowerCase()));
+    const divisionMatch = selectedDivisions.length === 0 ||
+    selectedDivisions.includes(row?.division?.details.name?? '');
+    if (!searchText) return divisionMatch;
+    const searchLower = searchText.toLowerCase();
+
+    const searchMatch =
+    (row.IROno && row.IROno.toLowerCase().includes(searchLower)) ||
+    (row.IRODate && row.IRODate.format('DD/MM/YYYY').toLowerCase().includes(searchLower)) ||
+    (row.division?.details.name && row.division?.details.name.toLowerCase().includes(searchLower)) ||
+    (row.purposeSubdivision?.name && row.purposeSubdivision.name.toLowerCase().includes(searchLower)) ||
+    // Add subCategory search
+    (row.particulars && row.particulars.some((particular:any) =>
+      (particular.subCategory1 && particular.subCategory1.toLowerCase().includes(searchLower)) ||
+      (particular.subCategory2 && particular.subCategory2.toLowerCase().includes(searchLower)) ||
+      (particular.subCategory3 && particular.subCategory3.toLowerCase().includes(searchLower)),
+    )) ||
+    // Add mainCategory search
+    (row.particulars && row.particulars.some((particular:any) =>
+      particular.mainCategory && particular.mainCategory.toLowerCase().includes(searchLower),
+    )) ||
+    // Add beneficiary name search
+    (row.sanctionedBank && row.sanctionedBank.toLowerCase().includes(searchLower));
+
+    return divisionMatch && searchMatch;
   });
   if (searchText && filteredRows.length ===0) {
     enqueueSnackbar({
@@ -685,79 +722,79 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
         />
       ),
     },
-    {
-      field: 'status',
-      renderHeader: () => <b>Status</b>,
-      width: 250,
-      align: 'center',
-      headerAlign: 'center',
-      cellClassName: (params) => {
-        const statusName = params.formattedValue;
-        if (params.value == null) {
-          return '';
-        }
-        switch (statusName) {
-        case 'WAITING FOR APPROVAL':
-          return clsx('yellow-light');
-        case 'WAITING FOR ACCOUNTS MNGR':
-          return clsx('yellow-dark');
-        case 'IRO APPROVED':
-          return clsx('orange-light');
-        case 'WAITING FOR RELEASE AMOUNT':
-          return clsx('orange-dark');
-        case 'AMOUNT RELEASED':
-          return clsx('green-light');
-        case 'RECONCILIATION DONE':
-          return clsx('green-medium');
-        case 'IRO CLOSED':
-          return clsx('green-dark');
-        case 'IRO DISAPPROVED':
-          return clsx('red-light');
-        case 'IRO IN PROCESS':
-          return clsx('dark-orange');
-        default:
-          // console.log('No class applied');
-          return '';
-        }
-      },
+    // {
+    //   field: 'status',
+    //   renderHeader: () => <b>Status</b>,
+    //   width: 250,
+    //   align: 'center',
+    //   headerAlign: 'center',
+    //   cellClassName: (params) => {
+    //     const statusName = params.formattedValue;
+    //     if (params.value == null) {
+    //       return '';
+    //     }
+    //     switch (statusName) {
+    //     case 'WAITING FOR APPROVAL':
+    //       return clsx('yellow-light');
+    //     case 'WAITING FOR ACCOUNTS MNGR':
+    //       return clsx('yellow-dark');
+    //     case 'IRO APPROVED':
+    //       return clsx('orange-light');
+    //     case 'WAITING FOR RELEASE AMOUNT':
+    //       return clsx('orange-dark');
+    //     case 'AMOUNT RELEASED':
+    //       return clsx('green-light');
+    //     case 'RECONCILIATION DONE':
+    //       return clsx('green-medium');
+    //     case 'IRO CLOSED':
+    //       return clsx('green-dark');
+    //     case 'IRO DISAPPROVED':
+    //       return clsx('red-light');
+    //     case 'IRO IN PROCESS':
+    //       return clsx('dark-orange');
+    //     default:
+    //       // console.log('No class applied');
+    //       return '';
+    //     }
+    //   },
 
-      valueGetter: (params) => {
-        let statusName = IROLifeCycleStates.getStatusNameByCodeTransaction(params.value);
-        // Check if the status name needs to be changed
-        console.log(statusName, 'sjhivi');
-        switch (statusName) {
-        case 'SEND_BACK':
-          statusName = 'REVERTED';
-          break;
-        case 'FR_APPROVED':
-          statusName = 'FR VERIFIED'; // Change to whatever new name you want
-          break;
-        case 'FR_REJECTED':
-          statusName = 'IRO DISAPPROVED'; // Change to whatever new name you want
-          break;
-        case 'WAITING_FOR_OFFICE_MNGR':
-          statusName = 'WAITING FOR APPROVAL'; // Change to whatever new name you want
-          break;
-        case 'WAITING_FOR_ACCOUNTS_STATE':
-          statusName = 'IRO APPROVED'; // Change to whatever new name you want
-          break;
-        case 'IRO_IN_PROCESS':
-          statusName = 'IRO IN PROCESS'; // Change to whatever new name you want
-          break;
-          // case 'WAITING_FOR_ACCOUNTS_MNGR':
-          //   statusName = 'WAITING FOR ACCOUNTS MNGR';
-          //   if (props.action === 'release') {
-          //     statusName = 'WAITTING FOR RELEASE AMOUNT'; // Change to whatever new name you want
-          //   }
-          break;
-          // Add more cases for other status names you want to change
-        default:
-          statusName = statusName.replaceAll('_', ' ');
-          break;
-        }
-        return statusName;
-      },
-    },
+    //   valueGetter: (params) => {
+    //     let statusName = IROLifeCycleStates.getStatusNameByCodeTransaction(params.value);
+    //     // Check if the status name needs to be changed
+    //     console.log(statusName, 'sjhivi');
+    //     switch (statusName) {
+    //     case 'SEND_BACK':
+    //       statusName = 'REVERTED';
+    //       break;
+    //     case 'FR_APPROVED':
+    //       statusName = 'FR VERIFIED'; // Change to whatever new name you want
+    //       break;
+    //     case 'FR_REJECTED':
+    //       statusName = 'IRO DISAPPROVED'; // Change to whatever new name you want
+    //       break;
+    //     case 'WAITING_FOR_OFFICE_MNGR':
+    //       statusName = 'WAITING FOR APPROVAL'; // Change to whatever new name you want
+    //       break;
+    //     case 'WAITING_FOR_ACCOUNTS_STATE':
+    //       statusName = 'IRO APPROVED'; // Change to whatever new name you want
+    //       break;
+    //     case 'IRO_IN_PROCESS':
+    //       statusName = 'IRO IN PROCESS'; // Change to whatever new name you want
+    //       break;
+    //       // case 'WAITING_FOR_ACCOUNTS_MNGR':
+    //       //   statusName = 'WAITING FOR ACCOUNTS MNGR';
+    //       //   if (props.action === 'release') {
+    //       //     statusName = 'WAITTING FOR RELEASE AMOUNT'; // Change to whatever new name you want
+    //       //   }
+    //       break;
+    //       // Add more cases for other status names you want to change
+    //     default:
+    //       statusName = statusName.replaceAll('_', ' ');
+    //       break;
+    //     }
+    //     return statusName;
+    //   },
+    // },
     { field: 'IROno', headerName: 'IRO No', width: 130, renderHeader: (params) => <b style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</b>, align: 'center', headerAlign: 'center' },
     {
       field: 'IRODate',
@@ -910,7 +947,7 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
   ];
 
   return (
-    <CommonPageLayout title={'Office Manager Verify'} momentFilter={
+    <CommonPageLayout title={'Office Manager Verify '} status={'WAITING FOR APPROVAL'} momentFilter={
 
       {
         dateRange: dateRange,
@@ -929,7 +966,7 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
           <>
             <Card sx={{ maxWidth: '78vw', height: '100vh', alignItems: 'center' }}>
               <Grid container spacing={2} padding={2}>
-                <Grid item xs={8}>
+                <Grid item xs={6}>
                   {/* <div style={{ display: 'flex', alignItems: 'center' }}> */}
                   <TextField
                     label="Search"
@@ -941,6 +978,68 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
                     // style={{ width: '80%' }}
                   />
                   {/* </div> */}
+                </Grid>
+                <Grid item xs={6}>
+                  {/* <div style={{ display: 'flex', alignItems: 'center' }}> */}
+                  {hasPermissions(['MANAGE_IRO']) && (
+                    <Grid item xs={12} md="auto" sx={{
+                      display: 'flex',
+                      alignItems: 'center', // ✅ vertical center
+                    }}>
+                      <FormControl
+                        sx={{
+                          'minWidth': 200,
+                          '& .MuiOutlinedInput-root': {
+                            // height: 45, // ✅ control select height
+                            fontSize: 13,
+                            borderRadius: 1.5,
+                          },
+                        }}
+                      >
+                        <InputLabel id="division-label">
+                    Division
+                        </InputLabel>
+                        <Select
+                          multiple
+                          value={selectedDivisions}
+                          label="Division"
+                          onChange={handleDivisionChange}
+                          renderValue={(selected) =>
+                            selected.length === 0 ? 'None' : selected.join(', ')
+                          }
+                          MenuProps={{
+                            PaperProps: {
+                              style: { maxHeight: 300, width: 250 },
+                            },
+                          }}
+                        >
+                          <ListSubheader>
+                            <TextField
+                              size="small"
+                              placeholder="Search division..."
+                              fullWidth
+                              autoFocus
+                              value={divisionSearch}
+                              onChange={(e) => setDivisionSearch(e.target.value)}
+                              onKeyDown={(e) => e.stopPropagation()}
+                            />
+                          </ListSubheader>
+
+                          <MenuItem value="__ALL__">
+                            <Checkbox checked={selectedDivisions.length === 0} />
+                            <ListItemText primary="None" />
+                          </MenuItem>
+
+                          {filteredDivisions.map((name) => (
+                            <MenuItem key={name} value={name}>
+                              <Checkbox checked={selectedDivisions.includes(name)} />
+                              <ListItemText primary={name} />
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
+                    </Grid>
+                  )}
                 </Grid>
                 <Grid
                   container
@@ -963,12 +1062,14 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
                       <ToggleButtonGroup
                         exclusive
                         size="small"
-                        value={exstatusFilter.includes(69) ? 'NonBankTransfers' : 'All'}
+                        value={exstatusFilter.includes(69) ? 'NonBankTransfers' :exstatusFilter.includes(70) ? 'BankTransfers' :'All'}
                         onChange={(_, value) => {
                           if (!value) return;
 
                           if (value === 'NonBankTransfers') {
                             setExStatusFilter([69]);
+                          } else if (value === 'BankTransfers') {
+                            setExStatusFilter([70]);
                           } else {
                             setExStatusFilter([]);
                             setStatusFilter([
@@ -983,7 +1084,7 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
                         <ToggleButton value="NonBankTransfers">
           NON BANK TRANSFERS
                         </ToggleButton>
-                        <ToggleButton value="NonBankTransfers">
+                        <ToggleButton value="BankTransfers">
           BANK TRANS.               </ToggleButton>
                       </ToggleButtonGroup>
 
@@ -998,9 +1099,11 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
                           setStatusFilter1(
                             value === 'Support' ?
                               'Support' :
-                              value === 'Expanse' ?
-                                'Expanse' :
-                                'All',
+                              value === 'Sanctioned' ?
+                                'Sanctioned' :
+                                value === 'Expanse' ?
+                                  'Expanse' :
+                                  'All',
                           );
                         }}
                         sx={toggleSx}
@@ -1008,7 +1111,7 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
                         <ToggleButton value="All">ALL </ToggleButton>
                         <ToggleButton value="Support">SUPPORT</ToggleButton>
                         <ToggleButton value="Expanse">EXPENSE</ToggleButton>
-                        <ToggleButton value="Expanse">SANCTIONED</ToggleButton>
+                        <ToggleButton value="Sanctioned">SANCTIONED</ToggleButton>
                       </ToggleButtonGroup>
                     </Box>
                   </Grid>
@@ -1143,6 +1246,13 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
                       getRowId={(row) => row._id}
                       checkboxSelection={props.action == 'release'}
                       disableRowSelectionOnClick={props.action == 'release'}
+
+                      isRowSelectable={(params:any) =>
+                        selectedDivisions.length === 0 ?
+                          true :
+                          selectedDivisions.includes(params?.row?.division?.details?.name)
+                      }
+
                       onRowSelectionModelChange={(newRowSelectionModel) => {
                         setReleaseAmountIROs(() => {
                           const selectedIROs = IROrder ? IROrder.filter((iro) => newRowSelectionModel.includes(iro._id)) : [];

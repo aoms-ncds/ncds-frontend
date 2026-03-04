@@ -54,7 +54,8 @@ interface DateFilterProps {
   min?: Moment;
   max?: Moment;
 }
-const CommonPageLayout = (props: { children: React.ReactNode; title?: string; hidePageHeader?: boolean; momentFilter?: DateFilterProps; appBarSx?: SxProps; mainContentSx?: SxProps }) => {
+const CommonPageLayout = (props: { children: React.ReactNode; title?: string;
+   status?:string; hidePageHeader?: boolean; momentFilter?: DateFilterProps; appBarSx?: SxProps; mainContentSx?: SxProps; }) => {
   const loader = useLoader();
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
@@ -150,7 +151,7 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string; hi
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
           <img src="/favicon.ico" alt="" style={{ height: 90, marginTop: 20 }} />
           <br />
-         
+
           <div>
           </div>
         </div>
@@ -179,7 +180,7 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string; hi
                   <ListItem disablePadding sx={{ backgroundColor: 'inherit' }}>
                     <ListItemButton>
                       {<ListItemIcon sx={{ color: 'inherit' }}>{page.icon}</ListItemIcon>}
-                      <ListItemText primary={page.title} />
+                      <ListItemText primary={page.title} /> <Typography>{props.status}</Typography>
                     </ListItemButton>
                   </ListItem>
                 </NavLink>
@@ -408,7 +409,29 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string; hi
             {props.title && !props.hidePageHeader && (
               <Typography variant="h6" fontWeight={600} color="text.primary">
                 {props.title}
-                <Divider />
+                {props.status && (
+                  <>
+                    {' - '}
+                    <Box
+                      component="span"
+                      sx={{
+                        ml: 1,
+                        px: 1.5,
+                        py: 0.3,
+                        borderRadius: 1,
+                        fontSize: 14,
+                        fontWeight: 700,
+                        backgroundColor: '#E3F2FD',
+                        color: '#1976D2',
+                      }}
+                    >
+                      {props.status}
+                    </Box>
+                  </>
+                )}
+
+
+                <Divider sx={{ mt: 1 }} />
               </Typography>
             )}
           </Grid>

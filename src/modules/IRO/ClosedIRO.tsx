@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 import React, { SetStateAction, useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import { Grid, Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Box, Container, Tooltip, FormControl, FormControlLabel, Radio, RadioGroup, ToggleButton, ToggleButtonGroup } from '@mui/material';
+import { Grid, Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Box, Container, Tooltip, FormControl, FormControlLabel, Radio, RadioGroup, ToggleButton, ToggleButtonGroup, Checkbox, InputLabel, ListItemText, ListSubheader, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import { Preview as PreviewIcon, Download as DownloadIcon } from '@mui/icons-material';
 import PrintIcon from '@mui/icons-material/Print';
 import { DataGrid, GridCellParams, GridColDef } from '@mui/x-data-grid';
@@ -72,7 +72,30 @@ const ClosedIRO = () => {
   const [exstatusFilter, setExStatusFilter] = useState<any>([]); // default WFA: Waiting for access or Reverted
   const [openLog, setOpenLog] = useState(false);
   const [statusFilter1, setStatusFilter1] = useState<'Support' |'All' | 'Expanse'| null>('All'); // default WFA: Waiting for access or Reverted
+  const [divisions, setDivisions] = useState<string[]>([]);
+  const [divisionSearch, setDivisionSearch] = useState('');
+  const [selectedDivisions, setSelectedDivisions] = useState<string[]>([]);
 
+  useEffect(() => {
+    DivisionsServices.getDivisions().then((res) => {
+      const names = res.data.map((d: any) => d.details.name);
+      setDivisions(names);
+    });
+  }, []);
+  const filteredDivisions = divisions.filter((name) =>
+    name
+    .toLowerCase()
+    .replace(/\s/g, '') // remove spaces
+    .includes(divisionSearch.toLowerCase().replace(/\s/g, '')),
+  );
+  const handleDivisionChange = (event: SelectChangeEvent<string[]>) => {
+    const value = event.target.value as string[];
+    if (value.includes('__ALL__')) {
+      ([]); // empty = show all
+      return;
+    }
+    setSelectedDivisions(value);
+  };
   const [selectedSignature, setSignature] = useState<Esignature>({
     _id: '',
     officeManagerSignature: {
@@ -218,16 +241,33 @@ const ClosedIRO = () => {
     setSearchText(event.target.value);
   };
   const filteredRows = (IROrder ?? []).filter((row) => {
-    if ((row.IROno && row.IROno.toLowerCase().includes(searchText.toLowerCase())) ||
-      (row.IRODate && row.IRODate.format('DD/MM/YYYY').toLowerCase().includes(searchText.toLowerCase())) ||
-      // (row.particulars[0]?.subCategory1 && row.particulars[0]?.subCategory1.toLowerCase().includes(searchText.toLowerCase())) ||
-      // (row.particulars[0]?.subCategory2 && row.particulars[0]?.subCategory2.toLowerCase().includes(searchText.toLowerCase())) ||
-      // (row.particulars[0]?.subCategory3 && row.particulars[0]?.subCategory3.toLowerCase().includes(searchText.toLowerCase())) ||
-      (row.division?.details.name && row.division?.details.name.toLowerCase().includes(searchText.toLowerCase()))
-    ) {
-      return true;
-    }
-    return Object.values(row).some((value) => value && value.toString().toLowerCase().includes(searchText.toLowerCase()));
+    const divisionMatch = selectedDivisions.length === 0 ||
+    selectedDivisions.includes(row?.division?.details.name ?? '');
+
+    if (!searchText) return divisionMatch;
+
+    const searchLower = searchText.toLowerCase();
+
+    // Check all searchable fields
+    const searchMatch =
+    (row.IROno && row.IROno.toLowerCase().includes(searchLower)) ||
+    (row.IRODate && row.IRODate.format('DD/MM/YYYY').toLowerCase().includes(searchLower)) ||
+    (row.division?.details.name && row.division?.details.name.toLowerCase().includes(searchLower)) ||
+    (row.purposeSubdivision?.name && row.purposeSubdivision.name.toLowerCase().includes(searchLower)) ||
+    // Add subCategory search
+    (row.particulars && row.particulars.some((particular:any) =>
+      (particular.subCategory1 && particular.subCategory1.toLowerCase().includes(searchLower)) ||
+      (particular.subCategory2 && particular.subCategory2.toLowerCase().includes(searchLower)) ||
+      (particular.subCategory3 && particular.subCategory3.toLowerCase().includes(searchLower)),
+    )) ||
+    // Add mainCategory search
+    (row.particulars && row.particulars.some((particular:any) =>
+      particular.mainCategory && particular.mainCategory.toLowerCase().includes(searchLower),
+    )) ||
+    // Add beneficiary name search
+    (row.sanctionedBank && row.sanctionedBank.toLowerCase().includes(searchLower));
+
+    return divisionMatch && searchMatch;
   });
   if (searchText && filteredRows.length ===0) {
     enqueueSnackbar({
@@ -750,7 +790,7 @@ const ClosedIRO = () => {
       });
   }, [dateRange, exstatusFilter, statusFilter1]);
   return (
-    <CommonPageLayout title="Closed IRO" momentFilter={
+    <CommonPageLayout status='CLOSED IRO' title="Closed IRO" momentFilter={
 
       {
         dateRange: dateRange,
@@ -765,7 +805,7 @@ const ClosedIRO = () => {
     }>
       <Card sx={{ maxWidth: '78vw', height: '100vh', alignItems: 'center' }} >
         <Grid container spacing={2} padding={2}>
-          <Grid item xs={8}>
+          <Grid item xs={6}>
             {/* <div style={{ display: 'flex', alignItems: 'center' }}> */}
             <TextField
               label="Search"
@@ -778,7 +818,68 @@ const ClosedIRO = () => {
             />
             {/* </div> */}
           </Grid>
-              <Grid item xs={4}>
+          <Grid item xs={3}>
+            {hasPermissions(['MANAGE_IRO']) && (
+              <Grid item xs={12} md="auto" sx={{
+                display: 'flex',
+                alignItems: 'center', // ✅ vertical center
+              }}>
+                <FormControl
+                  sx={{
+                    'minWidth': 200,
+                    '& .MuiOutlinedInput-root': {
+                      // height: 45, // ✅ control select height
+                      fontSize: 13,
+                      borderRadius: 1.5,
+                    },
+                  }}
+                >
+                  <InputLabel id="division-label">
+  Division
+                  </InputLabel>
+                  <Select
+                    multiple
+                    value={selectedDivisions}
+                    label="Division"
+                    onChange={handleDivisionChange}
+                    renderValue={(selected) =>
+                      selected.length === 0 ? 'None' : selected.join(', ')
+                    }
+                    MenuProps={{
+                      PaperProps: {
+                        style: { maxHeight: 300, width: 250 },
+                      },
+                    }}
+                  >
+                    <ListSubheader>
+                      <TextField
+                        size="small"
+                        placeholder="Search division..."
+                        fullWidth
+                        autoFocus
+                        value={divisionSearch}
+                        onChange={(e) => setDivisionSearch(e.target.value)}
+                        onKeyDown={(e) => e.stopPropagation()}
+                      />
+                    </ListSubheader>
+
+                    <MenuItem value="__ALL__">
+                      <Checkbox checked={selectedDivisions.length === 0} />
+                      <ListItemText primary="None" />
+                    </MenuItem>
+
+                    {filteredDivisions.map((name) => (
+                      <MenuItem key={name} value={name}>
+                        <Checkbox checked={selectedDivisions.includes(name)} />
+                        <ListItemText primary={name} />
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
+            )}
+          </Grid>
+          <Grid item xs={3}>
             <Button
               onClick={async () => {
                 const sheet =
@@ -878,7 +979,7 @@ const ClosedIRO = () => {
               </ToggleButtonGroup>
             </Grid>
           </>
-      
+
           <Grid item xs={12}>
             <Box
               sx={{
@@ -908,12 +1009,18 @@ const ClosedIRO = () => {
               }}
             >
 
-              <DataGrid rows={filteredRows ?? []} columns={columns} getRowId={(row) => row._id} style={{ height: '75vh', width: '100%' }} getRowClassName={(params) => {
-                if (params.row.specialsanction == 'Yes') {
-                  return 'special-sanction'; // Class for rows with special sanction
+              <DataGrid rows={filteredRows ?? []} columns={columns} getRowId={(row) => row._id} style={{ height: '75vh', width: '100%' }}
+                isRowSelectable={(params:any) =>
+                  selectedDivisions.length === 0 ?
+                    true :
+                    selectedDivisions.includes(params?.row?.division?.details?.name)
                 }
-                return params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'; // Default classes
-              }}
+                getRowClassName={(params) => {
+                  if (params.row.specialsanction == 'Yes') {
+                    return 'special-sanction'; // Class for rows with special sanction
+                  }
+                  return params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'; // Default classes
+                }}
               />
             </Box>
           </Grid>

@@ -290,11 +290,14 @@ const IRODashboard = () => {
                 </Grid>
               )} />
             <Grid item xs={12} md={4} xl={3}>
-              <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '50px', height: '50px' }} />} primaryText="Dissaproved IRO" color="#fff" targetRoute="/iro/disapproved" />
+              <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '50px', height: '50px' }} />} primaryText="Reverted IRO" color="#fff" targetRoute="/iro/reverted" />
             </Grid>
             <Grid item xs={12} md={4} xl={3}>
-              <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '50px', height: '50px' }} />} primaryText="Reverted IRO" color="#fff" targetRoute="/iro/rejected" />
+              <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '50px', height: '50px' }} />} primaryText="Disapproved IRO" color="#fff" targetRoute="/iro/disapproved" />
             </Grid>
+            {/* <Grid item xs={12} md={4} xl={3}>
+              <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '50px', height: '50px' }} />} primaryText="Rejected IRO" color="#fff" targetRoute="/iro/rejected" />
+            </Grid> */}
             <PermissionChecks
               permissions={['AUDIT_VIEW']}
               granted={(
