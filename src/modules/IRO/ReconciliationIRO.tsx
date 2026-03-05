@@ -545,6 +545,13 @@ const ReconciliationIRO = () => {
                 <ListItemIcon><PreviewIcon fontSize="small" /></ListItemIcon>
                 <ListItemText primary="View Details" />
               </MenuItem>
+              <MenuItem onClick={() => {
+                setAttachment(true);
+                setSelectedIRO(props.row);
+              }}>
+                <ListItemIcon><PreviewIcon fontSize="small" /></ListItemIcon>
+                <ListItemText primary="Reconciliation" />
+              </MenuItem>
 
               <MenuItem onClick={() => window.open(`/fr/${props.row.FR}/view`, '_blank')}>
                 <ListItemIcon><PreviewIcon fontSize="small" /></ListItemIcon>

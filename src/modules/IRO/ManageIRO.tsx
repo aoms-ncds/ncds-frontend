@@ -1345,15 +1345,15 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     //   align: 'center',
     //   headerAlign: 'center',
     // },
-    {
-      field: 'Amount Release Date',
-      headerName: 'Amount Release Date',
-      width: 200,
-      valueGetter: (params) => params.row.releaseAmount?.transferredDate?.format('DD/MM/YYYY') ?? 'N/A',
-      renderHeader: (params) => <b style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</b>,
-      align: 'center',
-      headerAlign: 'center',
-    },
+    // {
+    //   field: 'Amount Release Date',
+    //   headerName: 'Amount Release Date',
+    //   width: 200,
+    //   valueGetter: (params) => params.row.releaseAmount?.transferredDate?.format('DD/MM/YYYY') ?? 'N/A',
+    //   renderHeader: (params) => <b style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</b>,
+    //   align: 'center',
+    //   headerAlign: 'center',
+    // },
     // { field: 'sanction', headerName: 'Special Sanction', width: 150, renderHeader: () => <b>Special Sanction</b>, align: 'center', headerAlign: 'center' },
     // {
     //   field: 'sanctionedAmount',
@@ -1600,7 +1600,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
           <>
             <Card sx={{ maxWidth: '78vw', height: '100vh', alignItems: 'center' }}>
               <Grid container spacing={2} padding={2}>
-                <Grid item xs={6}>
+                <Grid item xs={5}>
                   <TextField
                     label="Search"
                     variant="outlined"
@@ -1610,7 +1610,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                     fullWidth
                   />
                 </Grid>
-                <Grid item xs={6}>
+                <Grid item xs={3}>
                   {hasPermissions(['MANAGE_IRO']) && (
                     <Grid item xs={12} md="auto" sx={{
                       display: 'flex',
@@ -1672,7 +1672,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                   )}
                 </Grid>
 
-                {/* <Grid item xs={4}>
+                <Grid item xs={4}>
                   <PermissionChecks
                     permissions={['MANAGE_IRO']}
                     granted={
@@ -1825,7 +1825,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                       Bulk Release
                     </Button>
                   ) : null}
-                </Grid> */}
+                </Grid>
 
                 <Grid container spacing={2}>
                   <Grid item xs={12}>

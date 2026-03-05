@@ -62,11 +62,20 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
   };
   console.log(props.action, 'props.data');
   let saveReleaseAmount;
+  const [releaseAmounts, setReleaseAmounts] = useState({
+    transferredAmounts: {},
+  });
+  const [transferredAmounts, setTransferredAmounts] = useState<any>({});
+  console.log(transferredAmounts, 'transferredAmounts');
+
   // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
   const [showFileUploader, setShowFileUploader] = useState(false);
   // if(iroStatus){
   console.log(props, 'new data');
-
+  const [openTransferDialog, setOpenTransferDialog] = useState(false);
+  const [selectedRow, setSelectedRow] = useState<any>(null);
+  const [transferInput, setTransferInput] = useState('');
+  const [transferValue, setTransferValue] = useState('');
   // eslint-disable-next-line prefer-const
   saveReleaseAmount = (e: { preventDefault: () => void }) => {// TODO: on release datagrid should updated
     e.preventDefault();
@@ -292,6 +301,47 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
         />
       ),
     },
+    {
+      field: 'tanfered',
+      headerName: 'Transferred Amount',
+      width: 180,
+
+      renderCell: (params) => {
+        let value = 0;
+
+        // check edited value for this row
+        if (transferredAmounts?.[params.row._id] !== undefined) {
+          value = transferredAmounts[params.row._id];
+        }
+        // otherwise show sanctioned amount
+        else if (params.row?.sanctionedAmount) {
+          value = params.row.sanctionedAmount;
+        }
+        // otherwise calculate from particulars
+        else if (Array.isArray(params.row?.particulars)) {
+          value = params.row.particulars.reduce(
+            (sum, item) => sum + (item.sanctionedAmount || 0),
+            0,
+          );
+        }
+
+        return (
+          <span
+            style={{ cursor: 'pointer', color: '#1976d2', fontWeight: 600 }}
+            onClick={() => {
+              setSelectedRow(params.row);
+              setTransferInput(value);
+              setOpenTransferDialog(true);
+            }}
+          >
+            {Number(value).toFixed(2)}
+          </span>
+        );
+      },
+
+      align: 'center',
+      headerAlign: 'center',
+    },
     { field: 'IROno', headerName: 'IRO No', width: 130, renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>, align: 'center', headerAlign: 'center' },
     {
       field: 'IRODate',
@@ -419,7 +469,7 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
                 <TextField
                   label="Amount Transferred"
                   type="tel"
-                  value={releaseAmount?.transferredAmount != 0 ? formatAmount(releaseAmount?.transferredAmount) : ''}
+                  value={releaseAmount?.transferredAmount ==0 ? releaseAmount?.releaseAmount: releaseAmount?.transferredAmount }
                   onChange={(e) =>
                     Number(e.target.value) <= (releaseAmount.releaseAmount ?? 0) &&
                     setReleaseAmount(() => ({
@@ -706,6 +756,57 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
             ) : null}
           </DialogActions>
         </form>
+        <Dialog open={openTransferDialog} onClose={() => setOpenTransferDialog(false)}>
+
+          <DialogTitle>Enter Transferred Amount</DialogTitle>
+
+          <DialogContent>
+            <TextField
+              fullWidth
+              type="number"
+              value={transferInput}
+              onChange={(e) => setTransferInput(e.target.value)}
+            />
+          </DialogContent>
+
+          <DialogActions>
+
+            <Button onClick={() => setOpenTransferDialog(false)}>
+      Cancel
+            </Button>
+
+            <Button
+              variant="contained"
+              onClick={() => {
+                const amount = Number(transferInput);
+
+                const updatedAmounts = {
+                  ...transferredAmounts,
+                  [selectedRow._id]: amount,
+                };
+
+                // update row values
+                setTransferredAmounts(updatedAmounts);
+
+                // calculate total
+                const total = Object.values(updatedAmounts)
+      .reduce((sum:any, val:any) => sum + Number(val || 0), 0);
+
+                // update release form
+                setReleaseAmount((prev:any) => ({
+                  ...prev,
+                  transferredAmount: total,
+                }));
+
+                setOpenTransferDialog(false);
+              }}
+            >
+Save
+            </Button>
+
+          </DialogActions>
+
+        </Dialog>
         <Dialog
           open={open}
           keepMounted
