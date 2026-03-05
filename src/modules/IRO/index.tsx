@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 import React, { useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import { Card, CardContent, Grid, Typography } from '@mui/material';
+import { Box, Card, CardContent, Grid, LinearProgress, MenuItem, TextField, Typography } from '@mui/material';
 import DashboardCardButton from '../../components/DashboardCardButton';
 import IROServices from './extras/IROServices';
 import PermissionChecks from '../User/components/PermissionChecks';
@@ -9,6 +9,8 @@ import FRCountCard from '../FR/components/FRCountCard';
 import IROLifeCycleStates from './extras/IROLifeCycleStates';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/Authentication';
+import { ArrowBackIos } from '@mui/icons-material';
+import FROperationalSummary from '../FR/components/FROperationalSummary';
 
 const IRODashboard = () => {
   const navigate = useNavigate();
@@ -112,11 +114,469 @@ const IRODashboard = () => {
         console.log({ error });
       });
   }, []);
-  return (
-    <CommonPageLayout title="IRO Dashboard">
-      <Grid container spacing={3}>
+  const data = [
+    {
+      title: 'Total Applied (FY 24–25)',
+      count: '1,284',
+      amount: '$8.2M',
+      color: '#2F80ED',
+    },
+    {
+      title: 'Total Approved',
+      count: '1,046',
+      percent: 81,
+      subtitle: 'Approval Rate',
+      color: '#8E7CC3',
+    },
+    {
+      title: 'Total Approved',
+      count: '1,046',
+      percent: 81,
+      subtitle: 'Closure Rate',
+      color: '#F2C94C',
+    },
+    {
+      title: 'Total Closed',
+      count: '982',
+      percent: 76,
+      subtitle: 'Closure Rate',
+      color: '#F2994A',
+    },
+  ];
+  const getFinancialYear = (date = new Date()) => {
+    const year = date.getFullYear();
+    const month = date.getMonth(); // Jan = 0
 
-        {/* Total Applied – permission based */}
+    // Financial year starts in April
+    const startYear = month >= 3 ? year : year - 1;
+    const endYear = startYear + 1;
+
+    return `${startYear}-${String(endYear).slice(2)}`;
+  };
+  const [year, setYear] = useState(getFinancialYear());
+  const currentFYStartYear =
+  new Date().getMonth() >= 3 ?
+    new Date().getFullYear() :
+    new Date().getFullYear() - 1;
+
+  const years = Array.from({ length: 5 }, (_, i) => {
+    const start = currentFYStartYear - i;
+    return `${start}-${String(start + 1).slice(2)}`;
+  });
+  return (
+    <CommonPageLayout>
+      <Card
+        sx={{
+          borderRadius: 4,
+          p: { xs: 2, sm: 3 },
+          background: '#ebebeb',
+        }}
+      >
+
+
+        <CardContent>
+
+
+          <Grid container spacing={3}>
+            <Grid item xs={12} md={3} xl={12}>
+              <Typography variant="h6" fontWeight={600} color="text.primary">
+                Financial Year Summary
+                {/* <Divider /> */}
+              </Typography>
+              <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+
+                <TextField
+                  select
+                  size="small"
+                  value={year}
+                  onClick={(e) => e.stopPropagation()}
+                  onMouseDown={(e) => e.stopPropagation()}
+                  onChange={(e) => {
+                    e.stopPropagation();
+                    setYear(e.target.value);
+                  }}
+                  sx={{
+                    'minWidth': 120,
+
+                    /* SELECT TEXT (important fix) */
+                    '& .MuiSelect-select': {
+                      display: 'flex',
+                      justifyContent: 'flex-end',
+                      textAlign: 'right',
+                      paddingRight: '32px !important', // space for arrow
+                      paddingLeft: '8px',
+                    },
+
+                    /* DROPDOWN ICON */
+                    '& .MuiSelect-icon': {
+                      color: '#3B32E6',
+                      right: 6,
+                    },
+
+                    /* OUTER BOX */
+                    '& .MuiOutlinedInput-root': {
+                      'height': 32,
+                      'fontSize': 12,
+                      'fontWeight': 600,
+                      'borderRadius': 8,
+                      'color': '#3B32E6',
+                      'background': 'linear-gradient(135deg, #F4F6FF, #FFFFFF)',
+                      'boxShadow': '0 2px 6px rgba(59,50,230,0.15)',
+                      'transition': 'all 0.2s ease',
+
+                      '& fieldset': {
+                        borderColor: '#3B32E6',
+                      },
+
+                      '&:hover': {
+                        background: '#EEF1FF',
+                        boxShadow: '0 4px 10px rgba(59,50,230,0.25)',
+                      },
+
+                      '&.Mui-focused': {
+                        background: '#FFFFFF',
+                        boxShadow: '0 0 0 2px rgba(59,50,230,0.25)',
+                      },
+
+                      '&.Mui-focused fieldset': {
+                        borderColor: '#3B32E6',
+                      },
+                    },
+                  }}
+                >
+
+                  {years.map((yr) => (
+                    <MenuItem
+                      key={yr}
+                      value={yr}
+                      sx={{
+                        // justifyContent: 'flex-end',
+                        // textAlign: 'right',
+                        fontSize: 12,
+                        fontWeight: 600,
+                      }}
+                    >
+                     Financial Year -  {yr}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </Box>
+            </Grid>
+
+            <Grid item xs={12} md={3} xl={3}>
+              <FRCountCard
+                icon={
+                  <img
+                    src="/mod_icons/Approved IRO.png"
+                    alt="Logo"
+                    style={{ width: '50px', height: '50px' }}
+                  />
+                }
+                count={iroDivCOunt?.toString()}
+                amount={'1000'}
+                onClick={() => navigate(`/iro/manage?id=${5}`)}
+                secondaryText="Total Applied"
+                color="#0026ff"
+              />
+            </Grid>
+            <Grid item xs={12} md={3} xl={3}>
+              <FRCountCard
+                icon={
+                  <img
+                    src="/mod_icons/Approved IRO.png"
+                    alt="Logo"
+                    style={{ width: '50px', height: '50px' }}
+                  />
+                }
+                count={iroDivCOunt?.toString()}
+                onClick={() => navigate(`/iro/manage?id=${5}`)}
+                secondaryText="Total Approved"
+                color="#ffc400"
+              />
+            </Grid>
+            <Grid item xs={12} md={3} xl={3}>
+              <FRCountCard
+                icon={
+                  <img
+                    src="/mod_icons/Approved IRO.png"
+                    alt="Logo"
+                    style={{ width: '50px', height: '50px' }}
+                  />
+                }
+                count={iroDivCOunt?.toString()}
+                onClick={() => navigate(`/iro/manage?id=${5}`)}
+                secondaryText="Total Pending"
+                color="#ba00f3"
+              />
+            </Grid>
+            <Grid item xs={12} md={3} xl={3}>
+              <FRCountCard
+                icon={
+                  <img
+                    src="/mod_icons/Approved IRO.png"
+                    alt="Logo"
+                    style={{ width: '50px', height: '50px' }}
+                  />
+                }
+                count={iroDivCOunt?.toString()}
+                onClick={() => navigate(`/iro/manage?id=${5}`)}
+                secondaryText="Total Closed"
+                color="#00ddff"
+              />
+            </Grid>
+
+            <Grid item xs={12} md={3} xl={12}>
+              <Typography variant="h6" fontWeight={600} color="text.primary">
+               Operational Summary
+                {/* <Divider /> */}
+              </Typography>
+            </Grid>
+            <Grid item xs={12} md={3} xl={3}>
+              <FROperationalSummary
+                icon={
+                  <img
+                    src="/mod_icons/Approved IRO.png"
+                    alt="Logo"
+                    style={{ width: '50px', height: '50px' }}
+                  />
+                }
+                count={iroDivCOunt?.toString()}
+                onClick={() => navigate(`/iro/manage?id=${5}`)}
+                secondaryText="Manage IRO"
+                color="#0004ff"
+              />
+            </Grid>
+            <Grid item xs={12} md={3} xl={3}>
+              <FROperationalSummary
+                icon={
+                  <img
+                    src="/mod_icons/Approved IRO.png"
+                    alt="Logo"
+                    style={{ width: '50px', height: '50px' }}
+                  />
+                }
+                count={iroDivCOunt?.toString()}
+                onClick={() => navigate(`/iro/manage?id=${5}`)}
+                secondaryText="Total Active IRO"
+                color="#ff0000"
+              />
+            </Grid>
+            <Grid item xs={12} md={3} xl={3}>
+              <FROperationalSummary
+                icon={
+                  <img
+                    src="/mod_icons/Approved IRO.png"
+                    alt="Logo"
+                    style={{ width: '50px', height: '50px' }}
+                  />
+                }
+                count={iroDivCOunt?.toString()}
+                onClick={() => navigate(`/iro/manage?id=${5}`)}
+                secondaryText="Awaiting Approval"
+                color="#5eff00"
+              />
+            </Grid>
+            <Grid item xs={12} md={3} xl={3}>
+              <FROperationalSummary
+                icon={
+                  <img
+                    src="/mod_icons/Approved IRO.png"
+                    alt="Logo"
+                    style={{ width: '50px', height: '50px' }}
+                  />
+                }
+                count={iroDivCOunt?.toString()}
+                onClick={() => navigate(`/iro/manage?id=${5}`)}
+                secondaryText="For Reconciliation"
+                color="#46006e"
+              />
+            </Grid>
+
+            <Grid item xs={12} md={3} xl={12}>
+              <Typography variant="h6" fontWeight={600} color="text.primary">
+               Financial Exposure
+                {/* <Divider /> */}
+              </Typography>
+            </Grid>
+            <Grid item xs={12} md={3} xl={4}>
+              <FROperationalSummary
+                icon={
+                  <img
+                    src="/mod_icons/Approved IRO.png"
+                    alt="Logo"
+                    style={{ width: '50px', height: '50px' }}
+                  />
+                }
+                // count={iroDivCOunt?.toString()}
+                amount={'10000000'}
+                onClick={() => navigate(`/iro/manage?id=${5}`)}
+                secondaryText="Total IRO Amount"
+                color="#1d006e"
+              />
+            </Grid>
+            <Grid item xs={12} md={3} xl={4}>
+              <FROperationalSummary
+                icon={
+                  <img
+                    src="/mod_icons/Approved IRO.png"
+                    alt="Logo"
+                    style={{ width: '50px', height: '50px' }}
+                  />
+                }
+                amount={'10000000'}
+                onClick={() => navigate(`/iro/manage?id=${5}`)}
+                secondaryText="Pending Approval Amount"
+                color="#004e5a"
+              />
+            </Grid>
+            <Grid item xs={12} md={3} xl={4}>
+              <FROperationalSummary
+                icon={
+                  <img
+                    src="/mod_icons/Approved IRO.png"
+                    alt="Logo"
+                    style={{ width: '50px', height: '50px' }}
+                  />
+                }
+                amount={'10000000'}
+                onClick={() => navigate(`/iro/manage?id=${5}`)}
+                secondaryText="Pending Reconciliation Amount"
+                color="#68006b"
+              />
+            </Grid>
+            <Grid item xs={12} md={3} xl={12}>
+              <Typography variant="h6" fontWeight={600} color="text.primary">
+               Overdue & Compliance
+                {/* <Divider /> */}
+              </Typography>
+            </Grid>
+            <Grid item xs={12} md={3} xl={3}>
+              <FROperationalSummary
+                icon={
+                  <img
+                    src="/mod_icons/Approved IRO.png"
+                    alt="Logo"
+                    style={{ width: '50px', height: '50px' }}
+                  />
+                }
+                // count={iroDivCOunt?.toString()}
+                days='30'
+                onClick={() => navigate(`/iro/manage?id=${5}`)}
+                secondaryText="Overdue Approval"
+                color="#ff9100"
+              />
+            </Grid>
+            <Grid item xs={12} md={3} xl={3}>
+              <FROperationalSummary
+                icon={
+                  <img
+                    src="/mod_icons/Approved IRO.png"
+                    alt="Logo"
+                    style={{ width: '50px', height: '50px' }}
+                  />
+                }
+                days='3'
+                onClick={() => navigate(`/iro/manage?id=${5}`)}
+                secondaryText="Overdue Reconciliation "
+                color="#ff9100"
+              />
+            </Grid>
+            <Grid item xs={12} md={3} xl={3}>
+              <FROperationalSummary
+                icon={
+                  <img
+                    src="/mod_icons/Approved IRO.png"
+                    alt="Logo"
+                    style={{ width: '50px', height: '50px' }}
+                  />
+                }
+                count={iroDivCOunt?.toString()}
+                onClick={() => navigate(`/iro/manage?id=${5}`)}
+                secondaryText="Reject IRO"
+                color="#ff9100"
+              />
+            </Grid>
+            <Grid item xs={12} md={3} xl={3}>
+              <FROperationalSummary
+                icon={
+                  <img
+                    src="/mod_icons/Approved IRO.png"
+                    alt="Logo"
+                    style={{ width: '50px', height: '50px' }}
+                  />
+                }
+                count={iroDivCOunt?.toString()}
+                onClick={() => navigate(`/iro/manage?id=${5}`)}
+                secondaryText="Reopened IRO"
+                color="#ff9100"
+              />
+            </Grid>
+            <Grid item xs={12} md={3} xl={3}>
+              <FROperationalSummary
+                icon={
+                  <img
+                    src="/mod_icons/Approved IRO.png"
+                    alt="Logo"
+                    style={{ width: '50px', height: '50px' }}
+                  />
+                }
+                count={iroDivCOunt?.toString()}
+                onClick={() => navigate(`/iro/manage?id=${5}`)}
+                secondaryText="High-Value IRO's"
+                color="#ff9100"
+              />
+            </Grid>
+            <Grid item xs={12} md={3} xl={3}>
+              <FROperationalSummary
+                icon={
+                  <img
+                    src="/mod_icons/Approved IRO.png"
+                    alt="Logo"
+                    style={{ width: '50px', height: '50px' }}
+                  />
+                }
+                count={iroDivCOunt?.toString()}
+                onClick={() => navigate(`/iro/manage?id=${5}`)}
+                secondaryText="Custom IRO"
+                color="#ff9100"
+              />
+            </Grid>
+            <Grid item xs={12} md={3} xl={3}>
+              <FROperationalSummary
+                icon={
+                  <img
+                    src="/mod_icons/Approved IRO.png"
+                    alt="Logo"
+                    style={{ width: '50px', height: '50px' }}
+                  />
+                }
+                count={iroDivCOunt?.toString()}
+                onClick={() => navigate(`/iro/manage?id=${5}`)}
+                secondaryText="Average Approval Time"
+                color="#ff9100"
+              />
+            </Grid>
+            <Grid item xs={12} md={3} xl={3}>
+              <FROperationalSummary
+                icon={
+                  <img
+                    src="/mod_icons/Approved IRO.png"
+                    alt="Logo"
+                    style={{ width: '50px', height: '50px' }}
+                  />
+                }
+                count={iroDivCOunt?.toString()}
+                onClick={() => navigate(`/iro/manage?id=${5}`)}
+                secondaryText="SLA Brach Count"
+                color="#ff9100"
+              />
+            </Grid>
+
+          </Grid>
+        </CardContent>
+      </Card>
+      <br />
+      {/* <Grid container spacing={3}>
 
 
         <PermissionChecks
@@ -138,7 +598,7 @@ const IRODashboard = () => {
               />
             </Grid>
           }
-          denied={() => ( // division baset total count
+          denied={() => (
             <Grid item xs={12} md={3} xl={2.4}>
               <FRCountCard
                 icon={
@@ -157,7 +617,7 @@ const IRODashboard = () => {
           )}
         />
 
-        {/* New Applied – always visible */}
+
         <Grid item xs={12} md={3} xl={2.4}>
           <FRCountCard
             icon={
@@ -174,7 +634,7 @@ const IRODashboard = () => {
           />
         </Grid>
 
-        {/* Amount Released */}
+
         <Grid item xs={12} md={3} xl={2.4}>
           <FRCountCard
             icon={<img src="/mod_icons/Amount Released.png" alt="Logo" style={{ width: '50px', height: '50px' }} />}
@@ -185,7 +645,7 @@ const IRODashboard = () => {
           />
         </Grid>
 
-        {/* Reconciliation */}
+
         <Grid item xs={12} md={3} xl={2.4}>
           <FRCountCard
             icon={<img src="/mod_icons/Reconciliation on Process.png" alt="Logo" style={{ width: '50px', height: '50px' }} />}
@@ -196,7 +656,7 @@ const IRODashboard = () => {
           />
         </Grid>
 
-        {/* Closed */}
+
         <Grid item xs={12} md={3} xl={2.4}>
           <FRCountCard
             icon={<img src="/mod_icons/Closed .png" alt="Logo" style={{ width: '50px', height: '50px' }} />}
@@ -207,9 +667,9 @@ const IRODashboard = () => {
           />
         </Grid>
 
-      </Grid>
+      </Grid> */}
 
-      <br />
+      {/* <br /> */}
       <br />
 
       <Card

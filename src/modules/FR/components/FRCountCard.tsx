@@ -1,12 +1,15 @@
 import { Badge, Box, Card, CardActionArea, CardContent, Grid, MenuItem, TextField, Typography, styled } from '@mui/material';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import formatAmount from '../../Common/formatcode';
 const StyledLink = styled(Link)`
   text-decoration: none;
 `;
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const FRCountCard = (props: {
-  count?: string; badgeColor?: 'default' | 'error' | 'primary' | 'secondary';
+  count?: string; 
+  amount?: string; 
+  badgeColor?: 'default' | 'error' | 'primary' | 'secondary';
   icon?: React.ReactNode;
   secondaryText: string; color: string; onClick?: React.MouseEventHandler<HTMLDivElement>; targetRoute?: string;
 }) => {
@@ -98,6 +101,13 @@ const FRCountCard = (props: {
             color={'#3B32E6'}
           >
             {props.count || '0'}
+          </Typography>|
+          <Typography
+            fontWeight={600}
+            fontSize={{ xs: 15, sm: 15, md: 15 }}
+            color={'#2b1b1b'}
+          >
+           ₹ {formatAmount(props.amount || '0')}
           </Typography>
         </Box>
       </CardContent>
