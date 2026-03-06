@@ -1255,19 +1255,22 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     {
       field: 'divisionName',
       renderHeader: () => <b>Division Name</b>,
-      valueGetter: (params) => params.row.division?.details.name,
-      width: 130,
+      valueGetter: (params) =>
+        `${params.row.division?.details?.name || ''}${
+          params.row.purposeSubdivision?.name ? ' / ' : ''
+        }${params.row.purposeSubdivision?.name || ''}`,
+      width: 200,
       align: 'center',
       headerAlign: 'center',
     },
-    {
-      field: 'subDivisionName',
-      renderHeader: () => <b>Sub Division Name</b>,
-      valueGetter: (params) => params.row.purposeSubdivision?.name,
-      width: 160,
-      align: 'center',
-      headerAlign: 'center',
-    },
+    // {
+    //   field: 'subDivisionName',
+    //   renderHeader: () => <b>Sub Division Name</b>,
+    //   valueGetter: (params) => params.row.purposeSubdivision?.name,
+    //   width: 160,
+    //   align: 'center',
+    //   headerAlign: 'center',
+    // },
     {
       field: 'mainCategory',
       renderHeader: () => <b>Main Category</b>,
