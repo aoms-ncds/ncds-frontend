@@ -282,7 +282,7 @@ const FRForm = (props: FormComponentProps<any>) => {
       setParticulars(props.value.particulars);
     }
   }, [props.value.particulars]);
-  console.log(props.action, 'propd');
+  console.log(props.value, 'propd');
 
   const addParticulars = () => {
     setParticularDialog('add');
@@ -1521,6 +1521,111 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
                   />
 
                 </Grid>
+                {props.action == 'customIRO' &&(
+                  <>
+
+                    <Grid item xs={12}>
+                      <span style={{ fontWeight: 600, fontSize: 20 }}>
+                    Adjustment Details
+                      </span>
+                    </Grid>
+
+                    <Grid item xs={12} md={4}>
+                      <TextField
+                        label="Adjusted IRO"
+                        type="tel"
+                        value={props.value?.adjustedIro}
+                        onChange={(e) =>
+                          props.onChange(() => ({
+                            ...props?.value,
+                            adjustedIro: e.target?.value,
+                          }))
+                        }
+                        InputLabelProps={{
+                          shrink: Boolean(props.value?.adjustedIro),
+                        }}
+                        fullWidth
+                        inputProps={{
+                          onWheel: (event: React.WheelEvent<HTMLInputElement>) => {
+                            event.preventDefault();
+                            event.currentTarget.blur();
+                          },
+                        }}
+                        variant="outlined"
+                        // disabled={props.action !== 'add'}
+
+                        // required
+                      />
+                    </Grid>
+                    <Grid item xs={12} md={4}>
+                      <TextField
+                        label="Adjusted Amount"
+                        type="number"
+                        value={props.value?.adjustedAmount }
+                        onChange={(e) =>
+                        // Number(e.target.value) <= (releaseAmount.adjustedAmount ?? 0) &&
+                          props.onChange(() => ({
+                            ...props?.value,
+                            adjustedAmount: Number(e.target?.value),
+                          }))
+                        }
+                        fullWidth
+                        // inputProps={{
+                        //   max: releaseAmount.releaseAmount ?? 0, min: 0, step: 0.01,
+                        //   onWheel: (event: React.WheelEvent<HTMLInputElement>) => {
+                        //     event.preventDefault();
+                        //     event.currentTarget.blur();
+                        //   },
+                        // }}
+                        variant="outlined"
+                        // disabled={props.action !== 'add'}
+
+                        // required
+                      />
+                    </Grid>
+                    <Grid item xs={12} md={3} style={{ display: 'flex', alignItems: 'center' }}>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            name="closingBalance"
+                            // Use double negation (!!) to ensure it's a boolean value
+                            checked={props.value?.closingBalance}
+                            onChange={(e) =>
+                              props.onChange(() => ({
+                                ...props?.value,
+                                closingBalance: e.target?.checked,
+                              }))
+                            }
+                            // disabled={props.action !== 'add'}
+                            color="primary"
+                          />
+                        }
+                        label="Closing Balance"
+                      />
+                    </Grid>
+                    {props.value?.closingBalance &&(
+
+                      <Grid item xs={12} md={3}>
+                        <TextField
+                          label="Closing Balance Remark"
+                          type="tel"
+                          value={props.value?.closingBalanceRemark }
+                          onChange={(e) =>
+                            props.onChange(() => ({
+                              ...props.value,
+                              closingBalanceRemark: e.target.value,
+                            }))
+                          }
+                          fullWidth
+                          variant="outlined"
+                          // disabled={props.action !== 'add'}
+
+                          // required
+                        />
+                      </Grid>
+                    )}
+                  </>
+                )}
                 {props.action == 'customIRO' ?(
 
                   <Grid item xs={12} md={12}>

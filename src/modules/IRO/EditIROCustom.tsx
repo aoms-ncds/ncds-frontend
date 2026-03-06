@@ -1268,6 +1268,112 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
 
                   </Grid>
 
+
+                  <Grid item xs={12}>
+                    <span style={{ fontWeight: 600, fontSize: 20 }}>
+                    Adjustment Details
+                    </span>
+                  </Grid>
+
+                  <Grid item xs={12} md={4}>
+                    <TextField
+                      label="Adjusted IRO"
+                      type="tel"
+                      value={IRO?.adjustedIro}
+                      onChange={(e) =>
+                        setIRO(() => ({
+                          ...IRO,
+                          adjustedIro: e.target?.value,
+                        }))
+                      }
+                      InputLabelProps={{
+                        shrink: Boolean(IRO?.adjustedIro),
+                      }}
+                      fullWidth
+                      inputProps={{
+                        onWheel: (event: React.WheelEvent<HTMLInputElement>) => {
+                          event.preventDefault();
+                          event.currentTarget.blur();
+                        },
+                      }}
+                      variant="outlined"
+                      // disabled={props.action !== 'add'}
+
+                      // required
+                    />
+                  </Grid>
+                  <Grid item xs={12} md={4}>
+                    <TextField
+                      label="Adjusted Amount"
+                      type="number"
+                      value={IRO?.adjustedAmount }
+                      onChange={(e) =>
+                        // Number(e.target.value) <= (releaseAmount.adjustedAmount ?? 0) &&
+                        setIRO(() => ({
+                          ...IRO,
+                          adjustedAmount: Number(e.target?.value),
+                        }))
+                      }
+                       InputLabelProps={{
+                        shrink: Boolean(IRO?.adjustedAmount),
+                      }}
+                      fullWidth
+                      // inputProps={{
+                      //   max: releaseAmount.releaseAmount ?? 0, min: 0, step: 0.01,
+                      //   onWheel: (event: React.WheelEvent<HTMLInputElement>) => {
+                      //     event.preventDefault();
+                      //     event.currentTarget.blur();
+                      //   },
+                      // }}
+                      variant="outlined"
+                      // disabled={props.action !== 'add'}
+
+                      // required
+                    />
+                  </Grid>
+                  <Grid item xs={12} md={3} style={{ display: 'flex', alignItems: 'center' }}>
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          name="closingBalance"
+                          // Use double negation (!!) to ensure it's a boolean value
+                          checked={!!IRO?.closingBalance}
+                          onChange={(e) =>
+                            setIRO(() => ({
+                              ...IRO,
+                              closingBalance: e.target?.checked,
+                            }))
+                          }
+                          // disabled={props.action !== 'add'}
+                          color="primary"
+                        />
+                      }
+                      label="Closing Balance"
+                    />
+                  </Grid>
+                  {IRO?.closingBalance &&(
+
+                    <Grid item xs={12} md={3}>
+                      <TextField
+                        label="Closing Balance Remark"
+                        type="tel"
+                        value={IRO?.closingBalanceRemark }
+                        onChange={(e) =>
+                          setIRO(() => ({
+                            ...IRO,
+                            closingBalanceRemark: e.target.value,
+                          }))
+                        }
+                        fullWidth
+                        variant="outlined"
+                        // disabled={props.action !== 'add'}
+
+                        // required
+                      />
+                    </Grid>
+                  )}
+
+
                   <Grid item xs={12} md={12}>
                     <span style={{ fontWeight: 600, fontSize: 20 }}> Signature and Manager details
                     </span>
@@ -1856,7 +1962,7 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
                   label="Sanctioned Amount"
                   type={'number'}
                   value={newParticular?.sanctionedAmount !==0 ?newParticular?.sanctionedAmount: null}
-                  // required={props.value.status == FRLifeCycleStates.WAITING_FOR_ACCOUNTS}
+                  // required={IRO.status == FRLifeCycleStates.WAITING_FOR_ACCOUNTS}
                   title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`}
                   autoComplete='off'
                   // disabled={
@@ -2052,7 +2158,7 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
         //   return FileUploaderServices.renameFile(fileId, newName);
         // }}
         // deleteFile={(fileId: string) => {
-        //   props.onChange({
+        //  setIRO({
         //     ...props.value,
         //     attachment: props.value.attachment.filter((file: any) => file._id !== fileId),
         //   });

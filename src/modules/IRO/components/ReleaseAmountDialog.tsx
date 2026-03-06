@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { Autocomplete, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, TextField, Typography } from '@mui/material';
+import { Autocomplete, Button, Checkbox, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControlLabel, Grid, TextField, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { DatePicker } from '@mui/x-date-pickers';
 import { AttachFile as AttachmentIcon } from '@mui/icons-material';
@@ -45,6 +45,11 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
     releaseAmount: 0,
     transactionNumber: '',
     transferredAmount: 0,
+    // transferredAmountEach: [],
+    adjustedIro: '',
+    adjustedAmount: 0,
+    closingBalance: false,
+    closingBalanceRemark: '',
     transferredDate: null,
     transferredBank: {
       bankName: '',
@@ -74,7 +79,7 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
   console.log(props, 'new data');
   const [openTransferDialog, setOpenTransferDialog] = useState(false);
   const [selectedRow, setSelectedRow] = useState<any>(null);
-  const [transferInput, setTransferInput] = useState('');
+  const [transferInput, setTransferInput] = useState<any>('');
   const [transferValue, setTransferValue] = useState('');
   // eslint-disable-next-line prefer-const
   saveReleaseAmount = (e: { preventDefault: () => void }) => {// TODO: on release datagrid should updated
@@ -431,7 +436,7 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
     //     <Card style={{ width: '100%' }}>
     //       <CardContent>
     <>
-      <Dialog open={props.open} onClose={props.onClose} maxWidth="lg" fullWidth={true}>
+      <Dialog open={props.open} onClose={props.onClose} maxWidth="xl" fullWidth={true}>
         <form onSubmit={saveReleaseAmount}>
           <DialogContent>
             <Grid container spacing={3}>
@@ -513,6 +518,106 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
                   }
                 />
               </Grid>
+              <Grid item xs={12}>
+                <Typography variant="h4" component="h4">
+                  Adjustment Details
+                </Typography>
+              </Grid>
+
+              <Grid item xs={12} md={4}>
+                <TextField
+                  label="Adjusted IRO"
+                  type="tel"
+                  value={releaseAmount?.adjustedIro}
+                  onChange={(e) =>
+                    setReleaseAmount(() => ({
+                      ...releaseAmount,
+                      adjustedIro: e.target.value,
+                    }))
+                  }
+                  InputLabelProps={{
+                    shrink: Boolean(releaseAmount?.adjustedIro),
+                  }}
+                  fullWidth
+                  inputProps={{
+                    onWheel: (event: React.WheelEvent<HTMLInputElement>) => {
+                      event.preventDefault();
+                      event.currentTarget.blur();
+                    },
+                  }}
+                  variant="outlined"
+                  disabled={props.action !== 'add'}
+
+                  // required
+                />
+              </Grid>
+              <Grid item xs={12} md={4}>
+                <TextField
+                  label="Adjusted Amount"
+                  type="number"
+                  value={releaseAmount?.adjustedAmount }
+                  onChange={(e) =>
+                    // Number(e.target.value) <= (releaseAmount.adjustedAmount ?? 0) &&
+                    setReleaseAmount(() => ({
+                      ...releaseAmount,
+                      adjustedAmount: Number(e.target.value),
+                    }))
+                  }
+                  fullWidth
+                  // inputProps={{
+                  //   max: releaseAmount.releaseAmount ?? 0, min: 0, step: 0.01,
+                  //   onWheel: (event: React.WheelEvent<HTMLInputElement>) => {
+                  //     event.preventDefault();
+                  //     event.currentTarget.blur();
+                  //   },
+                  // }}
+                  variant="outlined"
+                  disabled={props.action !== 'add'}
+
+                  // required
+                />
+              </Grid>
+              <Grid item xs={12} md={3} style={{ display: 'flex', alignItems: 'center' }}>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      name="closingBalance"
+                      // Use double negation (!!) to ensure it's a boolean value
+                      checked={!!releaseAmount?.closingBalance}
+                      onChange={(e) =>
+                        setReleaseAmount((prev) => ({
+                          ...prev,
+                          closingBalance: e.target.checked,
+                        }))
+                      }
+                      disabled={props.action !== 'add'}
+                      color="primary"
+                    />
+                  }
+                  label="Closing Balance"
+                />
+              </Grid>
+              {releaseAmount?.closingBalance &&(
+
+                <Grid item xs={12} md={3}>
+                  <TextField
+                    label="Closing Balance Remark"
+                    type="tel"
+                    value={releaseAmount?.closingBalanceRemark }
+                    onChange={(e) =>
+                      setReleaseAmount(() => ({
+                        ...releaseAmount,
+                        closingBalanceRemark: e.target.value,
+                      }))
+                    }
+                    fullWidth
+                    variant="outlined"
+                    disabled={props.action !== 'add'}
+
+                    // required
+                  />
+                </Grid>
+              )}
               {/* <Grid item xs={12} > */}
               {/* { <BankDetailsForm
                   value={IRO?.transferredBank}
@@ -796,6 +901,10 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
                 setReleaseAmount((prev:any) => ({
                   ...prev,
                   transferredAmount: total,
+                }));
+                setReleaseAmount((prev:any) => ({
+                  ...prev,
+                  transferredAmountEach: transferredAmounts,
                 }));
 
                 setOpenTransferDialog(false);

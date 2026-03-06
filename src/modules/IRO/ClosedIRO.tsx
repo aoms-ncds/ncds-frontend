@@ -34,6 +34,7 @@ import LeaderDetailsService from '../Settings/extras/LeaderDetailsService';
 import FRReceiptTemplate from '../FR/components/FRReceiptTemplate';
 import ReleaseAmountDialogEdit from './components/ReleaseAmountDialogEdit';
 import TransactionLogDialog from '../FR/components/TransactionLogDialog';
+import formatAmount from '../Common/formatcode';
 
 const ClosedIRO = () => {
   const [openRemarks, toggleOpenRemarks] = useState(false);
@@ -729,6 +730,36 @@ const ClosedIRO = () => {
         }
         return 0; // or return a suitable default value
       }, headerAlign: 'center', renderHeader: () => (<b>Sanctioned Amount</b>), width: 150,
+    },
+    {
+      field: 'Transferred',
+      headerName: 'Transferred Amount',
+      width: 180,
+      renderHeader: () => <b>Transferred Amount</b>,
+      valueGetter: (params) => {
+        return params.row.releaseAmount?.transferredAmount;
+      }, align: 'center',
+      headerAlign: 'center',
+    },
+    {
+      field: 'totalTransferred',
+      headerName: 'Total Transferred Amount',
+      width: 180,
+      renderHeader: () => <b>Total Transferred Amount</b>,
+      valueGetter: (params) => {
+        if (params.row.sanctionedAmount !== undefined) {
+          return formatAmount(params.row.sanctionedAmount as number);
+        }
+        if (Array.isArray(params.row.particulars)) {
+          return formatAmount(
+            params.row.particulars.reduce(
+              (sum, item) => sum + (Number(item.sanctionedAmount) || 0),
+              0,
+            ).toFixed(2));
+        }
+        return 0; // or return a suitable default value
+      }, align: 'center',
+      headerAlign: 'center',
     },
     {
       field: 'specialsanction',

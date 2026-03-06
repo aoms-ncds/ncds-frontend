@@ -49,6 +49,7 @@ import InfoIcon from '@mui/icons-material/Info';
 import TransactionLogDialog from '../FR/components/TransactionLogDialog';
 import ReleaseAmountDialogEdit from './components/ReleaseAmountDialogEdit';
 import DivisionsServices from '../Divisions/extras/DivisionsServices';
+import formatAmount from '../Common/formatcode';
 
 const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
   const [openRemarks, toggleOpenRemarks] = useState(false);
@@ -1240,6 +1241,36 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
       }, align: 'center',
       headerAlign: 'center',
     },
+    {
+      field: 'Transferred',
+      headerName: 'Transferred Amount',
+      width: 180,
+      renderHeader: () => <b>Transferred Amount</b>,
+      valueGetter: (params) => {
+        return params.row.releaseAmount?.transferredAmount;
+      }, align: 'center',
+      headerAlign: 'center',
+    },
+    {
+      field: 'totalTransferred',
+      headerName: 'Total Transferred Amount',
+      width: 180,
+      renderHeader: () => <b>Total Transferred Amount</b>,
+      valueGetter: (params) => {
+        if (params.row.sanctionedAmount !== undefined) {
+          return formatAmount(params.row.sanctionedAmount as number);
+        }
+        if (Array.isArray(params.row.particulars)) {
+          return formatAmount(
+            params.row.particulars.reduce(
+              (sum, item) => sum + (Number(item.sanctionedAmount) || 0),
+              0,
+            ).toFixed(2));
+        }
+        return 0; // or return a suitable default value
+      }, align: 'center',
+      headerAlign: 'center',
+    },
 
     // {
     //   field: 'sanctionedAsPer',
@@ -1454,7 +1485,7 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
   return (
     <CommonPageLayout
       title={props.action == 'manage' ? 'Manage IRO' : 'Fm Request'}
-      status={'FM REQUEST'}
+      status={'WAITING FOR RELEASE AMOUNT'}
       momentFilter={{
         dateRange: dateRange,
         onChange: (newDateRange) => {
@@ -2249,7 +2280,7 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
                 return FileUploaderServices.deleteFile(fileId);
               }}
             />
-            <ReleaseAmount action={'add'} onClose={() => setOpenRelease(false)} open={openRelease} data={ releaseAmountIROs?.length === 0 ? newTest : releaseAmountIROs} />
+            <ReleaseAmount action={'manage'} onClose={() => setOpenRelease(false)} open={openRelease} data={ releaseAmountIROs?.length === 0 ? newTest : releaseAmountIROs} />
           </>
         }
         denied={(missingPermissions) => (

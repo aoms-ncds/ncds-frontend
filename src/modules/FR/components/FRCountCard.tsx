@@ -7,8 +7,8 @@ const StyledLink = styled(Link)`
 `;
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const FRCountCard = (props: {
-  count?: string; 
-  amount?: string; 
+  count?: string;
+  amount?: string;
   badgeColor?: 'default' | 'error' | 'primary' | 'secondary';
   icon?: React.ReactNode;
   secondaryText: string; color: string; onClick?: React.MouseEventHandler<HTMLDivElement>; targetRoute?: string;
@@ -82,7 +82,7 @@ const FRCountCard = (props: {
             {props.secondaryText}
           </Typography>
 
-        
+
         </Box>
 
         <Box
@@ -101,14 +101,17 @@ const FRCountCard = (props: {
             color={'#3B32E6'}
           >
             {props.count || '0'}
-          </Typography>|
-          <Typography
-            fontWeight={600}
-            fontSize={{ xs: 15, sm: 15, md: 15 }}
-            color={'#2b1b1b'}
-          >
-           ₹ {formatAmount(props.amount || '0')}
           </Typography>
+          {props.amount&&(
+
+            <Typography
+              fontWeight={600}
+              fontSize={{ xs: 15, sm: 15, md: 15 }}
+              color={'#2b1b1b'}
+            >
+          | ₹ {formatAmount(props.amount || '0')}
+            </Typography>
+          )}
         </Box>
       </CardContent>
     </Card>

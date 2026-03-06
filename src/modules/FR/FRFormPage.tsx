@@ -112,6 +112,8 @@ const FRFormPage = (props: FRFormPageProps) => {
         res = await FRServices.createFRRequests(requisition);
       } else if (props.action === 'customIRO') {
         res = await IROServices.createFRRequestsIRO(requisition);
+                  navigate('/iro/');
+
         if (res) {
           navigate('/iro/');
         }

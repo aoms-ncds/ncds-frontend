@@ -45,6 +45,7 @@ import LeaderDetailsService from '../Settings/extras/LeaderDetailsService';
 import ReleaseAmountDialogEdit from './components/ReleaseAmountDialogEdit';
 import TransactionLogDialog from '../FR/components/TransactionLogDialog';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import formatAmount from '../Common/formatcode';
 
 const ReconciliationIRO = () => {
   const [reconciliationIRO, setReconcilationIRO] = useState<IROrder[]>();
@@ -828,6 +829,36 @@ const ReconciliationIRO = () => {
         return 0; // or return a suitable default value
       }, renderHeader: () => (<b>Sanctioned Amount</b>), align: 'center', headerAlign: 'center' },
     {
+      field: 'Transferred',
+      headerName: 'Transferred Amount',
+      width: 180,
+      renderHeader: () => <b>Transferred Amount</b>,
+      valueGetter: (params) => {
+        return params.row.releaseAmount?.transferredAmount;
+      }, align: 'center',
+      headerAlign: 'center',
+    },
+    {
+      field: 'totalTransferred',
+      headerName: 'Total Transferred Amount',
+      width: 180,
+      renderHeader: () => <b>Total Transferred Amount</b>,
+      valueGetter: (params) => {
+        if (params.row.sanctionedAmount !== undefined) {
+          return formatAmount(params.row.sanctionedAmount as number);
+        }
+        if (Array.isArray(params.row.particulars)) {
+          return formatAmount(
+            params.row.particulars.reduce(
+              (sum, item) => sum + (Number(item.sanctionedAmount) || 0),
+              0,
+            ).toFixed(2));
+        }
+        return 0; // or return a suitable default value
+      }, align: 'center',
+      headerAlign: 'center',
+    },
+    {
       field: 'specialsanction',
       renderHeader: () => <b>Sanction as per</b>,
       renderCell: (props) => (
@@ -849,10 +880,10 @@ const ReconciliationIRO = () => {
       headerAlign: 'center',
     },
     { field: 'sanctionedBank', headerName: 'Sanctioned Bank', width: 150, renderHeader: () => (<b>Sanctioned Bank</b>), align: 'center', headerAlign: 'center' },
-    {
-      field: 'released amount ', headerName: 'Amount Transferred ', width: 150, renderHeader: () => <b>Amount Transferred</b>, align: 'center', headerAlign: 'center',
-      valueGetter: (params) => params.row.releaseAmount?.transferredAmount?.toFixed(2),
-    },
+    // {
+    //   field: 'released amount ', headerName: 'Amount Transferred ', width: 150, renderHeader: () => <b>Amount Transferred</b>, align: 'center', headerAlign: 'center',
+    //   valueGetter: (params) => params.row.releaseAmount?.transferredAmount?.toFixed(2),
+    // },
 
     {
       field: 'updatedAt', headerName: 'Last Updated', width: 130, renderHeader: () => (<b>Last Updated</b>),

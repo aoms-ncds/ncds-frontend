@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { Autocomplete, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, TextField, Typography } from '@mui/material';
+import { Autocomplete, Button, Checkbox, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControlLabel, Grid, TextField, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { DatePicker } from '@mui/x-date-pickers';
 import { AttachFile as AttachmentIcon } from '@mui/icons-material';
@@ -44,6 +44,10 @@ const ReleaseAmountDialogEdit = (props: ReleaseDialogProps) => {
     releaseAmount: 0,
     transactionNumber: '',
     transferredAmount: 0,
+    adjustedIro: '',
+    adjustedAmount: 0,
+    closingBalance: false,
+    closingBalanceRemark: '',
     transferredDate: null,
     transferredBank: {
       bankName: '',
@@ -54,6 +58,10 @@ const ReleaseAmountDialogEdit = (props: ReleaseDialogProps) => {
     attachment: [],
     division: '',
   });
+  const [transferredAmounts, setTransferredAmounts] = useState<any>({});
+  const [openTransferDialog, setOpenTransferDialog] = useState(false);
+  const [selectedRow, setSelectedRow] = useState<any>(null);
+  const [transferInput, setTransferInput] = useState<any>('');
   console.log(releaseAmount, 'iroStatus');
   const model = (e: { preventDefault: () => void }) => {
     e.preventDefault();
@@ -248,7 +256,7 @@ const ReleaseAmountDialogEdit = (props: ReleaseDialogProps) => {
   }, [props.data]);
 
   const columns: GridColDef<IROrder>[] = [
-     {
+    {
       field: '_manage',
       headerClassName: 'super-app-theme--cell',
       headerName: '',
@@ -288,6 +296,47 @@ const ReleaseAmountDialogEdit = (props: ReleaseDialogProps) => {
           ]}
         />
       ),
+    },
+    {
+      field: 'tanfered',
+      headerName: 'Transferred Amount',
+      width: 180,
+
+      renderCell: (params) => {
+        let value = 0;
+
+        // check edited value for this row
+        if (transferredAmounts?.[params.row._id] !== undefined) {
+          value = transferredAmounts[params.row._id];
+        }
+        // otherwise show sanctioned amount
+        else if (params.row?.sanctionedAmount) {
+          value = params.row.sanctionedAmount;
+        }
+        // otherwise calculate from particulars
+        else if (Array.isArray(params.row?.particulars)) {
+          value = params.row.particulars.reduce(
+            (sum, item) => sum + (item.sanctionedAmount || 0),
+            0,
+          );
+        }
+
+        return (
+          <span
+            style={{ cursor: 'pointer', color: '#1976d2', fontWeight: 600 }}
+            onClick={() => {
+              setSelectedRow(params.row);
+              setTransferInput(value);
+              setOpenTransferDialog(true);
+            }}
+          >
+            {Number(value).toFixed(2)}
+          </span>
+        );
+      },
+
+      align: 'center',
+      headerAlign: 'center',
     },
     { field: 'IROno', headerName: 'IRO No', width: 130, renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>, align: 'center', headerAlign: 'center' },
     {
@@ -459,6 +508,109 @@ const ReleaseAmountDialogEdit = (props: ReleaseDialogProps) => {
                   }
                 />
               </Grid>
+              <Grid item xs={12}>
+                <Typography variant="h4" component="h4">
+                  Adjustment Details
+                </Typography>
+              </Grid>
+
+              <Grid item xs={12} md={4}>
+                <TextField
+                  label="Adjusted IRO"
+                  type="tel"
+                  value={releaseAmount?.adjustedIro}
+                  onChange={(e) =>
+                    setReleaseAmount(() => ({
+                      ...releaseAmount,
+                      adjustedIro: e.target.value,
+                    }))
+                  }
+                  InputLabelProps={{
+                    shrink: Boolean(releaseAmount?.adjustedIro),
+                  }}
+                  fullWidth
+                  inputProps={{
+                    onWheel: (event: React.WheelEvent<HTMLInputElement>) => {
+                      event.preventDefault();
+                      event.currentTarget.blur();
+                    },
+                  }}
+                  variant="outlined"
+                  disabled={props.action !== 'add'}
+
+                  // required
+                />
+              </Grid>
+              <Grid item xs={12} md={4}>
+                <TextField
+                  label="Adjusted Amount"
+                  type="number"
+                  value={releaseAmount?.adjustedAmount }
+                  onChange={(e) =>
+                    // Number(e.target.value) <= (releaseAmount.adjustedAmount ?? 0) &&
+                    setReleaseAmount(() => ({
+                      ...releaseAmount,
+                      adjustedAmount: Number(e.target.value),
+                    }))
+                  }
+                  fullWidth
+                  inputProps={{
+                    // max: releaseAmount.releaseAmount ?? 0, min: 0, step: 0.01,
+                    onWheel: (event: React.WheelEvent<HTMLInputElement>) => {
+                      event.preventDefault();
+                      event.currentTarget.blur();
+                    },
+                  }}
+                  InputLabelProps={{
+                    shrink: Boolean(releaseAmount?.adjustedAmount),
+                  }}
+                  variant="outlined"
+                  disabled={props.action !== 'add'}
+
+                  // required
+                />
+              </Grid>
+              <Grid item xs={12} md={3} style={{ display: 'flex', alignItems: 'center' }}>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      name="closingBalance"
+                      // Use double negation (!!) to ensure it's a boolean value
+                      checked={!!releaseAmount?.closingBalance}
+                      onChange={(e) =>
+                        setReleaseAmount((prev) => ({
+                          ...prev,
+                          closingBalance: e.target.checked,
+                        }))
+                      }
+                      disabled={props.action !== 'add'}
+                      color="primary"
+                    />
+                  }
+                  label="Closing Balance"
+                />
+              </Grid>
+              {releaseAmount?.closingBalance &&(
+
+                <Grid item xs={12} md={3}>
+                  <TextField
+                    label="Closing Balance Remark"
+                    type="tel"
+                    value={releaseAmount?.closingBalanceRemark }
+                    onChange={(e) =>
+                      setReleaseAmount(() => ({
+                        ...releaseAmount,
+                        closingBalanceRemark: e.target.value,
+                      }))
+                    }
+                    fullWidth
+                    variant="outlined"
+                    disabled={props.action !== 'add'}
+
+                    // required
+                  />
+                </Grid>
+              )}
               {/* <Grid item xs={12} > */}
               {/* { <BankDetailsForm
                   value={IRO?.transferredBank}
@@ -677,6 +829,57 @@ const ReleaseAmountDialogEdit = (props: ReleaseDialogProps) => {
             {/* ) : null} */}
           </DialogActions>
         </form>
+        <Dialog open={openTransferDialog} onClose={() => setOpenTransferDialog(false)}>
+
+          <DialogTitle>Enter Transferred Amount</DialogTitle>
+
+          <DialogContent>
+            <TextField
+              fullWidth
+              type="number"
+              value={transferInput}
+              onChange={(e) => setTransferInput(e.target.value)}
+            />
+          </DialogContent>
+
+          <DialogActions>
+
+            <Button onClick={() => setOpenTransferDialog(false)}>
+              Cancel
+            </Button>
+
+            <Button
+              variant="contained"
+              onClick={() => {
+                const amount = Number(transferInput);
+
+                const updatedAmounts = {
+                  ...transferredAmounts,
+                  [selectedRow._id]: amount,
+                };
+
+                // update row values
+                setTransferredAmounts(updatedAmounts);
+
+                // calculate total
+                const total = Object.values(updatedAmounts)
+              .reduce((sum:any, val:any) => sum + Number(val || 0), 0);
+
+                // update release form
+                setReleaseAmount((prev:any) => ({
+                  ...prev,
+                  transferredAmount: total,
+                }));
+
+                setOpenTransferDialog(false);
+              }}
+            >
+        Save
+            </Button>
+
+          </DialogActions>
+
+        </Dialog>
         <Dialog
           open={open}
           keepMounted
