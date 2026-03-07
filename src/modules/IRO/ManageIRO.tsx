@@ -415,7 +415,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     date: string | null;
   } | null>(null);
   const [loading, setLoading] = useState(false);
-  console.log(props.action, 'selectedIROId');
+  console.log(statusFilter, 'selectedIROId');
   useEffect(() => {
     if (finder === 1|| 0) {
       setStatusFilter([IROLifeCycleStates.AMOUNT_RELEASED]);
@@ -539,11 +539,12 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
           iro.IRODate.isSameOrAfter(dateRange.startDate) &&
     iro.IRODate.isSameOrBefore(dateRange.endDate),
         );
-
+        // let filteredCustom;
         const filteredCustom = customRes.data.filter((iro) =>
           iro.IRODate.isSameOrAfter(dateRange.startDate) &&
-    iro.IRODate.isSameOrBefore(dateRange.endDate),
+      iro.IRODate.isSameOrBefore(dateRange.endDate),
         );
+
 
         // ✅ MERGE BOTH
         const combinedData = [...filteredOptimized, ...filteredCustom];
@@ -1151,7 +1152,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
             }
 
             switch (statusName) {
-            case 'WAITING FOR APPROVAL':
+            case 'WAITING APPROV.':
               return clsx('yellow-light');
 
             case 'WAITING FOR ACCOUNTS MNGR':
@@ -1159,15 +1160,16 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
 
             case 'IRO APPROVED':
               return clsx('orange-light');
-
-            case 'RE-SUBMITTED':
+            // case 'RE-SUBMITTED':
             case 'CUSTOM IRO':
               return clsx('status-cell', 're-sum');
 
-            case 'WAITING FOR RELEASE AMOUNT':
+            case 'WAITING RELEASE.':
               return clsx('orange-dark');
+            case 'REOPENED':
+              return clsx('status-cell', 're-color');
 
-            case 'AMOUNT RELEASED':
+            case 'AMT RELEASED':
               return clsx('green-light');
 
             case 'RECONCILIATION DONE':
@@ -1179,8 +1181,13 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
             case 'IRO DISAPPROVED':
               return clsx('red-light');
 
-            case 'IRO IN PROCESS':
+            case 'IN PROCESS':
               return clsx('dark-orange');
+
+            case 'REVERTED':
+              return clsx('revert');
+            case 'DISAPPROVED':
+              return clsx('DISAPPROVED');
 
             default:
               return '';
@@ -1201,25 +1208,37 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
             case 'SEND_BACK':
               statusName = 'REVERTED';
               break;
+            case 'REVERTED_TO_DIVISION':
+              statusName = 'REVERTED';
+              break;
+            case 'REOPENED':
+              statusName = 'REOPENED';
+              break;
 
             case 'FR_APPROVED':
               statusName = 'FR VERIFIED';
               break;
 
             case 'FR_REJECTED':
-              statusName = 'IRO DISAPPROVED';
+              statusName = 'DISAPPROVED';
               break;
 
             case 'WAITING_FOR_OFFICE_MNGR':
-              statusName = 'WAITING FOR APPROVAL';
+              statusName = 'WAITING APPROV.';
+              break;
+            case 'WAITTING_FOR_RELEASE_AMOUNT':
+              statusName = 'WAITING RELEASE.';
               break;
 
             case 'WAITING_FOR_ACCOUNTS_STATE':
               statusName = 'IRO APPROVED';
               break;
+            case 'AMOUNT_RELEASED':
+              statusName = 'AMT RELEASED';
+              break;
 
             case 'IRO_IN_PROCESS':
-              statusName = 'IRO IN PROCESS';
+              statusName = 'IRO PROCESS';
               break;
 
             default:
@@ -2076,22 +2095,30 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                           backgroundColor: '#ffa500',
                         },
                         '& .orange-dark': {
-                          backgroundColor: '#cc8400',
+                          backgroundColor: '#3949AB',
+                          color: '#fff',
+                          fontWeight: '600',
                         },
                         '& .yellow-light': {
-                          backgroundColor: '#ffffe0',
+                          backgroundColor: '#a964f4',
+                          color: '#fff',
+                          fontWeight: '600',
                         },
                         '& .yellow-dark ': {
                           backgroundColor: '#ffd700',
                         },
                         '& .green-light ': {
-                          backgroundColor: '#90ee90',
+                          backgroundColor: '#2E7D32',
+                          color: '#fff',
+                          fontWeight: '600',
                         },
                         '& .green-medium': {
                           backgroundColor: '#32cd32',
                         },
                         '& .green-dark ': {
-                          backgroundColor: '#008000',
+                          backgroundColor: '#424242',
+                          color: '#fff',
+                          fontWeight: '600',
                         },
                         '&  .red-light ': {
                           backgroundColor: '#ff7f7f',
@@ -2100,7 +2127,24 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                           backgroundColor: '#ff0000',
                         },
                         '&   .dark-orange': {
-                          backgroundColor: '#FFD243',
+                          backgroundColor: '#00897B',
+                          color: '#fff',
+                          fontWeight: '600',
+                        },
+                        '&   .revert': {
+                          backgroundColor: '#F57C00',
+                          color: '#fff',
+                          fontWeight: '600',
+                        },
+                        '&   .DISAPPROVED': {
+                          backgroundColor: '#D32F2F',
+                          color: '#fff',
+                          fontWeight: '600',
+                        },
+                        '& .re-color': {
+                          backgroundColor: '#7B1FA2',
+                          color: '#fff',
+                          fontWeight: '600',
                         },
                       }} >
                       <DataGrid

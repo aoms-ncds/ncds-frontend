@@ -758,7 +758,20 @@ const FRForm = (props: FormComponentProps<any>) => {
                   />
                 </Grid>
               )}
-
+              <Grid item xs={12} md={6}>
+                <TextField
+                  label="Raised By"
+                  value={props.value.raisedBy}
+                  onChange={(e) =>
+                    props.onChange({
+                      ...props.value,
+                      raisedBy: e.target.value,
+                    })
+                  }
+                  variant="outlined"
+                  fullWidth
+                />
+              </Grid>
               {props.value.purpose === 'Subdivision' ? (
                 <Grid item xs={12} md={6}>
                   <Autocomplete

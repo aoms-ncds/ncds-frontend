@@ -454,6 +454,21 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                   />
                 </Grid>
               ) : null}
+              <Grid item xs={12} md={6}>
+                <TextField
+                  label="Raised By"
+                  value={props.value.raisedBy}
+                  onChange={(e) =>
+                    props.onChange({
+                      ...props.value,
+                      raisedBy: e.target.value,
+                    })
+                  }
+                  variant="outlined"
+                  fullWidth
+                  disabled
+                />
+              </Grid>
 
 
               <Grid item xs={12}>
@@ -809,29 +824,28 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
               ) : null}
               <Grid item xs={12}>
                 {/* {props.action === 'edit' && ( */}
-                  {props.options?.FRLoaded && 
+                {props.options?.FRLoaded &&
               <Button
-                  variant="contained"
-                  color="warning"
-                  style={{
-                    textAlign: 'left', textDecoration: 'none',
-                  }}
-                  onClick={() => {
-                     setLoading(true);
-                    FRServices.getAllOptimizedById(props.value?._id).then((res) => {
-                      console.log(res.data, 'daa989');
-                      setData2(res.data);
-                       setOpenThePrintFr(true);
-                        setLoading(false);
-                     
-                    });
-                  }}
+                variant="contained"
+                color="warning"
+                style={{
+                  textAlign: 'left', textDecoration: 'none',
+                }}
+                onClick={() => {
+                  setLoading(true);
+                  FRServices.getAllOptimizedById(props.value?._id).then((res) => {
+                    console.log(res.data, 'daa989');
+                    setData2(res.data);
+                    setOpenThePrintFr(true);
+                    setLoading(false);
+                  });
+                }}
 
-                >
-               
-                  {loading ? 'Loading...' : 'Print FR'}
-                </Button>
-                   }
+              >
+
+                {loading ? 'Loading...' : 'Print FR'}
+              </Button>
+                }
                 &nbsp;
                 {props.value.status === FRLifeCycleStates.WAITING_FOR_PRESIDENT && (
                   (hasPermissions(['PRESIDENT_ACCESS']) && props.value.status === FRLifeCycleStates.WAITING_FOR_PRESIDENT) ||
@@ -871,7 +885,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                       console.log(res.data, 'daa98');
                       setData(res.data);
                     });
-                   // setOpenPrintFr(true);
+                    // setOpenPrintFr(true);
                     // setTimeout(() => {
                     //   setOpenPrintFr(false);
                     // }, 2000);
@@ -1875,28 +1889,28 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
       <Dialog open={Boolean(data)} onClose={() => setData(null)} maxWidth="xs" fullWidth>
         <DialogTitle> Print Fr</DialogTitle>
         <DialogContent>
-       <Container>
+          <Container>
   Download the FR Auth Letter for {data?.FRno}
-  <br />
+            <br />
 
-  {data && (
-    <BlobProvider document={<SanctionLetter data={data as any} />}>
-      {({ loading, url }) =>
-  loading ? (
-    <span style={{ color: 'blue' }}>....</span>
-  ) : (
-    <a
-      href={url ?? ''}
-      download="AuthLetter.pdf"
-      style={{ color: 'blue' }}
-    >
+            {data && (
+              <BlobProvider document={<SanctionLetter data={data as any} />}>
+                {({ loading, url }) =>
+                  loading ? (
+                    <span style={{ color: 'blue' }}>....</span>
+                  ) : (
+                    <a
+                      href={url ?? ''}
+                      download="AuthLetter.pdf"
+                      style={{ color: 'blue' }}
+                    >
       AuthLetter.pdf
-    </a>
-  )
-}
-    </BlobProvider>
-  )}
-</Container>
+                    </a>
+                  )
+                }
+              </BlobProvider>
+            )}
+          </Container>
         </DialogContent>
         <DialogActions>
           <Button
@@ -2094,38 +2108,38 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
         </DialogActions>
       </Dialog>
       <Dialog open={openThePrintFr &&Boolean(data2)} onClose={() => setData2(null)} maxWidth="xs" fullWidth>
-  <DialogTitle>Print FR</DialogTitle>
-  <DialogContent>
-    <Container>
+        <DialogTitle>Print FR</DialogTitle>
+        <DialogContent>
+          <Container>
       Downloading the FRReceipt for {data2?.FRno}
-      <br />
-      {data2 && (
-        <BlobProvider
-          document={
-            <FRReceiptTemplate
-              rowData={data2}
-              president={selectedSignaturePresident}
-            />
-          }
-        >
-          {({ loading, url }) =>
-            loading ? (
-              <span style={{ color: 'blue' }}>....</span>
-            ) : (
-              <a
-                href={url ?? ''}
-                download="FRReceipt.pdf"
-                style={{ color: 'blue' }}
+            <br />
+            {data2 && (
+              <BlobProvider
+                document={
+                  <FRReceiptTemplate
+                    rowData={data2}
+                    president={selectedSignaturePresident}
+                  />
+                }
               >
+                {({ loading, url }) =>
+                  loading ? (
+                    <span style={{ color: 'blue' }}>....</span>
+                  ) : (
+                    <a
+                      href={url ?? ''}
+                      download="FRReceipt.pdf"
+                      style={{ color: 'blue' }}
+                    >
                 FRReceipt.pdf
-              </a>
-            )
-          }
-        </BlobProvider>
-      )}
-    </Container>
-  </DialogContent>
-</Dialog>
+                    </a>
+                  )
+                }
+              </BlobProvider>
+            )}
+          </Container>
+        </DialogContent>
+      </Dialog>
 
       {props.value._id && <TransactionLogDialog open={openLog} onClose={() => setOpenLog(false)} TRId={props.value._id} />}
     </div>

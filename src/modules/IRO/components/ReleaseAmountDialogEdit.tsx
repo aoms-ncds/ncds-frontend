@@ -488,7 +488,7 @@ const ReleaseAmountDialogEdit = (props: ReleaseDialogProps) => {
               </Grid>
               <Grid item xs={12} md={6}>
                 <DatePicker
-                  label="Date"
+                  label="Transferred Date"
                   value={releaseAmount?.transferredDate}
                   format="DD/MM/YYYY"
                   sx={{ width: '100%' }}

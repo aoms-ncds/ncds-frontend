@@ -36,6 +36,7 @@ declare global {
     FRdate?: Moment;
     FRno?: FR['FRno'];
     lastUpdatedDate?: Moment;
+    raisedBy?: string;
     purpose?: FR['purpose'];
     sanction?: FR['sanction'];
     requestAmount?: ['requestedAmount'];
