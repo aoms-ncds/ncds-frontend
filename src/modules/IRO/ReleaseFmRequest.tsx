@@ -438,7 +438,7 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
     setSelectedIros([]);
   };
   console.log(releaseAmountIROs, '#ODD');
-  console.log(newTest, '#NEW');
+  console.log(groupIro, '#NEW');
   const [pdfProps, setPdfProps] = useState<{
     purpose: FRPurpose | null;
     divisionId: string | null;
@@ -681,6 +681,8 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
       });
   };
   const flattenedData = groupIro.reduce((acc: any, item: { IRO: IROrder[]; _id: any}, parentIndex: any) => {
+    console.log(parentIndex, 'ppopo');
+
     const iros = Array.isArray(item.IRO) ? // Ensure IRO is an array before mapping
       item.IRO.map((iro: IROrder) => ({
         ...iro,

@@ -20,6 +20,7 @@ const WorkersDashboard = () => {
   const [activeWorker, setActiveWorker] = useState<number | null>(null);
   const [activeSpouse, setActiveSpouse] = useState<number | null>(0);
   const [activeChild, setActiveChild] = useState<number | null>(0);
+  const [gender, setGender] = useState<number | null>(0);
   // console.log(activeChild?.length, 'activeSpouse');
 
   const user = useAuth();
@@ -45,7 +46,7 @@ const WorkersDashboard = () => {
       .catch((error) => {
         console.log(error);
       });
-    WorkerServices.getCount({ status: WorkerLifeCycleStates.ACTIVE })
+    WorkerServices.getCount({ status: WorkerLifeCycleStates.ACTIVE, gender: gender })
       .then((res) => setActiveWorker(res.data))
       .catch((error) => {
         console.log(error);
@@ -66,6 +67,21 @@ const WorkersDashboard = () => {
     <CommonPageLayout title="Workers Dashboard">
 
       <Grid container spacing={3}>
+        <Grid item xs={6} md={4} xl={3}>
+          <FRCountCard
+            icon={
+              <img
+                src="/mod_icons/Total Active Workers Counter Card.png"
+                alt="Logo"
+                style={{ width: '70px', height: '70px' }}
+              />
+            }
+            onFilter={(value) => setGender(value)}
+            genderFilter={gender}
+            count={(activeWorker ?? 0) + (activeSpouse ?? 0)}
+            secondaryText="Total Workers"
+            color="#fff"
+          />        </Grid>
         <Grid item xs={6} md={4} xl={3}>
           <FRCountCard icon={<img src="/mod_icons/Total Active Workers Counter Card.png"
             alt="Logo" style={{ width: '70px', height: '70px' }} />} count={activeWorker?.toString()} secondaryText="Active Worker" color="#fff" />

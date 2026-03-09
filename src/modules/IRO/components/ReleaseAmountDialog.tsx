@@ -461,6 +461,19 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
                   variant="outlined"
                   fullWidth
                   disabled
+                  sx={{
+                    '& .MuiInputBase-input.Mui-disabled': {
+                      WebkitTextFillColor: '#000', // text color
+                      color: '#000',
+                      opacity: 1,
+                    },
+                    '& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline': {
+                      borderColor: '#c4c4c4', // normal border color
+                    },
+                    '& .MuiInputLabel-root.Mui-disabled': {
+                      color: 'rgba(0,0,0,0.6)',
+                    },
+                  }}
                   inputProps={{
                     onWheel: (event: React.WheelEvent<HTMLInputElement>) => {
                       event.preventDefault();
@@ -492,6 +505,22 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
                   }}
                   variant="outlined"
                   disabled={props.action !== 'add'}
+
+
+                  sx={{
+                    '& .MuiInputBase-input.Mui-disabled': {
+                      WebkitTextFillColor: '#000', // text color
+                      color: '#000',
+                      opacity: 1,
+                    },
+                    '& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline': {
+                      borderColor: '#c4c4c4', // normal border color
+                    },
+                    '& .MuiInputLabel-root.Mui-disabled': {
+                      color: 'rgba(0,0,0,0.6)',
+                    },
+                  }}
+
 
                   required
                 />
@@ -547,6 +576,20 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
                   }}
                   variant="outlined"
                   disabled={props.action !== 'add'}
+                  sx={{
+                    '& .MuiInputBase-input.Mui-disabled': {
+                      WebkitTextFillColor: '#000', // text color
+                      color: '#000',
+                      opacity: 1,
+                    },
+                    '& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline': {
+                      borderColor: '#c4c4c4', // normal border color
+                    },
+                    '& .MuiInputLabel-root.Mui-disabled': {
+                      color: 'rgba(0,0,0,0.6)',
+                    },
+                  }}
+
 
                   // required
                 />
@@ -574,6 +617,21 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
                   variant="outlined"
                   disabled={props.action !== 'add'}
 
+
+                  sx={{
+                    '& .MuiInputBase-input.Mui-disabled': {
+                      WebkitTextFillColor: '#000', // text color
+                      color: '#000',
+                      opacity: 1,
+                    },
+                    '& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline': {
+                      borderColor: '#c4c4c4', // normal border color
+                    },
+                    '& .MuiInputLabel-root.Mui-disabled': {
+                      color: 'rgba(0,0,0,0.6)',
+                    },
+                  }}
+
                   // required
                 />
               </Grid>
@@ -591,6 +649,21 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
                         }))
                       }
                       disabled={props.action !== 'add'}
+
+                      sx={{
+                        '& .MuiInputBase-input.Mui-disabled': {
+                          WebkitTextFillColor: '#000', // text color
+                          color: '#000',
+                          opacity: 1,
+                        },
+                        '& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline': {
+                          borderColor: '#c4c4c4', // normal border color
+                        },
+                        '& .MuiInputLabel-root.Mui-disabled': {
+                          color: 'rgba(0,0,0,0.6)',
+                        },
+                      }}
+
                       color="primary"
                     />
                   }
@@ -613,6 +686,21 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
                     fullWidth
                     variant="outlined"
                     disabled={props.action !== 'add'}
+
+                    sx={{
+                      '& .MuiInputBase-input.Mui-disabled': {
+                        WebkitTextFillColor: '#000', // text color
+                        color: '#000',
+                        opacity: 1,
+                      },
+                      '& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline': {
+                        borderColor: '#c4c4c4', // normal border color
+                      },
+                      '& .MuiInputLabel-root.Mui-disabled': {
+                        color: 'rgba(0,0,0,0.6)',
+                      },
+                    }}
+
 
                     // required
                   />
@@ -659,6 +747,21 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
                   fullWidth
                   disabled={props.action !== 'add'}
 
+                  sx={{
+                    '& .MuiInputBase-input.Mui-disabled': {
+                      WebkitTextFillColor: '#000', // text color
+                      color: '#000',
+                      opacity: 1,
+                    },
+                    '& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline': {
+                      borderColor: '#c4c4c4', // normal border color
+                    },
+                    '& .MuiInputLabel-root.Mui-disabled': {
+                      color: 'rgba(0,0,0,0.6)',
+                    },
+                  }}
+
+
                 />
               </Grid>
               <Grid item xs={12} md={6} lg={4}>
@@ -677,6 +780,20 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
                   variant="outlined"
                   fullWidth
                   disabled={props.action !== 'add'}
+                  sx={{
+                    '& .MuiInputBase-input.Mui-disabled': {
+                      WebkitTextFillColor: '#000', // text color
+                      color: '#000',
+                      opacity: 1,
+                    },
+                    '& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline': {
+                      borderColor: '#c4c4c4', // normal border color
+                    },
+                    '& .MuiInputLabel-root.Mui-disabled': {
+                      color: 'rgba(0,0,0,0.6)',
+                    },
+                  }}
+
 
                 />
               </Grid>
@@ -696,6 +813,20 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
                   variant="outlined"
                   fullWidth
                   disabled={props.action !== 'add'}
+                  sx={{
+                    '& .MuiInputBase-input.Mui-disabled': {
+                      WebkitTextFillColor: '#000', // text color
+                      color: '#000',
+                      opacity: 1,
+                    },
+                    '& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline': {
+                      borderColor: '#c4c4c4', // normal border color
+                    },
+                    '& .MuiInputLabel-root.Mui-disabled': {
+                      color: 'rgba(0,0,0,0.6)',
+                    },
+                  }}
+
 
                 />
               </Grid>
@@ -716,6 +847,21 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
                   fullWidth
                   disabled={props.action !== 'add'}
 
+                  sx={{
+                    '& .MuiInputBase-input.Mui-disabled': {
+                      WebkitTextFillColor: '#000', // text color
+                      color: '#000',
+                      opacity: 1,
+                    },
+                    '& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline': {
+                      borderColor: '#c4c4c4', // normal border color
+                    },
+                    '& .MuiInputLabel-root.Mui-disabled': {
+                      color: 'rgba(0,0,0,0.6)',
+                    },
+                  }}
+
+
                 />
               </Grid>
               <Grid item xs={12} md={6} lg={4}>
@@ -735,6 +881,22 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
                   fullWidth
                   disabled={props.action !== 'add'}
 
+
+                  sx={{
+                    '& .MuiInputBase-input.Mui-disabled': {
+                      WebkitTextFillColor: '#000', // text color
+                      color: '#000',
+                      opacity: 1,
+                    },
+                    '& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline': {
+                      borderColor: '#c4c4c4', // normal border color
+                    },
+                    '& .MuiInputLabel-root.Mui-disabled': {
+                      color: 'rgba(0,0,0,0.6)',
+                    },
+                  }}
+
+
                   InputLabelProps={{
                     shrink: Boolean(releaseAmount?.transferredBank?.beneficiary),
                   }}
@@ -748,6 +910,19 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
                     variant="outlined"
                     fullWidth
                     disabled
+                    sx={{
+                      '& .MuiInputBase-input.Mui-disabled': {
+                        WebkitTextFillColor: '#000', // text color
+                        color: '#000',
+                        opacity: 1,
+                      },
+                      '& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline': {
+                        borderColor: '#c4c4c4', // normal border color
+                      },
+                      '& .MuiInputLabel-root.Mui-disabled': {
+                        color: 'rgba(0,0,0,0.6)',
+                      },
+                    }}
                     InputLabelProps={{
                       shrink: true,
                     }}
@@ -774,6 +949,7 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
                     renderInput={(params) => <TextField {...params} label="Mode of payment" required />}
                     // disabled={props.action !== 'add'}
 
+
                   />
                 </Grid>
               )}
@@ -793,6 +969,20 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
                     fullWidth
                     // required
                     disabled={props.action !== 'add'}
+                    sx={{
+                      '& .MuiInputBase-input.Mui-disabled': {
+                        WebkitTextFillColor: '#000', // text color
+                        color: '#000',
+                        opacity: 1,
+                      },
+                      '& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline': {
+                        borderColor: '#c4c4c4', // normal border color
+                      },
+                      '& .MuiInputLabel-root.Mui-disabled': {
+                        color: 'rgba(0,0,0,0.6)',
+                      },
+                    }}
+
 
                   />
                 </Grid>
@@ -813,6 +1003,21 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
                   fullWidth
                   // required
                   disabled={props.action !== 'add'}
+
+                  sx={{
+                    '& .MuiInputBase-input.Mui-disabled': {
+                      WebkitTextFillColor: '#000', // text color
+                      color: '#000',
+                      opacity: 1,
+                    },
+                    '& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline': {
+                      borderColor: '#c4c4c4', // normal border color
+                    },
+                    '& .MuiInputLabel-root.Mui-disabled': {
+                      color: 'rgba(0,0,0,0.6)',
+                    },
+                  }}
+
 
                 />
               </Grid>
@@ -869,6 +1074,8 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
             <TextField
               fullWidth
               type="number"
+              disabled={props.action !== 'add'}
+
               value={transferInput}
               onChange={(e) => setTransferInput(e.target.value)}
             />

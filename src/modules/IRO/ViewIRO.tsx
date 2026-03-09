@@ -356,7 +356,7 @@ const ViewIRO = (props: any) => {
   });
   const [openRelease, setOpenRelease] = useState(false);
 
-  console.log(Data, 'ORRO');
+  console.log(IRO, 'ORRO');
   const totalRequestedAmount = IRO?.particulars && IRO?.particulars.reduce((total: number, item: { requestedAmount: any}) => total + Number(item.requestedAmount), 0);
   const IROstatus = IROLifeCycleStates.getStatusNameByCodeTransaction(Number(IRO?.status));
   const [sanctionedAsPer, setSanctionedAsPer] = useState<ISanctionedAsPer[]>([]);
@@ -533,6 +533,37 @@ const ViewIRO = (props: any) => {
                               disabled
                             />
                           </Grid>
+                          <Grid item xs={12} md={6}>
+                            <TextField
+                              label="Raised By (Only Applicable For Delhi Staff)"
+                              value={IRO.raisedBy}
+                              // onChange={(e) =>
+                              //   props.onChange({
+                              //     ...props.value,
+                              //     raisedBy: e.target.value,
+                              //   })
+                              // }
+                              variant="outlined"
+                              fullWidth
+                              InputLabelProps={{ shrink: true }}
+
+                              disabled
+                              // sx={{
+                              //   '& .MuiInputBase-input.Mui-disabled': {
+                              //     WebkitTextFillColor: '#000', // text color
+                              //     color: '#000',
+                              //     opacity: 1,
+                              //   },
+                              //   '& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline': {
+                              //     borderColor: '#c4c4c4', // normal border color
+                              //   },
+                              //   '& .MuiInputLabel-root.Mui-disabled': {
+                              //     color: 'rgba(0,0,0,0.6)',
+                              //   },
+                              // }}
+                            />
+                          </Grid>
+
                           <Grid item xs={12} md={6}>
                             <TextField
                               label="Worker Code"

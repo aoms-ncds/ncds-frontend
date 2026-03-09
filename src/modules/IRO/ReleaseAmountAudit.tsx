@@ -48,6 +48,7 @@ import FRServices from '../FR/extras/FRServices';
 import InfoIcon from '@mui/icons-material/Info';
 import TransactionLogDialog from '../FR/components/TransactionLogDialog';
 import DivisionsServices from '../Divisions/extras/DivisionsServices';
+import formatAmount from '../Common/formatcode';
 
 const ReleaseAmountAudit = (props: { action: 'manage' | 'release' }) => {
   const [openRemarks, toggleOpenRemarks] = useState(false);
@@ -983,17 +984,31 @@ const ReleaseAmountAudit = (props: { action: 'manage' | 'release' }) => {
       }, align: 'center',
       headerAlign: 'center',
     },
-    {
-      field: 'amountTransfered',
-      headerName: 'Amount Transferred',
+     {
+      field: 'Transferred',
+      headerName: 'Transferred Amount',
       width: 180,
-      renderHeader: () => <b>Amount Transferred</b>,
+      renderHeader: () => <b>Transferred Amount</b>,
       valueGetter: (params) => {
-        if (params.row.releaseAmount?.transferredAmount !== undefined) {
-          return params.row.releaseAmount?.transferredAmount;
+        return params.row.releaseAmount?.transferredAmount;
+      }, align: 'center',
+      headerAlign: 'center',
+    },
+    {
+      field: 'totalTransferred',
+      headerName: 'Total Transferred Amount',
+      width: 180,
+      renderHeader: () => <b>Total Transferred Amount</b>,
+      valueGetter: (params) => {
+        if (params.row.sanctionedAmount !== undefined) {
+          return formatAmount(params.row.sanctionedAmount as number);
         }
         if (Array.isArray(params.row.particulars)) {
-          return params.row.particulars.reduce((sum, item) => sum + (item.sanctionedAmount || 0), 0).toFixed(2);
+          return formatAmount(
+            params.row.particulars.reduce(
+              (sum, item) => sum + (Number(item.sanctionedAmount) || 0),
+              0,
+            ).toFixed(2));
         }
         return 0; // or return a suitable default value
       }, align: 'center',

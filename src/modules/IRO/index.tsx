@@ -178,7 +178,7 @@ const IRODashboard = () => {
 
 
           <Grid container spacing={3}>
-            <Grid item xs={12} md={3} xl={12}>
+            <Grid item xs={12} md={12} xl={12}>
               <Typography variant="h6" fontWeight={600} color="text.primary">
                 Financial Year Summary
                 {/* <Divider /> */}
@@ -325,7 +325,7 @@ const IRODashboard = () => {
               />
             </Grid>
 
-            <Grid item xs={12} md={3} xl={12}>
+            <Grid item xs={12} md={12} xl={12}>
               <Typography variant="h6" fontWeight={600} color="text.primary">
                Operational Summary
                 {/* <Divider /> */}
@@ -392,7 +392,7 @@ const IRODashboard = () => {
               />
             </Grid>
 
-            <Grid item xs={12} md={3} xl={12}>
+            <Grid item xs={12} md={12} xl={12}>
               <Typography variant="h6" fontWeight={600} color="text.primary">
                Financial Exposure
                 {/* <Divider /> */}
@@ -444,7 +444,7 @@ const IRODashboard = () => {
                 color="#68006b"
               />
             </Grid>
-            <Grid item xs={12} md={3} xl={12}>
+            <Grid item xs={12} md={12} xl={12}>
               <Typography variant="h6" fontWeight={600} color="text.primary">
                Overdue & Compliance
                 {/* <Divider /> */}

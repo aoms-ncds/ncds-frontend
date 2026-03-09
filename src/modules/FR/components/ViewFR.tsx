@@ -303,7 +303,20 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                   label="FR No"
                   value={props.value?.FRno}
                   fullWidth
-                  disabled
+
+                  sx={{
+                    '& .MuiInputBase-input.Mui-disabled': {
+                      WebkitTextFillColor: '#000', // text color
+                      color: '#000',
+                      opacity: 1,
+                    },
+                    '& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline': {
+                      borderColor: '#c4c4c4', // normal border color
+                    },
+                    '& .MuiInputLabel-root.Mui-disabled': {
+                      color: 'rgba(0,0,0,0.6)',
+                    },
+                  }}
                   InputLabelProps={{
                     shrink: true,
                   }}
@@ -322,6 +335,19 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                   format="DD/MM/YYYY"
                   slotProps={{ textField: { fullWidth: true } }}
                   disabled
+                  sx={{
+                    '& .MuiInputBase-input.Mui-disabled': {
+                      WebkitTextFillColor: '#000', // text color
+                      color: '#000',
+                      opacity: 1,
+                    },
+                    '& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline': {
+                      borderColor: '#c4c4c4', // normal border color
+                    },
+                    '& .MuiInputLabel-root.Mui-disabled': {
+                      color: 'rgba(0,0,0,0.6)',
+                    },
+                  }}
                 />
               </Grid>
               <Grid item xs={12} md={6}>
@@ -340,6 +366,19 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                   renderInput={(params) => <TextField {...params} label="Requisition For" />}
                   fullWidth
                   disabled
+                  sx={{
+                    '& .MuiInputBase-input.Mui-disabled': {
+                      WebkitTextFillColor: '#000', // text color
+                      color: '#000',
+                      opacity: 1,
+                    },
+                    '& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline': {
+                      borderColor: '#c4c4c4', // normal border color
+                    },
+                    '& .MuiInputLabel-root.Mui-disabled': {
+                      color: 'rgba(0,0,0,0.6)',
+                    },
+                  }}
                 />
               </Grid>
               {props.value.purpose === 'Worker' ? (
@@ -368,6 +407,19 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                       value={props.value.purposeWorker?.kind === 'staff' ? (props.value.purposeWorker as Staff | undefined)?.staffCode : (props.value.purposeWorker as unknown as IWorker)?.workerCode}
                       fullWidth
                       disabled
+                      sx={{
+                        '& .MuiInputBase-input.Mui-disabled': {
+                          WebkitTextFillColor: '#000', // text color
+                          color: '#000',
+                          opacity: 1,
+                        },
+                        '& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline': {
+                          borderColor: '#c4c4c4', // normal border color
+                        },
+                        '& .MuiInputLabel-root.Mui-disabled': {
+                          color: 'rgba(0,0,0,0.6)',
+                        },
+                      }}
                       InputLabelProps={{
                         shrink: true,
                       }}
@@ -385,13 +437,41 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                     getOptionLabel={(subDiv) => subDiv?.name}
                     onChange={(event, newVal) => props.onChange({ ...props.value, purposeSubdivision: newVal ?? undefined })}
                     renderInput={(params) => <TextField {...params} label="Subdivision" />}
-                    disabled />
+                    disabled
+                    sx={{
+                      '& .MuiInputBase-input.Mui-disabled': {
+                        WebkitTextFillColor: '#000', // text color
+                        color: '#000',
+                        opacity: 1,
+                      },
+                      '& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline': {
+                        borderColor: '#c4c4c4', // normal border color
+                      },
+                      '& .MuiInputLabel-root.Mui-disabled': {
+                        color: 'rgba(0,0,0,0.6)',
+                      },
+                    }}
+
+                  />
                 </Grid><Grid item xs={12} md={6}>
                   <TextField
                     label="Division"
                     value={props.value?.division?.details?.name}
                     fullWidth
                     disabled
+                    sx={{
+                      '& .MuiInputBase-input.Mui-disabled': {
+                        WebkitTextFillColor: '#000', // text color
+                        color: '#000',
+                        opacity: 1,
+                      },
+                      '& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline': {
+                        borderColor: '#c4c4c4', // normal border color
+                      },
+                      '& .MuiInputLabel-root.Mui-disabled': {
+                        color: 'rgba(0,0,0,0.6)',
+                      },
+                    }}
                     InputLabelProps={{
                       shrink: true,
                     }} />
@@ -414,6 +494,19 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                     renderInput={(params) => <TextField {...params} label="Choose Division" />}
                     fullWidth
                     disabled
+                    sx={{
+                      '& .MuiInputBase-input.Mui-disabled': {
+                        WebkitTextFillColor: '#000', // text color
+                        color: '#000',
+                        opacity: 1,
+                      },
+                      '& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline': {
+                        borderColor: '#c4c4c4', // normal border color
+                      },
+                      '& .MuiInputLabel-root.Mui-disabled': {
+                        color: 'rgba(0,0,0,0.6)',
+                      },
+                    }}
                   />
                 </Grid>
               ) : null}
@@ -434,6 +527,19 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                     renderInput={(params) => <TextField {...params} label="Choose Coordinator" />}
                     fullWidth
                     disabled
+                    sx={{
+                      '& .MuiInputBase-input.Mui-disabled': {
+                        WebkitTextFillColor: '#000', // text color
+                        color: '#000',
+                        opacity: 1,
+                      },
+                      '& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline': {
+                        borderColor: '#c4c4c4', // normal border color
+                      },
+                      '& .MuiInputLabel-root.Mui-disabled': {
+                        color: 'rgba(0,0,0,0.6)',
+                      },
+                    }}
                   />
                 </Grid>
               ) : null}
@@ -451,12 +557,25 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                     variant="outlined"
                     fullWidth
                     disabled
+                    sx={{
+                      '& .MuiInputBase-input.Mui-disabled': {
+                        WebkitTextFillColor: '#000', // text color
+                        color: '#000',
+                        opacity: 1,
+                      },
+                      '& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline': {
+                        borderColor: '#c4c4c4', // normal border color
+                      },
+                      '& .MuiInputLabel-root.Mui-disabled': {
+                        color: 'rgba(0,0,0,0.6)',
+                      },
+                    }}
                   />
                 </Grid>
               ) : null}
               <Grid item xs={12} md={6}>
                 <TextField
-                  label="Raised By"
+                  label="Raised By (Only Applicable For Delhi Staff)"
                   value={props.value.raisedBy}
                   onChange={(e) =>
                     props.onChange({
@@ -466,7 +585,22 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                   }
                   variant="outlined"
                   fullWidth
+                  InputLabelProps={{ shrink: true }}
+
                   disabled
+                  sx={{
+                    '& .MuiInputBase-input.Mui-disabled': {
+                      WebkitTextFillColor: '#000', // text color
+                      color: '#000',
+                      opacity: 1,
+                    },
+                    '& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline': {
+                      borderColor: '#c4c4c4', // normal border color
+                    },
+                    '& .MuiInputLabel-root.Mui-disabled': {
+                      color: 'rgba(0,0,0,0.6)',
+                    },
+                  }}
                 />
               </Grid>
 
@@ -571,6 +705,19 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                   // }
                   fullWidth
                   disabled
+                  sx={{
+                    '& .MuiInputBase-input.Mui-disabled': {
+                      WebkitTextFillColor: '#000', // text color
+                      color: '#000',
+                      opacity: 1,
+                    },
+                    '& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline': {
+                      borderColor: '#c4c4c4', // normal border color
+                    },
+                    '& .MuiInputLabel-root.Mui-disabled': {
+                      color: 'rgba(0,0,0,0.6)',
+                    },
+                  }}
                 />
               </Grid>
               {props.action === 'view' && props.value.status && (props.value.status >= FRLifeCycleStates.WAITING_FOR_ACCOUNTS || props.value.status == FRLifeCycleStates.FR_CLOSED) ? (
@@ -591,6 +738,19 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                       title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`}
                       autoComplete='off'
                       disabled
+                      sx={{
+                        '& .MuiInputBase-input.Mui-disabled': {
+                          WebkitTextFillColor: '#000', // text color
+                          color: '#000',
+                          opacity: 1,
+                        },
+                        '& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline': {
+                          borderColor: '#c4c4c4', // normal border color
+                        },
+                        '& .MuiInputLabel-root.Mui-disabled': {
+                          color: 'rgba(0,0,0,0.6)',
+                        },
+                      }}
                       onChange={(e) => {
                         if (totalRequestedAmount) {
                           props.onChange({
@@ -1393,6 +1553,19 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                     renderInput={(params) => <TextField {...params} label="Sub Category 1" required />}
                     fullWidth
                     disabled
+                    sx={{
+                      '& .MuiInputBase-input.Mui-disabled': {
+                        WebkitTextFillColor: '#000', // text color
+                        color: '#000',
+                        opacity: 1,
+                      },
+                      '& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline': {
+                        borderColor: '#c4c4c4', // normal border color
+                      },
+                      '& .MuiInputLabel-root.Mui-disabled': {
+                        color: 'rgba(0,0,0,0.6)',
+                      },
+                    }}
                   />
                 </Grid>
                 <Grid item md={12}>
@@ -1403,6 +1576,19 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                     renderInput={(params) => <TextField {...params} label="Sub Category 2" required />}
                     fullWidth
                     disabled
+                    sx={{
+                      '& .MuiInputBase-input.Mui-disabled': {
+                        WebkitTextFillColor: '#000', // text color
+                        color: '#000',
+                        opacity: 1,
+                      },
+                      '& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline': {
+                        borderColor: '#c4c4c4', // normal border color
+                      },
+                      '& .MuiInputLabel-root.Mui-disabled': {
+                        color: 'rgba(0,0,0,0.6)',
+                      },
+                    }}
                   />
                 </Grid>
                 <Grid item md={12}>
@@ -1413,6 +1599,19 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                     renderInput={(params) => <TextField {...params} label="Sub Category 2" required />}
                     fullWidth
                     disabled
+                    sx={{
+                      '& .MuiInputBase-input.Mui-disabled': {
+                        WebkitTextFillColor: '#000', // text color
+                        color: '#000',
+                        opacity: 1,
+                      },
+                      '& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline': {
+                        borderColor: '#c4c4c4', // normal border color
+                      },
+                      '& .MuiInputLabel-root.Mui-disabled': {
+                        color: 'rgba(0,0,0,0.6)',
+                      },
+                    }}
                   />
                 </Grid>
                 <Grid item md={12}>
@@ -1421,6 +1620,19 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                     type="number"
                     value={newParticular?.quantity == 0 ? '' : newParticular?.quantity}
                     disabled
+                    sx={{
+                      '& .MuiInputBase-input.Mui-disabled': {
+                        WebkitTextFillColor: '#000', // text color
+                        color: '#000',
+                        opacity: 1,
+                      },
+                      '& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline': {
+                        borderColor: '#c4c4c4', // normal border color
+                      },
+                      '& .MuiInputLabel-root.Mui-disabled': {
+                        color: 'rgba(0,0,0,0.6)',
+                      },
+                    }}
                     fullWidth
                     inputProps={{
                       onWheel: handleWheel,
@@ -1433,6 +1645,19 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                     type="number"
                     value={newParticular?.unitPrice?.toFixed(2)}
                     disabled
+                    sx={{
+                      '& .MuiInputBase-input.Mui-disabled': {
+                        WebkitTextFillColor: '#000', // text color
+                        color: '#000',
+                        opacity: 1,
+                      },
+                      '& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline': {
+                        borderColor: '#c4c4c4', // normal border color
+                      },
+                      '& .MuiInputLabel-root.Mui-disabled': {
+                        color: 'rgba(0,0,0,0.6)',
+                      },
+                    }}
                     required
                     fullWidth
                     inputProps={{
@@ -1463,6 +1688,19 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                     fullWidth
                     required
                     disabled
+                    sx={{
+                      '& .MuiInputBase-input.Mui-disabled': {
+                        WebkitTextFillColor: '#000', // text color
+                        color: '#000',
+                        opacity: 1,
+                      },
+                      '& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline': {
+                        borderColor: '#c4c4c4', // normal border color
+                      },
+                      '& .MuiInputLabel-root.Mui-disabled': {
+                        color: 'rgba(0,0,0,0.6)',
+                      },
+                    }}
                     InputLabelProps={{ shrink: true }}
                   />
                 </Grid>
@@ -1472,6 +1710,19 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                     options={monthNames ?? []}
                     getOptionLabel={(monthName) => monthName}
                     disabled
+                    sx={{
+                      '& .MuiInputBase-input.Mui-disabled': {
+                        WebkitTextFillColor: '#000', // text color
+                        color: '#000',
+                        opacity: 1,
+                      },
+                      '& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline': {
+                        borderColor: '#c4c4c4', // normal border color
+                      },
+                      '& .MuiInputLabel-root.Mui-disabled': {
+                        color: 'rgba(0,0,0,0.6)',
+                      },
+                    }}
                     renderInput={(params) => <TextField {...params} label="For the Month" required />}
                     fullWidth
                   />
@@ -1482,6 +1733,19 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                     control={
                       <Checkbox
                         disabled
+                        sx={{
+                          '& .MuiInputBase-input.Mui-disabled': {
+                            WebkitTextFillColor: '#000', // text color
+                            color: '#000',
+                            opacity: 1,
+                          },
+                          '& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline': {
+                            borderColor: '#c4c4c4', // normal border color
+                          },
+                          '& .MuiInputLabel-root.Mui-disabled': {
+                            color: 'rgba(0,0,0,0.6)',
+                          },
+                        }}
                         checked={newParticular.isUpcomingYear}
                         onChange={(e) =>
                           setNewParticular((particularDetails) => ({
@@ -1499,6 +1763,19 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                     value={newParticular.applicationReferenceNo}
                     multiline
                     disabled
+                    sx={{
+                      '& .MuiInputBase-input.Mui-disabled': {
+                        WebkitTextFillColor: '#000', // text color
+                        color: '#000',
+                        opacity: 1,
+                      },
+                      '& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline': {
+                        borderColor: '#c4c4c4', // normal border color
+                      },
+                      '& .MuiInputLabel-root.Mui-disabled': {
+                        color: 'rgba(0,0,0,0.6)',
+                      },
+                    }}
                     maxRows={4}
                     onChange={(e) =>
                       setNewParticular((particularDetails) => ({

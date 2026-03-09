@@ -1725,8 +1725,8 @@ const CustomReportFRFilterPage = () => {
                         {selectedData.includes('Sub Category 1') && <TableCell>{row.particularsData?.subCategory1}</TableCell>}
                         {selectedData.includes('Sub Category 2') && <TableCell>{row.particularsData?.subCategory2}</TableCell>}
                         {selectedData.includes('Sub Category 3') && <TableCell>{row.particularsData?.subCategory3}</TableCell>}
-                        {selectedData.includes('Requested Amount') && <TableCell>{row.particularsData?.requestedAmount}</TableCell>}
-                        {selectedData.includes('Sanction Amount') && <TableCell>{row.particularsData?.sanctionedAmount}</TableCell>}
+                        {selectedData.includes('Requested Amount') && <TableCell>{formatAmount(row.particularsData?.requestedAmount)}</TableCell>}
+                        {selectedData.includes('Sanction Amount') && <TableCell>{ formatAmount(row.particularsData?.sanctionedAmount)}</TableCell>}
                         {selectedData.includes('Sanctioned Bank') && <TableCell>{row.sanctionedBank}</TableCell>}
                         {selectedData.includes('Beneficiary Name') && <TableCell>{row.sanctionedBank?.split('-').slice(1).join('-').trim()}</TableCell>}
                         {selectedData.includes('For the month') && <TableCell>{row.particularsData?.month}</TableCell>}

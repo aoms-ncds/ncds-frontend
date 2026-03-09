@@ -27,7 +27,7 @@ export const allModuleRoutes = [
   workersPageRoutes,
   frPageRoutes,
   iroPageRoutes,
-  AnalyticsPageRoutes,
+  // AnalyticsPageRoutes,
   applicationRoutes,
   customFrIroRoute,
   hrPageRoutes,

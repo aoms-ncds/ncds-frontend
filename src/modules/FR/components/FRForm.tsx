@@ -760,7 +760,7 @@ const FRForm = (props: FormComponentProps<any>) => {
               )}
               <Grid item xs={12} md={6}>
                 <TextField
-                  label="Raised By"
+                  label="Raised By (Only Applicable For Delhi Staff)"
                   value={props.value.raisedBy}
                   onChange={(e) =>
                     props.onChange({

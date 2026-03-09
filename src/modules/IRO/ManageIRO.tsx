@@ -1188,6 +1188,8 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
               return clsx('revert');
             case 'DISAPPROVED':
               return clsx('DISAPPROVED');
+            case 'IRO PROCESS':
+              return clsx('DISAPPROVED');
 
             default:
               return '';
@@ -1406,36 +1408,49 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       }, align: 'center',
       headerAlign: 'center',
     },
-    {
-      field: 'Transferred',
-      headerName: 'Transferred Amount',
-      width: 180,
-      renderHeader: () => <b>Transferred Amount</b>,
-      valueGetter: (params) => {
-        return params.row.releaseAmount?.transferredAmount;
-      }, align: 'center',
-      headerAlign: 'center',
-    },
-    {
-      field: 'totalTransferred',
-      headerName: 'Total Transferred Amount',
-      width: 180,
-      renderHeader: () => <b>Total Transferred Amount</b>,
-      valueGetter: (params) => {
-        if (params.row.sanctionedAmount !== undefined) {
-          return formatAmount(params.row.sanctionedAmount as number);
-        }
-        if (Array.isArray(params.row.particulars)) {
-          return formatAmount(
-            params.row.particulars.reduce(
-              (sum, item) => sum + (Number(item.sanctionedAmount) || 0),
-              0,
-            ).toFixed(2));
-        }
-        return 0; // or return a suitable default value
-      }, align: 'center',
-      headerAlign: 'center',
-    },
+    ...(props.action === 'manage' ?
+      [
+        {
+          field: 'Transferred',
+          headerName: 'Transferred Amount',
+          width: 180,
+          renderHeader: () => <b>Transferred Amount</b>,
+          valueGetter: (params: any) => {
+            return formatAmount(
+              Number(params.row.releaseAmount?.transferredAmount) || 0,
+            );
+          },
+          align: 'center' as const,
+          headerAlign: 'center' as const,
+        },
+
+        {
+          field: 'totalTransferred',
+          headerName: 'Total Transferred Amount',
+          width: 180,
+          renderHeader: () => <b>Total Transferred Amount</b>,
+          valueGetter: (params: any) => {
+            if (params.row.sanctionedAmount !== undefined) {
+              return formatAmount(Number(params.row.sanctionedAmount));
+            }
+
+            if (Array.isArray(params.row.particulars)) {
+              const total = params.row.particulars.reduce(
+                (sum: number, item: any) =>
+                  sum + (Number(item.sanctionedAmount) || 0),
+                0,
+              );
+
+              return formatAmount(total);
+            }
+
+            return formatAmount(0);
+          },
+          align: 'center' as const,
+          headerAlign: 'center' as const,
+        },
+      ] :
+      []),
 
     // {
     //   field: 'sanctionedAsPer',
@@ -2092,7 +2107,10 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                           backgroundColor: '#fff',
                         },
                         '& .orange-light': {
-                          backgroundColor: '#ffa500',
+                          backgroundColor: '#7EC82F',
+                          // backgroundColor: '#3949AB',
+                          color: '#fff',
+                          fontWeight: '600',
                         },
                         '& .orange-dark': {
                           backgroundColor: '#3949AB',
@@ -2108,7 +2126,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                           backgroundColor: '#ffd700',
                         },
                         '& .green-light ': {
-                          backgroundColor: '#2E7D32',
+                          backgroundColor: '#E2445C',
                           color: '#fff',
                           fontWeight: '600',
                         },
@@ -2116,7 +2134,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                           backgroundColor: '#32cd32',
                         },
                         '& .green-dark ': {
-                          backgroundColor: '#424242',
+                          backgroundColor: '#3b32e6 ',
                           color: '#fff',
                           fontWeight: '600',
                         },
@@ -2138,6 +2156,11 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                         },
                         '&   .DISAPPROVED': {
                           backgroundColor: '#D32F2F',
+                          color: '#fff',
+                          fontWeight: '600',
+                        },
+                        '&   .InPro': {
+                          backgroundColor: '#FDAB3D',
                           color: '#fff',
                           fontWeight: '600',
                         },

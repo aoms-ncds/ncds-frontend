@@ -31,6 +31,7 @@ import FRLifeCycleStates from '../FR/extras/FRLifeCycleStates';
 import TransactionLogDialog from '../FR/components/TransactionLogDialog';
 import DivisionsServices from '../Divisions/extras/DivisionsServices';
 import { hasPermissions } from '../User/components/PermissionChecks';
+import formatAmount from '../Common/formatcode';
 
 const RevertedIRO = () => {
   const [openRemarks, toggleOpenRemarks] = useState(false);
@@ -570,9 +571,35 @@ const RevertedIRO = () => {
       field: 'sanctionedBank', renderHeader: () => (<b>Sanctioned Bank</b>), align: 'center',
       headerAlign: 'center', width: 130,
     },
+     {
+      field: 'Transferred',
+      headerName: 'Transferred Amount',
+      width: 180,
+      renderHeader: () => <b>Transferred Amount</b>,
+      valueGetter: (params) => {
+        return params.row.releaseAmount?.transferredAmount;
+      }, align: 'center',
+      headerAlign: 'center',
+    },
     {
-      field: 'released amount ', headerName: 'Amount Transferred ', width: 150, renderHeader: () => <b>Amount Transferred</b>, align: 'center', headerAlign: 'center',
-      valueGetter: (params) => params.row.releaseAmount?.transferredAmount,
+      field: 'totalTransferred',
+      headerName: 'Total Transferred Amount',
+      width: 180,
+      renderHeader: () => <b>Total Transferred Amount</b>,
+      valueGetter: (params) => {
+        if (params.row.sanctionedAmount !== undefined) {
+          return formatAmount(params.row.sanctionedAmount as number);
+        }
+        if (Array.isArray(params.row.particulars)) {
+          return formatAmount(
+            params.row.particulars.reduce(
+              (sum, item) => sum + (Number(item.sanctionedAmount) || 0),
+              0,
+            ).toFixed(2));
+        }
+        return 0; // or return a suitable default value
+      }, align: 'center',
+      headerAlign: 'center',
     },
     {
       field: 'reasonForRejectIRO',

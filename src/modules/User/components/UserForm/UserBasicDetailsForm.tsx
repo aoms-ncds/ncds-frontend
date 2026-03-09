@@ -66,9 +66,9 @@ const UserBasicDetailsForm = (
 
   return (
     <>
-      <Grid item xs={12} md={6} lg={4}>
+      <Grid item xs={12} md={6} lg={3}>
         <FormControl>
-          <FormLabel id="Field">Field</FormLabel>
+          <FormLabel required id="Typeofworker,">Type of worker</FormLabel>
           <RadioGroup
             aria-labelledby="martialStatus"
             value={props.value.field ?? null}
@@ -87,6 +87,39 @@ const UserBasicDetailsForm = (
         </FormControl>
       </Grid>
 
+
+      <Grid item xs={12} md={6} lg={3}>
+        <Autocomplete
+          value={props?.value?.organization ?? null}
+          options={['IET', 'BCG', 'NCDS']}
+          getOptionLabel={(option) => option}
+          onChange={(e, newValue) =>
+            props.onChange({ ...props.value, organization: newValue??'' })
+          }
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              label="Organization"
+              variant={props?.options?.textField?.variant}
+            />
+          )}
+        />
+      </Grid>
+      {props?.value?.organization =='IET' &&(
+
+        <Grid item xs={12} md={6} lg={3}>
+          <TextField
+            label="Daughter Organisation"
+            value={props.value.daughterOrganization}
+            onChange={(e) => props.onChange({ ...props.value, daughterOrganization: e.target.value })}
+            variant={props.options?.textField?.variant}
+            fullWidth
+            InputProps={{ required: true, autoFocus: true }}
+          // required
+          />
+
+        </Grid>
+      )}
       <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="First Name"

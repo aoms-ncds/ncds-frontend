@@ -1,4 +1,4 @@
-import { Badge, Box, Card, CardActionArea, CardContent, Grid, MenuItem, TextField, Typography, styled } from '@mui/material';
+import { Badge, Box, Card, CardActionArea, CardContent, Grid, MenuItem, Select, TextField, Typography, styled } from '@mui/material';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import formatAmount from '../../Common/formatcode';
@@ -7,7 +7,9 @@ const StyledLink = styled(Link)`
 `;
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const FRCountCard = (props: {
-  count?: string;
+  genderFilter?: any;
+  onFilter?: (value: any) => unknown;
+  count?: string| number;
   amount?: string;
   badgeColor?: 'default' | 'error' | 'primary' | 'secondary';
   icon?: React.ReactNode;
@@ -43,6 +45,7 @@ const FRCountCard = (props: {
         },
       }}
     >
+
       {/* LEFT COLOR STRIP */}
       <Box
         sx={{
@@ -82,9 +85,25 @@ const FRCountCard = (props: {
             {props.secondaryText}
           </Typography>
 
+          {/* Dropdown Filter */}
+          {props.onFilter &&(
 
+            <Select
+              size="small"
+              value={props.genderFilter || 'all'}
+              onChange={(e) => props.onFilter?.(e.target.value)}
+              sx={{
+                height: 30,
+                fontSize: 12,
+                minWidth: 90,
+              }}
+            >
+              <MenuItem value="all">All</MenuItem>
+              <MenuItem value="male">Male</MenuItem>
+              <MenuItem value="female">Female</MenuItem>
+            </Select>
+          )}
         </Box>
-
         <Box
           sx={{
             display: 'flex',

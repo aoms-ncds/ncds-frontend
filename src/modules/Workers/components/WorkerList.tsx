@@ -150,6 +150,7 @@ const UserCard: React.FC<UserCardProps> = ({ user, reason, removeUser }) => {
     window.open(`/users/worker/${user._id}`);
     // }}
   };
+  console.log(user, 'jfdks');
 
   return (
     <>
@@ -164,6 +165,15 @@ const UserCard: React.FC<UserCardProps> = ({ user, reason, removeUser }) => {
           </Typography>
           <Typography variant="body2" color="text.secondary">
             Division: {user.division?.details.name}
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+  Sub-Division: {
+              user.officialDetails.divisionHistory?.length ?
+                user.officialDetails.divisionHistory[
+          user.officialDetails.divisionHistory.length - 1
+                ]?.subDivision?.name :
+                ''
+            }
           </Typography>
         </CardContent>
         <Grid container spacing={2}>
@@ -334,54 +344,54 @@ const UserCard: React.FC<UserCardProps> = ({ user, reason, removeUser }) => {
         </form>
       </Dialog>
       <Dialog open={reasonDialog} fullWidth maxWidth="md">
-  <DialogTitle>Reason</DialogTitle>
+        <DialogTitle>Reason</DialogTitle>
 
-  <DialogContent>
-    <br />
+        <DialogContent>
+          <br />
 
-    <Autocomplete<IReason|any>
-      options={reason ?? []}
-      value={reasonForDeactivation}
-      getOptionLabel={(option) => option?.reason ?? ''}
-      onChange={(_, selectedReason) => {
-        setReasonForDeactivation(selectedReason);
-      }}
-      renderInput={(params) => (
-        <TextField
-          {...params}
-          label="Reason for Deactivation"
-          required
-        />
-      )}
-      fullWidth
-    />
-  </DialogContent>
+          <Autocomplete<IReason|any>
+            options={reason ?? []}
+            value={reasonForDeactivation}
+            getOptionLabel={(option) => option?.reason ?? ''}
+            onChange={(_, selectedReason) => {
+              setReasonForDeactivation(selectedReason);
+            }}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Reason for Deactivation"
+                required
+              />
+            )}
+            fullWidth
+          />
+        </DialogContent>
 
-  <DialogActions>
-    <Button
-      variant="contained"
-      onClick={() => {
-        setReasonDialog(false);
-      }}
-      sx={{ mx: '1rem', py: 1.7, height: 50, background: 'red' }}
-    >
-      <CloseIcon sx={{ color: 'white' }} />
-    </Button>
+        <DialogActions>
+          <Button
+            variant="contained"
+            onClick={() => {
+              setReasonDialog(false);
+            }}
+            sx={{ mx: '1rem', py: 1.7, height: 50, background: 'red' }}
+          >
+            <CloseIcon sx={{ color: 'white' }} />
+          </Button>
 
-    <Button
-      variant="contained"
-      onClick={() => {
-        if (reasonForDeactivation) {
-          deactivateWorker(rowID, reasonForDeactivation);
-        }
-        setReasonDialog(false);
-      }}
-      sx={{ mx: '1rem', py: 1.7, height: 50, background: 'green' }}
-    >
+          <Button
+            variant="contained"
+            onClick={() => {
+              if (reasonForDeactivation) {
+                deactivateWorker(rowID, reasonForDeactivation);
+              }
+              setReasonDialog(false);
+            }}
+            sx={{ mx: '1rem', py: 1.7, height: 50, background: 'green' }}
+          >
       Submit
-    </Button>
-  </DialogActions>
-</Dialog>
+          </Button>
+        </DialogActions>
+      </Dialog>
 
       <Dialog open={Boolean(deleteModel)} onClose={() => setDeleteModel(false)}>
         {/* <DialogContent>
@@ -472,17 +482,17 @@ const WorkerList: React.FC<UserListProps> = ({ users, reason, onScroll, deleteUs
 
   // Attach scroll event listener when component mounts
   React.useEffect(() => {
-  const element = listRef.current;
-  if (!element) {
-    return () => {}; //  consistent return
-  }
+    const element = listRef.current;
+    if (!element) {
+      return () => {}; //  consistent return
+    }
 
-  element.addEventListener('scroll', handleScroll);
+    element.addEventListener('scroll', handleScroll);
 
-  return () => {
-    element.removeEventListener('scroll', handleScroll);
-  };
-}, [handleScroll]);
+    return () => {
+      element.removeEventListener('scroll', handleScroll);
+    };
+  }, [handleScroll]);
 
   const callDelete = (userId: string) => {
     deleteUser(userId);

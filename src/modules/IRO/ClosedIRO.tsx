@@ -787,10 +787,10 @@ const ClosedIRO = () => {
       field: 'sanctionedBank', renderHeader: () => (<b>Sanctioned Bank</b>), align: 'center',
       headerAlign: 'center', width: 130,
     },
-    {
-      field: 'released amount ', headerName: 'Amount Transferred ', width: 150, renderHeader: () => <b>Amount Transferred</b>, align: 'center', headerAlign: 'center',
-      valueGetter: (params) => params.row.releaseAmount?.transferredAmount,
-    },
+    // {
+    //   field: 'released amount ', headerName: 'Amount Transferred ', width: 150, renderHeader: () => <b>Amount Transferred</b>, align: 'center', headerAlign: 'center',
+    //   valueGetter: (params) => params.row.releaseAmount?.transferredAmount,
+    // },
     {
       field: 'updatedAt',
       align: 'center',
