@@ -66,27 +66,27 @@ const ApproveWorkerPage = () => {
       });
   };
 
-  const rejectWorker = (id: string) => {
-    WorkersServices.reject(id)
-      .then(() => {
-        if (workers) {
-          const newWorkers = workers.filter((workerRequests) => {
-            return workerRequests._id !== id;
-          });
-          setWorkers(newWorkers);
-        }
-        enqueueSnackbar({
-          message: 'Rejected',
-          variant: 'warning',
-        });
-      })
-      .catch((err) => {
-        enqueueSnackbar({
-          message: err.message,
-          variant: 'error',
-        });
-      });
-  };
+  // const rejectWorker = (id: string) => {
+  //   WorkersServices.reject(id)
+  //     .then(() => {
+  //       if (workers) {
+  //         const newWorkers = workers.filter((workerRequests) => {
+  //           return workerRequests._id !== id;
+  //         });
+  //         setWorkers(newWorkers);
+  //       }
+  //       enqueueSnackbar({
+  //         message: 'Rejected',
+  //         variant: 'warning',
+  //       });
+  //     })
+  //     .catch((err) => {
+  //       enqueueSnackbar({
+  //         message: err.message,
+  //         variant: 'error',
+  //       });
+  //     });
+  // };
   const assignRemark = (id: string) => {
     console.log('setremark', id);
     toggleOpenRemarks(true);

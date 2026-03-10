@@ -9,7 +9,7 @@ const StyledLink = styled(Link)`
 const FRCountCard = (props: {
   genderFilter?: any;
   onFilter?: (value: any) => unknown;
-  count?: string| number;
+  count?: string| number|null;
   amount?: string;
   badgeColor?: 'default' | 'error' | 'primary' | 'secondary';
   icon?: React.ReactNode;

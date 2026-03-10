@@ -47,8 +47,29 @@ const frDashboard = () => {
       route: '/iro/applyCustom',
     },
   ];
+  const getFinancialYear = (date = new Date()) => {
+    const year = date.getFullYear();
+    const month = date.getMonth(); // Jan = 0
+
+    // Financial year starts in April
+    const startYear = month >= 3 ? year : year - 1;
+    const endYear = startYear + 1;
+
+    return `${startYear}-${String(endYear).slice(2)}`;
+  };
+  const [year, setYear] = useState(getFinancialYear());
+  const currentFYStartYear =
+  new Date().getMonth() >= 3 ?
+    new Date().getFullYear() :
+    new Date().getFullYear() - 1;
+
+  const years = Array.from({ length: 5 }, (_, i) => {
+    const start = currentFYStartYear - i;
+    return `${start}-${String(start + 1).slice(2)}`;
+  });
+
   useEffect(() => {
-    FRServices.getCount()
+    FRServices.getCount({ year: year })
       .then((res) => setAppliedFrCount(res.data))
       .catch((error) => {
         console.log(error);
@@ -86,26 +107,39 @@ const frDashboard = () => {
         console.log(res);
       });
   }, []);
-  const getFinancialYear = (date = new Date()) => {
-    const year = date.getFullYear();
-    const month = date.getMonth(); // Jan = 0
+  useEffect(() => {
+    FRServices.getCount({ year: year })
+      .then((res) => setAppliedFrCount(res.data))
+      .catch((error) => {
+        console.log(error);
+      });
+    FRServices.getCount({ status: FRLifeCycleStates.FR_APPROVED, year: year })
+      .then((res) => setApprovedFrCount(res.data))
+      .catch((error) => {
+        console.log(error);
+      });
+    FRServices.getCount({ status: FRLifeCycleStates.WAITING_FOR_PRESIDENT, year: year })
+      .then((res) => setWaitingForPresidentFrCount(res.data))
+      .catch((error) => {
+        console.log(error);
+      });
+    FRServices.getCount({ status: FRLifeCycleStates.WAITING_FOR_ACCOUNTS, year: year })
+      .then((res) => setWaitingForAccountFrCount(res.data))
+      .catch((error) => {
+        console.log(error);
+      });
+    FRServices.getCount({ status: FRLifeCycleStates.FR_SEND_BACK, year: year })
+      .then((res) => setReverted(res.data))
+      .catch((error) => {
+        console.log(error);
+      });
+    FRServices.getCustomCount({ isReSubmitted: true, status: FRLifeCycleStates.WAITING_FOR_ACCOUNTS, year: year })
+      .then((res) => setResubmittedFrCount(res.data))
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [year]);
 
-    // Financial year starts in April
-    const startYear = month >= 3 ? year : year - 1;
-    const endYear = startYear + 1;
-
-    return `${startYear}-${String(endYear).slice(2)}`;
-  };
-  const [year, setYear] = useState(getFinancialYear());
-  const currentFYStartYear =
-  new Date().getMonth() >= 3 ?
-    new Date().getFullYear() :
-    new Date().getFullYear() - 1;
-
-  const years = Array.from({ length: 5 }, (_, i) => {
-    const start = currentFYStartYear - i;
-    return `${start}-${String(start + 1).slice(2)}`;
-  });
   return (
     <CommonPageLayout title="FR Dashboard">
       <Box sx={{ display: 'flex', justifyContent: 'flex-end', pb: 2 }}>

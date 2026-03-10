@@ -20,7 +20,7 @@ const WorkersDashboard = () => {
   const [activeWorker, setActiveWorker] = useState<number | null>(null);
   const [activeSpouse, setActiveSpouse] = useState<number | null>(0);
   const [activeChild, setActiveChild] = useState<number | null>(0);
-  const [gender, setGender] = useState<number | null>(0);
+  const [gender, setGender] = useState<string | null>('');
   // console.log(activeChild?.length, 'activeSpouse');
 
   const user = useAuth();
@@ -85,7 +85,7 @@ const WorkersDashboard = () => {
             }
             onFilter={(value) => setGender(value)}
             genderFilter={gender}
-            count={(activeWorker ?? 0) + (activeSpouse ?? 0)}
+            count={gender =='male'?activeWorker: gender =='female'? activeSpouse : (activeWorker ?? 0) + (activeSpouse ?? 0)}
             secondaryText="Total Workers"
             color="#fff"
           />        </Grid>

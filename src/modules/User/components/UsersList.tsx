@@ -453,7 +453,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
       headerAlign: 'center',
       align: 'center',
       renderHeader: () => <b>{'Reason'}</b>,
-      valueGetter: (params) => params.row.reasonForReject,
+      valueGetter: (params) => (params.row as any).reasonForReject,
     },
     // {
     //   field: 'PANnumber',
