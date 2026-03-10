@@ -1734,7 +1734,9 @@ const EditIRO = () => {
                   fullWidth
                   InputLabelProps={{ shrink: true }}
                   inputProps={{
-                    max: newParticular?.requestedAmount, min: 0,
+                    max: totalRequestedAmount,
+                    min: 0,
+                    step: 0.01, // Allows up to two decimal places
                     onWheel: handleWheel,
                   }}
                   // inputProps={{
