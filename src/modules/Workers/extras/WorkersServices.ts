@@ -266,7 +266,7 @@ export default {
    * @param {string} id - The ID of the worker to reject.
    * @return {Promise<StandardResponse<Worker>>} A promise that resolves to the response containing the rejected worker.
    */
-  reject: (id: string) => getStandardResponse<Worker>(axios.patch(`/workers/${id}/reject`, null, { headers: { ...getAuthHeader() } })),
+  reject: (id: string, reason: string) => getStandardResponse<Worker>(axios.patch(`/workers/${id}/reject`, { reason }, { headers: { ...getAuthHeader() } })),
   activate: (id: string) => getStandardResponse<IWorker>(axios.patch(`/workers/${id}/activate`, null, { headers: { ...getAuthHeader() } })),
 
   // deactivate: (id: string) => getStandardResponse<IWorker>(axios.patch(`/workers/${id}/deactivate`, null, { headers: { ...getAuthHeader() } })),

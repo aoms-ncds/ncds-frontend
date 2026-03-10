@@ -2,7 +2,7 @@ import React, { SetStateAction, useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import { Box, Button, Card, Dialog, DialogActions, DialogContent, DialogTitle, Grid, IconButton, InputAdornment, TextField } from '@mui/material';
 import { DataGrid, GridColDef, GridRowParams } from '@mui/x-data-grid';
-import { enqueueSnackbar } from 'notistack';
+import { closeSnackbar, enqueueSnackbar } from 'notistack';
 import UserLifeCycleStates from '../User/extras/UserLifeCycleStates';
 import MessageItem from '../../components/MessageItem';
 import SendIcon from '@mui/icons-material/Send';
@@ -12,6 +12,7 @@ import {
   Edit as EditIcon,
   Preview as PreviewIcon,
   Download as DownloadIcon,
+  CloseOutlined,
 } from '@mui/icons-material';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import DoneIcon from '@mui/icons-material/Done';
@@ -28,6 +29,10 @@ const ApproveWorkerPage = () => {
     remark: '',
     transactionId: '',
   });
+  const [reasonDialog, setReasonDialog] = useState(false);
+  const [reasonForDeactivation, setReasonForDeactivation] = useState('');
+  const [id, setId] = useState();
+
   // useEffect(() => {
   //   DivisionsServices.getDivisions()
   //     .then((res) => {
@@ -102,16 +107,16 @@ const ApproveWorkerPage = () => {
   };
 
   const filteredRows = (workers ?? []).filter((row) => {
-   if (
-  (row.basicDetails.firstName &&
+    if (
+      (row.basicDetails.firstName &&
     row.basicDetails.firstName.toLowerCase().includes(searchText.toLowerCase())) ||
   (row.basicDetails.lastName &&
     row.basicDetails.lastName.toLowerCase().includes(searchText.toLowerCase())) ||
   (row.basicDetails.phone &&
     row.basicDetails.phone.toString().includes(searchText))
-) {
-  return true;
-}
+    ) {
+      return true;
+    }
 
     return Object.values(row).some((value) =>
       value && value.toString().toLowerCase().includes(searchText.toLowerCase()),
@@ -160,7 +165,9 @@ const ApproveWorkerPage = () => {
             icon={<ClearIcon />}
             showInMenu
             onClick={() => {
-              rejectWorker(params.row._id);
+              setId(params.row._id);
+              setReasonDialog(true);
+              // rejectWorker(params.row._id);
             }}
           />,
           false,
@@ -301,13 +308,73 @@ const ApproveWorkerPage = () => {
             }}
             >
               <DataGrid rows={filteredRows ?? []} columns={columns} getRowId={(row) => row._id} loading={workers === null} getRowClassName={(params) =>
-                params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd' } 
+                params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd' }
               />
 
             </Box>
           </Grid>
         </Grid>
       </Card>
+      <Dialog open={reasonDialog} fullWidth maxWidth="md">
+        <DialogTitle>Remark</DialogTitle>
+        <DialogContent>
+          <br />
+          <TextField
+            value={reasonForDeactivation}
+            onChange={(e) => setReasonForDeactivation(e.target.value)}
+            label="Reason for rejection"
+            required
+            fullWidth
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button
+            variant="contained"
+            onClick={() => {
+              setReasonDialog(false);
+              false;
+            }}
+            sx={{ mx: '1rem', py: 1.7, height: 50, background: 'red' }}
+          >
+            <CloseOutlined sx={{ color: 'white' }} />
+          </Button>
+
+          <Button
+            variant="contained"
+            onClick={() => {
+              const snackbarId = enqueueSnackbar({
+                message: 'Rejecting...',
+                variant: 'info',
+              });
+              WorkersServices.reject(id as unknown as string, reasonForDeactivation as unknown as string)
+                .then((res) => {
+                  if (workers) {
+                    const filteredApplications = workers?.filter((application) => {
+                      return application._id !== id;
+                    });
+                    setWorkers(filteredApplications);
+                  }
+                  closeSnackbar(snackbarId);
+                  enqueueSnackbar({
+                    message: res.message,
+                    variant: 'success',
+                  });
+                })
+                .catch((err) => {
+                  closeSnackbar(snackbarId);
+                  enqueueSnackbar({
+                    message: err.message,
+                    variant: 'error',
+                  });
+                });
+              setReasonDialog(false);
+            }}
+            sx={{ mx: '1rem', py: 1.7, height: 50, background: 'green' }}
+          >
+            submit
+          </Button>
+        </DialogActions>
+      </Dialog>
       <Dialog open={openRemarks} fullWidth maxWidth="md">
         <DialogTitle>Remarks</DialogTitle>
         <DialogContent>

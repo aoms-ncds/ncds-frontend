@@ -62,6 +62,13 @@ const WorkersDashboard = () => {
         console.log(error);
       });
   }, []);
+  useEffect(()=>{
+    WorkerServices.getCount({ status: WorkerLifeCycleStates.ACTIVE, gender: gender })
+      .then((res) => setActiveWorker(res.data))
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [gender]);
 
   return (
     <CommonPageLayout title="Workers Dashboard">
@@ -105,7 +112,7 @@ const WorkersDashboard = () => {
         </Grid>
         <PermissionChecks permissions={['MANAGE_WORKER']} granted={
           <Grid item xs={12} md={4} xl={3}>
-            <ButtonCard secondaryText="Approve  Workers" icon={<img src="/mod_icons/ApproveWorker.jpeg" alt="Logo" style={{ width: '70px', height: '70px' }} />}
+            <ButtonCard secondaryText="Awaiting Verification" icon={<img src="/mod_icons/ApproveWorker.jpeg" alt="Logo" style={{ width: '70px', height: '70px' }} />}
               count={unapprovedWorkersCount?.toString()} color="#fff" targetRoute="/workers/approve" />
           </Grid>
         }

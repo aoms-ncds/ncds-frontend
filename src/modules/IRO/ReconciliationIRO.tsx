@@ -542,16 +542,16 @@ const ReconciliationIRO = () => {
               {/* ================= VIEW ================= */}
               <Section title="VIEW" />
 
-              <MenuItem onClick={() => window.open(`/iro/${props.row._id}`, '_blank')}>
-                <ListItemIcon><PreviewIcon fontSize="small" /></ListItemIcon>
-                <ListItemText primary="View Details" />
-              </MenuItem>
               <MenuItem onClick={() => {
                 setAttachment(true);
                 setSelectedIRO(props.row);
               }}>
                 <ListItemIcon><PreviewIcon fontSize="small" /></ListItemIcon>
                 <ListItemText primary="Reconciliation" />
+              </MenuItem>
+              <MenuItem onClick={() => window.open(`/iro/${props.row._id}`, '_blank')}>
+                <ListItemIcon><PreviewIcon fontSize="small" /></ListItemIcon>
+                <ListItemText primary="View IRO" />
               </MenuItem>
 
               <MenuItem onClick={() => window.open(`/fr/${props.row.FR}/view`, '_blank')}>
