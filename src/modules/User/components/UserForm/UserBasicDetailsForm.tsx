@@ -88,7 +88,7 @@ const UserBasicDetailsForm = (
       </Grid>
 
 
-      <Grid item xs={12} md={6} lg={3}>
+      <Grid item xs={12} md={6} lg={4}>
         <Autocomplete
           value={props?.value?.organization ?? null}
           options={['IET', 'BCG', 'NCDS']}
@@ -120,7 +120,25 @@ const UserBasicDetailsForm = (
 
         </Grid>
       )}
-      <Grid item xs={12} md={6} lg={4}>
+      
+      <Grid item xs={12} md={6} lg={3}>
+        <Autocomplete
+          value={props?.value?.title ?? null}
+          options={['Mr', 'Mrs']}
+          getOptionLabel={(option) => option}
+          onChange={(e, newValue) =>
+            props.onChange({ ...props.value, title: newValue??'' })
+          }
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              label="Title"
+              variant={props?.options?.textField?.variant}
+            />
+          )}
+        />
+      </Grid>
+      <Grid item xs={12} md={6} lg={3}>
         <TextField
           label="First Name"
           value={props.value.firstName}
@@ -134,7 +152,7 @@ const UserBasicDetailsForm = (
         <Typography sx={{ fontSize: '12px', color: '#8c8d8f' }} >(Name as per the Aadhaar card )</Typography>
       </Grid>
 
-      <Grid item xs={12} md={6} lg={4}>
+      <Grid item xs={12} md={6} lg={3}>
         <TextField
           label="Middle Name"
           value={props.value.middleName}
@@ -145,7 +163,7 @@ const UserBasicDetailsForm = (
         />
       </Grid>
 
-      <Grid item xs={12} md={6} lg={4}>
+      <Grid item xs={12} md={6} lg={3}>
         <TextField
           label="Last Name"
           value={props.value.lastName}
