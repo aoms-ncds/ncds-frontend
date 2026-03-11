@@ -48,6 +48,7 @@ import PDFTemplateCustom from './components/PDFTemplateCustom';
 import PDFTemplateCustomFR from './components/PDFTemplateCustomFR';
 import PDFTemplateCustomFRAll from './components/PDFTemplateCustomFRAll';
 import formatAmount from '../Common/formatcode';
+import { ToWords } from 'to-words';
 
 const CustomFooter = () => (
   <Box sx={{ display: 'flex', justifyContent: 'space-between', padding: '10px', background: '#f0f0f0', fontWeight: 'bold', borderTop: '1px solid black' }}>
@@ -93,6 +94,31 @@ const CustomReportFRFilterPage = () => {
     endDate: moment().endOf('M'),
     rangeType: 'months',
   });
+
+  const toWords = new ToWords({
+    localeCode: 'en-IN',
+    converterOptions: {
+      currency: true,
+      ignoreDecimal: false,
+    },
+  });
+  const totalRequested = data?.reduce(
+    (total, e) =>
+      total + (e.particularsData?.requestedAmount ?
+        Number(e.particularsData.requestedAmount) :
+        0),
+    0,
+  );
+
+  const totalSanctioned = data?.reduce(
+    (total, e) =>
+      total + (e.particularsData?.sanctionedAmount ?
+        Number(e.particularsData.sanctionedAmount) :
+        0),
+    0,
+  );
+  const requestedWords = toWords.convert(totalRequested || 0);
+  const sanctionedWords = toWords.convert(totalSanctioned || 0);
   const options = [
     'IRO No',
     'Status',
@@ -278,15 +304,15 @@ const CustomReportFRFilterPage = () => {
     setSearchText(event.target.value);
   };
   const filteredRows = (data ?? []).filter((row: any) => {
-  const search = searchText.toLowerCase();
+    const search = searchText.toLowerCase();
 
-  return (
-    row.FRno?.toLowerCase().includes(search) ||
+    return (
+      row.FRno?.toLowerCase().includes(search) ||
     row.IROdata?.IROno?.toLowerCase().includes(search) ||
     row.divisionData?.details?.name?.toLowerCase().includes(search) ||
     row.particularsData?.mainCategory?.toLowerCase().includes(search)
-  );
-});
+    );
+  });
 
   console.log(filteredRows, 'filteredRows');
 
@@ -1746,19 +1772,29 @@ const CustomReportFRFilterPage = () => {
               </TableContainer>
 
               {/* Bottom Export Button */}
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', padding: '10px', background: '#f0f0f0', fontWeight: 'bold', borderTop: '1px solid black' }}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  padding: '10px',
+                  background: '#f0f0f0',
+                  fontWeight: 'bold',
+                  borderTop: '1px solid black',
+                }}
+              >
                 <span>Total:</span>
-                <span>
-                  {`Requested amt : ₹${ formatAmount(data?.reduce(
-                    (total, e) => total + (e.particularsData?.requestedAmount ? Number(e.particularsData.requestedAmount) : 0),
-                    0,
-                  ).toFixed(2))}`}
 
+                <span>
+                  {`Requested amt : ₹${formatAmount(totalRequested.toFixed(2))}`}
+                  <br />
+                  {/* {requestedWords} */}
                 </span>
-                <span>{`Sanctioned amt : ₹${
-                  formatAmount(data?.reduce((total, e) =>
-                    total + (e.particularsData?.sanctionedAmount ? Number(e.particularsData.sanctionedAmount) : 0)
-                  , 0).toFixed(2))}`}</span>
+
+                <span>
+                  {`Sanctioned amt : ₹${formatAmount(totalSanctioned.toFixed(2))}`}
+                  <br />
+                  {/* {sanctionedWords} */}
+                </span>
               </Box>
               {/* <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
                 <Button
@@ -1866,30 +1902,30 @@ const CustomReportFRFilterPage = () => {
               <br />
               {iroData && mngrName && selectedSignature && FrData && (
                 <BlobProvider
-  document={
-    <IROTemplate
-      rowData={iroData}
-      mngrName={mngrName}
-      officeMngrSign={selectedSignature}
-      fr={FrData as FR}
-      president={signaturePresident}
-    />
-  }
->
-  {({ loading, url }) =>
-    loading || printIroLoading ? (
-      <span style={{ color: 'blue' }}>....</span>
-    ) : (
-      <a
-        href={url ?? ''}
-        download={`${iroData?.IROno}_Receipt.pdf`}
-        style={{ color: 'blue' }}
-      >
-        {`${iroData?.IROno}_Receipt.pdf`}
-      </a>
-    )
-  }
-</BlobProvider>
+                  document={
+                    <IROTemplate
+                      rowData={iroData}
+                      mngrName={mngrName}
+                      officeMngrSign={selectedSignature}
+                      fr={FrData as FR}
+                      president={signaturePresident}
+                    />
+                  }
+                >
+                  {({ loading, url }) =>
+                    loading || printIroLoading ? (
+                      <span style={{ color: 'blue' }}>....</span>
+                    ) : (
+                      <a
+                        href={url ?? ''}
+                        download={`${iroData?.IROno}_Receipt.pdf`}
+                        style={{ color: 'blue' }}
+                      >
+                        {`${iroData?.IROno}_Receipt.pdf`}
+                      </a>
+                    )
+                  }
+                </BlobProvider>
               )}{' '}
             </Container>
           </DialogContent>
@@ -1906,33 +1942,33 @@ const CustomReportFRFilterPage = () => {
             <>
               {iroData && mngrName && selectedSignature && FrData && (
                 <>
-                 <BlobProvider
-  document={
-    <IROTemplate
-      rowData={iroData}
-      mngrName={mngrName}
-      officeMngrSign={selectedSignature}
-      fr={FrData as FR}
-      president={signaturePresident}
-    />
-  }
->
-  {({ blob, loading }) => (
-    <Button
-      variant="contained"
-      color="info"
-      onClick={async () => {
-        if (blob) {
-          setLoading(true);
-          await attach(blob);
-        }
-      }}
-      disabled={loading || printIroLoading}
-    >
-      {loading || printIroLoading ? 'Loading...' : 'Yes, Attach'}
-    </Button>
-  )}
-</BlobProvider>
+                  <BlobProvider
+                    document={
+                      <IROTemplate
+                        rowData={iroData}
+                        mngrName={mngrName}
+                        officeMngrSign={selectedSignature}
+                        fr={FrData as FR}
+                        president={signaturePresident}
+                      />
+                    }
+                  >
+                    {({ blob, loading }) => (
+                      <Button
+                        variant="contained"
+                        color="info"
+                        onClick={async () => {
+                          if (blob) {
+                            setLoading(true);
+                            await attach(blob);
+                          }
+                        }}
+                        disabled={loading || printIroLoading}
+                      >
+                        {loading || printIroLoading ? 'Loading...' : 'Yes, Attach'}
+                      </Button>
+                    )}
+                  </BlobProvider>
 
                 </>
               )}
@@ -1947,31 +1983,31 @@ const CustomReportFRFilterPage = () => {
               <br />
               {iroData && mngrName && selectedSignature && FrData && (
                 <BlobProvider
-  document={
-    <IROTemplate
-      prev={true}
-      rowData={iroData}
-      mngrName={mngrName}
-      officeMngrSign={selectedSignature}
-      fr={FrData as FR}
-      president={signaturePresident}
-    />
-  }
->
-  {({ loading, url }) =>
-    loading || printIroLoading ? (
-      <span style={{ color: 'blue' }}>....</span>
-    ) : (
-      <a
-        href={url ?? ''}
-        download={`${iroData?.IROno}_Receipt.pdf`}
-        style={{ color: 'blue' }}
-      >
-        {`${iroData?.IROno}_Receipt.pdf`}
-      </a>
-    )
-  }
-</BlobProvider>
+                  document={
+                    <IROTemplate
+                      prev={true}
+                      rowData={iroData}
+                      mngrName={mngrName}
+                      officeMngrSign={selectedSignature}
+                      fr={FrData as FR}
+                      president={signaturePresident}
+                    />
+                  }
+                >
+                  {({ loading, url }) =>
+                    loading || printIroLoading ? (
+                      <span style={{ color: 'blue' }}>....</span>
+                    ) : (
+                      <a
+                        href={url ?? ''}
+                        download={`${iroData?.IROno}_Receipt.pdf`}
+                        style={{ color: 'blue' }}
+                      >
+                        {`${iroData?.IROno}_Receipt.pdf`}
+                      </a>
+                    )
+                  }
+                </BlobProvider>
               )}{' '}
             </Container>
           </DialogContent>
@@ -1988,34 +2024,34 @@ const CustomReportFRFilterPage = () => {
             <>
               {iroData && mngrName && selectedSignature && FrData && (
                 <>
-                 <BlobProvider
-  document={
-    <IROTemplate
-      rowData={iroData}
-      mngrName={mngrName}
-      prev={true}
-      officeMngrSign={selectedSignature}
-      fr={FrData as FR}
-      president={signaturePresident}
-    />
-  }
->
-  {({ blob, loading }) => (
-    <Button
-      variant="contained"
-      color="info"
-      onClick={async () => {
-        if (blob) {
-          setLoading(true);
-          await attach(blob);
-        }
-      }}
-      disabled={loading || printIroLoading}
-    >
-      {loading || printIroLoading ? 'Loading...' : 'Yes, Attach'}
-    </Button>
-  )}
-</BlobProvider>
+                  <BlobProvider
+                    document={
+                      <IROTemplate
+                        rowData={iroData}
+                        mngrName={mngrName}
+                        prev={true}
+                        officeMngrSign={selectedSignature}
+                        fr={FrData as FR}
+                        president={signaturePresident}
+                      />
+                    }
+                  >
+                    {({ blob, loading }) => (
+                      <Button
+                        variant="contained"
+                        color="info"
+                        onClick={async () => {
+                          if (blob) {
+                            setLoading(true);
+                            await attach(blob);
+                          }
+                        }}
+                        disabled={loading || printIroLoading}
+                      >
+                        {loading || printIroLoading ? 'Loading...' : 'Yes, Attach'}
+                      </Button>
+                    )}
+                  </BlobProvider>
                 </>
               )}
             </>
@@ -2100,58 +2136,58 @@ const CustomReportFRFilterPage = () => {
         <Dialog open={print} onClose={() => setPrint(false)} maxWidth="xs" fullWidth>
           <DialogTitle> Print Fr</DialogTitle>
           <DialogContent>
-           <Container>
+            <Container>
   Downloading Custom report fr
-  <br />
+              <br />
 
-  {selectedData.length === 7 ? (
-    <BlobProvider
-      document={
-        <PDFTemplateCustomFR
-          rowData={data as any}
-          headers={selectedData}
-        />
-      }
-    >
-      {({ loading, url }) =>
-        loading ? (
-          <span style={{ color: 'blue' }}>....</span>
-        ) : (
-          <a
-            href={url ?? ''}
-            download="CustomReport.pdf"
-            style={{ color: 'blue' }}
-          >
+              {selectedData.length === 7 ? (
+                <BlobProvider
+                  document={
+                    <PDFTemplateCustomFR
+                      rowData={data as any}
+                      headers={selectedData}
+                    />
+                  }
+                >
+                  {({ loading, url }) =>
+                    loading ? (
+                      <span style={{ color: 'blue' }}>....</span>
+                    ) : (
+                      <a
+                        href={url ?? ''}
+                        download="CustomReport.pdf"
+                        style={{ color: 'blue' }}
+                      >
             CustomReport.pdf
-          </a>
-        )
-      }
-    </BlobProvider>
-  ) : (
-    <BlobProvider
-      document={
-        <PDFTemplateCustomFRAll
-          rowData={data as any}
-          headers={selectedData}
-        />
-      }
-    >
-      {({ loading, url }) =>
-        loading ? (
-          <span style={{ color: 'blue' }}>....</span>
-        ) : (
-          <a
-            href={url ?? ''}
-            download="CustomReport.pdf"
-            style={{ color: 'blue' }}
-          >
+                      </a>
+                    )
+                  }
+                </BlobProvider>
+              ) : (
+                <BlobProvider
+                  document={
+                    <PDFTemplateCustomFRAll
+                      rowData={data as any}
+                      headers={selectedData}
+                    />
+                  }
+                >
+                  {({ loading, url }) =>
+                    loading ? (
+                      <span style={{ color: 'blue' }}>....</span>
+                    ) : (
+                      <a
+                        href={url ?? ''}
+                        download="CustomReport.pdf"
+                        style={{ color: 'blue' }}
+                      >
             CustomReport.pdf
-          </a>
-        )
-      }
-    </BlobProvider>
-  )}
-</Container>
+                      </a>
+                    )
+                  }
+                </BlobProvider>
+              )}
+            </Container>
           </DialogContent>
           <DialogActions>
             <Button

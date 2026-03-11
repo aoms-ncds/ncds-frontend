@@ -4,6 +4,7 @@ import WorkerFormPage from '../WorkerFormPage';
 import ApproveWorkerPage from '../ApproveWorkersPage';
 import SendBackWorkersPage from '../SendBackWorkersPage';
 import DeactivatedWorkersPage from '../DeactivatedWorkersPage';
+import DisapproveWorkersPage from '../DIapproveWorkersPage';
 
 const workersPageRoutes: ModuleRoute = {
   base: '/workers',
@@ -71,6 +72,13 @@ const workersPageRoutes: ModuleRoute = {
       title: 'Deactivated Workers',
       path: '/deactivated',
       element: <DeactivatedWorkersPage />,
+      private: true,
+      requiredAccessRights: ['READ_WORKERS'],
+    },
+    {
+      title: 'Disapprove Workers',
+      path: '/disapprove',
+      element: <DisapproveWorkersPage />,
       private: true,
       requiredAccessRights: ['READ_WORKERS'],
     },

@@ -127,6 +127,8 @@ const IROReportFilter = () => {
     'Sanction Amount',
     'Sanction as per',
     'Narration',
+    'Transferred Amount',
+    'Total Transferred Amount',
   ]);
   const [selectedRow, setSelectedRow] = useState<number | null>(null);
   console.log(selectedData.length, 'options');
@@ -221,6 +223,8 @@ const IROReportFilter = () => {
     'Sanction Amount',
     'Sanction as per',
     'Narration',
+    'Transferred Amount',
+    'Total Transferred Amount',
     'Sanctioned Bank',
     'Beneficiary Name',
     'Sub-Division',
@@ -1733,6 +1737,8 @@ const IROReportFilter = () => {
                       {selectedData.includes('Amount Release Date') && <TableCell sx={{ fontWeight: 'bold' }}>Amount Release Date</TableCell>}
                       {selectedData.includes('Sanction as per') && <TableCell sx={{ fontWeight: 'bold' }}>Sanction as per</TableCell>}
                       {selectedData.includes('Narration') && <TableCell sx={{ fontWeight: 'bold' }}>Narration</TableCell>}
+                      {selectedData.includes('Transferred Amount') && <TableCell sx={{ fontWeight: 'bold' }}>Transferred Amount</TableCell>}
+                      {selectedData.includes('Total Transferred Amount') && <TableCell sx={{ fontWeight: 'bold' }}>Total Transferred Amount</TableCell>}
                       {/* {selectedData.includes('UnitPrice') && <TableCell sx={{ fontWeight: 'bold' }}>UnitPrice</TableCell>} */}
                       {/* {selectedData.includes('Beneficiary Name') && <TableCell sx={{ fontWeight: 'bold' }}>Beneficiary Name</TableCell>} */}
                       {selectedData.includes('IroClosedOn') && <TableCell sx={{ fontWeight: 'bold' }}>Iro Closed On</TableCell>}
@@ -1780,6 +1786,8 @@ const IROReportFilter = () => {
                         {selectedData.includes('Amount Release Date') && <TableCell>{moment(row.releaseAmountData?.transferredDate).format('DD/MM/YYYY')}</TableCell>}
                         {selectedData.includes('Sanction as per') && <TableCell>{row.particularsData?.sanctionedAsPer}</TableCell>}
                         {selectedData.includes('Narration') && <TableCell>{row.particularsData?.narration}</TableCell>}
+                        {selectedData.includes('Transferred Amount') && <TableCell>{ formatAmount(row.releaseAmountData?.transferredAmount)}</TableCell>}
+                        {selectedData.includes('Total Transferred Amount') && <TableCell>{ formatAmount(row.particularsData?.sanctionedAmount)}</TableCell>}
                         {/* {selectedData.includes('UnitPrice') && <TableCell>{row.particularsData?.unitPrice}</TableCell>} */}
                         {selectedData.includes('IroClosedOn') && <TableCell>{moment(row.iroClosedOn).format('DD/MM/YYYY')}</TableCell>}
                         {selectedData.includes('Source Of Account') && <TableCell>{row.sourceOfAccount}</TableCell>}

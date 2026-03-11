@@ -940,13 +940,13 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                 </MenuItem>
               )}
 
-              {(params.row.status == IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE ||
+              {/* {(params.row.status == IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE ||
       (IROLifeCycleStates.WAITING_FOR_ACCOUNTS_MNGR && props.action === 'release')) && (
                 <MenuItem onClick={()=>[setOpenRelease(true), setReleaseAmountIROs([params.row])]}>
                   <ListItemIcon><CurrencyRupeeIcon fontSize="small"/></ListItemIcon>
                   <ListItemText primary="Release Amount"/>
                 </MenuItem>
-              )}
+              )} */}
 
               <MenuItem onClick={()=>{
                 toggleOpenRemarks(true);
@@ -1057,6 +1057,8 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       [
         {
           field: 'status',
+          headerClassName: 'status-header',
+
           renderHeader: () => <b>Status</b>,
           width: 250,
           align: 'center' as const,
@@ -1071,43 +1073,43 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
 
             switch (statusName) {
             case 'WAITING APPROV.':
-              return clsx('yellow-light');
+              return clsx('status-cell', 'yellow-light');
 
             case 'WAITING FOR ACCOUNTS MNGR':
-              return clsx('yellow-dark');
+              return clsx('status-cell', 'yellow-dark');
 
             case 'IRO APPROVED':
-              return clsx('orange-light');
+              return clsx('status-cell', 'orange-light');
             // case 'RE-SUBMITTED':
             case 'CUSTOM IRO':
-              return clsx('status-cell', 're-sum');
+              return clsx('status-cell', 'status-cell', 're-sum');
 
             case 'WAITING RELEASE.':
-              return clsx('orange-dark');
+              return clsx('status-cell', 'orange-dark');
             case 'REOPENED':
-              return clsx('status-cell', 're-color');
+              return clsx('status-cell', 'status-cell', 're-color');
 
             case 'AMT RELEASED':
-              return clsx('green-light');
+              return clsx('status-cell', 'green-light');
 
             case 'RECONCILIATION DONE':
-              return clsx('green-medium');
+              return clsx('status-cell', 'green-medium');
 
             case 'IRO CLOSED':
-              return clsx('green-dark');
+              return clsx('status-cell', 'green-dark');
 
             case 'IRO DISAPPROVED':
-              return clsx('red-light');
+              return clsx('status-cell', 'status-cell', 'status-cell', 'red-light');
 
             case 'IN PROCESS':
-              return clsx('dark-orange');
+              return clsx('status-cell', 'status-cell', 'dark-orange');
 
             case 'REVERTED':
-              return clsx('revert');
+              return clsx('status-cell', 'revert');
             case 'DISAPPROVED':
-              return clsx('DISAPPROVED');
+              return clsx('status-cell', 'DISAPPROVED');
             case 'IRO PROCESS':
-              return clsx('DISAPPROVED');
+              return clsx('status-cell', 'DISAPPROVED');
 
             default:
               return '';

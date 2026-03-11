@@ -17,13 +17,13 @@ const usersPageRoutes: ModuleRoute = {
     //   icon: <Diversity2Icon />,
     // },
     {
-      title: 'Forgot Password',
+      title: 'Reset Password',
       path: '/reset_password',
       element: <ResetPasswordFormPage />,
       private: false,
     },
     {
-      title: 'Forgot Password',
+      title: 'Reset Password',
       path: '/reset_password_form',
       element: <ForgottenPasswordFormPage />,
       private: false,

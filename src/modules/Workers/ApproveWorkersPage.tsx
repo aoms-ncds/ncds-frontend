@@ -30,7 +30,9 @@ const ApproveWorkerPage = () => {
     transactionId: '',
   });
   const [reasonDialog, setReasonDialog] = useState(false);
+  const [reasonDisappproveDialog, setReasonDisappproveDialog] = useState(false);
   const [reasonForDeactivation, setReasonForDeactivation] = useState('');
+  const [reasonForDisapprove, setReasonForDisapprove] = useState('');
   const [id, setId] = useState();
 
   // useEffect(() => {
@@ -161,12 +163,23 @@ const ApproveWorkerPage = () => {
           />,
           <GridLinkAction
             key={5}
-            label="Reject"
+            label="Reject/Revert"
             icon={<ClearIcon />}
             showInMenu
             onClick={() => {
               setId(params.row._id);
               setReasonDialog(true);
+              // rejectWorker(params.row._id);
+            }}
+          />,
+          <GridLinkAction
+            key={5}
+            label="Disapprove"
+            icon={<ClearIcon />}
+            showInMenu
+            onClick={() => {
+              setId(params.row._id);
+              setReasonDisappproveDialog(true);
               // rejectWorker(params.row._id);
             }}
           />,
@@ -316,7 +329,7 @@ const ApproveWorkerPage = () => {
         </Grid>
       </Card>
       <Dialog open={reasonDialog} fullWidth maxWidth="md">
-        <DialogTitle>Remark</DialogTitle>
+        <DialogTitle>Revert</DialogTitle>
         <DialogContent>
           <br />
           <TextField
@@ -368,6 +381,66 @@ const ApproveWorkerPage = () => {
                   });
                 });
               setReasonDialog(false);
+            }}
+            sx={{ mx: '1rem', py: 1.7, height: 50, background: 'green' }}
+          >
+            submit
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog open={reasonDisappproveDialog} fullWidth maxWidth="md">
+        <DialogTitle>Disapprove</DialogTitle>
+        <DialogContent>
+          <br />
+          <TextField
+            value={reasonForDisapprove}
+            onChange={(e) => setReasonForDisapprove(e.target.value)}
+            label="Reason for Disapprove"
+            required
+            fullWidth
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button
+            variant="contained"
+            onClick={() => {
+              setReasonDisappproveDialog(false);
+              false;
+            }}
+            sx={{ mx: '1rem', py: 1.7, height: 50, background: 'red' }}
+          >
+            <CloseOutlined sx={{ color: 'white' }} />
+          </Button>
+
+          <Button
+            variant="contained"
+            onClick={() => {
+              const snackbarId = enqueueSnackbar({
+                message: 'Rejecting...',
+                variant: 'info',
+              });
+              WorkersServices.disapprove(id as unknown as string, reasonForDisapprove as unknown as string)
+                .then((res) => {
+                  if (workers) {
+                    const filteredApplications = workers?.filter((application) => {
+                      return application._id !== id;
+                    });
+                    setWorkers(filteredApplications);
+                  }
+                  closeSnackbar(snackbarId);
+                  enqueueSnackbar({
+                    message: res.message,
+                    variant: 'success',
+                  });
+                })
+                .catch((err) => {
+                  closeSnackbar(snackbarId);
+                  enqueueSnackbar({
+                    message: err.message,
+                    variant: 'error',
+                  });
+                });
+              setReasonDisappproveDialog(false);
             }}
             sx={{ mx: '1rem', py: 1.7, height: 50, background: 'green' }}
           >

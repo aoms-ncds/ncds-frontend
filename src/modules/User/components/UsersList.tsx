@@ -58,6 +58,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
   //     setReason(res.data);
   //   });
   // }, []);
+console.log(props.options?.showEditButton, '090');
 
   useEffect(() => {
     if (currentTab == 0) {
@@ -231,7 +232,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
       getActions: (params: GridRowParams) =>
         [
           <GridLinkAction key={1} label="View" icon={<PreviewIcon />} showInMenu to={`/users/${props.options?.kind}/${params.row._id}`} />,
-          (hasPermissions(['MANAGE_WORKER']) || props?.options?.showEditButton === true) && (
+          (hasPermissions(['ADMIN_ACCESS']) || props?.options?.showEditButton === true) && (
             <GridLinkAction
               key={2}
               label="Edit"
@@ -299,30 +300,30 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
               assignRemark(params.row._id);
             }}
           />,
-          // props.options?.status != 'reject' &&
-          // hasPermissions(['MANAGE_WORKER']) &&
-          // (params.row.status == UserLifeCycleStates.ACTIVE ? (
-          //   <GridLinkAction
-          //     key={5}
-          //     label="Deactivate"
-          //     icon={<NoAccountsIcon />}
-          //     showInMenu
-          //     onClick={() => {
-          //       setRowID(params.row._id);
-          //       setReasonDialog(true);
-          //     }}
-          //   />
-          // ) : (
-          //   <GridLinkAction
-          //     key={5}
-          //     label="Activate"
-          //     icon={<PersonIcon />}
-          //     showInMenu
-          //     onClick={() => {
-          //       activateWorker(params.row._id);
-          //     }}
-          //   />
-          // )),
+          props.options?.status != 'reject' &&
+          hasPermissions(['MANAGE_WORKER']) &&
+          (params.row.status == UserLifeCycleStates.ACTIVE ? (
+            <GridLinkAction
+              key={5}
+              label="Deactivate"
+              icon={<NoAccountsIcon />}
+              showInMenu
+              onClick={() => {
+                setRowID(params.row._id);
+                setReasonDialog(true);
+              }}
+            />
+          ) : (
+            <GridLinkAction
+              key={5}
+              label="Activate"
+              icon={<PersonIcon />}
+              showInMenu
+              onClick={() => {
+                activateWorker(params.row._id);
+              }}
+            />
+          )),
           hasPermissions(['ADMIN_ACCESS']) && <GridLinkAction key={6} label="Manage Permissions" icon={<BallotIcon />} showInMenu to={`/users/${params.row._id}/permission_manager`} />,
           false,
         ].filter((action) => action !== false) as JSX.Element[],
@@ -453,7 +454,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
       headerAlign: 'center',
       align: 'center',
       renderHeader: () => <b>{'Reason'}</b>,
-      valueGetter: (params) => (params.row as any).reasonForReject,
+      valueGetter: (params) => (params.row as any).reasonForReject ??(params.row as any).reasonForDisapprove,
     },
     // {
     //   field: 'PANnumber',
