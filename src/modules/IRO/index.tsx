@@ -19,8 +19,18 @@ const IRODashboard = () => {
     IRAppliedCount:number;
   }
   const [waitingtoofficemanagerCount, setWaitingToOfficeManagerCount] = useState<number>();
+  const [totApproved, setTotApproved] = useState<number>();
+  const [totTotalPendingReconcilation, setTotalPendingReconcilation] = useState<number>();
   const [reconciliationCount, setReconciliationCount] = useState<number | null>(null);
+  const [pendingRelease, setPendingReleases] = useState<number | null>(null);
+  const [revert, setrevert] = useState<number | null>(null);
+  const [disapprove, setDisapprovet] = useState<number | null>(null);
+  const [reopen, setReopen] = useState<number | null>(null);
   const [amountReleasedCount, setAmountReleasedCount] = useState<number | null>(null);
+  const [dayCount1, setDayCount1] = useState<number | null>(null);
+  const [dayCount2, setDayCount2] = useState<number | null>(null);
+  const [dayCount3, setDayCount3] = useState<number | null>(null);
+  const [dayCount4, setDayCount4] = useState<number | null>(null);
   const [closedIROCount, setClosedIROCount] = useState<number | null>(null);
   const [iroDivCOunt, setIroDivCount] = useState<number | null>(null);
   const [divisionBasedCount, setDivisionBasedCount] = useState<number | null>(null);
@@ -87,6 +97,56 @@ const IRODashboard = () => {
 
     IROServices.getCount({ status: IROLifeCycleStates.IRO_CLOSED })
       .then((res) => setClosedIROCount(res.data))
+      .catch((error) => {
+        console.log(error);
+      });
+    IROServices.countDay({ status: IROLifeCycleStates.WAITING_FOR_OFFICE_MNGR, day: '30' })
+      .then((res) => setDayCount1(res.data),
+      )
+      .catch((error) => {
+        console.log(error);
+      });
+    IROServices.countDay({ status: IROLifeCycleStates.REVERTED_TO_DIVISION, day: '3' })
+      .then((res) => setDayCount2(res.data),
+      )
+      .catch((error) => {
+        console.log(error);
+      });
+    IROServices.countDay({ status: IROLifeCycleStates.WAITTING_FOR_RELEASE_AMOUNT, day: '45' })
+      .then((res) => setDayCount3(res.data),
+      )
+      .catch((error) => {
+        console.log(error);
+      });
+    IROServices.countDay({ status: IROLifeCycleStates.APPROVED, day: '200' })
+      .then((res) => setDayCount4(res.data),
+      )
+      .catch((error) => {
+        console.log(error);
+      });
+    IROServices.getCount({ status: IROLifeCycleStates.WAITTING_FOR_RELEASE_AMOUNT })
+      .then((res) => setPendingReleases(res.data))
+      .catch((error) => {
+        console.log(error);
+      });
+    IROServices.getCount({ status: IROLifeCycleStates.REVERTED_TO_DIVISION })
+      .then((res) => setrevert(res.data))
+      .catch((error) => {
+        console.log(error);
+      });
+    IROServices.getCount({ status: IROLifeCycleStates.REJECTED })
+      .then((res) => setDisapprovet(res.data))
+      .catch((error) => {
+        console.log(error);
+      });
+    IROServices.getCount({ status: IROLifeCycleStates.REOPENED })
+      .then((res) => setReopen(res.data))
+      .catch((error) => {
+        console.log(error);
+      });
+
+    IROServices.getCount({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE })
+      .then((res) => setTotApproved(res.data))
       .catch((error) => {
         console.log(error);
       });
@@ -180,7 +240,7 @@ const IRODashboard = () => {
           <Grid container spacing={3}>
             <Grid item xs={12} md={12} xl={12}>
               <Typography variant="h6" fontWeight={600} color="text.primary">
-                Financial Year Summary
+                Financial Year Summary (Count -Based to FY)
                 {/* <Divider /> */}
               </Typography>
               <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
@@ -272,8 +332,8 @@ const IRODashboard = () => {
                     style={{ width: '50px', height: '50px' }}
                   />
                 }
-                count={iroDivCOunt?.toString()}
-                amount={'1000'}
+                count={waitingtoofficemanagerCount?.toString()}
+                // amount={'1000'}
                 onClick={() => navigate(`/iro/manage?id=${5}`)}
                 secondaryText="Total Applied"
                 color="#0026ff"
@@ -288,7 +348,7 @@ const IRODashboard = () => {
                     style={{ width: '50px', height: '50px' }}
                   />
                 }
-                count={iroDivCOunt?.toString()}
+                count={totApproved?.toString()}
                 onClick={() => navigate(`/iro/manage?id=${5}`)}
                 secondaryText="Total Approved"
                 color="#ffc400"
@@ -303,9 +363,9 @@ const IRODashboard = () => {
                     style={{ width: '50px', height: '50px' }}
                   />
                 }
-                count={iroDivCOunt?.toString()}
+                count={amountReleasedCount?.toString()}
                 onClick={() => navigate(`/iro/manage?id=${5}`)}
-                secondaryText="Total Pending"
+                secondaryText="Total Pending Reconcilation"
                 color="#ba00f3"
               />
             </Grid>
@@ -318,7 +378,7 @@ const IRODashboard = () => {
                     style={{ width: '50px', height: '50px' }}
                   />
                 }
-                count={iroDivCOunt?.toString()}
+                count={closedIROCount?.toString()}
                 onClick={() => navigate(`/iro/manage?id=${5}`)}
                 secondaryText="Total Closed"
                 color="#00ddff"
@@ -327,7 +387,7 @@ const IRODashboard = () => {
 
             <Grid item xs={12} md={12} xl={12}>
               <Typography variant="h6" fontWeight={600} color="text.primary">
-               Operational Summary
+               Operational Summary (Amount-Based to FY filters)
                 {/* <Divider /> */}
               </Typography>
             </Grid>
@@ -342,7 +402,8 @@ const IRODashboard = () => {
                 }
                 count={iroDivCOunt?.toString()}
                 onClick={() => navigate(`/iro/manage?id=${5}`)}
-                secondaryText="Manage IRO"
+                secondaryText="Awaiting Approv.
+"
                 color="#0004ff"
               />
             </Grid>
@@ -355,9 +416,9 @@ const IRODashboard = () => {
                     style={{ width: '50px', height: '50px' }}
                   />
                 }
-                count={iroDivCOunt?.toString()}
+                count={pendingRelease?.toString()}
                 onClick={() => navigate(`/iro/manage?id=${5}`)}
-                secondaryText="Total Active IRO"
+                secondaryText="Rele_Amt. Pending"
                 color="#ff0000"
               />
             </Grid>
@@ -370,10 +431,40 @@ const IRODashboard = () => {
                     style={{ width: '50px', height: '50px' }}
                   />
                 }
-                count={iroDivCOunt?.toString()}
+                count={revert?.toString()}
                 onClick={() => navigate(`/iro/manage?id=${5}`)}
-                secondaryText="Awaiting Approval"
+                secondaryText="Reverted"
                 color="#5eff00"
+              />
+            </Grid>
+            <Grid item xs={12} md={3} xl={3}>
+              <FROperationalSummary
+                icon={
+                  <img
+                    src="/mod_icons/Approved IRO.png"
+                    alt="Logo"
+                    style={{ width: '50px', height: '50px' }}
+                  />
+                }
+                count={disapprove?.toString()}
+                onClick={() => navigate(`/iro/manage?id=${5}`)}
+                secondaryText="Disapprov."
+                color="#46006e"
+              />
+            </Grid>
+            <Grid item xs={12} md={3} xl={3}>
+              <FROperationalSummary
+                icon={
+                  <img
+                    src="/mod_icons/Approved IRO.png"
+                    alt="Logo"
+                    style={{ width: '50px', height: '50px' }}
+                  />
+                }
+                count={reopen?.toString()}
+                onClick={() => navigate(`/iro/manage?id=${5}`)}
+                secondaryText="Re-Opened."
+                color="#46006e"
               />
             </Grid>
             <Grid item xs={12} md={3} xl={3}>
@@ -387,7 +478,7 @@ const IRODashboard = () => {
                 }
                 count={iroDivCOunt?.toString()}
                 onClick={() => navigate(`/iro/manage?id=${5}`)}
-                secondaryText="For Reconciliation"
+                secondaryText="Custom."
                 color="#46006e"
               />
             </Grid>
@@ -460,7 +551,7 @@ const IRODashboard = () => {
                   />
                 }
                 // count={iroDivCOunt?.toString()}
-                days='30'
+                count={dayCount1?.toString()}
                 onClick={() => navigate(`/iro/manage?id=${5}`)}
                 secondaryText="Overdue Approval"
                 color="#ff9100"
@@ -475,9 +566,9 @@ const IRODashboard = () => {
                     style={{ width: '50px', height: '50px' }}
                   />
                 }
-                days='3'
+                count={dayCount2?.toString()}
                 onClick={() => navigate(`/iro/manage?id=${5}`)}
-                secondaryText="Overdue Reconciliation "
+                secondaryText="Overdew Resubmit"
                 color="#ff9100"
               />
             </Grid>
@@ -490,9 +581,9 @@ const IRODashboard = () => {
                     style={{ width: '50px', height: '50px' }}
                   />
                 }
-                count={iroDivCOunt?.toString()}
+                count={dayCount3?.toString()}
                 onClick={() => navigate(`/iro/manage?id=${5}`)}
-                secondaryText="Reject IRO"
+                secondaryText="Overdew reconcilation"
                 color="#ff9100"
               />
             </Grid>
@@ -505,13 +596,13 @@ const IRODashboard = () => {
                     style={{ width: '50px', height: '50px' }}
                   />
                 }
-                count={iroDivCOunt?.toString()}
+                count={dayCount4?.toString()}
                 onClick={() => navigate(`/iro/manage?id=${5}`)}
-                secondaryText="Reopened IRO"
+                secondaryText="Over dew Closing "
                 color="#ff9100"
               />
             </Grid>
-            <Grid item xs={12} md={3} xl={3}>
+            {/* <Grid item xs={12} md={3} xl={3}>
               <FROperationalSummary
                 icon={
                   <img
@@ -570,7 +661,7 @@ const IRODashboard = () => {
                 secondaryText="SLA Brach Count"
                 color="#ff9100"
               />
-            </Grid>
+            </Grid> */}
 
           </Grid>
         </CardContent>

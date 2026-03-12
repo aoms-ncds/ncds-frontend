@@ -6,6 +6,7 @@ import axios from 'axios';
 
 export default {
   getCount: (conditions?: unknown) => getStandardResponse<number>(axios.get('/iro/count', { params: conditions, headers: { ...getAuthHeader() } })),
+  countDay: (conditions?: unknown) => getStandardResponse<number>(axios.get('/iro/countDay', { params: conditions, headers: { ...getAuthHeader() } })),
   groupedIRO: (conditions?: { Exstatus?:any; status?: number[];dateRange?: DateRange; support?: 'Expanse' | 'Support'|'All'| 'Sanctioned'| null}) => getStandardResponse<number>(axios.get('/iro/groupedIRO', { params: conditions, headers: { ...getAuthHeader() } })),
   groupedIROView: (conditions?: { Exstatus?:any; status?: number[];dateRange?: DateRange; support?: 'Expanse' | 'Support'|'All'| null}) => getStandardResponse<number>(axios.get('/iro/groupedIROView', { params: conditions, headers: { ...getAuthHeader() } })),
   getAppliedCount: () => getStandardResponse<number>(axios.get('/iro/appliedCount', { headers: { ...getAuthHeader() } })),
