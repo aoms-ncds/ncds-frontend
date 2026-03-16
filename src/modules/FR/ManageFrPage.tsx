@@ -42,6 +42,8 @@ import FRReceiptTempForHelhiDevisionPrev from './components/FRReceiptTempForHelh
 import TransactionLogDialog from './components/TransactionLogDialog';
 import SanctionLetter from './components/authLatter';
 import formatAmount from '../Common/formatcode';
+import FileUploader from '../../components/FileUploader/FileUploader';
+import { MB } from '../../extras/CommonConfig';
 
 const ManageFrPage = () => {
   const location = useLocation();
@@ -65,6 +67,9 @@ const ManageFrPage = () => {
     endDate: moment().endOf('M'),
     rangeType: 'months',
   });
+  const [attachments, setAttachments] = useState<FileObject[]>([]);
+  const [viewFileUploader, setViewFileUploader] = useState(false);
+
   const [data3, setData3] = useState<FR | null>(null);
   const [pdfProps, setPdfProps] = useState<{
     purpose: FRPurpose | null;
@@ -337,6 +342,17 @@ const ManageFrPage = () => {
               icon: PreviewIcon,
 
             },
+            // {
+            //   id: 'View Attachment',
+            //   // component: Link,
+            //   // to: `/fr/${props.row._id}/edit`,
+            //   icon: EditIcon,
+            //   onClick: () => {
+            //     setViewFileUploader(true);
+            //     setAttachments(props.row.particulars[0]);
+            //   },
+            //   text: '',
+            // },
             ...(hasPermissions(['WRITE_FR']) && !hasPermissions(['PRESIDENT_ACCESS'])&& props.row.status == FRLifeCycleStates.FR_SEND_BACK|| hasPermissions(['ADMIN_ACCESS'])?
               [
                 {
@@ -2003,6 +2019,35 @@ const ManageFrPage = () => {
                 </Button>
               </DialogActions>
             </Dialog>
+            <FileUploader
+              title="Attachments"
+              types={[
+                'application/pdf',
+                'image/png',
+                'image/jpeg',
+                'image/jpg',
+
+              ]}
+              limits={{
+                // types: [],
+                maxItemSize: 1 * MB,
+                maxItemCount: 3,
+                maxTotalSize: 3 * MB,
+              }}
+              // accept={['video/*']}
+              open={viewFileUploader}
+              action='view'
+              onClose={() => setViewFileUploader(false)}
+              // getFiles={TestServices.getBills}
+              getFiles={attachments}
+              // deleteFile={(fileId: string) => {
+              //   setNewParticular((particularDetails) => ({
+              //     ...particularDetails,
+              //     attachment: particularDetails.attachment.filter((file) => file._id !== fileId),
+              //   }));
+              //   return FileUploaderServices.deleteFile(fileId);
+              // }}
+            />
             <Dialog open={Boolean(data5)} onClose={() => setData5(null)} maxWidth="xs" fullWidth>
               <DialogTitle> Print Prev Fr</DialogTitle>
               <DialogContent>

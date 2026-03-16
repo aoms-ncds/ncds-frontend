@@ -11,6 +11,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/Authentication';
 import { ArrowBackIos } from '@mui/icons-material';
 import FROperationalSummary from '../FR/components/FROperationalSummary';
+import formatAmount from '../Common/formatcode';
 
 const IRODashboard = () => {
   const navigate = useNavigate();
@@ -38,6 +39,59 @@ const IRODashboard = () => {
   console.log(iroDivCOunt, 'iroDivCOunt');
   console.log(divisionBasedCount, 'divisionBasedCount');
   console.log(auth, 'auth user');
+  /**
+ * Convert number to short Indian currency format (K, L, Cr)
+ */
+  function formatShortIndianAmount(amount: number) {
+    if (!amount) return '0';
+
+    if (amount >= 10000000) {
+      return (amount / 10000000).toFixed(2) + ' Cr';
+    }
+    if (amount >= 100000) {
+      return (amount / 100000).toFixed(2) + ' L';
+    }
+    if (amount >= 1000) {
+      return (amount / 1000).toFixed(2) + ' K';
+    }
+
+    return amount.toString();
+  }
+  const [totalSanctionedAmount, setTotalSanctionedAmount] = useState<number>(0);
+  const [totaltransferredAmount, setTotaltransferredAmount] = useState<number>(0);
+  const [totaltransferredTotalAmount, setTotaltransferredTotalAmount] = useState<number>(0);
+  const getFinancialYear = (date = new Date()) => {
+    const year = date.getFullYear();
+    const month = date.getMonth(); // Jan = 0
+
+    // Financial year starts in April
+    const startYear = month >= 3 ? year : year - 1;
+    const endYear = startYear + 1;
+
+    return `${startYear}-${String(endYear).slice(2)}`;
+  };
+  const [year, setYear] = useState(getFinancialYear());
+  const currentFYStartYear =
+  new Date().getMonth() >= 3 ?
+    new Date().getFullYear() :
+    new Date().getFullYear() - 1;
+
+  const years = Array.from({ length: 3 }, (_, i) => {
+    const start = currentFYStartYear - i;
+    return `${start}-${String(start + 1).slice(2)}`;
+  });
+  useEffect(() => {
+    IROServices.totalAmount({ total: 'sanctioned', year: year }).then((res) => {
+      setTotalSanctionedAmount((res.data as any).totalSanctionedAmount);
+    });
+    IROServices.totalAmount({ total: 'transferred', year: year }).then((res) => {
+      setTotaltransferredAmount((res.data as any).totalTranfferedAmount);
+    });
+    IROServices.totalAmount({ total: 'reconciliation' }).then((res) => {
+      setTotaltransferredTotalAmount((res.data as any).totalTranfferedAmount);
+    });
+  }, [year]);
+
 
   useEffect(() => {
     //   IROServices.getCount({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_MNGR })
@@ -89,6 +143,7 @@ const IRODashboard = () => {
     //     console.log(error);
     //   });
 
+
     IROServices.getAppliedCountByID(auth?.user?.division)
      .then((res) => {
        console.log(res?.data, 'divisionBasedCount');
@@ -100,62 +155,62 @@ const IRODashboard = () => {
       .catch((error) => {
         console.log(error);
       });
-    IROServices.countDay({ status: IROLifeCycleStates.WAITING_FOR_OFFICE_MNGR, day: '30' })
+    IROServices.countDay({ status: IROLifeCycleStates.WAITING_FOR_OFFICE_MNGR, day: '30', year: year })
       .then((res) => setDayCount1(res.data),
       )
       .catch((error) => {
         console.log(error);
       });
-    IROServices.countDay({ status: IROLifeCycleStates.REVERTED_TO_DIVISION, day: '3' })
+    IROServices.countDay({ status: IROLifeCycleStates.REVERTED_TO_DIVISION, day: '3', year: year })
       .then((res) => setDayCount2(res.data),
       )
       .catch((error) => {
         console.log(error);
       });
-    IROServices.countDay({ status: IROLifeCycleStates.WAITTING_FOR_RELEASE_AMOUNT, day: '45' })
+    IROServices.countDay({ status: IROLifeCycleStates.WAITTING_FOR_RELEASE_AMOUNT, day: '45', year: year })
       .then((res) => setDayCount3(res.data),
       )
       .catch((error) => {
         console.log(error);
       });
-    IROServices.countDay({ status: IROLifeCycleStates.APPROVED, day: '200' })
+    IROServices.countDay({ status: IROLifeCycleStates.APPROVED, day: '200', year: year })
       .then((res) => setDayCount4(res.data),
       )
       .catch((error) => {
         console.log(error);
       });
-    IROServices.getCount({ status: IROLifeCycleStates.WAITTING_FOR_RELEASE_AMOUNT })
+    IROServices.getCount({ status: IROLifeCycleStates.WAITTING_FOR_RELEASE_AMOUNT, year: year })
       .then((res) => setPendingReleases(res.data))
       .catch((error) => {
         console.log(error);
       });
-    IROServices.getCount({ status: IROLifeCycleStates.REVERTED_TO_DIVISION })
+    IROServices.getCount({ status: IROLifeCycleStates.REVERTED_TO_DIVISION, year: year })
       .then((res) => setrevert(res.data))
       .catch((error) => {
         console.log(error);
       });
-    IROServices.getCount({ status: IROLifeCycleStates.REJECTED })
+    IROServices.getCount({ status: IROLifeCycleStates.REJECTED, year: year })
       .then((res) => setDisapprovet(res.data))
       .catch((error) => {
         console.log(error);
       });
-    IROServices.getCount({ status: IROLifeCycleStates.REOPENED })
+    IROServices.getCount({ status: IROLifeCycleStates.REOPENED, year: year })
       .then((res) => setReopen(res.data))
       .catch((error) => {
         console.log(error);
       });
 
-    IROServices.getCount({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE })
+    IROServices.getCount({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE, year: year })
       .then((res) => setTotApproved(res.data))
       .catch((error) => {
         console.log(error);
       });
-    IROServices.getCount({ status: IROLifeCycleStates.WAITING_FOR_OFFICE_MNGR })
+    IROServices.getCount({ status: IROLifeCycleStates.WAITING_FOR_OFFICE_MNGR, year: year })
       .then((res) => setIroDivCount(res.data))
       .catch((error) => {
         console.log(error);
       });
-    IROServices.getAppliedCount()
+    IROServices.getAppliedCount({ year: year })
      .then((res) => {
        console.log(res?.data, 'response here');
        setWaitingToOfficeManagerCount(res.data as number);
@@ -163,17 +218,17 @@ const IRODashboard = () => {
       .catch((error) => {
         console.log({ error });
       });
-    IROServices.getCount({ status: IROLifeCycleStates.AMOUNT_RELEASED })
+    IROServices.getCount({ status: IROLifeCycleStates.AMOUNT_RELEASED, year: year })
       .then((res) => setAmountReleasedCount(res.data))
       .catch((error) => {
         console.log({ error });
       });
-    IROServices.getCount({ status: IROLifeCycleStates.RECONCILIATION_DONE })
+    IROServices.getCount({ status: IROLifeCycleStates.RECONCILIATION_DONE, year: year })
       .then((res) => setReconciliationCount(res.data))
       .catch((error) => {
         console.log({ error });
       });
-  }, []);
+  }, [year]);
   const data = [
     {
       title: 'Total Applied (FY 24–25)',
@@ -203,26 +258,7 @@ const IRODashboard = () => {
       color: '#F2994A',
     },
   ];
-  const getFinancialYear = (date = new Date()) => {
-    const year = date.getFullYear();
-    const month = date.getMonth(); // Jan = 0
 
-    // Financial year starts in April
-    const startYear = month >= 3 ? year : year - 1;
-    const endYear = startYear + 1;
-
-    return `${startYear}-${String(endYear).slice(2)}`;
-  };
-  const [year, setYear] = useState(getFinancialYear());
-  const currentFYStartYear =
-  new Date().getMonth() >= 3 ?
-    new Date().getFullYear() :
-    new Date().getFullYear() - 1;
-
-  const years = Array.from({ length: 5 }, (_, i) => {
-    const start = currentFYStartYear - i;
-    return `${start}-${String(start + 1).slice(2)}`;
-  });
   return (
     <CommonPageLayout>
       <Card
@@ -499,7 +535,7 @@ const IRODashboard = () => {
                   />
                 }
                 // count={iroDivCOunt?.toString()}
-                amount={'10000000'}
+                amount={totalSanctionedAmount}
                 onClick={() => navigate(`/iro/manage?id=${5}`)}
                 secondaryText="Total IRO Amount"
                 color="#1d006e"
@@ -514,7 +550,7 @@ const IRODashboard = () => {
                     style={{ width: '50px', height: '50px' }}
                   />
                 }
-                amount={'10000000'}
+                amount={totaltransferredAmount}
                 onClick={() => navigate(`/iro/manage?id=${5}`)}
                 secondaryText="Pending Approval Amount"
                 color="#004e5a"
@@ -529,8 +565,8 @@ const IRODashboard = () => {
                     style={{ width: '50px', height: '50px' }}
                   />
                 }
-                amount={'10000000'}
-                onClick={() => navigate(`/iro/manage?id=${5}`)}
+                amount={formatShortIndianAmount(Number(totaltransferredTotalAmount || 0))}
+                 onClick={() => navigate(`/iro/manage?id=${5}`)}
                 secondaryText="Pending Reconciliation Amount"
                 color="#68006b"
               />

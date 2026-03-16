@@ -336,7 +336,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
     }
   };
   console.log(applicationFormState, 'applications');
-  
+
   const [searchText, setSearchText] = useState('');
   const handleSearchChange = (event: { target: { value: SetStateAction<string> } }) => {
     setSearchText(event.target.value);
@@ -550,6 +550,8 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
           return clsx('green');
         case 'REJECTED':
           return clsx('red');
+        case 'WAITING FOR HR':
+          return clsx('HR');
         default:
           console.log('No class applied');
           return '';
@@ -836,7 +838,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                         name: newValue ? newValue.name : '', // Preserve appliedFor
                       }));
                     }}
-                   
+
                     renderInput={(params) => (
 
                       <TextField {...params} label="Name" fullWidth required />
@@ -1143,13 +1145,24 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                       backgroundColor: '#fff', // Change to blue for odd rows
                     },
                     '& .orange': {
-                      backgroundColor: 'orange', // Change to blue for odd rows
+                      backgroundColor: '#00897B',
+                      color: '#fff',
+                      fontWeight: '600',
                     },
                     '& .green': {
-                      backgroundColor: 'green', // Change to blue for odd rows
+                      backgroundColor: '#7EC82F',
+                      color: '#fff',
+                      fontWeight: '600',
                     },
                     '& .red': {
-                      backgroundColor: 'red', // Change to blue for odd rows
+                      backgroundColor: '#E2445C',
+                      color: '#fff',
+                      fontWeight: '600',
+                    },
+                    '& .HR': {
+                      backgroundColor: '#3b32e6',
+                      color: '#fff',
+                      fontWeight: '600',
                     },
                   }}
                 >

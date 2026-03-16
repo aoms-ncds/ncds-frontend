@@ -7,9 +7,10 @@ import axios from 'axios';
 export default {
   getCount: (conditions?: unknown) => getStandardResponse<number>(axios.get('/iro/count', { params: conditions, headers: { ...getAuthHeader() } })),
   countDay: (conditions?: unknown) => getStandardResponse<number>(axios.get('/iro/countDay', { params: conditions, headers: { ...getAuthHeader() } })),
+  totalAmount: (conditions?: unknown) => getStandardResponse<number>(axios.get('/iro/totalAmount', { params: conditions, headers: { ...getAuthHeader() } })),
   groupedIRO: (conditions?: { Exstatus?:any; status?: number[];dateRange?: DateRange; support?: 'Expanse' | 'Support'|'All'| 'Sanctioned'| null}) => getStandardResponse<number>(axios.get('/iro/groupedIRO', { params: conditions, headers: { ...getAuthHeader() } })),
   groupedIROView: (conditions?: { Exstatus?:any; status?: number[];dateRange?: DateRange; support?: 'Expanse' | 'Support'|'All'| null}) => getStandardResponse<number>(axios.get('/iro/groupedIROView', { params: conditions, headers: { ...getAuthHeader() } })),
-  getAppliedCount: () => getStandardResponse<number>(axios.get('/iro/appliedCount', { headers: { ...getAuthHeader() } })),
+  getAppliedCount: (year: any) => getStandardResponse<number>(axios.get('/iro/appliedCount', { params: year, headers: { ...getAuthHeader() } })),
   getAppliedCountByID: (divisionID?: number) => getStandardResponse<number>(axios.get(`/iro/appliedCount/${divisionID}`, { headers: { ...getAuthHeader() } })),
   getCloseCount: (conditions?: unknown) => getStandardResponse<number>(axios.get('/iro/count/close', { params: conditions, headers: { ...getAuthHeader() } })),
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

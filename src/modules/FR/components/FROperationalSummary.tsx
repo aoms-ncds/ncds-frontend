@@ -8,7 +8,7 @@ const StyledLink = styled(Link)`
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const FROperationalSummary = (props: {
   count?: string;
-  amount?: string;
+  amount?: number|any;
   days?: string;
   badgeColor?: 'default' | 'error' | 'primary' | 'secondary';
   icon?: React.ReactNode;

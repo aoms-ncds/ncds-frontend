@@ -63,7 +63,7 @@ const frDashboard = () => {
     new Date().getFullYear() :
     new Date().getFullYear() - 1;
 
-  const years = Array.from({ length: 5 }, (_, i) => {
+  const years = Array.from({ length: 3 }, (_, i) => {
     const start = currentFYStartYear - i;
     return `${start}-${String(start + 1).slice(2)}`;
   });
