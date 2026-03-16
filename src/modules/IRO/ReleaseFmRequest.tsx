@@ -1153,30 +1153,40 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
       headerName: 'Transferred Amount',
       width: 180,
       renderHeader: () => <b>Transferred Amount</b>,
-      valueGetter: (params) => {
-        return params.row.releaseAmount?.transferredAmount;
-      }, align: 'center',
-      headerAlign: 'center',
+
+      valueGetter: (params: any) => {
+        if (params.row.sanctionedAmount !== undefined) {
+          return formatAmount(Number(params.row.sanctionedAmount));
+        }
+
+        if (Array.isArray(params.row.particulars)) {
+          const total = params.row.particulars.reduce(
+            (sum: number, item: any) =>
+              sum + (Number(item.sanctionedAmount) || 0),
+            0,
+          );
+
+          return formatAmount(total);
+        }
+
+        return formatAmount(0);
+      },
+      align: 'center' as const,
+      headerAlign: 'center' as const,
     },
+
     {
       field: 'totalTransferred',
       headerName: 'Total Transferred Amount',
       width: 180,
       renderHeader: () => <b>Total Transferred Amount</b>,
-      valueGetter: (params) => {
-        if (params.row.sanctionedAmount !== undefined) {
-          return formatAmount(params.row.sanctionedAmount as number);
-        }
-        if (Array.isArray(params.row.particulars)) {
-          return formatAmount(
-            params.row.particulars.reduce(
-              (sum, item) => sum + (Number(item.sanctionedAmount) || 0),
-              0,
-            ).toFixed(2));
-        }
-        return 0; // or return a suitable default value
-      }, align: 'center',
-      headerAlign: 'center',
+      valueGetter: (params: any) => {
+        return formatAmount(
+          Number(params.row.releaseAmount?.transferredAmount) || 0,
+        );
+      },
+      align: 'center' as const,
+      headerAlign: 'center' as const,
     },
 
     // {
@@ -1623,7 +1633,7 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
                       <ToggleButton value="All">All</ToggleButton>
                       <ToggleButton value="Support">SUPPORT</ToggleButton>
                       <ToggleButton value="Expanse">EXPENSE</ToggleButton>
-                        <ToggleButton value="Sanctioned">SANCTIONED</ToggleButton>
+                      <ToggleButton value="Sanctioned">SANCTIONED</ToggleButton>
                     </ToggleButtonGroup>
                   </Grid>
                 </>

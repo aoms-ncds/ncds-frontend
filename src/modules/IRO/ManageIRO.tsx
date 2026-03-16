@@ -1335,20 +1335,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
           headerName: 'Transferred Amount',
           width: 180,
           renderHeader: () => <b>Transferred Amount</b>,
-          valueGetter: (params: any) => {
-            return formatAmount(
-              Number(params.row.releaseAmount?.transferredAmount) || 0,
-            );
-          },
-          align: 'center' as const,
-          headerAlign: 'center' as const,
-        },
 
-        {
-          field: 'totalTransferred',
-          headerName: 'Total Transferred Amount',
-          width: 180,
-          renderHeader: () => <b>Total Transferred Amount</b>,
           valueGetter: (params: any) => {
             if (params.row.sanctionedAmount !== undefined) {
               return formatAmount(Number(params.row.sanctionedAmount));
@@ -1365,6 +1352,20 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
             }
 
             return formatAmount(0);
+          },
+          align: 'center' as const,
+          headerAlign: 'center' as const,
+        },
+
+        {
+          field: 'totalTransferred',
+          headerName: 'Total Transferred Amount',
+          width: 180,
+          renderHeader: () => <b>Total Transferred Amount</b>,
+          valueGetter: (params: any) => {
+            return formatAmount(
+              Number(params.row.releaseAmount?.transferredAmount) || 0,
+            );
           },
           align: 'center' as const,
           headerAlign: 'center' as const,

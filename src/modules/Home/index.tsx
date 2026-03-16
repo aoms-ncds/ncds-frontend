@@ -207,7 +207,7 @@ const HomePage = () => {
                       mt: 0.5,
                     }}
                   >
-                    {Number(divisionsCount) === 0 ? '1' : divisionsCount || '1'}
+                    {Number(divisionsCountit) === 0 ? '1' : divisionsCountit || '1'}
                   </Typography>
 
                   <Box display="flex" alignItems="center" mt={1}>
@@ -947,7 +947,7 @@ Total Sub-Div                          </Typography>
 
                 <Box display="flex" alignItems="center" gap={1}>
                   <Typography fontWeight={600} color="#5a5fcf">
-                    {divisionsCount}
+                    {divisionsCountit}
                   </Typography>
                   <RampRight fontSize="small" />
                 </Box>
@@ -1019,7 +1019,7 @@ Total Sub-Div                          </Typography>
 
                 <Box display="flex" alignItems="center" gap={1}>
                   <Typography fontWeight={600} color="#5a5fcf">
-                    {divisionsCountit}
+                    {divisionsCount}
                   </Typography>
                   <RampRight fontSize="small" />
                 </Box>

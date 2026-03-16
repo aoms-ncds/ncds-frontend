@@ -265,7 +265,7 @@ const IRODashboard = () => {
         sx={{
           borderRadius: 4,
           p: { xs: 2, sm: 3 },
-          background: '#ebebeb',
+          background: '#ffffff',
         }}
       >
 
@@ -275,11 +275,17 @@ const IRODashboard = () => {
 
           <Grid container spacing={3}>
             <Grid item xs={12} md={12} xl={12}>
-              <Typography variant="h6" fontWeight={600} color="text.primary">
-                Financial Year Summary (Count -Based to FY)
-                {/* <Divider /> */}
-              </Typography>
-              <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  flexWrap: 'wrap',
+                }}
+              >
+                <Typography variant="h6" fontWeight={600} color="text.primary">
+      Financial Year Summary (Count -Based to FY)
+                </Typography>
 
                 <TextField
                   select
@@ -294,22 +300,19 @@ const IRODashboard = () => {
                   sx={{
                     'minWidth': 120,
 
-                    /* SELECT TEXT (important fix) */
                     '& .MuiSelect-select': {
                       display: 'flex',
                       justifyContent: 'flex-end',
                       textAlign: 'right',
-                      paddingRight: '32px !important', // space for arrow
+                      paddingRight: '32px !important',
                       paddingLeft: '8px',
                     },
 
-                    /* DROPDOWN ICON */
                     '& .MuiSelect-icon': {
                       color: '#3B32E6',
                       right: 6,
                     },
 
-                    /* OUTER BOX */
                     '& .MuiOutlinedInput-root': {
                       'height': 32,
                       'fontSize': 12,
@@ -340,19 +343,16 @@ const IRODashboard = () => {
                     },
                   }}
                 >
-
                   {years.map((yr) => (
                     <MenuItem
                       key={yr}
                       value={yr}
                       sx={{
-                        // justifyContent: 'flex-end',
-                        // textAlign: 'right',
                         fontSize: 12,
                         fontWeight: 600,
                       }}
                     >
-                     Financial Year -  {yr}
+          Financial Year - {yr}
                     </MenuItem>
                   ))}
                 </TextField>
@@ -565,8 +565,8 @@ const IRODashboard = () => {
                     style={{ width: '50px', height: '50px' }}
                   />
                 }
-                amount={formatShortIndianAmount(Number(totaltransferredTotalAmount || 0))}
-                 onClick={() => navigate(`/iro/manage?id=${5}`)}
+                amount={totaltransferredTotalAmount || 0}
+                onClick={() => navigate(`/iro/manage?id=${5}`)}
                 secondaryText="Pending Reconciliation Amount"
                 color="#68006b"
               />
