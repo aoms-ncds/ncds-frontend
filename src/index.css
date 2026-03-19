@@ -1,0 +1,121 @@
+body {
+  cursor: url('http://www.rw-designer.com/cursor-extern.php?id=35090'), auto;
+  margin: 0;
+  font-family:monospace;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.group-color-1 {
+  background-color: #D63AE8; /* Light green for group 1 */
+}
+
+.group-color-2 {
+  background-color: #9D3AE8; /* Light red for group 2 */
+}
+.group-color-3 {
+  background-color: #E83AA2; /* Light red for group 2 */
+}
+/* code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+} */
+
+.send-back-color {
+  color: red;
+}
+.special-sanction {
+  background-color:#889bfe;
+  color: rgb(0, 0, 0); /* Optional: change text color for better visibility */
+}
+
+.even {
+  background-color: #f5f5f5;
+}
+
+.odd {
+  background-color: white;
+}
+/* HEADER: dark + blur */
+.status-header {
+  background: #f0f4fa;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  color: #000000;
+  font-weight: 700;
+  /* text-transform: uppercase; */
+}
+
+/* BASE CELL STYLE */
+.status-cell {
+  background-color: #e3f2fd; /* light blue */
+  color: #ffffff;
+  font-weight: 600;
+  border-radius: 6px;
+  padding: 6px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.status-cell1 {
+  background-color: #269811; /* light blue */
+  color: #ffffff;
+  font-weight: 600;
+  border-radius: 6px;
+  padding: 6px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.status-cell2 {
+  background-color: #FCA017 ; /* light blue */
+  color: #ffffff;
+  font-weight: 600;
+  border-radius: 6px;
+  padding: 6px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.status-cell3 {
+  background-color: #477e00 ; /* light blue */
+  color: #ffffff;
+  font-weight: 600;
+  border-radius: 6px;
+  padding: 6px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* STATUS COLORS */
+.red-light {
+  background-color: #FCA017;
+}
+.Appr {
+  background-color: #0b57d0;
+}
+.VERIF {
+  background-color: #a964f4;
+}
+.DIS {
+  background-color: #EF5350 ;
+}
+
+.red-dark {
+  background-color: #c62828;
+}
+.re-sum {
+  background-color: #0097A7;
+}
+
+.orange {
+  background-color: #fb8c00;
+}
+
+.green {
+  background-color: #43a047;
+}
+
+b{
+  color: #060f71;
+   font-weight: 600;
+}

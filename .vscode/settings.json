@@ -1,0 +1,17 @@
+{
+  "editor.fontFamily": "Fira Code",
+  "workbench.settings.editor": "json",
+  "eslint.format.enable": true,
+  "eslint.codeActionsOnSave.mode": "all",
+  "editor.formatOnSave": true,
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+  "files.eol": "\r\n",
+  "cSpell.words": [
+    "Aadhaar"
+  ]
+}
