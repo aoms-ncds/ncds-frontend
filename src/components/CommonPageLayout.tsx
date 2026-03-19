@@ -54,7 +54,8 @@ interface DateFilterProps {
   min?: Moment;
   max?: Moment;
 }
-const CommonPageLayout = (props: { children: React.ReactNode; title?: string; hidePageHeader?: boolean; momentFilter?: DateFilterProps; appBarSx?: SxProps; mainContentSx?: SxProps }) => {
+const CommonPageLayout = (props: { children: React.ReactNode; title?: string;
+   status?:string; hidePageHeader?: boolean; momentFilter?: DateFilterProps; appBarSx?: SxProps; mainContentSx?: SxProps; }) => {
   const loader = useLoader();
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
@@ -121,7 +122,7 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string; hi
   }, [loader.count]);
 
   useEffect(() => {
-    document.title = props.title ? `IET : ${props.title}` : 'Indian Evangelical Team';
+    document.title = 'IET-AOMS';
   }, [props.title]);
 
 
@@ -146,16 +147,16 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string; hi
     <div>
 
       {/* <Toolbar /> */}
-      <Grid sx={{ height: 100 }}>
+      {/* <Grid sx={{ height: 100 }}>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
           <img src="/favicon.ico" alt="" style={{ height: 90, marginTop: 20 }} />
           <br />
-          {/* <b>IET</b> */}
+
           <div>
           </div>
         </div>
       </Grid>
-      <Divider />
+      <Divider /> */}
       <List>
         {allModuleRoutes
           .map((moduleRoute, index) =>
@@ -179,7 +180,7 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string; hi
                   <ListItem disablePadding sx={{ backgroundColor: 'inherit' }}>
                     <ListItemButton>
                       {<ListItemIcon sx={{ color: 'inherit' }}>{page.icon}</ListItemIcon>}
-                      <ListItemText primary={page.title} />
+                      <ListItemText primary={page.title} /> <Typography>{props.status}</Typography>
                     </ListItemButton>
                   </ListItem>
                 </NavLink>
@@ -197,9 +198,9 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string; hi
                             textDecoration: 'none',
                           } :
                           {
-                            color: isDark ? 'black' : 'white',
+                            color: isDark ? 'white' : 'black',
                             textDecoration: 'none',
-                            backgroundColor: theme.palette.primary.main,
+                            backgroundColor: 'rgb(224, 224, 224)',
                           }
                       }
                     >
@@ -217,7 +218,7 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string; hi
           )
           .flat()}
       </List>
-      <Divider />
+      {/* <Divider /> */}
     </div>
   );
 
@@ -253,18 +254,21 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string; hi
         {/* <ArrowBackIcon/> */}
 
         <Toolbar >
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+            <img src="/favicon.ico" alt="" style={{ height: 50 }} />
+          </div>
           <Typography variant="h6" noWrap component="div" sx={{ padding: '10px', fontSize: '17px', marginRight: '15px' }}>
-            {CommonConstants.appName}
+            {'IET - AOMS'}
           </Typography>
+          &nbsp;&nbsp;&nbsp;  &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;
+          {/* <Divider /> */}
           <IconButton color="inherit" aria-label="open drawer" edge="start" onClick={handleDrawer} sx={{ mr: 2, display: isMobile ? 'none' : 'inherit' }}>
             {open ? <ChevronLeftIcon /> : <ChevronRightIcon />}
           </IconButton>
           <IconButton color="inherit" aria-label="open drawer" edge="start" onClick={handleDrawerToggle} sx={{ mr: 2, display: { sm: 'none' } }}>
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div" sx={{ fontSize: '13px' }}>
-            {props.title}
-          </Typography>
+
           <Typography variant="h6" noWrap component="div" sx={{ ml: 'auto', fontSize: '13px' }}>
             Last Login: {logs?.createdAt?.format('hh:mm A DD/MM/YYYY')}
           </Typography>
@@ -291,6 +295,7 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string; hi
               <PersonIcon fontSize="large" />
             </IconButton>
           </Tooltip> */}
+
           {auth?.user && (
 
             <>
@@ -401,13 +406,37 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string; hi
         <Grid sx={{ p: 2 }} container spacing={2} alignItems="start" justifyContent="space-between">
           {/* Left Side: Back Icon + Title */}
           <Grid item sx={{ display: 'flex', alignItems: 'center' }}>
-            {/* {props.title && !props.hidePageHeader && (
-              <Typography variant="h5" color="text.secondary" sx={{ ml: 1 }}>
+            {props.title && !props.hidePageHeader && (
+              <Typography variant="h6" fontWeight={600} color="text.primary">
                 {props.title}
+                {props.status && (
+                  <>
+                    {' - '}
+                    <Box
+                      component="span"
+                      sx={{
+                        ml: 1,
+                        px: 1.5,
+                        py: 0.3,
+                        borderRadius: 1,
+                        fontSize: 14,
+                        fontWeight: 700,
+                        backgroundColor: '#E3F2FD',
+                        color: '#1976D2',
+                      }}
+                    >
+                      {props.status}
+                    </Box>
+                  </>
+                )}
+
+
+                <Divider sx={{ mt: 1 }} />
               </Typography>
-            )} */}
+            )}
           </Grid>
           {/* Right Side: MomentFilter */}
+
           {props.momentFilter && (
             <Grid item>
               <MomentFilter
@@ -416,8 +445,8 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string; hi
                 rangeTypes={props.momentFilter.rangeTypes}
                 initialRange={props.momentFilter.initialRange}
                 sx={{
-                  minHeight: 40,
-                  minWidth: 268,
+                  minHeight: 25,
+                  minWidth: 240,
                   justifyContent: 'flex-end',
                 }}
                 min={props.momentFilter.min}
@@ -427,6 +456,7 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string; hi
           )}
 
         </Grid>
+
         <Button
           sx={{
             backgroundColor: 'orange',
@@ -438,9 +468,9 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string; hi
           <ArrowBackIcon />
         </Button>
 
-        <br />
+        {/* <br />
         <Divider />
-        <br />
+        <br /> */}
 
         {props.children}
       </Box>

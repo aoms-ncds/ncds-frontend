@@ -14,6 +14,7 @@ declare global {
   createdBy?:User;
   attachment:FileObject[];
   appliedFor?:string;
+  workersName?:string;
   applicantName?:string;
   requestedAmount?:number;
   sanctionedAmount?:number;

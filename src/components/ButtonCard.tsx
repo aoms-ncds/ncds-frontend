@@ -1,6 +1,6 @@
 import React from 'react';
 import { Badge, Card, CardActionArea, Grid, CardContent, Typography, styled, IconButton, Box, Button, CardActions } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import KeyboardDoubleArrowRightOutlinedIcon from '@mui/icons-material/KeyboardDoubleArrowRightOutlined';
 const StyledLink = styled(Link)`
   text-decoration: none;
@@ -9,7 +9,7 @@ const StyledLink = styled(Link)`
 const ButtonCard = (props: {
   count?: string;
   secondaryText: string;
-  dot?:string
+  dot?:string;
   color: string;
   onClick?: React.MouseEventHandler<HTMLDivElement>;
   targetRoute?: string;
@@ -18,99 +18,87 @@ const ButtonCard = (props: {
   badgeColor?: 'default' | 'error' | 'primary' | 'secondary'; // Allow customizing badge color
   contentAlignment?: 'left' | 'center' | 'right'; // Allow customizing content alignment
 }) => {
+  const navigate = useNavigate();
   return (
+    <Card
+      onClick={() => props.targetRoute && navigate(props.targetRoute)}
+      sx={{
+        // width: 340,
+        borderRadius: 4,
+        boxShadow: '0 6px 18px rgba(0,0,0,0.15)',
+        position: 'relative',
+        overflow: 'hidden',
+        p: 2.5,
+        backgroundColor: '#fff',
+      }}
+    >
+      {/* LEFT GREEN BAR */}
+      <Box
+        sx={{
+          position: 'absolute',
+          left: 0,
+          top: 0,
+          bottom: 0,
+          width: 6,
+          backgroundColor: props.color,
+          borderRadius: '4px 0 0 4px',
+        }}
+      />
 
-    <Box sx={{ color: 'red' }}>
-      <Card
-        onClick={props.onClick}
-        {...(props.targetRoute && {
-          component: StyledLink,
-          to: props.targetRoute,
-        })}
+      {/* TOP ROW */}
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          mb: 1,
+        }}
       >
-        <CardActionArea
+        <Typography sx={{ fontWeight: 600, fontSize: '1.1rem' }}>
+          {props.secondaryText}
+        </Typography>
+
+        {/* <Button
+          variant="outlined"
+          size="small"
+          // endIcon={r}
           sx={{
-            'border': '2px solid #3B32E6',
-            'backgroundColor': props.color,
-            'color': 'white',
-            'borderRadius': 3,
-            'transition': 'all 0.3s',
-            'padding': 2,
-            '&:hover': {
-              boxShadow: '0 8px 16px 0 rgba(0, 0, 0, 0.6)',
-              transform: 'translate(0, -2px)',
-              cursor: 'pointer',
-            },
-            '&:active': {
-              boxShadow: 'none !important',
-              transform: 'translate(0, 2px)',
-              cursor: 'pointer',
-            },
+            textTransform: 'none',
+            borderRadius: 2,
+            px: 1.5,
+            minWidth: 70,
+            fontWeight: 600,
           }}
         >
-          <CardContent sx={{ textAlign: 'center' }}>
-            <Typography variant="h4" sx={{ fontSize: '2.5rem' }}>
-              {/* {props.count} */}
-            </Typography>
-            <br />
+      2026
+        </Button> */}
+      </Box>
 
-            <Typography variant="h5" sx={{ display: 'flex', alignItems: 'end', justifyContent: 'end', color: 'black' }}>
-              {props.secondaryText}
-            </Typography>
-            <Typography variant="h5" sx={{ display: 'flex', alignItems: 'end', justifyContent: 'end', color: '#8833ff', fontWeight: 600 }}>
-              {props.count}
-             
-              {/* <Box sx={{ marginLeft: '10px' }}>{props.icon}</Box> Adjust the margin here */}
-            </Typography>
-            <Typography color={'#fff'}>{props.dot}</Typography>
-            <Box sx={{ display: 'flex', alignItems: 'start', justifyContent: 'start', color: 'black' }}>{props.icon}</Box>
-          </CardContent>
-          {/*
-        {props.count !== undefined && (
-          <Grid style={{ position: 'absolute', top: 0, right: 0 }}>
-            <Badge
-              max={10000000}
-              badgeContent={props.count}
-              color={props.badgeColor || 'error'}
-              showZero
-              sx={{
-                '& .MuiBadge-badge': {
-                  width: '3rem',
-                  height: '3rem',
-                  fontSize: '1.5rem',
-                  borderRadius: '50%',
+      {/* CONTENT */}
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+        }}
+      >
+        {/* LEFT ICON */}
+        <Box sx={{ color: '#6a5cff' }}>
+          {props.icon /* checklist icon */}
+        </Box>
 
-                },
-              }}
-
-            ></Badge>
-          </Grid>
-        )} */}
-          <CardActions >
-            {/* <Button variant='outlined' sx={{ ml: 'auto', color: 'white', borderColor: 'white' }}>Help</Button> */}
-            <Button
-              variant="contained"
-              endIcon={<KeyboardDoubleArrowRightOutlinedIcon />}
-              sx={{
-                'ml': 'auto',
-                'color': 'white',
-                'bgcolor': 'orange',
-                '&:hover': {
-                  color: 'white',
-                  bgcolor: 'orange',
-                },
-                '&:active': {
-                  color: 'white',
-                  bgcolor: 'orange',
-                },
-              }}
-            >
-              Go
-            </Button>
-          </CardActions>
-        </CardActionArea>
-      </Card>
-    </Box>
+        {/* COUNT */}
+        <Typography
+          sx={{
+            fontSize: '2.4rem',
+            fontWeight: 700,
+            color: '#3f3dff',
+          }}
+        >
+          {props.count}
+        </Typography>
+      </Box>
+    </Card>
   );
 };
 

@@ -61,6 +61,11 @@ declare global{
     releaseAmount?: number;
     transactionNumber?: string;
     transferredAmount?: number;
+    adjustedIro?: string;
+    adjustedAmount?: number;
+    closingBalance?: boolean;
+    closingBalanceRemark?: string;
+    transferredAmountEach?: number;
     transferredDate?: Moment|null;
     transferredBank: BankDetails;
     IRO?:IROrder[];

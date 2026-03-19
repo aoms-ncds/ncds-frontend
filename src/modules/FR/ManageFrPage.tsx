@@ -16,7 +16,7 @@ import {
 } from '@mui/icons-material';
 import InfoIcon from '@mui/icons-material/Info';
 import { Link, useLocation } from 'react-router-dom';
-import { Alert, Box, Button, Card, Container, Dialog, DialogActions, DialogContent, DialogTitle, Divider, FormControl, FormControlLabel, FormLabel, Grid, IconButton, InputAdornment, Radio, RadioGroup, TextField, Tooltip, Typography } from '@mui/material';
+import { Alert, Box, Button, Card, CardContent, Checkbox, Container, Dialog, DialogActions, DialogContent, DialogTitle, Divider, FormControl, FormControlLabel, FormLabel, Grid, IconButton, InputAdornment, InputLabel, ListItemText, ListSubheader, MenuItem, Radio, RadioGroup, Select, SelectChangeEvent, TextField, ToggleButton, ToggleButtonGroup, Tooltip, Typography } from '@mui/material';
 import FRServices from './extras/FRServices';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 // import SendIcon from '@mui/icons-material/Send';
@@ -41,6 +41,9 @@ import FRReceiptTemplatePrev from './components/FRReceiptTemplatePrev';
 import FRReceiptTempForHelhiDevisionPrev from './components/FRReceiptTempForHelhiDevisionPrev';
 import TransactionLogDialog from './components/TransactionLogDialog';
 import SanctionLetter from './components/authLatter';
+import formatAmount from '../Common/formatcode';
+import FileUploader from '../../components/FileUploader/FileUploader';
+import { MB } from '../../extras/CommonConfig';
 
 const ManageFrPage = () => {
   const location = useLocation();
@@ -53,6 +56,7 @@ const ManageFrPage = () => {
   const [openRemarks, toggleOpenRemarks] = useState(false);
   const [sendNotification, toggleSendNotification] = useState(false);
   const [selectedFR, setSelectedFR] = useState<string | null>(null);
+  const [selectedFRData, setSelectedFRData] = useState<FR | null>(null);
   const [data, setData] = useState<FR | null>(null);
   const [data2, setData2] = useState<FR | null>(null);
   const [data4, setData4] = useState<FR | null>(null);
@@ -63,6 +67,9 @@ const ManageFrPage = () => {
     endDate: moment().endOf('M'),
     rangeType: 'months',
   });
+  const [attachments, setAttachments] = useState<FileObject[]>([]);
+  const [viewFileUploader, setViewFileUploader] = useState(false);
+
   const [data3, setData3] = useState<FR | null>(null);
   const [pdfProps, setPdfProps] = useState<{
     purpose: FRPurpose | null;
@@ -86,7 +93,7 @@ const ManageFrPage = () => {
   } | null>(null);
   const [supportAttachment, setSupportAttachment] = useState<boolean>(false);
   const [supportAttachmentChild, setSupportAttachmentChild] = useState<boolean>(false);
-
+  const [openReason, setOpenReason] = useState(false);
   const [remarks, setRemarks] = useState<Remark[]>([]);
   const [remark, setRemark] = useState<CreatableRemark>({
     remark: '',
@@ -98,7 +105,30 @@ const ManageFrPage = () => {
   const [openPrintFrPrev, setOpenPrintFrPrev] = useState(false);
   const [openPrintFrPrevDelhi, setOpenPrintFrPrevDelhi] = useState(false);
   const [openLog, setOpenLog] = useState(false);
+  const [divisions, setDivisions] = useState<string[]>([]);
+  const [divisionSearch, setDivisionSearch] = useState('');
+  const [selectedDivisions, setSelectedDivisions] = useState<string[]>([]);
 
+  useEffect(() => {
+    DivisionsServices.getDivisions().then((res) => {
+      const names = res.data.map((d: any) => d.details.name);
+      setDivisions(names);
+    });
+  }, []);
+  const filteredDivisions = divisions.filter((name) =>
+    name
+    .toLowerCase()
+    .replace(/\s/g, '') // remove spaces
+    .includes(divisionSearch.toLowerCase().replace(/\s/g, '')),
+  );
+  const handleDivisionChange = (event: SelectChangeEvent<string[]>) => {
+    const value = event.target.value as string[];
+    if (value.includes('__ALL__')) {
+      ([]); // empty = show all
+      return;
+    }
+    setSelectedDivisions(value);
+  };
   const [Label, setLeaderHeading] = useState<ILeaderDetails[] | null>(null);
   const [selectedSignaturePresident, setSignaturePresident] = useState<EsignaturePresident>({
     _id: '',
@@ -119,7 +149,7 @@ const ManageFrPage = () => {
   });
 
   const [statusFilter, setStatusFilter] = useState([FRLifeCycleStates.WAITING_FOR_ACCOUNTS]); // default WFA: Waiting for access or Reverted
-  const [statusFilter1, setStatusFilter1] = useState<'Support' | 'Expanse'| 'Resubmitted'|null| 'All'>(null); // default WFA: Waiting for access or Reverted
+  const [statusFilter1, setStatusFilter1] = useState<'Support' | 'Expanse'| 'Resubmitted'| 'Custom'|null| 'All'>(null); // default WFA: Waiting for access or Reverted
   useEffect(() => {
     ESignatureService.getESignature()
       .then((res) => {
@@ -193,16 +223,25 @@ const ManageFrPage = () => {
       });
   }, []);
   useEffect(() => {
-    FRServices.getAllOptimized({ dateRange: dateRange, status: statusFilter })
-      .then((res) => {
-        if (res.data) {
-          setFRRequests(res.data?.map((fr, index) => ({ ...fr, serialNumber: index + 1 })));
-        }
-      })
-      .catch((res) => {
-        console.log(res);
-      });
-  }, [dateRange, statusFilter, statusFilter]);
+    Promise.all([
+      FRServices.getAllOptimized({ dateRange, status: statusFilter }),
+      FRServices.getAllCustom({ dateRange, status: statusFilter }),
+    ])
+    .then(([optimizedRes, customRes]) => {
+      const optimizedData = optimizedRes.data ?? [];
+      const customData = customRes.data ?? [];
+
+      const combinedData = [...optimizedData, ...customData].map(
+        (fr, index) => ({
+          ...fr,
+          serialNumber: index + 1,
+        }),
+      );
+
+      setFRRequests(combinedData);
+    })
+    .catch((err) => console.log(err));
+  }, [dateRange, statusFilter]);
   useEffect(() => {
     FRServices.getAllOptimizedExSupprt({ dateRange: dateRange, support: statusFilter1, status: statusFilter })
       .then((res) => {
@@ -294,11 +333,26 @@ const ManageFrPage = () => {
               component: Link,
               // to: `/fr/${props.row._id}/view`,
               onClick: () => {
-                window.open(`/fr/${props.row._id}/view`, '_blank');
+                if ((props.row as any).isCustom) {
+                  window.open(`/fr/${props.row._id}/viewCustom`, '_blank');
+                } else {
+                  window.open(`/fr/${props.row._id}/view`, '_blank');
+                }
               },
               icon: PreviewIcon,
 
             },
+            // {
+            //   id: 'View Attachment',
+            //   // component: Link,
+            //   // to: `/fr/${props.row._id}/edit`,
+            //   icon: EditIcon,
+            //   onClick: () => {
+            //     setViewFileUploader(true);
+            //     setAttachments(props.row.particulars[0]);
+            //   },
+            //   text: '',
+            // },
             ...(hasPermissions(['WRITE_FR']) && !hasPermissions(['PRESIDENT_ACCESS'])&& props.row.status == FRLifeCycleStates.FR_SEND_BACK|| hasPermissions(['ADMIN_ACCESS'])?
               [
                 {
@@ -369,15 +423,15 @@ const ManageFrPage = () => {
                   text: 'Print FR HQ DELHI',
                   icon: PrintIcon,
                   onClick: async () => {
-  const delhiHQ = (await DivisionsServices.getDivisionById(
-  '658270549efadc163550a28c'
-)).data;
+                    const delhiHQ = (await DivisionsServices.getDivisionById(
+                      '658270549efadc163550a28c',
+                    )).data;
 
-const rowData = (await FRServices.getAllOptimizedById(props.row?._id)).data;
-console.log(rowData, 'rowData');
-console.log(delhiHQ, 'delhiHQ');
+                    const rowData = (await FRServices.getAllOptimizedById(props.row?._id)).data;
+                    console.log(rowData, 'rowData');
+                    console.log(delhiHQ, 'delhiHQ');
 
-rowData.division?.details &&
+                    rowData.division?.details &&
   setData4({
     ...props.row,
     division: {
@@ -390,8 +444,7 @@ rowData.division?.details &&
       },
     },
   });
-
-},
+                  },
                 },
               ] :
               []),
@@ -414,6 +467,20 @@ rowData.division?.details &&
               },
               icon: EditNoteIcon,
             },
+            ...(props.row.reasonForReject || props.row.reasonForSentBack ?
+              [
+                {
+                  id: 'resaons',
+                  text: 'View Reasons',
+                  component: Link,
+                  // to: '/fr/view_FR/' + props.row._id,
+                  onClick: () => {
+                    setOpenReason(true);
+                    setSelectedFRData(props.row);
+                  },
+                  icon: EditNoteIcon,
+                },
+              ]:[]),
             {
               id: 'notification',
               text: 'Send notification',
@@ -448,7 +515,7 @@ rowData.division?.details &&
                     const delhiHQ=(await DivisionsServices.getDivisionById('658270549efadc163550a28c')).data;
                     const rowData= (await FRServices.getAllOptimizedById(props.row?._id)).data;
 
-                    rowData.division?.details&& setData4({ 
+                    rowData.division?.details&& setData4({
                       ...props.row,
                       status: 'Prev Cord' as any,
                       division: {
@@ -602,6 +669,80 @@ rowData.division?.details &&
     //   headerAlign: 'center',
     // },
     {
+      field: 'status',
+      headerClassName: 'status-header',
+      renderHeader: () => <b>Status</b>,
+      cellClassName: (params) => {
+        const statusName = params.formattedValue;
+        if (params.value == null) return '';
+
+        switch (statusName) {
+        case 'REVERTED':
+          return clsx('status-cell2');
+        case 'PENDING VERIF.':
+          return clsx('status-cell', 'VERIF');
+        case 'IRO CLOSED':
+        case 'FR VERIFIED':
+        case 'FR CLOSED':
+          return clsx('status-cell1');
+        case ' FR_REJECTED':
+          return clsx('status-cell', 'red');
+        case 'AWAITING APPROV.':
+          return clsx('status-cell', 'Appr');
+        case 'RE-SUBMITTED':
+          return clsx('status-cell', 're-sum');
+        case 'CUSTOM FR':
+          return clsx('status-cell3');
+        case 'IRO DISAPPROVED':
+          return clsx('status-cell', 'red-dark');
+        case 'FR DISAPPROVED':
+          return clsx('status-cell', 'DIS');
+        default:
+          return 'status-cell';
+        }
+      },
+      width: 205,
+      align: 'center',
+      headerAlign: 'center',
+      valueGetter: (params) => {
+        let statusName =
+      IROLifeCycleStates.getStatusNameByCodeTransaction(params.value);
+        const iscustom = (params.row as any)?.isCustom;
+        switch (statusName) {
+        case 'SEND_BACK':
+          statusName = 'REVERTED';
+          break;
+        case 'FR_APPROVED':
+          statusName = 'FR VERIFIED';
+          break;
+        case 'WAITING_FOR_ACCOUNTS':
+          if ((params.row as any)?.isReverted === true) {
+            statusName = 'RE-SUBMITTED';
+          } else if (iscustom === true) {
+            statusName = 'CUSTOM FR';
+          } else {
+            statusName = 'PENDING VERIF.';
+          }
+          break;
+        case 'WAITING_FOR_PRESIDENT':
+          statusName = 'AWAITING APPROV.';
+          break;
+        case 'FR_REJECTED':
+          statusName = 'FR DISAPPROVED';
+          break;
+        case 'IRO_REJECTED':
+        case 'REOPEND':
+          statusName = 'IRO DISAPPROVED';
+          break;
+        default:
+          statusName = statusName.replaceAll('_', ' ');
+          break;
+        }
+        return statusName;
+      },
+    },
+
+    {
       field: 'FRno',
       headerClassName: 'super-app-theme--cell',
       renderHeader: () => <b>FR No</b>,
@@ -622,7 +763,7 @@ rowData.division?.details &&
       headerClassName: 'super-app-theme--cell',
       width: 130,
       valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
-      renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
+      renderHeader: (params) => <b style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</b>,
       align: 'center',
       headerAlign: 'center',
     },
@@ -634,70 +775,7 @@ rowData.division?.details &&
     //   align: 'center',
     //   headerAlign: 'center',
     // },
-    {
-      field: 'status',
-      headerClassName: 'super-app-theme--cell',
-      renderHeader: () => <b>Status</b>,
-      cellClassName: (params) => {
-        console.log('CellClassName params:', params);
-        const statusName = params.formattedValue;
-        console.log('Status Name###:', statusName);
-        if (params.value == null) {
-          return '';
-        }
-        switch (statusName) {
-        case 'REVERTED':
-          return clsx('red-light');
-        case 'WAITING FOR ACCOUNTS':
-          return clsx('orange');
-        case 'IRO CLOSED':
-          return clsx('green');
-        case 'FR VERIFIED':
-          return clsx('green');
-        case 'FR CLOSED':
-          return clsx('green');
-        case ' FR_REJECTED':
-          return clsx('red');
-        case 'WAITING FOR PRESIDENT':
-          return clsx('orange');
-        case 'IRO DISAPPROVED':
-          return clsx('red-dark');
-        default:
-          console.log('No class applied');
-          return '';
-        }
-      },
-      width: 205,
-      align: 'center',
-      headerAlign: 'center',
-      valueGetter: (params) => {
-        let statusName = IROLifeCycleStates.getStatusNameByCodeTransaction(params.value);
-        console.log(statusName, 'lolpß');
-        // Check if the status name needs to be changed
-        switch (statusName) {
-        case 'SEND_BACK':
-          statusName = 'REVERTED';
-          break;
-        case 'FR_APPROVED':
-          statusName = 'FR VERIFIED'; // Change to whatever new name you want
-          break;
-        case 'FR_REJECTED':
-          statusName = ' FR DISAPPROVED'; // Change to whatever new name you want
-          break;
-        case 'IRO_REJECTED':
-          statusName = 'IRO DISAPPROVED'; // Change to whatever new name you want
-          break;
-        case 'REOPEND':
-          statusName = 'IRO DISAPPROVED'; // Change to whatever new name you want
-          break;
-          // Add more cases for other status names you want to change
-        default:
-          statusName = statusName.replaceAll('_', ' ');
-          break;
-        }
-        return statusName;
-      },
-    },
+
     {
       field: 'divisionName',
       headerClassName: 'super-app-theme--cell',
@@ -731,55 +809,74 @@ rowData.division?.details &&
       width: 240,
       align: 'center',
       headerAlign: 'center',
-      renderCell: (props) => (
-        <p
-          style={{
-            maxWidth: 240,
-            whiteSpace: 'normal',
-            wordBreak: 'break-word',
-            justifyContent: 'center',
-            textAlign: 'center',
-          }}
-        >
-          {props.row?.particulars?.[0]?.mainCategory}
-        </p>
-      ),
-    },
-    {
-      field: 'subCategory',
-      headerClassName: 'super-app-theme--cell',
-      renderHeader: () => <b>Sub Category</b>,
-      width: 240,
-      align: 'center',
-      headerAlign: 'center',
-      valueGetter: (params) => {
-        const subCategory3 = params.row.particulars?.[0]?.subCategory3;
-        const subCategory2 = params.row.particulars?.[0]?.subCategory2;
-        const subCategory1 = params.row.particulars?.[0]?.subCategory1;
-        if (subCategory3 && subCategory3 !== 'Select' && subCategory3 !== '' && subCategory3 !== '.') {
-          return subCategory3;
-        } else if (subCategory2 && subCategory2 !== 'Select' && subCategory2 !== '') {
-          return subCategory2;
-        } else {
-          return subCategory1;
-        }
-      },
+
       renderCell: (params) => {
+        const mainCategory =
+      params.row?.particulars?.[0]?.mainCategory
+        ?.split(' ')
+        ?.at(0) ?? '';
+
+        const { subCategory1, subCategory2, subCategory3 } =
+      params.row?.particulars?.[0] || {};
+
+        let subCategory = subCategory1;
+
+        if (subCategory3 && subCategory3 !== 'Select' && subCategory3 !== '.') {
+          subCategory = subCategory3;
+        } else if (subCategory2 && subCategory2 !== 'Select') {
+          subCategory = subCategory2;
+        }
+
         return (
           <p
             style={{
               maxWidth: 240,
               whiteSpace: 'normal',
               wordBreak: 'break-word',
-              justifyContent: 'center',
               textAlign: 'center',
+              margin: 0,
             }}
           >
-            {params.value}
+            {mainCategory} / {subCategory}
           </p>
         );
       },
     },
+    // {
+    //   field: 'subCategory',
+    //   headerClassName: 'super-app-theme--cell',
+    //   renderHeader: () => <b>Sub Category</b>,
+    //   width: 240,
+    //   align: 'center',
+    //   headerAlign: 'center',
+    //   valueGetter: (params) => {
+    //     const subCategory3 = params.row.particulars?.[0]?.subCategory3;
+    //     const subCategory2 = params.row.particulars?.[0]?.subCategory2;
+    //     const subCategory1 = params.row.particulars?.[0]?.subCategory1;
+    //     if (subCategory3 && subCategory3 !== 'Select' && subCategory3 !== '' && subCategory3 !== '.') {
+    //       return subCategory3;
+    //     } else if (subCategory2 && subCategory2 !== 'Select' && subCategory2 !== '') {
+    //       return subCategory2;
+    //     } else {
+    //       return subCategory1;
+    //     }
+    //   },
+    //   renderCell: (params) => {
+    //     return (
+    //       <p
+    //         style={{
+    //           maxWidth: 240,
+    //           whiteSpace: 'normal',
+    //           wordBreak: 'break-word',
+    //           justifyContent: 'center',
+    //           textAlign: 'center',
+    //         }}
+    //       >
+    //         {params.value}
+    //       </p>
+    //     );
+    //   },
+    // },
     {
       field: 'requestedAmount',
       headerClassName: 'super-app-theme--cell',
@@ -790,7 +887,7 @@ rowData.division?.details &&
       valueGetter(params) {
         const frRequest = params.row as FR;
         const particularAmount = frRequest.particulars?.reduce((total, particular) => total + Number(particular.requestedAmount), 0);
-        return particularAmount.toFixed(2);
+        return formatAmount(particularAmount.toFixed(2));
       },
     },
     // {
@@ -845,48 +942,48 @@ rowData.division?.details &&
       align: 'center',
       headerAlign: 'center',
     },
-    {
-      field: 'reasonForSentBack',
-      headerClassName: 'super-app-theme--cell',
-      renderHeader: () => <b>Reason For Revert</b>,
-      renderCell: (props) => (
-        <p
-          style={{
-            maxWidth: 200,
-            whiteSpace: 'normal',
-            wordBreak: 'break-word',
-            justifyContent: 'center',
-            textAlign: 'center',
-          }}
-        >
-          {props.row.reasonForSentBack}
-        </p>
-      ),
-      width: 200,
-      align: 'center',
-      headerAlign: 'center',
-    },
-    {
-      field: 'reasonForReject',
-      headerClassName: 'super-app-theme--cell',
-      renderHeader: () => <b>Reason For Reject</b>,
-      renderCell: (props) => (
-        <p
-          style={{
-            maxWidth: 200,
-            whiteSpace: 'normal',
-            wordBreak: 'break-word',
-            justifyContent: 'center',
-            textAlign: 'center',
-          }}
-        >
-          {props.row.reasonForReject}
-        </p>
-      ),
-      width: 200,
-      align: 'center',
-      headerAlign: 'center',
-    },
+    // {
+    //   field: 'reasonForSentBack',
+    //   headerClassName: 'super-app-theme--cell',
+    //   renderHeader: () => <b>Reason For Revert</b>,
+    //   renderCell: (props) => (
+    //     <p
+    //       style={{
+    //         maxWidth: 200,
+    //         whiteSpace: 'normal',
+    //         wordBreak: 'break-word',
+    //         justifyContent: 'center',
+    //         textAlign: 'center',
+    //       }}
+    //     >
+    //       {props.row.reasonForSentBack}
+    //     </p>
+    //   ),
+    //   width: 200,
+    //   align: 'center',
+    //   headerAlign: 'center',
+    // },
+    // {
+    //   field: 'reasonForReject',
+    //   headerClassName: 'super-app-theme--cell',
+    //   renderHeader: () => <b>Reason For Reject</b>,
+    //   renderCell: (props) => (
+    //     <p
+    //       style={{
+    //         maxWidth: 200,
+    //         whiteSpace: 'normal',
+    //         wordBreak: 'break-word',
+    //         justifyContent: 'center',
+    //         textAlign: 'center',
+    //       }}
+    //     >
+    //       {props.row.reasonForReject}
+    //     </p>
+    //   ),
+    //   width: 200,
+    //   align: 'center',
+    //   headerAlign: 'center',
+    // },
     {
       field: 'updatedAt',
       headerClassName: 'super-app-theme--cell',
@@ -901,28 +998,33 @@ rowData.division?.details &&
     setSearchText(event.target.value);
   };
   const filteredRows = (FRRequests ?? []).filter((row) => {
-    const searchTextLower = searchText.toLowerCase();
+    const divisionMatch = selectedDivisions.length === 0 ||
+    selectedDivisions.includes(row?.division?.details.name?? '');
 
-    if (
-      (row.FRno && row.FRno.toLowerCase().includes(searchTextLower)) ||
-      (row.FRdate && row.FRdate.format('DD/MM/YYYY').toLowerCase().includes(searchTextLower)) ||
-      (row.division?.details.name && row.division?.details.name.toLowerCase().includes(searchTextLower))
-    ) {
-      return true;
-    }
-    // Check for subcategories within the particulars
-    // const subCategoryMatch = row.particulars?.some((particular) =>
-    //   (particular?.subCategory1?.toLowerCase().includes(searchTextLower) || '') ||
-    //   (particular?.subCategory2?.toLowerCase().includes(searchTextLower) || '') ||
-    //   (particular?.subCategory3?.toLowerCase().includes(searchTextLower) || ''),
-    // );
-    // if (subCategoryMatch) {
-    //   return true;
-    // }
-    // Main filter logic
+    if (!searchText) return divisionMatch;
 
-    // Fallback: Check if any other row value matches the search text
-    return Object.values(row).some((value) => value && value.toString().toLowerCase().includes(searchTextLower));
+    const searchLower = searchText.toLowerCase();
+
+
+    const searchMatch =
+    (row.FRno && row.FRno.toLowerCase().includes(searchLower)) ||
+    (row.FRdate && row.FRdate.format('DD/MM/YYYY').toLowerCase().includes(searchLower)) ||
+    (row.division?.details.name && row.division?.details.name.toLowerCase().includes(searchLower)) ||
+    (row.purposeSubdivision?.name && row.purposeSubdivision.name.toLowerCase().includes(searchLower)) ||
+    // Add subCategory search
+    (row.particulars && row.particulars.some((particular:any) =>
+      (particular.subCategory1 && particular.subCategory1.toLowerCase().includes(searchLower)) ||
+      (particular.subCategory2 && particular.subCategory2.toLowerCase().includes(searchLower)) ||
+      (particular.subCategory3 && particular.subCategory3.toLowerCase().includes(searchLower)),
+    )) ||
+    // Add mainCategory search
+    (row.particulars && row.particulars.some((particular:any) =>
+      particular.mainCategory && particular.mainCategory.toLowerCase().includes(searchLower),
+    )) ||
+    // Add beneficiary name search
+    (row.sanctionedBank && row.sanctionedBank.toLowerCase().includes(searchLower));
+
+    return divisionMatch && searchMatch;
   });
 
   if (searchText && filteredRows.length ===0) {
@@ -951,6 +1053,7 @@ rowData.division?.details &&
         granted={
           <>
             <Grid item xs={12} lg={6}>
+
               <Grid item xs={12} md={12}>
                 <Card sx={{ maxWidth: '78vw', height: '100vh', alignItems: 'center' }}>
                   <Grid container spacing={2} padding={1}>
@@ -962,13 +1065,73 @@ rowData.division?.details &&
                         value={searchText}
                         placeholder='Enter FRno or FRDate or Division or SubCategory'
                         onChange={handleSearchChange}
-                        // fullWidth
+                        fullWidth
                         // style={{ height: '10%' }}
                       />
                       {/* </div> */}
                     </Grid>
+                    <Grid item xs={3}>
+                      {hasPermissions(['MANAGE_IRO']) && (
+                        <Grid item xs={12} md="auto" sx={{
+                          display: 'flex',
+                          alignItems: 'center', // ✅ vertical center
+                        }}>
+                          <FormControl
+                            sx={{
+                              'minWidth': 200,
+                              '& .MuiOutlinedInput-root': {
+                                // height: 45, // ✅ control select height
+                                fontSize: 13,
+                                borderRadius: 1.5,
+                              },
+                            }}
+                          >
+                            <InputLabel id="division-label">
+  Division
+                            </InputLabel>
+                            <Select
+                              multiple
+                              value={selectedDivisions}
+                              label="Division"
+                              onChange={handleDivisionChange}
+                              renderValue={(selected) =>
+                                selected.length === 0 ? 'None' : selected.join(', ')
+                              }
+                              MenuProps={{
+                                PaperProps: {
+                                  style: { maxHeight: 300, width: 250 },
+                                },
+                              }}
+                            >
+                              <ListSubheader>
+                                <TextField
+                                  size="small"
+                                  placeholder="Search division..."
+                                  fullWidth
+                                  autoFocus
+                                  value={divisionSearch}
+                                  onChange={(e) => setDivisionSearch(e.target.value)}
+                                  onKeyDown={(e) => e.stopPropagation()}
+                                />
+                              </ListSubheader>
 
-                    <Grid item xs={6} sx={{ px: 2 }}>
+                              <MenuItem value="__ALL__">
+                                <Checkbox checked={selectedDivisions.length === 0} />
+                                <ListItemText primary="None" />
+                              </MenuItem>
+
+                              {filteredDivisions.map((name) => (
+                                <MenuItem key={name} value={name}>
+                                  <Checkbox checked={selectedDivisions.includes(name)} />
+                                  <ListItemText primary={name} />
+                                </MenuItem>
+                              ))}
+                            </Select>
+                          </FormControl>
+                        </Grid>
+                      )}
+                    </Grid>
+                    <Grid item xs={3} sx={{ px: 2 }}>
                       {/* <br /> */}
 
                       <PermissionChecks
@@ -1026,48 +1189,84 @@ rowData.division?.details &&
                         }
                       />
                     </Grid>
-                    <Grid item >
-                      <FormControl>
-                        <RadioGroup
-                          aria-labelledby="Filter"
-                          value={statusFilter.includes(FRLifeCycleStates.WAITING_FOR_ACCOUNTS)?'WFA': statusFilter.includes(FRLifeCycleStates.FR_SEND_BACK)? 'RVT':'ALL'}
-                          onChange={(e) =>setStatusFilter(e.target.value==='WFA'?[FRLifeCycleStates.WAITING_FOR_ACCOUNTS]: e.target.value==='RVT'? [FRLifeCycleStates.FR_SEND_BACK]:[])}
-                          name="Filter"
-                          row
-                        >
-                          <FormControlLabel value="ALL" control={<Radio />} label="All" />
-                          <FormControlLabel sx={{ m: 2 }} value="WFA" control={<Radio />} label="Waiting for Accounts" />
-                          <FormControlLabel value="RVT" control={<Radio />} label="Reverted" />
+                    <Grid container spacing={2}>
+                      <Grid item xs={12}>
+                        <Card elevation={2}>
+                          <CardContent>
+                            <Grid
+                              container
+                              spacing={2}
+                              alignItems="center"
+                            >
+                              {/* LEFT TOGGLE */}
+                              <Grid item xs={12} md={6} minWidth={0}>
+                                <ToggleButtonGroup
+                                  fullWidth
+                                  exclusive
+                                  size="small"
+                                  value={
+                                    statusFilter.includes(FRLifeCycleStates.WAITING_FOR_ACCOUNTS) ?
+                                      'WFA' :
+                                      statusFilter.includes(FRLifeCycleStates.FR_APPROVED) ?
+                                        'VRY' :
+                                        statusFilter.includes(FRLifeCycleStates.REJECTED) ?
+                                          'DIS' :
+                                          statusFilter.includes(FRLifeCycleStates.WAITING_FOR_PRESIDENT) ?
+                                            'PRES' :
+                                            statusFilter.includes(FRLifeCycleStates.FR_SEND_BACK) ?
+                                              'RVT' :
+                                              'ALL'
+                                  }
+                                  onChange={(_, val) => {
+                                    if (!val) return;
+                                    setStatusFilter(
+                                      val === 'WFA' ?
+                                        [FRLifeCycleStates.WAITING_FOR_ACCOUNTS] :
+                                        val === 'VRY' ?
+                                          [FRLifeCycleStates.FR_APPROVED] :
+                                          val === 'RVT' ?
+                                            [FRLifeCycleStates.FR_SEND_BACK] :
+                                            val === 'PRES' ?
+                                              [FRLifeCycleStates.WAITING_FOR_PRESIDENT] :
+                                              val === 'DIS' ?
+                                                [FRLifeCycleStates.REJECTED] :
+                                                [],
+                                    );
+                                  }}
+                                  sx={{ whiteSpace: 'nowrap' }}
+                                >
+                                  <ToggleButton value="ALL">All</ToggleButton>
+                                  <ToggleButton value="WFA">Pending</ToggleButton>
+                                  <ToggleButton value="RVT">Reverted</ToggleButton>
+                                  <ToggleButton value="VRY">Verified</ToggleButton>
+                                  <ToggleButton value="DIS">Disapprove</ToggleButton>
+                                  <ToggleButton value="PRES">Awaiting Approv.</ToggleButton>
+                                </ToggleButtonGroup>
+                              </Grid>
 
-                        </RadioGroup>
-                      </FormControl>
+                              {/* RIGHT TOGGLE */}
+                              <Grid item xs={12} md={6} minWidth={0}>
+                                <ToggleButtonGroup
+                                  fullWidth
+                                  exclusive
+                                  size="small"
+                                  value={statusFilter1}
+                                  onChange={(_, val) => val && setStatusFilter1(val)}
+                                  sx={{ whiteSpace: 'nowrap' }}
+                                >
+                                  <ToggleButton value="Resubmitted">Re-Submitted</ToggleButton>
+                                  <ToggleButton value="Support">Support</ToggleButton>
+                                  <ToggleButton value="Expanse">Expense</ToggleButton>
+                                  <ToggleButton value="All">Both</ToggleButton>
+                                  <ToggleButton value="Custom">Custom FR</ToggleButton>
+                                </ToggleButtonGroup>
+                              </Grid>
+                            </Grid>
+                          </CardContent>
+                        </Card>
+                      </Grid>
                     </Grid>
-                    <Grid item >
-                      <FormControl>
-                        <RadioGroup
-                          aria-labelledby="Filter"
-                          value={statusFilter1}
-                          onChange={(e) =>
-                            setStatusFilter1(
-                              e.target.value === 'Support' ?
-                                'Support' :
-                                e.target.value === 'Resubmitted' ?
-                                  'Resubmitted' :
-                                  e.target.value === 'All' ?
-                                    'All': 'Expanse',
-                            )
-                          }
-                          name="Filter"
-                          row
-                        >
-                          <FormControlLabel value="Resubmitted" control={<Radio />} label="Re Submitted" />
-                          <FormControlLabel sx={{ m: 2 }} value="Support" control={<Radio />} label="Support" />
-                          <FormControlLabel sx={{ m: 2 }} value="Expanse" control={<Radio />} label="Expense" />
-                          <FormControlLabel value="All" control={<Radio />} label="BOTH CATEGORIES " />
 
-                        </RadioGroup>
-                      </FormControl>
-                    </Grid>
                   </Grid>
 
                   <Box
@@ -1118,6 +1317,11 @@ rowData.division?.details &&
                       getRowId={(row) => row._id}
                       loading={FRRequests === null}
                       style={{ height: '66vh', width: '100%' }}
+                      isRowSelectable={(params:any) =>
+                        selectedDivisions.length === 0 ?
+                          true :
+                          selectedDivisions.includes(params?.row?.division?.details?.name)
+                      }
                       getRowClassName={(params) => {
                         if (params.row.specialsanction == 'Yes') {
                           return 'special-sanction'; // Class for rows with special sanction
@@ -1238,7 +1442,7 @@ rowData.division?.details &&
       {data4 && (
         <PDFDownloadLink
           document={
-            <FRReceiptTempForHelhiDevisionPrev 
+            <FRReceiptTempForHelhiDevisionPrev
               label={Label}
               president={selectedSignaturePresident}
               rowData={data4 as FR}
@@ -1374,21 +1578,21 @@ rowData.division?.details &&
                     }
                   }}>WorkersSignatureSheet.pdf</a> <br /></>: (pdfProps &&
               <>
-               <BlobProvider document={<IROReconciliationPdf data={pdfProps} />}>
-  {({ loading, url }) => (
-    loading ? (
-      <span>....</span>
-    ) : (
-      <a
-        href={url ?? ''}
-        download="WorkersSignatureSheet.pdf"
-        style={{ color: 'blue' }}
-      >
+                <BlobProvider document={<IROReconciliationPdf data={pdfProps} />}>
+                  {({ loading, url }) => (
+                    loading ? (
+                      <span>....</span>
+                    ) : (
+                      <a
+                        href={url ?? ''}
+                        download="WorkersSignatureSheet.pdf"
+                        style={{ color: 'blue' }}
+                      >
         WorkersSignatureSheet.pdf
-      </a>
-    )
-  )}
-</BlobProvider>
+                      </a>
+                    )
+                  )}
+                </BlobProvider>
               </>)} NB: Ignore if already attached </Container>
               </DialogContent>
               <DialogActions>
@@ -1401,6 +1605,219 @@ rowData.division?.details &&
             Ok
                 </Button>
               </DialogActions>
+            </Dialog>
+            <Dialog
+              open={openReason}
+              onClose={() => setOpenReason(false)}
+              maxWidth="sm"
+              fullWidth
+              PaperProps={{
+                sx: {
+                  borderRadius: 3,
+                  p: 2,
+                },
+              }}
+            >
+              {/* HEADER */}
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  mb: 1,
+                }}
+              >
+                <Typography fontWeight={700} fontSize={18}>
+                  {selectedFRData?.reasonForSentBack? 'FR REASON FOR REVERT': 'FR REASON FOR DISAPPROVE'}
+                </Typography>
+
+                <IconButton onClick={() => setOpenReason(false)}>
+                  <CloseIcon />
+                </IconButton>
+              </Box>
+
+              <Divider />
+
+              {/* CONTENT */}
+              <Box sx={{ mt: 2 }}>
+                <Typography fontSize={14} mb={1}>
+                  <b>FR No:</b> {selectedFRData?.FRno}
+                </Typography>
+
+                {/* REVERT REASON */}
+                {selectedFRData?.reasonForSentBack && (
+                  <Box
+                    sx={{
+                      backgroundColor: '#FFF9E6',
+                      borderLeft: '5px solid #FFA000',
+                      p: 2,
+                      borderRadius: 2,
+                      mb: 2,
+                      boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+                    }}
+                  >
+                    {/* Reason Row */}
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        mb: 1,
+                      }}
+                    >
+                      <Typography
+                        sx={{
+                          fontWeight: 700,
+                          fontSize: 14,
+                          minWidth: 140,
+                          color: '#333',
+                        }}
+                      >
+        Reason for Revert:
+                      </Typography>
+
+                      <Typography
+                        sx={{
+                          fontSize: 14,
+                          fontWeight: 600,
+                          color: '#D84315',
+                        }}
+                      >
+                        {selectedFRData?.reasonForSentBack}
+                      </Typography>
+                    </Box>
+
+                    {/* Reverted By Row */}
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        mb: 1,
+                      }}
+                    >
+                      <Typography
+                        sx={{
+                          fontWeight: 700,
+                          fontSize: 14,
+                          minWidth: 140,
+                          color: '#333',
+                        }}
+                      >
+        Reverted By:
+                      </Typography>
+
+                      <Typography
+                        sx={{
+                          fontSize: 14,
+                          fontWeight: 600,
+                          color: '#1976D2',
+                        }}
+                      >
+                        {(selectedFRData as any)?.revertedBy || 'Admin'}
+                      </Typography>
+                    </Box>
+
+                    {/* Info */}
+                    <Typography
+                      sx={{
+                        fontSize: 13,
+                        fontWeight: 500,
+                        color: '#1976D2',
+                        mt: 1,
+                      }}
+                    >
+      ℹ️ Info: Resubmit the FR within 3 days
+                    </Typography>
+                  </Box>
+                )}
+
+                {/* REJECT REASON */}
+                {selectedFRData?.reasonForReject && (
+                  <Box
+                    sx={{
+                      backgroundColor: '#FFF5F5',
+                      borderLeft: '5px solid #D32F2F',
+                      p: 2,
+                      borderRadius: 2,
+                      mb: 2,
+                      boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+                    }}
+                  >
+                    {/* Reason Row */}
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        mb: 1,
+                      }}
+                    >
+                      <Typography
+                        sx={{
+                          fontWeight: 700,
+                          fontSize: 14,
+                          minWidth: 140,
+                          color: '#333',
+                        }}
+                      >
+        Reason for Disapprove:
+                      </Typography>
+
+                      <Typography
+                        sx={{
+                          fontSize: 14,
+                          fontWeight: 600,
+                          color: '#D32F2F',
+                        }}
+                      >
+                        {selectedFRData?.reasonForReject}
+                      </Typography>
+                    </Box>
+
+                    {/* Disapproved By Row */}
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                      }}
+                    >
+                      <Typography
+                        sx={{
+                          fontWeight: 700,
+                          fontSize: 14,
+                          minWidth: 140,
+                          color: '#333',
+                        }}
+                      >
+        Disapproved By:
+                      </Typography>
+
+                      <Typography
+                        sx={{
+                          fontSize: 14,
+                          fontWeight: 600,
+                          color: '#1976D2',
+                        }}
+                      >
+                        {(selectedFRData as any)?.disapprovedBy || 'ASL'}
+                      </Typography>
+                    </Box>
+                  </Box>
+                )}
+              </Box>
+
+              {/* FOOTER */}
+              <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3 }}>
+                <Button
+                  variant="contained"
+                  sx={{
+                    backgroundColor: '#5B4BEB',
+                    borderRadius: 2,
+                    px: 3,
+                  }}
+                  onClick={() => setOpenReason(false)}
+                >
+      Close
+                </Button>
+              </Box>
             </Dialog>
             <Dialog open={supportAttachmentChild} onClose={() => setSupportAttachmentChild(false)} maxWidth="xs" fullWidth>
               <DialogTitle> Signature Attachment </DialogTitle>
@@ -1416,23 +1833,23 @@ rowData.division?.details &&
                     }
                   }}>ChildrenSignatureSheet.pdf</a> <br /></>: (pdfProps &&
               <>
-               
-<BlobProvider document={<IROReconciliationPdf data={pdfProps} />}>
-  {({ loading, url }) => (
-    loading ? (
-      <span style={{ color: 'blue' }}>....</span>
-    ) : (
-      <a
-        href={url ?? ''}
-        download="ChildrenSignatureSheet.pdf"
-        style={{ color: 'blue' }}
-      >
+
+                <BlobProvider document={<IROReconciliationPdf data={pdfProps} />}>
+                  {({ loading, url }) => (
+                    loading ? (
+                      <span style={{ color: 'blue' }}>....</span>
+                    ) : (
+                      <a
+                        href={url ?? ''}
+                        download="ChildrenSignatureSheet.pdf"
+                        style={{ color: 'blue' }}
+                      >
         ChildrenSignatureSheet.pdf
-      </a>
-    )
-  )}
-</BlobProvider>
-<br />
+                      </a>
+                    )
+                  )}
+                </BlobProvider>
+                <br />
               </>)} NB: Ignore if already attached </Container>
               </DialogContent>
               <DialogActions>
@@ -1521,37 +1938,37 @@ rowData.division?.details &&
             </Dialog>
             <Dialog open={Boolean(data2)} onClose={() => setData2(null)} maxWidth="xs" fullWidth>
               <DialogTitle> Print Fr</DialogTitle>
-            <DialogContent>
-  <Container>
+              <DialogContent>
+                <Container>
     Downloading the FRReceipt for {data2?.FRno}
-    <br />
+                  <br />
 
-    {data2 && (
-      <BlobProvider
-        document={
-          <FRReceiptTemplate
-            rowData={data2 as FR}
-            president={selectedSignaturePresident}
-          />
-        }
-      >
-        {({ loading, url }) =>
-          loading || openPrintFr ? (
-            <span style={{ color: 'blue' }}>....</span>
-          ) : (
-            <a
-              href={url ?? ''}
-              download="FRReceipt.pdf"
-              style={{ color: 'blue' }}
-            >
+                  {data2 && (
+                    <BlobProvider
+                      document={
+                        <FRReceiptTemplate
+                          rowData={data2 as FR}
+                          president={selectedSignaturePresident}
+                        />
+                      }
+                    >
+                      {({ loading, url }) =>
+                        loading || openPrintFr ? (
+                          <span style={{ color: 'blue' }}>....</span>
+                        ) : (
+                          <a
+                            href={url ?? ''}
+                            download="FRReceipt.pdf"
+                            style={{ color: 'blue' }}
+                          >
               FRReceipt.pdf
-            </a>
-          )
-        }
-      </BlobProvider>
-    )}
-  </Container>
-</DialogContent>
+                          </a>
+                        )
+                      }
+                    </BlobProvider>
+                  )}
+                </Container>
+              </DialogContent>
               <DialogActions>
                 <Button
                   onClick={() => {
@@ -1566,31 +1983,31 @@ rowData.division?.details &&
             <Dialog open={Boolean(data6)} onClose={() => setData(null)} maxWidth="xs" fullWidth>
               <DialogTitle> Print Fr</DialogTitle>
               <DialogContent>
-  <Container>
+                <Container>
     Download the FR Auth Letter for {data6?.FRno}
-    <br />
+                  <br />
 
-    {data6 && (
-      <BlobProvider
-        document={<SanctionLetter data={data6 as any} />}
-      >
-        {({ loading, url }) =>
-          loading || openPrintFr ? (
-            <span style={{ color: 'blue' }}>....</span>
-          ) : (
-            <a
-              href={url ?? ''}
-              download="AuthLetter.pdf"
-              style={{ color: 'blue' }}
-            >
+                  {data6 && (
+                    <BlobProvider
+                      document={<SanctionLetter data={data6 as any} />}
+                    >
+                      {({ loading, url }) =>
+                        loading || openPrintFr ? (
+                          <span style={{ color: 'blue' }}>....</span>
+                        ) : (
+                          <a
+                            href={url ?? ''}
+                            download="AuthLetter.pdf"
+                            style={{ color: 'blue' }}
+                          >
               AuthLetter.pdf
-            </a>
-          )
-        }
-      </BlobProvider>
-    )}
-  </Container>
-</DialogContent>
+                          </a>
+                        )
+                      }
+                    </BlobProvider>
+                  )}
+                </Container>
+              </DialogContent>
               <DialogActions>
                 <Button
                   onClick={() => {
@@ -1602,39 +2019,68 @@ rowData.division?.details &&
                 </Button>
               </DialogActions>
             </Dialog>
+            <FileUploader
+              title="Attachments"
+              types={[
+                'application/pdf',
+                'image/png',
+                'image/jpeg',
+                'image/jpg',
+
+              ]}
+              limits={{
+                // types: [],
+                maxItemSize: 1 * MB,
+                maxItemCount: 3,
+                maxTotalSize: 3 * MB,
+              }}
+              // accept={['video/*']}
+              open={viewFileUploader}
+              action='view'
+              onClose={() => setViewFileUploader(false)}
+              // getFiles={TestServices.getBills}
+              getFiles={attachments}
+              // deleteFile={(fileId: string) => {
+              //   setNewParticular((particularDetails) => ({
+              //     ...particularDetails,
+              //     attachment: particularDetails.attachment.filter((file) => file._id !== fileId),
+              //   }));
+              //   return FileUploaderServices.deleteFile(fileId);
+              // }}
+            />
             <Dialog open={Boolean(data5)} onClose={() => setData5(null)} maxWidth="xs" fullWidth>
               <DialogTitle> Print Prev Fr</DialogTitle>
-           <DialogContent>
-  <Container>
+              <DialogContent>
+                <Container>
     Downloading the FRReceipt for {data5?.FRno}
-    <br />
+                  <br />
 
-    {data5 && (
-      <BlobProvider
-        document={
-          <FRReceiptTemplatePrev
-            rowData={data5 as any}
-            president={selectedSignaturePresident}
-          />
-        }
-      >
-        {({ loading, url }) =>
-          loading || openPrintFrPrev ? (
-            <span style={{ color: 'blue' }}>....</span>
-          ) : (
-            <a
-              href={url ?? ''}
-              download="FRReceipt.pdf"
-              style={{ color: 'blue' }}
-            >
+                  {data5 && (
+                    <BlobProvider
+                      document={
+                        <FRReceiptTemplatePrev
+                          rowData={data5 as any}
+                          president={selectedSignaturePresident}
+                        />
+                      }
+                    >
+                      {({ loading, url }) =>
+                        loading || openPrintFrPrev ? (
+                          <span style={{ color: 'blue' }}>....</span>
+                        ) : (
+                          <a
+                            href={url ?? ''}
+                            download="FRReceipt.pdf"
+                            style={{ color: 'blue' }}
+                          >
               FRReceipt.pdf
-            </a>
-          )
-        }
-      </BlobProvider>
-    )}
-  </Container>
-</DialogContent>
+                          </a>
+                        )
+                      }
+                    </BlobProvider>
+                  )}
+                </Container>
+              </DialogContent>
               <DialogActions>
                 <Button
                   onClick={() => {

@@ -16,7 +16,7 @@ import {
 } from '@mui/icons-material';
 import InfoIcon from '@mui/icons-material/Info';
 import { Link, useLocation } from 'react-router-dom';
-import { Alert, Box, Button, Card, Container, Dialog, DialogActions, DialogContent, DialogTitle, Divider, FormControl, FormControlLabel, FormLabel, Grid, IconButton, InputAdornment, Radio, RadioGroup, TextField, Tooltip, Typography } from '@mui/material';
+import { Alert, Box, Button, Card, CardContent, Container, Dialog, DialogActions, DialogContent, DialogTitle, Divider, FormControl, FormControlLabel, FormLabel, Grid, IconButton, InputAdornment, Radio, RadioGroup, TextField, ToggleButton, ToggleButtonGroup, Tooltip, Typography } from '@mui/material';
 import FRServices from './extras/FRServices';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 // import SendIcon from '@mui/icons-material/Send';
@@ -50,6 +50,7 @@ const ManageFrForDivision = () => {
   const [openRemarks, toggleOpenRemarks] = useState(false);
   const [sendNotification, toggleSendNotification] = useState(false);
   const [selectedFR, setSelectedFR] = useState<string | null>(null);
+  const [selectedFRData, setSelectedFRData] = useState<FR | null>(null);
   const [data, setData] = useState<FR | null>(null);
   const [data2, setData2] = useState<FR | null>(null);
   const [dateRange, setDateRange] = useState<DateRange>({
@@ -57,6 +58,8 @@ const ManageFrForDivision = () => {
     endDate: moment().endOf('M'),
     rangeType: 'months',
   });
+  const [openReason, setOpenReason] = useState(false);
+
   const [data3, setData3] = useState<FR | null>(null);
   const [pdfProps, setPdfProps] = useState<{
     purpose: FRPurpose | null;
@@ -330,6 +333,20 @@ const ManageFrForDivision = () => {
               },
               icon: EditNoteIcon,
             },
+               ...(props.row.reasonForReject || props.row.reasonForSentBack ?
+              [
+                {
+                  id: 'resaons',
+                  text: 'View Reasons',
+                  component: Link,
+                  // to: '/fr/view_FR/' + props.row._id,
+                  onClick: () => {
+                    setOpenReason(true);
+                    setSelectedFRData(props.row);
+                  },
+                  icon: EditNoteIcon,
+                },
+              ]:[]),
 
             // {
             //   id: 'print',
@@ -483,6 +500,75 @@ const ManageFrForDivision = () => {
     //   headerAlign: 'center',
     // },
     {
+      field: 'status',
+      headerClassName: 'status-header',
+      renderHeader: () => <b>Status</b>,
+      cellClassName: (params) => {
+        const statusName = params.formattedValue;
+        if (params.value == null) return '';
+
+        switch (statusName) {
+        case 'REVERTED':
+          return clsx('status-cell', 'red-light');
+        case 'PENDING VERIF.':
+          return clsx('status-cell', 'VERIF');
+        case 'IRO CLOSED':
+        case 'FR VERIFIED':
+        case 'FR CLOSED':
+          return clsx('status-cell', 'green');
+        case ' FR_REJECTED':
+          return clsx('status-cell', 'red');
+        case 'PENDING APPR.':
+          return clsx('status-cell', 'Appr');
+        case 'RE-SUBMITTED':
+          return clsx('status-cell', 're-sum');
+        case 'IRO DISAPPROVED':
+          return clsx('status-cell', 'red-dark');
+        case 'FR DISAPPROVED':
+          return clsx('status-cell', 'DIS');
+        default:
+          return 'status-cell';
+        }
+      },
+      width: 205,
+      align: 'center',
+      headerAlign: 'center',
+      valueGetter: (params) => {
+        let statusName =
+          IROLifeCycleStates.getStatusNameByCodeTransaction(params.value);
+
+        switch (statusName) {
+        case 'SEND_BACK':
+          statusName = 'REVERTED';
+          break;
+        case 'FR_APPROVED':
+          statusName = 'FR VERIFIED';
+          break;
+        case 'WAITING_FOR_ACCOUNTS':
+          if ((params.row as any)?.isReverted === true) {
+            statusName = 'RE-SUBMITTED';
+          } else {
+            statusName = 'PENDING VERIF.';
+          }
+          break;
+        case 'WAITING_FOR_PRESIDENT':
+          statusName = 'PENDING APPR.';
+          break;
+        case 'FR_REJECTED':
+          statusName = 'FR DISAPPROVED';
+          break;
+        case 'IRO_REJECTED':
+        case 'REOPEND':
+          statusName = 'IRO DISAPPROVED';
+          break;
+        default:
+          statusName = statusName.replaceAll('_', ' ');
+          break;
+        }
+        return statusName;
+      },
+    },
+    {
       field: 'FRno',
       headerClassName: 'super-app-theme--cell',
       renderHeader: () => <b>FR No</b>,
@@ -503,7 +589,7 @@ const ManageFrForDivision = () => {
       headerClassName: 'super-app-theme--cell',
       width: 130,
       valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
-      renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
+      renderHeader: (params) => <b style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</b>,
       align: 'center',
       headerAlign: 'center',
     },
@@ -515,62 +601,7 @@ const ManageFrForDivision = () => {
     //   align: 'center',
     //   headerAlign: 'center',
     // },
-    {
-      field: 'status',
-      headerClassName: 'super-app-theme--cell',
-      renderHeader: () => <b>Status</b>,
-      cellClassName: (params) => {
-        console.log('CellClassName params:', params);
-        const statusName = params.formattedValue;
-        console.log('Status Name###:', statusName);
-        if (params.value == null) {
-          return '';
-        }
-        switch (statusName) {
-        case 'REVERTED':
-          return clsx('red-light');
-        case 'WAITING FOR ACCOUNTS':
-          return clsx('orange');
-        case 'IRO CLOSED':
-          return clsx('green');
-        case 'FR VERIFIED':
-          return clsx('green');
-        case 'FR CLOSED':
-          return clsx('green');
-        case ' FR_REJECTED':
-          return clsx('red');
-        case 'WAITING FOR PRESIDENT':
-          return clsx('orange');
-        default:
-          console.log('No class applied');
-          return '';
-        }
-      },
-      width: 205,
-      align: 'center',
-      headerAlign: 'center',
-      valueGetter: (params) => {
-        let statusName = IROLifeCycleStates.getStatusNameByCodeTransaction(params.value);
-        console.log(statusName, 'lolpß');
-        // Check if the status name needs to be changed
-        switch (statusName) {
-        case 'SEND_BACK':
-          statusName = 'REVERTED';
-          break;
-        case 'FR_APPROVED':
-          statusName = 'FR VERIFIED'; // Change to whatever new name you want
-          break;
-        case 'FR_REJECTED':
-          statusName = ' FR DISAPPROVED'; // Change to whatever new name you want
-          break;
-          // Add more cases for other status names you want to change
-        default:
-          statusName = statusName.replaceAll('_', ' ');
-          break;
-        }
-        return statusName;
-      },
-    },
+
     {
       field: 'divisionName',
       headerClassName: 'super-app-theme--cell',
@@ -718,27 +749,27 @@ const ManageFrForDivision = () => {
       align: 'center',
       headerAlign: 'center',
     },
-    {
-      field: 'reasonForSentBack',
-      headerClassName: 'super-app-theme--cell',
-      renderHeader: () => <b>Reason For Revert</b>,
-      renderCell: (props) => (
-        <p
-          style={{
-            maxWidth: 200,
-            whiteSpace: 'normal',
-            wordBreak: 'break-word',
-            justifyContent: 'center',
-            textAlign: 'center',
-          }}
-        >
-          {props.row.reasonForSentBack}
-        </p>
-      ),
-      width: 200,
-      align: 'center',
-      headerAlign: 'center',
-    },
+    // {
+    //   field: 'reasonForSentBack',
+    //   headerClassName: 'super-app-theme--cell',
+    //   renderHeader: () => <b>Reason For Revert</b>,
+    //   renderCell: (props) => (
+    //     <p
+    //       style={{
+    //         maxWidth: 200,
+    //         whiteSpace: 'normal',
+    //         wordBreak: 'break-word',
+    //         justifyContent: 'center',
+    //         textAlign: 'center',
+    //       }}
+    //     >
+    //       {props.row.reasonForSentBack}
+    //     </p>
+    //   ),
+    //   width: 200,
+    //   align: 'center',
+    //   headerAlign: 'center',
+    // },
   ];
   const handleSearchChange = (event: { target: { value: SetStateAction<string> } }) => {
     setSearchText(event.target.value);
@@ -869,46 +900,82 @@ const ManageFrForDivision = () => {
                         }
                       />
                     </Grid>
-                    <Grid item >
-                      <FormControl>
-                        <RadioGroup
-                          aria-labelledby="Filter"
-                          value={statusFilter.includes(FRLifeCycleStates.WAITING_FOR_ACCOUNTS)?'WFA': statusFilter.includes(FRLifeCycleStates.FR_SEND_BACK)? 'RVT':'ALL'}
-                          onChange={(e) =>setStatusFilter(e.target.value==='WFA'?[FRLifeCycleStates.WAITING_FOR_ACCOUNTS]: e.target.value==='RVT'? [FRLifeCycleStates.FR_SEND_BACK]:[])}
-                          name="Filter"
-                          row
-                        >
-                          <FormControlLabel value="ALL" control={<Radio />} label="ALL" />
-                          <FormControlLabel value="WFA" control={<Radio />} label="Waiting for Accounts" />
-                          <FormControlLabel value="RVT" control={<Radio />} label="Reverted" />
-                        </RadioGroup>
-                      </FormControl>
-                    </Grid>
-                    <Grid item >
-                      <FormControl>
-                        <RadioGroup
-                          aria-labelledby="Filter"
-                          value={statusFilter1}
-                          onChange={(e) =>
-                            setStatusFilter1(
-                              e.target.value === 'Support' ?
-                                'Support' :
-                                e.target.value === 'Resubmitted' ?
-                                  'Resubmitted' :
-                                  e.target.value === 'All' ?
-                                    'All': 'Expanse',
-                            )
-                          }
-                          name="Filter"
-                          row
-                        >
-                          <FormControlLabel value="Support" control={<Radio />} label="Support" />
-                          <FormControlLabel value="Expanse" control={<Radio />} label="Expense" />
-                          <FormControlLabel value="Resubmitted" control={<Radio />} label="Re Submitted" />
-                          <FormControlLabel value="All" control={<Radio />} label="BOTH CATEGORIES " />
+                    <Grid container spacing={2}>
+                      <Grid item xs={12}>
+                        <Card elevation={2}>
+                          <CardContent>
+                            {/* <Typography variant="subtitle2" gutterBottom>
+          Status
+                            </Typography> */}
 
-                        </RadioGroup>
-                      </FormControl>
+                            {/* FLEX WRAPPER */}
+                            <Grid
+                              container
+                              spacing={1}
+                              alignItems="center"
+                              sx={{
+                                flexWrap: { xs: 'wrap', md: 'nowrap' },
+                              }}
+                            >
+                              {/* STATUS */}
+                              <Grid item xs={12} md={6}>
+                                <ToggleButtonGroup
+                                  fullWidth
+                                  exclusive
+                                  size="small"
+                                  value={
+                                    statusFilter.includes(FRLifeCycleStates.WAITING_FOR_ACCOUNTS) ?
+                                      'WFA' :
+                                      statusFilter.includes(FRLifeCycleStates.FR_APPROVED) ?
+                                        'VRY' :
+                                        statusFilter.includes(FRLifeCycleStates.REJECTED) ?
+                                          'DIS' :
+                                          statusFilter.includes(FRLifeCycleStates.FR_SEND_BACK) ?
+                                            'RVT' :
+                                            'ALL'
+                                  }
+                                  onChange={(_, val) => {
+                                    if (!val) return;
+                                    setStatusFilter(
+                                      val === 'WFA' ?
+                                        [FRLifeCycleStates.WAITING_FOR_ACCOUNTS] :
+                                        val === 'VRY' ?
+                                          [FRLifeCycleStates.FR_APPROVED] :
+                                          val === 'RVT' ?
+                                            [FRLifeCycleStates.FR_SEND_BACK] :
+                                            val === 'DIS' ?
+                                              [FRLifeCycleStates.REJECTED] :
+                                              [],
+                                    );
+                                  }}
+                                >
+                                  <ToggleButton value="ALL">All</ToggleButton>
+                                  <ToggleButton value="WFA">Pending</ToggleButton>
+                                  <ToggleButton value="RVT">Reverted</ToggleButton>
+                                  <ToggleButton value="VRY">Verified</ToggleButton>
+                                  <ToggleButton value="DIS">Disapprove</ToggleButton>
+                                </ToggleButtonGroup>
+                              </Grid>
+                              <Grid item xs={12} md={6}>
+                                <ToggleButtonGroup
+                                  fullWidth
+                                  exclusive
+                                  size="small"
+                                  value={statusFilter1}
+                                  onChange={(_, val) => val && setStatusFilter1(val)}
+                                >
+                                  <ToggleButton value="Resubmitted">Re-Submitted</ToggleButton>
+                                  <ToggleButton value="Support">Support</ToggleButton>
+                                  <ToggleButton value="Expanse">Expense</ToggleButton>
+                                  <ToggleButton value="All">Both</ToggleButton>
+                                </ToggleButtonGroup>
+                              </Grid>
+
+                              {/* CATEGORY */}
+                            </Grid>
+                          </CardContent>
+                        </Card>
+                      </Grid>
                     </Grid>
                   </Grid>
 
@@ -1057,6 +1124,103 @@ const ManageFrForDivision = () => {
                       </Grid> */}
                   </Grid>
                 </DialogContent>
+              </Dialog>
+              <Dialog
+                open={openReason}
+                onClose={() => setOpenReason(false)}
+                maxWidth="sm"
+                fullWidth
+                PaperProps={{
+                  sx: {
+                    borderRadius: 3,
+                    p: 2,
+                  },
+                }}
+              >
+                {/* HEADER */}
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    mb: 1,
+                  }}
+                >
+                  <Typography fontWeight={700} fontSize={18}>
+      FR REASON
+                  </Typography>
+
+                  <IconButton onClick={() => setOpenReason(false)}>
+                    <CloseIcon />
+                  </IconButton>
+                </Box>
+
+                <Divider />
+
+                {/* CONTENT */}
+                <Box sx={{ mt: 2 }}>
+                  <Typography fontSize={14} mb={1}>
+                    <b>FR No:</b> {selectedFRData?.FRno}
+                  </Typography>
+
+                  {/* REVERT REASON */}
+                  {selectedFRData?.reasonForSentBack && (
+                    <Box
+                      sx={{
+                        backgroundColor: '#FFF6D8',
+                        p: 1.5,
+                        borderRadius: 1.5,
+                        mb: 2,
+                      }}
+                    >
+                      <Typography fontWeight={600} fontSize={14}>
+          Reason for Revert:
+                      </Typography>
+                      <Typography fontSize={13} fontWeight={600}>
+                        {selectedFRData?.reasonForSentBack}
+                      </Typography>
+                      <Typography fontWeight={600} fontSize={14}>
+          Reverted By:
+                      </Typography>
+
+                      <Typography fontSize={12}>
+                 Info: Resubmit the FR within 3 days
+                      </Typography>
+                    </Box>
+                  )}
+
+                  {/* REJECT REASON */}
+                  {selectedFRData?.reasonForReject && (
+                    <Box sx={{
+                      backgroundColor: '#FFF6D8',
+                      p: 1.5,
+                      borderRadius: 1.5,
+                      mb: 2,
+                    }}>
+                      <Typography fontWeight={600} fontSize={14}>
+          Reason for Reject:
+                      </Typography>
+                      <Typography fontSize={13}>
+                        {selectedFRData?.reasonForReject}
+                      </Typography>
+                    </Box>
+                  )}
+                </Box>
+
+                {/* FOOTER */}
+                <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3 }}>
+                  <Button
+                    variant="contained"
+                    sx={{
+                      backgroundColor: '#5B4BEB',
+                      borderRadius: 2,
+                      px: 3,
+                    }}
+                    onClick={() => setOpenReason(false)}
+                  >
+      Close
+                  </Button>
+                </Box>
               </Dialog>
               <Dialog open={openRemarks} fullWidth maxWidth="md">
                 <DialogTitle>Remarks</DialogTitle>

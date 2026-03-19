@@ -1,3 +1,4 @@
+/* eslint-disable react/no-multi-comp */
 /* eslint-disable max-len */
 import React, { SetStateAction, useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
@@ -10,7 +11,7 @@ import {
   Delete as DeleteIcon,
 } from '@mui/icons-material';
 // eslint-disable-next-line max-len
-import { Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Grid, Box, Container, Typography, FormControl, FormControlLabel, Radio, RadioGroup } from '@mui/material';
+import { Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Grid, Box, Container, Typography, FormControl, FormControlLabel, Radio, RadioGroup, Divider, ListItemIcon, ListItemText, Menu, MenuItem, ToggleButton, ToggleButtonGroup, SelectChangeEvent, Checkbox, InputLabel, ListSubheader, Select } from '@mui/material';
 // eslint-disable-next-line no-duplicate-imports
 import { Send as SendIcon, Edit as EditIcon, Preview as PreviewIcon, Print as PrintIcon, Download as DownloadIcon } from '@mui/icons-material';
 import { DataGrid, GridCellParams, GridColDef } from '@mui/x-data-grid';
@@ -43,6 +44,8 @@ import FRReceiptTempForDelhiDivision from '../FR/components/FRReceiptTempForHelh
 import LeaderDetailsService from '../Settings/extras/LeaderDetailsService';
 import ReleaseAmountDialogEdit from './components/ReleaseAmountDialogEdit';
 import TransactionLogDialog from '../FR/components/TransactionLogDialog';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import formatAmount from '../Common/formatcode';
 
 const ReconciliationIRO = () => {
   const [reconciliationIRO, setReconcilationIRO] = useState<IROrder[]>();
@@ -152,6 +155,30 @@ const ReconciliationIRO = () => {
     signature: {},
     specialsanction: '',
   });
+  const [divisions, setDivisions] = useState<string[]>([]);
+  const [divisionSearch, setDivisionSearch] = useState('');
+  const [selectedDivisions, setSelectedDivisions] = useState<string[]>([]);
+
+  useEffect(() => {
+    DivisionsServices.getDivisions().then((res) => {
+      const names = res.data.map((d: any) => d.details.name);
+      setDivisions(names);
+    });
+  }, []);
+  const filteredDivisions = divisions.filter((name) =>
+    name
+      .toLowerCase()
+      .replace(/\s/g, '') // remove spaces
+      .includes(divisionSearch.toLowerCase().replace(/\s/g, '')),
+  );
+  const handleDivisionChange = (event: SelectChangeEvent<string[]>) => {
+    const value = event.target.value as string[];
+    if (value.includes('__ALL__')) {
+      ([]); // empty = show all
+      return;
+    }
+    setSelectedDivisions(value);
+  };
   const [loading, setLoading] = useState(false);
   const [iroData, setIroData] = useState<IROrder | null>(null);
   const [FrData, setFrData] = useState<FR | null>(null);
@@ -165,6 +192,29 @@ const ReconciliationIRO = () => {
     endDate: moment().endOf('M'),
     rangeType: 'months',
   });
+  const toggleSx = {
+    'border': '1px solid #dcdcdc',
+    'borderRadius': 1,
+    'overflow': 'hidden',
+    'display': 'flex',
+    '& .MuiToggleButton-root': {
+      'border': 'none',
+      'borderRight': '1px solid #dcdcdc',
+      'textTransform': 'none',
+      'fontSize': '0.85rem',
+      'fontWeight': 500,
+      'px': 2.5,
+      'whiteSpace': 'nowrap',
+      'minHeight': 36,
+      '&:last-of-type': {
+        borderRight: 'none',
+      },
+      '&.Mui-selected': {
+        backgroundColor: '#eaeaea',
+        color: '#000',
+      },
+    },
+  };
   const [selectedSignature, setSignature] = useState<Esignature>({
     _id: '',
     officeManagerSignature: {
@@ -287,16 +337,33 @@ const ReconciliationIRO = () => {
   };
 
   const filteredRows = (reconciliationIRO ?? []).filter((row) => {
-    if ((row.IROno && row.IROno.toLowerCase().includes(searchText.toLowerCase())) ||
-      (row.IRODate && row.IRODate.format('DD/MM/YYYY').toLowerCase().includes(searchText.toLowerCase())) ||
-      // (row.particulars[0]?.subCategory1 && row.particulars[0]?.subCategory1.toLowerCase().includes(searchText.toLowerCase())) ||
-      // (row.particulars[0]?.subCategory2 && row.particulars[0]?.subCategory2.toLowerCase().includes(searchText.toLowerCase())) ||
-      // (row.particulars[0]?.subCategory3 && row.particulars[0]?.subCategory3.toLowerCase().includes(searchText.toLowerCase())) ||
-      (row.division?.details.name && row.division?.details.name.toLowerCase().includes(searchText.toLowerCase()))
-    ) {
-      return true;
-    }
-    return Object.values(row).some((value) => value && value.toString().toLowerCase().includes(searchText.toLowerCase()));
+    const divisionMatch = selectedDivisions.length === 0 ||
+    selectedDivisions.includes(row?.division?.details.name ?? '');
+
+    if (!searchText) return divisionMatch;
+
+    const searchLower = searchText.toLowerCase();
+
+    // Check all searchable fields
+    const searchMatch =
+    (row.IROno && row.IROno.toLowerCase().includes(searchLower)) ||
+    (row.IRODate && row.IRODate.format('DD/MM/YYYY').toLowerCase().includes(searchLower)) ||
+    (row.division?.details.name && row.division?.details.name.toLowerCase().includes(searchLower)) ||
+    (row.purposeSubdivision?.name && row.purposeSubdivision.name.toLowerCase().includes(searchLower)) ||
+    // Add subCategory search
+    (row.particulars && row.particulars.some((particular:any) =>
+      (particular.subCategory1 && particular.subCategory1.toLowerCase().includes(searchLower)) ||
+      (particular.subCategory2 && particular.subCategory2.toLowerCase().includes(searchLower)) ||
+      (particular.subCategory3 && particular.subCategory3.toLowerCase().includes(searchLower)),
+    )) ||
+    // Add mainCategory search
+    (row.particulars && row.particulars.some((particular:any) =>
+      particular.mainCategory && particular.mainCategory.toLowerCase().includes(searchLower),
+    )) ||
+    // Add beneficiary name search
+    (row.sanctionedBank && row.sanctionedBank.toLowerCase().includes(searchLower));
+
+    return divisionMatch && searchMatch;
   });
   if (searchText && filteredRows.length ===0) {
     enqueueSnackbar({
@@ -334,314 +401,279 @@ const ReconciliationIRO = () => {
         });
     }
   }, [attachment, dateRange, selectedIRO, statusFilter, exstatusFilter, statusFilter1]);
+  const handlePrintIRO = (row: any) => {
+    IROServices.getByIdOptimized(row._id).then((res) => {
+      setData(res.data[0]);
+    });
 
+    setOpenPrintFr(true);
+
+    setTimeout(() => {
+      setOpenPrintFr(false);
+    }, 2000);
+  };
+
+  const handlePrintFR = (row: any) => {
+    if (!row.FR) {
+      enqueueSnackbar({
+        message: 'FR not found',
+        variant: 'warning',
+      });
+      return;
+    }
+
+    IROServices.getByIdOptimized(row._id).then((res) => {
+      setData2(res.data[0].FR);
+    });
+
+    setOpenPrintFr(true);
+
+    setTimeout(() => {
+      setOpenPrintFr(false);
+    }, 2000);
+  };
+
+  const handlePrintDelhi = async (row: any) => {
+    try {
+      const [rowRes, delhiRes] = await Promise.all([
+        IROServices.getByIdOptimized(row._id),
+        DivisionsServices.getDivisionById('658270549efadc163550a28c'),
+      ]);
+
+      const rowData = rowRes.data?.[0];
+      const delhiHQ = delhiRes.data;
+
+      if (rowData?.division?.details) {
+        setData5({
+          ...row,
+          division: {
+            ...rowData.division,
+            details: {
+              ...rowData.division.details,
+              seniorLeader: delhiHQ?.details?.seniorLeader,
+              juniorLeader: delhiHQ?.details?.juniorLeader,
+            },
+          },
+        });
+      }
+
+      setOpenPrintFr(true);
+
+      setTimeout(() => {
+        setOpenPrintFr(false);
+      }, 2000);
+    } catch (error) {
+      console.error('Failed to load IRO / Division data', error);
+    }
+  };
+  const handleCloseIRO = (row: any) => {
+  // same logic you already had
+    setIroData(row);
+    setConform1(true);
+
+    if (row?.FR) {
+      FRServices.getById(row.FR)
+      .then((res) => {
+        setFrData(res.data);
+      })
+      .catch((err) => {
+        enqueueSnackbar({
+          message: err.message,
+          variant: 'error',
+        });
+      });
+    }
+
+    setPrintIroLoading(true);
+
+    setTimeout(() => {
+      setPrintIroLoading(false);
+    }, 2000);
+  };
   const columns: GridColDef<IROrder>[] = [
     {
       field: '_manage',
       headerName: '',
       minWidth: 20,
       type: 'string',
+      renderHeader: () => <b>Action</b>,
       align: 'center',
       headerAlign: 'center',
-      renderCell: (props) => (
-        <DropdownButton
-          useIconButton={true}
-          id="Reconciliation action"
-          primaryText="Actions"
-          key={'Reconciliation action'}
-          items={[
-            // {
-            //   id: 'View',
-            //   text: 'Release Amount',
-            //   component: Link,
-            //   to: '/iro/release_amount/' + props.row._id,
-            //   icon: PreviewIcon,
-            // },
-            // {
-            //   id: 'remarks',
-            //   text: 'Remarks',
-            //   icon: EditIcon,
-            // },
-            ...(props.row.status == IROLifeCycleStates.AMOUNT_RELEASED ? [
-              {
-                id: 'Reconciliation',
-                text: 'Reconciliation',
-                icon: EditIcon,
-                onClick: () => {
-                  setAttachment(true);
-                  setSelectedIRO(props.row);
+
+      renderCell: (props) => {
+        const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+        const open = Boolean(anchorEl);
+
+        const Section = ({ title }: { title: string }) => (
+          <Typography
+            sx={{
+              px: 2,
+              pt: 1.5,
+              pb: 0.5,
+              fontSize: 12,
+              fontWeight: 700,
+              color: 'text.secondary',
+            }}
+          >
+            {title}
+          </Typography>
+        );
+
+        return (
+          <>
+            {/* ACTION ICON */}
+            <IconButton size="small" onClick={(e) => setAnchorEl(e.currentTarget)}>
+              <MoreVertIcon />
+            </IconButton>
+
+            {/* MENU */}
+            <Menu
+              anchorEl={anchorEl}
+              open={open}
+              onClose={() => setAnchorEl(null)}
+              PaperProps={{
+                sx: {
+                  width: 280,
+                  borderRadius: 2,
+                  boxShadow: '0 8px 24px rgba(0,0,0,0.12)',
                 },
-              }] : []),
-            {
-              id: 'View',
-              text: 'View Details ',
-              // component: Link,
-              // to: `/iro/${params.row._id}`,
-              icon: PreviewIcon,
-              onClick: () => {
-                window.open( `/iro/${props.row._id}`, '_blank');
-              },
-            },
-            {
-              id: 'print',
-              text: 'Print IRO',
-              icon: PrintIcon,
-              onClick: () => {
-                IROServices.getByIdOptimized(props.row._id).then((res)=>{
-                  console.log(res.data[0], '090');
+              }}
+            >
+              {/* ================= VIEW ================= */}
+              <Section title="VIEW" />
 
-                  setData(res.data[0]);
-                });
-                // setData(props.row);
-                setOpenPrintFr(true);
-                setTimeout(() => {
-                  setOpenPrintFr(false);
-                }, 2000);
-              },
-            },
-            {
-              id: 'print',
-              text: 'Print FR',
-              icon: PrintIcon,
-              onClick: () => {
-                if (!props.row.FR) {
-                  enqueueSnackbar({
-                    message: 'FR not found',
-                    variant: 'warning',
-                  });
-                } else {
-                  IROServices.getByIdOptimized(props.row._id).then((res)=>{
-                    console.log(res.data, 'res98');
-                    setData2(res.data[0].FR);
-                    // console.log(props.row.fr, 'res98');
-                  });
-                  setOpenPrintFr(true);
-                  setTimeout(() => {
-                    setOpenPrintFr(false);
-                  }, 2000);
-                }
-              },
-            },
-            ...(hasPermissions(['DELHI_DIVISION_ACCESS']) ?
-              [
-                {
-                  id: 'print',
-                  text: 'Print FR HQ DELHI',
-                  icon: PrintIcon,
-                onClick: async () => {
-  try {
-    const [rowRes, delhiRes] = await Promise.all([
-      IROServices.getByIdOptimized(props.row._id),
-      DivisionsServices.getDivisionById('658270549efadc163550a28c'),
-    ]);
+              <MenuItem onClick={() => {
+                setAttachment(true);
+                setSelectedIRO(props.row);
+              }}>
+                <ListItemIcon><PreviewIcon fontSize="small" /></ListItemIcon>
+                <ListItemText primary="Reconciliation" />
+              </MenuItem>
+              <MenuItem onClick={() => window.open(`/iro/${props.row._id}`, '_blank')}>
+                <ListItemIcon><PreviewIcon fontSize="small" /></ListItemIcon>
+                <ListItemText primary="View IRO" />
+              </MenuItem>
 
-    const rowData = rowRes.data?.[0];       // expecting array
-    const delhiHQ = delhiRes.data;
+              <MenuItem onClick={() => window.open(`/fr/${props.row.FR}/view`, '_blank')}>
+                <ListItemIcon><PreviewIcon fontSize="small" /></ListItemIcon>
+                <ListItemText primary="View FR" />
+              </MenuItem>
 
-    if (rowData?.division?.details as any) {
-      setData5({
-           ...props.row,
-        division: {
-           ...rowData?.division as any,
-          details: {
-             ...rowData?.division?.details,
-            seniorLeader: delhiHQ?.details?.seniorLeader,
-            juniorLeader: delhiHQ?.details?.juniorLeader,
-          },
-        },
-      });
-    }
+              {props.row.status >= IROLifeCycleStates.AMOUNT_RELEASED && (
+                <MenuItem onClick={() => [setOpenRelease(true), setReleaseAmountIROs([props.row])]}>
+                  <ListItemIcon><PreviewIcon fontSize="small" /></ListItemIcon>
+                  <ListItemText primary="View Release Amount" />
+                </MenuItem>
+              )}
 
-    setOpenPrintFr(true);
-
-    const timer = setTimeout(() => {
-      setOpenPrintFr(false);
-    }, 2000);
-
-    return undefined;
-
-  } catch (error) {
-    console.error('Failed to load IRO / Division data', error);
-    return undefined;
-  }
-}
-
-                },
-              ] :
-              []),
-            {
-              id: 'Attach IRO receipt',
-              text: 'Prev Regenerate IRO',
-              icon: AttachFileIcon,
-              onClick: () => {
-                setOpenAttachReceipt1(true);
-                setIroData(props.row);
-                if (props?.row.FR) {
-                  FRServices.getById(props.row.FR).then((res) => {
-                    setFrData(res.data);
-                    console.log(res.data, 'fr');
-                  });
-                }
-                setPrintIroLoading(true);
-                setTimeout(() => {
-                  setPrintIroLoading(false);
-                }, 2000);
-              } },
-            {
-              id: 'View',
-              text: 'View Fr ',
-              icon: PreviewIcon,
-              // component: Link,
-              // to: `/fr/${(props.row as any).FR}/view`,
-              onClick: () => {
-                window.open( `/fr/${(props.row as any).FR}/view`, '_blank');
-              },
-
-            },
-            ...(props.row.status >= IROLifeCycleStates.AMOUNT_RELEASED ?
-              [
-                {
-                  id: 'Release',
-                  text: 'View Release Amount',
-                  onClick: () => [setOpenRelease(true), setReleaseAmountIROs([props.row])],
-                  icon: PreviewIcon,
-                },
-              ] :
-              []),
-            ...(hasPermissions(['ADMIN_ACCESS']) || hasPermissions(['FCRA_ACCOUNTS_ACCESS']) || hasPermissions(['LOCAL_ACCOUNT_ACCESS']) ?
-              [
-                {
-                  id: 'Release',
-                  text: 'Edit Release Amount',
-                  onClick: () => [setOpenReleaseEdit(true), setReleaseAmountIROs([props.row])],
-                  icon: PreviewIcon,
-                },
-              ] :
-              []),
-
-            // ...(props.row.status == IROLifeCycleStates.AMOUNT_RELEASED ? [
-            //   {
-            //     id: 'Reconciliation',
-            //     text: 'Reconciliation',
-            //     icon: EditIcon,
-            //     onClick: () => {
-            //       setAttachment(true);
-            //       setSelectedIRO(props.row);
-            //     },
-            //   }] : []),
-
-            {
-              id: 'remarks',
-              text: 'Remark',
-              icon: EditNoteIcon,
-
-              onClick: () => {
-                toggleOpenRemarks(true);
-                setSelectedIROId(props.row._id);
-                IROServices.getAllRemarksById(props.row._id)
-                  .then((res) => setRemarks(res.data ?? []))
-                  .catch((error) => {
-                    enqueueSnackbar({
-                      variant: 'error',
-                      message: error.message,
-                    });
-                  });
-              },
-            },
-            // {
-            //   id: 'View',
-            //   text: 'View Details ',
-            //   component: Link,
-            //   to: `/fr/${props.row._id}/view`,
-            //   icon: PreviewIcon,
-            // },
-            // {
-            //   id: 'Reconciliation',
-            //   text: 'Reconciliation',
-            //   icon: EditIcon,
-            // },
-            // {
-            //   id: 'Close IRO',
-            //   text: 'Close IRO',
-            //   icon: PreviewIcon,
-            // },
-            {
-              id: 'Attachments',
-              text: 'Attachments',
-              icon: PrintIcon,
-              onClick: () => {
-                // console.log(props.row.particulars );
-                // props.row.particulars.map((item)=>{
-                setAttachments(props.row.billAttachment);
-                // });
-                console.log(attachments, 'setAttachments(item.attachment);');
-
-                setViewFileUploader(true);
-              },
-            },
-            {
-              id: 'Close IRO',
-              text: 'Close IRO',
-              icon: PreviewIcon,
-              onClick: () => {
-                setIroData(props.row);
-                setConform1(true);
-                if (props?.row.FR) {
-                  FRServices.getById((props.row as any).FR).then((res) => {
-                    setFrData(res.data);
-                    console.log(res.data, 'fr');
-                  });
-                }
-                setPrintIroLoading(true);
-                setTimeout(() => {
-                  setPrintIroLoading(false);
-                }, 2000);
-                //   IROServices.close(props.row._id)
-                //     .then((res) => {
-                //       if (reconciliationIRO) {
-                //         // eslint-disable-next-line @typescript-eslint/naming-convention
-                //         const filterIRO = reconciliationIRO?.filter((reconciliationIROs) => {
-                //           return reconciliationIROs._id !== props.row._id;
-                //         });
-                //         setReconcilationIRO(filterIRO);
-                //       }
-
-                //       enqueueSnackbar({
-                //         message: res.message,
-                //         variant: 'success',
-                //       });
-                //     })
-
-              //     .catch((err) => {
-              //       enqueueSnackbar({
-              //         message: err.message,
-              //         variant: 'error',
-              //       });
-              //     });
-              },
-            },
-            {
-              id: 'notification',
-              text: 'Send notification',
-              onClick: () => {
-                setSelectedIROId(props.row._id);
-                toggleSendNotification(true);
-              },
-              icon: MessageIcon,
-            },
-            {
-              id: 'log',
-              text: 'IRO Log',
-              icon: PreviewIcon,
-              onClick: () => {
+              <MenuItem onClick={() => {
                 setSelectedIROId(props.row._id);
                 setOpenLog(true);
-              },
-            },
-          ]}
-        />
-      ),
+              }}>
+                <ListItemIcon><PreviewIcon fontSize="small" /></ListItemIcon>
+                <ListItemText primary="IRO Log" />
+              </MenuItem>
+
+              <Divider />
+
+              {/* ================= EDIT / UPDATE ================= */}
+              <Section title="EDIT / UPDATE" />
+
+              {(hasPermissions(['ADMIN_ACCESS']) ||
+            hasPermissions(['FCRA_ACCOUNTS_ACCESS']) ||
+            hasPermissions(['LOCAL_ACCOUNT_ACCESS'])) && (
+                <MenuItem onClick={() => [setOpenReleaseEdit(true), setReleaseAmountIROs([props.row])]}>
+                  <ListItemIcon><EditIcon fontSize="small" /></ListItemIcon>
+                  <ListItemText primary="Edit Release Amount" />
+                </MenuItem>
+              )}
+
+              <MenuItem onClick={() => {
+                toggleOpenRemarks(true);
+                setSelectedIROId(props.row._id);
+              }}>
+                <ListItemIcon><EditNoteIcon fontSize="small" /></ListItemIcon>
+                <ListItemText primary="Add Remark" />
+              </MenuItem>
+
+              <MenuItem onClick={() => {
+                setAttachments(props.row.billAttachment);
+                setViewFileUploader(true);
+              }}>
+                <ListItemIcon><AttachFileIcon fontSize="small" /></ListItemIcon>
+                <ListItemText primary="Attachments" />
+              </MenuItem>
+
+              <Divider />
+
+              {/* ================= PRINT ================= */}
+              <Section title="PRINT" />
+
+              <MenuItem onClick={() => handlePrintIRO(props.row)}>
+                <ListItemIcon><PrintIcon fontSize="small" /></ListItemIcon>
+                <ListItemText primary="Print IRO" />
+              </MenuItem>
+
+              <MenuItem onClick={() => handlePrintFR(props.row)}>
+                <ListItemIcon><PrintIcon fontSize="small" /></ListItemIcon>
+                <ListItemText primary="Print FR" />
+              </MenuItem>
+
+              {hasPermissions(['DELHI_DIVISION_ACCESS']) && (
+                <MenuItem onClick={() => handlePrintDelhi(props.row)}>
+                  <ListItemIcon><PrintIcon fontSize="small" /></ListItemIcon>
+                  <ListItemText primary="Print FR – HQ Delhi" />
+                </MenuItem>
+              )}
+
+              <Divider />
+
+              {/* ================= SYSTEM ================= */}
+              <Section title="SYSTEM" />
+
+              <MenuItem
+                sx={{ color: 'error.main' }}
+                onClick={() => handleCloseIRO(props.row)}
+              >
+                <ListItemIcon sx={{ color: 'error.main' }}>
+                  <CloseIcon fontSize="small" />
+                </ListItemIcon>
+                <ListItemText primary="Close IRO" />
+              </MenuItem>
+
+              <MenuItem onClick={() => {
+                setSelectedIROId(props.row._id);
+                toggleSendNotification(true);
+              }}>
+                <ListItemIcon><MessageIcon fontSize="small" /></ListItemIcon>
+                <ListItemText primary="Send Notification" />
+              </MenuItem>
+            </Menu>
+          </>
+        );
+      },
     },
+    // {
+    //   field: 'status',
+    //   renderHeader: () => (<b>Status</b>),
+    //   // renderCell: (props) => (
+    //   //   <p
+    //   //     style={{
+    //   //       maxWidth: 205,
+    //   //       whiteSpace: 'normal',
+    //   //       wordBreak: 'break-word',
+    //   //     }}
+    //   //   >
+    //   //     {IROLifeCycleStates.getStatusNameByCodeTransaction(props.value).replaceAll('_', ' ')}
+    //   //   </p>
+    //   // ),
+    //   align: 'center',
+    //   width: 250,
+    //   headerAlign: 'center',
+    //   valueGetter: (params) => {
+    //     return IROLifeCycleStates.getStatusNameByCodeTransaction(params.value).replaceAll('_', ' ');
+    //   },
+    // },
     { field: 'IROno', headerName: 'IRO No', width: 130, renderHeader: () => (<b>IRO No</b>), align: 'center', headerAlign: 'center' },
     {
       field: 'IRODate', headerName: 'IRO Date', width: 130, renderHeader: () => (<b>IRO Date</b>),
@@ -744,7 +776,7 @@ const ReconciliationIRO = () => {
       width: 150,
       align: 'center',
       headerAlign: 'center',
-      renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
+      renderHeader: (params) => <b style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</b>,
       valueGetter(params) {
         const IRORequest = params.row as IROrder;
         const particularAmount = IRORequest.particulars?.reduce((total, particular) => total + Number(particular.requestedAmount), 0);
@@ -762,7 +794,7 @@ const ReconciliationIRO = () => {
       valueGetter: (params) => {
         return params.row.releaseAmount?.modeOfPayment;
       },
-      renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
+      renderHeader: (params) => <b style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</b>,
 
       align: 'center',
       headerAlign: 'center',
@@ -780,7 +812,7 @@ const ReconciliationIRO = () => {
           return 'N/A';
         }
       },
-      renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
+      renderHeader: (params) => <b style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</b>,
 
       align: 'center',
       headerAlign: 'center',
@@ -797,8 +829,47 @@ const ReconciliationIRO = () => {
         return 0; // or return a suitable default value
       }, renderHeader: () => (<b>Sanctioned Amount</b>), align: 'center', headerAlign: 'center' },
     {
+      field: 'Transferred',
+      headerName: 'Transferred Amount',
+      width: 180,
+      renderHeader: () => <b>Transferred Amount</b>,
+
+      valueGetter: (params: any) => {
+        if (params.row.sanctionedAmount !== undefined) {
+          return formatAmount(Number(params.row.sanctionedAmount));
+        }
+
+        if (Array.isArray(params.row.particulars)) {
+          const total = params.row.particulars.reduce(
+            (sum: number, item: any) =>
+              sum + (Number(item.sanctionedAmount) || 0),
+            0,
+          );
+
+          return formatAmount(total);
+        }
+
+        return formatAmount(0);
+      },
+      align: 'center' as const,
+      headerAlign: 'center' as const,
+    },
+
+    {
+      field: 'totalTransferred',
+      headerName: 'Total Transferred Amount',
+      width: 180,
+      renderHeader: () => <b>Total Transferred Amount</b>,
+      valueGetter: (params: any) => {
+        return formatAmount(
+          Number(params.row.releaseAmount?.transferredAmount) || 0,
+        );
+      },
+      align: 'center' as const,
+      headerAlign: 'center' as const,
+    },
+    {
       field: 'specialsanction',
-      headerClassName: 'super-app-theme--cell',
       renderHeader: () => <b>Sanction as per</b>,
       renderCell: (props) => (
         <p
@@ -819,38 +890,15 @@ const ReconciliationIRO = () => {
       headerAlign: 'center',
     },
     { field: 'sanctionedBank', headerName: 'Sanctioned Bank', width: 150, renderHeader: () => (<b>Sanctioned Bank</b>), align: 'center', headerAlign: 'center' },
-    {
-      field: 'released amount ', headerName: 'Amount Transferred ', width: 150, renderHeader: () => <b>Amount Transferred</b>, align: 'center', headerAlign: 'center',
-      valueGetter: (params) => params.row.releaseAmount?.transferredAmount?.toFixed(2),
-    },
-    {
-      field: 'status',
-      renderHeader: () => (<b>Status</b>),
-      // renderCell: (props) => (
-      //   <p
-      //     style={{
-      //       maxWidth: 205,
-      //       whiteSpace: 'normal',
-      //       wordBreak: 'break-word',
-      //     }}
-      //   >
-      //     {IROLifeCycleStates.getStatusNameByCodeTransaction(props.value).replaceAll('_', ' ')}
-      //   </p>
-      // ),
-      align: 'center',
-      width: 250,
-      headerAlign: 'center',
-      valueGetter: (params) => {
-        return IROLifeCycleStates.getStatusNameByCodeTransaction(params.value).replaceAll('_', ' ');
-      },
-    },
+
+
     {
       field: 'updatedAt', headerName: 'Last Updated', width: 130, renderHeader: () => (<b>Last Updated</b>),
       valueGetter: (params) => params.value?.format('DD/MM/YYYY'), align: 'center', headerAlign: 'center',
     },
   ];
   return (
-    <CommonPageLayout title="For Reconciliation" momentFilter={
+    <CommonPageLayout status='AMOUNT RELEASED' title="For Reconciliation" momentFilter={
 
       {
         dateRange: dateRange,
@@ -876,100 +924,71 @@ const ReconciliationIRO = () => {
                   value={searchText}
                   placeholder="Enter IROno, IRODate, Division, or SubCategory"
                   onChange={handleSearchChange}
-                  sx={{ width: '40%' }}
+                  sx={{ width: '60%' }}
                 />
                 {/* Count Box with Reset Button */}
-                <Grid container justifyContent="flex-end">
-                  <Grid
-                    item
-                    sx={{ alignContent: 'start', display: 'flex', justifyContent: 'space-between' }}
-                  >
-                    <FormControl>
-                      <RadioGroup
-                        aria-labelledby="Filter"
-                        value={
-                          exstatusFilter.includes(69) ? 'NonBankTransfers' :'All'
 
-                        }
-                        onChange={(e) => {
-                          const value = e.target.value;
-                          if (value === 'NonBankTransfers') {
-                            setExStatusFilter([69]);
-                          } else {
-                            setExStatusFilter([]);
-                            setStatusFilter([IROLifeCycleStates.AMOUNT_RELEASED]);
-                          // setStatusFilter([]);
-                          }
+                <Grid item xs={3}>
+                  {hasPermissions(['MANAGE_IRO']) && (
+                    <Grid item xs={12} md="auto" sx={{
+                      display: 'flex',
+                      alignItems: 'center', // ✅ vertical center
+                    }}>
+                      <FormControl
+                        sx={{
+                          'minWidth': 200,
+                          '& .MuiOutlinedInput-root': {
+                            // height: 45, // ✅ control select height
+                            fontSize: 13,
+                            borderRadius: 1.5,
+                          },
                         }}
-                        name="Filter"
-                        row
                       >
-                        <FormControlLabel value="All" control={<Radio />} label="ALL" />
-                        <FormControlLabel value="NonBankTransfers" control={<Radio />} label="NON BANK TRANSFERS" />
-                      </RadioGroup>
-                    </FormControl>
-                  </Grid>
-                  <Grid item>
-                    <FormControl>
-                      <RadioGroup
-                        aria-labelledby="Filter"
-                        value={statusFilter1}
-                        onChange={(e) =>
-                          setStatusFilter1(
-                            e.target.value === 'Support' ?
-                              'Support' :
-                              e.target.value === 'Expanse' ?
-                                'Expanse' :
-                                'All',
-                          )
-                        }
-                        name="Filter"
-                        row
-                      >
-                        {/* <FormControlLabel value="All" control={<Radio />} label="ALL" /> */}
-                        <FormControlLabel value="Support" control={<Radio />} label="SUPPORT" />
-                        <FormControlLabel value="Expanse" control={<Radio />} label="EXPENSE" />
-                        <FormControlLabel value="All" control={<Radio />} label="BOTH CATEGORIES " />
+                        <InputLabel id="division-label">
+  Division
+                        </InputLabel>
+                        <Select
+                          multiple
+                          value={selectedDivisions}
+                          label="Division"
+                          onChange={handleDivisionChange}
+                          renderValue={(selected) =>
+                            selected.length === 0 ? 'None' : selected.join(', ')
+                          }
+                          MenuProps={{
+                            PaperProps: {
+                              style: { maxHeight: 300, width: 250 },
+                            },
+                          }}
+                        >
+                          <ListSubheader>
+                            <TextField
+                              size="small"
+                              placeholder="Search division..."
+                              fullWidth
+                              autoFocus
+                              value={divisionSearch}
+                              onChange={(e) => setDivisionSearch(e.target.value)}
+                              onKeyDown={(e) => e.stopPropagation()}
+                            />
+                          </ListSubheader>
 
-                      </RadioGroup>
-                    </FormControl>
-                  </Grid>
-                  <Grid item>
-                    <Box
-                      sx={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: 4,
-                        backgroundColor: '#f5f5f5',
-                        padding: '8px 16px',
-                        borderRadius: '8px',
-                        boxShadow: 1,
-                      }}
-                    >
-                      <Typography variant="subtitle1" fontWeight="bold">
-        New Bills Attached:
-                      </Typography>
-                      <Typography
-                        variant="h6"
-                        fontWeight="bold"
-                        color="primary"
-                        sx={{ background: '#fff', px: 2, py: 1, borderRadius: '4px', boxShadow: 1 }}
-                      >
-                        {count}
-                      </Typography>
-                      <Button
-                        variant="outlined"
-                        color="secondary"
-                        size="small"
-                        onClick={async () => await NotificationService.markAllAsReadForBill().then((res) => setCount(0))}
-                      >
-        Reset
-                      </Button>
-                    </Box>
-                  </Grid>
+                          <MenuItem value="__ALL__">
+                            <Checkbox checked={selectedDivisions.length === 0} />
+                            <ListItemText primary="None" />
+                          </MenuItem>
+
+                          {filteredDivisions.map((name) => (
+                            <MenuItem key={name} value={name}>
+                              <Checkbox checked={selectedDivisions.includes(name)} />
+                              <ListItemText primary={name} />
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
+                    </Grid>
+                  )}
                 </Grid>
-
-
                 {/* Export Button */}
                 <Button
                   onClick={async () => {
@@ -1022,9 +1041,116 @@ const ReconciliationIRO = () => {
                 </Button>
 
               </Box>
+
+              <br />
+              <Grid
+                container
+                spacing={2}
+                alignItems="center"
+                justifyContent="flex-start"
+                wrap="wrap"
+              >
+                {/* ================= STATUS FILTER ================= */}
+                <Grid item>
+                  <ToggleButtonGroup
+                    exclusive
+                    size="small"
+                    value={exstatusFilter.includes(69) ? 'NonBankTransfers' : 'All'}
+                    onChange={(_, value) => {
+                      if (!value) return;
+
+                      if (value === 'NonBankTransfers') {
+                        setExStatusFilter([69]);
+                      } else {
+                        setExStatusFilter([]);
+                        setStatusFilter([IROLifeCycleStates.AMOUNT_RELEASED]);
+                      }
+                    }}
+                    sx={toggleSx}
+                  >
+                    <ToggleButton value="All">ALL</ToggleButton>
+                    <ToggleButton value="NonBankTransfers">
+        NON BANK TRANSFERS
+                    </ToggleButton>
+                  </ToggleButtonGroup>
+                </Grid>
+
+                {/* ================= CATEGORY FILTER ================= */}
+                <Grid item>
+                  <ToggleButtonGroup
+                    exclusive
+                    size="small"
+                    value={statusFilter1}
+                    onChange={(_, value) => {
+                      if (!value) return;
+                      setStatusFilter1(
+                        value === 'Support' ?
+                          'Support' :
+                          value === 'Expanse' ?
+                            'Expanse' :
+                            'All',
+                      );
+                    }}
+                    sx={toggleSx}
+                  >
+                    <ToggleButton value="Support">SUPPORT</ToggleButton>
+                    <ToggleButton value="Expanse">EXPENSE</ToggleButton>
+                    <ToggleButton value="All">BOTH CATEGORIES</ToggleButton>
+                  </ToggleButtonGroup>
+                </Grid>
+
+                {/* ================= INFO BOX (UNCHANGED) ================= */}
+                <Grid item xs={12} md="auto">
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 4,
+                      backgroundColor: '#f5f5f5',
+                      padding: '8px 16px',
+                      borderRadius: '8px',
+                      boxShadow: 1,
+                      flexWrap: 'wrap',
+                    }}
+                  >
+                    <Typography variant="subtitle1" fontWeight="bold">
+        New Bills Attached:
+                    </Typography>
+
+                    <Typography
+                      variant="h6"
+                      fontWeight="bold"
+                      color="primary"
+                      sx={{
+                        background: '#fff',
+                        px: 2,
+                        py: 1,
+                        borderRadius: '4px',
+                        boxShadow: 1,
+                      }}
+                    >
+                      {count}
+                    </Typography>
+
+                    <Button
+                      variant="outlined"
+                      color="secondary"
+                      size="small"
+                      onClick={async () =>
+                        await NotificationService
+            .markAllAsReadForBill()
+            .then(() => setCount(0))
+                      }
+                    >
+        Reset
+                    </Button>
+                  </Box>
+                </Grid>
+              </Grid>
             </Grid>
 
           </Grid>
+
 
           <Grid item xs={12}>
             <Box
@@ -1054,12 +1180,18 @@ const ReconciliationIRO = () => {
                 },
               }}
             >
-              <DataGrid rows={filteredRows ?? []} columns={columns} getRowId={(row) => row._id} style={{ height: '70vh', width: '100%' }} getRowClassName={(params) => {
-                if (params.row.specialsanction == 'Yes') {
-                  return 'special-sanction'; // Class for rows with special sanction
+              <DataGrid rows={filteredRows ?? []} columns={columns} getRowId={(row) => row._id} style={{ height: '70vh', width: '100%' }}
+                isRowSelectable={(params:any) =>
+                  selectedDivisions.length === 0 ?
+                    true :
+                    selectedDivisions.includes(params?.row?.division?.details?.name)
                 }
-                return params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'; // Default classes
-              }}
+                getRowClassName={(params) => {
+                  if (params.row.specialsanction == 'Yes') {
+                    return 'special-sanction'; // Class for rows with special sanction
+                  }
+                  return params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'; // Default classes
+                }}
               />
 
             </Box>
@@ -1217,35 +1349,35 @@ const ReconciliationIRO = () => {
         <DialogContent>
 
 
-<Container>
+          <Container>
   Downloading the FRReceipt for {data2?.FRno}
-  <br />
+            <br />
 
-  {data2 && (
-    <BlobProvider
-      document={
-        <FRReceiptTemplate
-          rowData={data2 as FR}
-          president={signaturePresident}
-        />
-      }
-    >
-      {({ loading, url }) =>
-        loading || openPrintFr ? (
-          <span style={{ color: 'blue' }}>....</span>
-        ) : (
-          <a
-            href={url ?? ''}
-            download="FRReceipt.pdf"
-            style={{ color: 'blue' }}
-          >
+            {data2 && (
+              <BlobProvider
+                document={
+                  <FRReceiptTemplate
+                    rowData={data2 as FR}
+                    president={signaturePresident}
+                  />
+                }
+              >
+                {({ loading, url }) =>
+                  loading || openPrintFr ? (
+                    <span style={{ color: 'blue' }}>....</span>
+                  ) : (
+                    <a
+                      href={url ?? ''}
+                      download="FRReceipt.pdf"
+                      style={{ color: 'blue' }}
+                    >
             FRReceipt.pdf
-          </a>
-        )
-      }
-    </BlobProvider>
-  )}
-</Container>
+                    </a>
+                  )
+                }
+              </BlobProvider>
+            )}
+          </Container>
 
         </DialogContent>
         <DialogActions>
@@ -1262,40 +1394,40 @@ const ReconciliationIRO = () => {
       <Dialog open={ openAttachReceipt1 } onClose={() => setOpenAttachReceipt1(false)} maxWidth="xs" fullWidth>
         <DialogTitle>Are you sure</DialogTitle>
         <DialogContent>
-         
-<Container>
-  Do you want to download receipt for {iroData?.IROno}?
-  <br />
 
-  {iroData && mngrName && selectedSignature && FrData && (
-    <BlobProvider
-      document={
-        <IROTemplate
-          prev={true}
-          rowData={iroData}
-          mngrName={mngrName}
-          officeMngrSign={selectedSignature}
-          fr={FrData as FR}
-          president={signaturePresident}
-        />
-      }
-    >
-      {({ loading, url }) =>
-        loading || printIroLoading ? (
-          <span style={{ color: 'blue' }}>....</span>
-        ) : (
-          <a
-            href={url ?? ''}
-            download={`${iroData?.IROno}_Receipt.pdf`}
-            style={{ color: 'blue' }}
-          >
-            {`${iroData?.IROno}_Receipt.pdf`}
-          </a>
-        )
-      }
-    </BlobProvider>
-  )}
-</Container>
+          <Container>
+  Do you want to download receipt for {iroData?.IROno}?
+            <br />
+
+            {iroData && mngrName && selectedSignature && FrData && (
+              <BlobProvider
+                document={
+                  <IROTemplate
+                    prev={true}
+                    rowData={iroData}
+                    mngrName={mngrName}
+                    officeMngrSign={selectedSignature}
+                    fr={FrData as FR}
+                    president={signaturePresident}
+                  />
+                }
+              >
+                {({ loading, url }) =>
+                  loading || printIroLoading ? (
+                    <span style={{ color: 'blue' }}>....</span>
+                  ) : (
+                    <a
+                      href={url ?? ''}
+                      download={`${iroData?.IROno}_Receipt.pdf`}
+                      style={{ color: 'blue' }}
+                    >
+                      {`${iroData?.IROno}_Receipt.pdf`}
+                    </a>
+                  )
+                }
+              </BlobProvider>
+            )}
+          </Container>
         </DialogContent>
         <DialogActions>
           <Button
@@ -1337,36 +1469,36 @@ const ReconciliationIRO = () => {
       <Dialog open={Boolean(data5)} onClose={() => setData(null)} maxWidth="xs" fullWidth>
         <DialogTitle> Print Fr</DialogTitle>
         <DialogContent>
-<Container>
+          <Container>
   Download the FR Receipt, Delhi for {data5?.FRno}
-  <br />
+            <br />
 
-  {data5 && (
-    <BlobProvider
-      document={
-        <FRReceiptTempForDelhiDivision
-          label={Label}
-          president={signaturePresident}
-          rowData={data5 as FR}
-        />
-      }
-    >
-      {({ loading, url }) =>
-        loading || openPrintFr ? (
-          <span style={{ color: 'blue' }}>....</span>
-        ) : (
-          <a
-            href={url ?? ''}
-            download="FRReceiptDelhi.pdf"
-            style={{ color: 'blue' }}
-          >
+            {data5 && (
+              <BlobProvider
+                document={
+                  <FRReceiptTempForDelhiDivision
+                    label={Label}
+                    president={signaturePresident}
+                    rowData={data5 as FR}
+                  />
+                }
+              >
+                {({ loading, url }) =>
+                  loading || openPrintFr ? (
+                    <span style={{ color: 'blue' }}>....</span>
+                  ) : (
+                    <a
+                      href={url ?? ''}
+                      download="FRReceiptDelhi.pdf"
+                      style={{ color: 'blue' }}
+                    >
             FRReceiptDelhi.pdf
-          </a>
-        )
-      }
-    </BlobProvider>
-  )}
-</Container>
+                    </a>
+                  )
+                }
+              </BlobProvider>
+            )}
+          </Container>
         </DialogContent>
         <DialogActions>
           <Button
@@ -1382,38 +1514,38 @@ const ReconciliationIRO = () => {
       <Dialog open={Boolean(data)} onClose={() => setData(null)} maxWidth="xs" fullWidth>
         <DialogTitle> Print IRO</DialogTitle>
         <DialogContent>
-        
-<Container>
-  Downloading the IROReceipt for {data?.IRONo}
-  <br />
 
-  {data && (
-    <BlobProvider
-      document={
-        <IROTemplate
-          rowData={data as IROrder}
-          fr={data.FR}
-          president={signaturePresident}
-          officeMngrSign={selectedSignature}
-        />
-      }
-    >
-      {({ loading, url }) =>
-        loading || openPrintFr ? (
-          <span style={{ color: 'blue' }}>....</span>
-        ) : (
-          <a
-            href={url ?? ''}
-            download="IROReceipt.pdf"
-            style={{ color: 'blue' }}
-          >
+          <Container>
+  Downloading the IROReceipt for {data?.IRONo}
+            <br />
+
+            {data && (
+              <BlobProvider
+                document={
+                  <IROTemplate
+                    rowData={data as IROrder}
+                    fr={data.FR}
+                    president={signaturePresident}
+                    officeMngrSign={selectedSignature}
+                  />
+                }
+              >
+                {({ loading, url }) =>
+                  loading || openPrintFr ? (
+                    <span style={{ color: 'blue' }}>....</span>
+                  ) : (
+                    <a
+                      href={url ?? ''}
+                      download="IROReceipt.pdf"
+                      style={{ color: 'blue' }}
+                    >
             IROReceipt.pdf
-          </a>
-        )
-      }
-    </BlobProvider>
-  )}
-</Container>
+                    </a>
+                  )
+                }
+              </BlobProvider>
+            )}
+          </Container>
         </DialogContent>
         <DialogActions>
           <Button
@@ -1619,40 +1751,40 @@ const ReconciliationIRO = () => {
       <Dialog open={Boolean(conform1)} onClose={() => setConform1(false)} maxWidth="xs" fullWidth>
         <DialogTitle>Warning</DialogTitle>
         <DialogContent>
-         <Container>
-  {`Are you sure you want to close this IRO No ${iroData?.IROno}
+          <Container>
+            {`Are you sure you want to close this IRO No ${iroData?.IROno}
     from ${iroData?.division?.details.name}
     related to FR No ${FrData?.FRno ?? ''} ?`}
-  <br />
+            <br />
 
-  {iroData && mngrName && selectedSignature && FrData && (
-    <BlobProvider
-      document={
-        <IROTemplate
-          rowData={iroData}
-          mngrName={mngrName}
-          officeMngrSign={selectedSignature}
-          fr={FrData as FR}
-          president={signaturePresident}
-        />
-      }
-    >
-      {({ loading, url }) =>
-        loading || printIroLoading ? (
-          <span style={{ color: 'blue' }}>....</span>
-        ) : (
-          <a
-            href={url ?? ''}
-            download={`${iroData?.IROno}_Receipt.pdf`}
-            style={{ color: 'blue' }}
-          >
-            {`${iroData?.IROno}_Receipt.pdf`}
-          </a>
-        )
-      }
-    </BlobProvider>
-  )}
-</Container>
+            {iroData && mngrName && selectedSignature && FrData && (
+              <BlobProvider
+                document={
+                  <IROTemplate
+                    rowData={iroData}
+                    mngrName={mngrName}
+                    officeMngrSign={selectedSignature}
+                    fr={FrData as FR}
+                    president={signaturePresident}
+                  />
+                }
+              >
+                {({ loading, url }) =>
+                  loading || printIroLoading ? (
+                    <span style={{ color: 'blue' }}>....</span>
+                  ) : (
+                    <a
+                      href={url ?? ''}
+                      download={`${iroData?.IROno}_Receipt.pdf`}
+                      style={{ color: 'blue' }}
+                    >
+                      {`${iroData?.IROno}_Receipt.pdf`}
+                    </a>
+                  )
+                }
+              </BlobProvider>
+            )}
+          </Container>
         </DialogContent>
         <DialogActions>
           <Button
@@ -1667,33 +1799,33 @@ const ReconciliationIRO = () => {
             {iroData && mngrName&&selectedSignature&&FrData&& (
 
               <>
-              <BlobProvider
-  document={
-    <IROTemplate
-      rowData={iroData}
-      mngrName={mngrName}
-      officeMngrSign={selectedSignature}
-      fr={FrData as FR}
-      president={signaturePresident}
-    />
-  }
->
-  {({ blob, loading }) => (
-    <Button
-      variant="contained"
-      color="info"
-      onClick={async () => {
-        if (blob) {
-          setLoading(true);
-          await attach(blob);
-        }
-      }}
-      disabled={loading || printIroLoading}
-    >
-      {loading || printIroLoading ? 'Loading...' : 'Yes, Close'}
-    </Button>
-  )}
-</BlobProvider>
+                <BlobProvider
+                  document={
+                    <IROTemplate
+                      rowData={iroData}
+                      mngrName={mngrName}
+                      officeMngrSign={selectedSignature}
+                      fr={FrData as FR}
+                      president={signaturePresident}
+                    />
+                  }
+                >
+                  {({ blob, loading }) => (
+                    <Button
+                      variant="contained"
+                      color="info"
+                      onClick={async () => {
+                        if (blob) {
+                          setLoading(true);
+                          await attach(blob);
+                        }
+                      }}
+                      disabled={loading || printIroLoading}
+                    >
+                      {loading || printIroLoading ? 'Loading...' : 'Yes, Close'}
+                    </Button>
+                  )}
+                </BlobProvider>
 
               </>
             )}

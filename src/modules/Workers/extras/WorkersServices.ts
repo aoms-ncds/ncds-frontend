@@ -8,6 +8,7 @@ export default {
    * @return {Promise<StandardResponse<number>>} A promise that resolves to the response containing the count of workers.
    */
   getCount: (conditions?: unknown) => getStandardResponse<number>(axios.get('/workers/count', { params: conditions, headers: { ...getAuthHeader() } })),
+  recentActivity: (conditions?: unknown) => getStandardResponse<number>(axios.get('/workers/recentActivity', { params: conditions, headers: { ...getAuthHeader() } })),
 
   /**
    * Creates a new worker.
@@ -266,7 +267,8 @@ export default {
    * @param {string} id - The ID of the worker to reject.
    * @return {Promise<StandardResponse<Worker>>} A promise that resolves to the response containing the rejected worker.
    */
-  reject: (id: string) => getStandardResponse<Worker>(axios.patch(`/workers/${id}/reject`, null, { headers: { ...getAuthHeader() } })),
+  reject: (id: string, reason: string) => getStandardResponse<Worker>(axios.patch(`/workers/${id}/reject`, { reason }, { headers: { ...getAuthHeader() } })),
+  disapprove: (id: string, reasonDisapprove: string) => getStandardResponse<Worker>(axios.patch(`/workers/${id}/disapprove`, { reasonDisapprove }, { headers: { ...getAuthHeader() } })),
   activate: (id: string) => getStandardResponse<IWorker>(axios.patch(`/workers/${id}/activate`, null, { headers: { ...getAuthHeader() } })),
 
   // deactivate: (id: string) => getStandardResponse<IWorker>(axios.patch(`/workers/${id}/deactivate`, null, { headers: { ...getAuthHeader() } })),

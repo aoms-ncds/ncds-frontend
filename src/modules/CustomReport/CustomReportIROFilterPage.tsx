@@ -46,6 +46,7 @@ import SendIcon from '@mui/icons-material/Send';
 import CircularProgress from '@mui/material/CircularProgress';
 import PDFTemplateCustom from './components/PDFTemplateCustom';
 import PDFTemplateCustomAll from './components/PDFTemplateCustomAll';
+import formatAmount from '../Common/formatcode';
 
 const CustomFooter = () => (
   <Box sx={{ display: 'flex', justifyContent: 'space-between', padding: '10px', background: '#f0f0f0', fontWeight: 'bold', borderTop: '1px solid black' }}>
@@ -126,6 +127,8 @@ const IROReportFilter = () => {
     'Sanction Amount',
     'Sanction as per',
     'Narration',
+    'Transferred Amount',
+    'Total Transferred Amount',
   ]);
   const [selectedRow, setSelectedRow] = useState<number | null>(null);
   console.log(selectedData.length, 'options');
@@ -220,6 +223,8 @@ const IROReportFilter = () => {
     'Sanction Amount',
     'Sanction as per',
     'Narration',
+    'Transferred Amount',
+    'Total Transferred Amount',
     'Sanctioned Bank',
     'Beneficiary Name',
     'Sub-Division',
@@ -1732,6 +1737,8 @@ const IROReportFilter = () => {
                       {selectedData.includes('Amount Release Date') && <TableCell sx={{ fontWeight: 'bold' }}>Amount Release Date</TableCell>}
                       {selectedData.includes('Sanction as per') && <TableCell sx={{ fontWeight: 'bold' }}>Sanction as per</TableCell>}
                       {selectedData.includes('Narration') && <TableCell sx={{ fontWeight: 'bold' }}>Narration</TableCell>}
+                      {selectedData.includes('Transferred Amount') && <TableCell sx={{ fontWeight: 'bold' }}>Transferred Amount</TableCell>}
+                      {selectedData.includes('Total Transferred Amount') && <TableCell sx={{ fontWeight: 'bold' }}>Total Transferred Amount</TableCell>}
                       {/* {selectedData.includes('UnitPrice') && <TableCell sx={{ fontWeight: 'bold' }}>UnitPrice</TableCell>} */}
                       {/* {selectedData.includes('Beneficiary Name') && <TableCell sx={{ fontWeight: 'bold' }}>Beneficiary Name</TableCell>} */}
                       {selectedData.includes('IroClosedOn') && <TableCell sx={{ fontWeight: 'bold' }}>Iro Closed On</TableCell>}
@@ -1770,8 +1777,8 @@ const IROReportFilter = () => {
                         {selectedData.includes('Sub Category 1') &&<TableCell>{row.particularsData?.subCategory1}</TableCell>}
                         {selectedData.includes('Sub Category 2') &&<TableCell>{row.particularsData?.subCategory2}</TableCell>}
                         {selectedData.includes('Sub Category 3') &&<TableCell>{row.particularsData?.subCategory3}</TableCell>}
-                        {selectedData.includes('Requested Amount') &&<TableCell>{row.particularsData?.requestedAmount}</TableCell>}
-                        {selectedData.includes('Sanction Amount') &&<TableCell>{row.particularsData?.sanctionedAmount}</TableCell>}
+                        {selectedData.includes('Requested Amount') &&<TableCell>{formatAmount(row.particularsData?.requestedAmount)}</TableCell>}
+                        {selectedData.includes('Sanction Amount') &&<TableCell>{formatAmount(row.particularsData?.sanctionedAmount)}</TableCell>}
                         {selectedData.includes('Sanctioned Bank') &&<TableCell>{row.sanctionedBank}</TableCell>}
                         {selectedData.includes('Beneficiary Name') &&<TableCell>{row.sanctionedBank?.split('-').slice(1).join('-').trim()}</TableCell>}
                         {selectedData.includes('For the month') && <TableCell>{row.particularsData?.month}</TableCell>}
@@ -1779,6 +1786,8 @@ const IROReportFilter = () => {
                         {selectedData.includes('Amount Release Date') && <TableCell>{moment(row.releaseAmountData?.transferredDate).format('DD/MM/YYYY')}</TableCell>}
                         {selectedData.includes('Sanction as per') && <TableCell>{row.particularsData?.sanctionedAsPer}</TableCell>}
                         {selectedData.includes('Narration') && <TableCell>{row.particularsData?.narration}</TableCell>}
+                        {selectedData.includes('Transferred Amount') && <TableCell>{ formatAmount(row.releaseAmountData?.transferredAmount)}</TableCell>}
+                        {selectedData.includes('Total Transferred Amount') && <TableCell>{ formatAmount(row.particularsData?.sanctionedAmount)}</TableCell>}
                         {/* {selectedData.includes('UnitPrice') && <TableCell>{row.particularsData?.unitPrice}</TableCell>} */}
                         {selectedData.includes('IroClosedOn') && <TableCell>{moment(row.iroClosedOn).format('DD/MM/YYYY')}</TableCell>}
                         {selectedData.includes('Source Of Account') && <TableCell>{row.sourceOfAccount}</TableCell>}
@@ -1803,16 +1812,16 @@ const IROReportFilter = () => {
               <Box sx={{ display: 'flex', justifyContent: 'space-between', padding: '10px', background: '#f0f0f0', fontWeight: 'bold', borderTop: '1px solid black' }}>
                 <span>Total:</span>
                 <span>
-                  {`Requested amt : ₹${data?.reduce(
+                  {`Requested amt : ₹${ formatAmount(data?.reduce(
                     (total, e) => total + (e.particularsData?.requestedAmount ? Number(e.particularsData.requestedAmount) : 0),
                     0,
-                  ).toFixed(2)}`}
+                  ).toFixed(2))}`}
 
                 </span>
                 <span>{`Sanctioned amt : ₹${
-                  data?.reduce((total, e) =>
+                  formatAmount(data?.reduce((total, e) =>
                     total + (e.particularsData?.sanctionedAmount ? Number(e.particularsData.sanctionedAmount) : 0)
-                  , 0).toFixed(2)}`}</span>
+                  , 0).toFixed(2))}`}</span>
               </Box>
               {/* <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
                 <Button
@@ -1919,31 +1928,31 @@ const IROReportFilter = () => {
               Do you want to attach receipt for {iroData?.IROno}?
               <br />
               {iroData && mngrName && selectedSignature && FrData && (
-               <BlobProvider
-  document={
-    <IROTemplate
-      rowData={iroData}
-      mngrName={mngrName}
-      officeMngrSign={selectedSignature}
-      fr={FrData as FR}
-      president={signaturePresident}
-    />
-  }
->
-  {({ loading, url }) =>
-    loading || printIroLoading ? (
-      <span style={{ color: 'blue' }}>....</span>
-    ) : (
-      <a
-        href={url ?? ''}
-        download={`${iroData?.IROno}_Receipt.pdf`}
-        style={{ color: 'blue' }}
-      >
-        {`${iroData?.IROno}_Receipt.pdf`}
-      </a>
-    )
-  }
-</BlobProvider>
+                <BlobProvider
+                  document={
+                    <IROTemplate
+                      rowData={iroData}
+                      mngrName={mngrName}
+                      officeMngrSign={selectedSignature}
+                      fr={FrData as FR}
+                      president={signaturePresident}
+                    />
+                  }
+                >
+                  {({ loading, url }) =>
+                    loading || printIroLoading ? (
+                      <span style={{ color: 'blue' }}>....</span>
+                    ) : (
+                      <a
+                        href={url ?? ''}
+                        download={`${iroData?.IROno}_Receipt.pdf`}
+                        style={{ color: 'blue' }}
+                      >
+                        {`${iroData?.IROno}_Receipt.pdf`}
+                      </a>
+                    )
+                  }
+                </BlobProvider>
               )}{' '}
             </Container>
           </DialogContent>
@@ -1960,33 +1969,33 @@ const IROReportFilter = () => {
             <>
               {iroData && mngrName && selectedSignature && FrData && (
                 <>
-               <BlobProvider
-  document={
-    <IROTemplate
-      rowData={iroData}
-      mngrName={mngrName}
-      officeMngrSign={selectedSignature}
-      fr={FrData as FR}
-      president={signaturePresident}
-    />
-  }
->
-  {({ blob, loading }) => (
-    <Button
-      variant="contained"
-      color="info"
-      onClick={async () => {
-        if (blob) {
-          setLoading(true);
-          await attach(blob);
-        }
-      }}
-      disabled={loading || printIroLoading}
-    >
-      {loading || printIroLoading ? 'Loading...' : 'Yes, Attach'}
-    </Button>
-  )}
-</BlobProvider>
+                  <BlobProvider
+                    document={
+                      <IROTemplate
+                        rowData={iroData}
+                        mngrName={mngrName}
+                        officeMngrSign={selectedSignature}
+                        fr={FrData as FR}
+                        president={signaturePresident}
+                      />
+                    }
+                  >
+                    {({ blob, loading }) => (
+                      <Button
+                        variant="contained"
+                        color="info"
+                        onClick={async () => {
+                          if (blob) {
+                            setLoading(true);
+                            await attach(blob);
+                          }
+                        }}
+                        disabled={loading || printIroLoading}
+                      >
+                        {loading || printIroLoading ? 'Loading...' : 'Yes, Attach'}
+                      </Button>
+                    )}
+                  </BlobProvider>
 
                 </>
               )}
@@ -2001,30 +2010,30 @@ const IROReportFilter = () => {
               <br />
               {iroData && mngrName && selectedSignature && FrData && (
                 <BlobProvider
-  document={
-    <IROTemplate
-      rowData={iroData}
-      mngrName={mngrName}
-      officeMngrSign={selectedSignature}
-      fr={FrData as FR}
-      president={signaturePresident}
-    />
-  }
->
-  {({ loading, url }) =>
-    loading || printIroLoading ? (
-      <span style={{ color: 'blue' }}>....</span>
-    ) : (
-      <a
-        href={url ?? ''}
-        download={`${iroData?.IROno}_Receipt.pdf`}
-        style={{ color: 'blue' }}
-      >
-        {`${iroData?.IROno}_Receipt.pdf`}
-      </a>
-    )
-  }
-</BlobProvider>
+                  document={
+                    <IROTemplate
+                      rowData={iroData}
+                      mngrName={mngrName}
+                      officeMngrSign={selectedSignature}
+                      fr={FrData as FR}
+                      president={signaturePresident}
+                    />
+                  }
+                >
+                  {({ loading, url }) =>
+                    loading || printIroLoading ? (
+                      <span style={{ color: 'blue' }}>....</span>
+                    ) : (
+                      <a
+                        href={url ?? ''}
+                        download={`${iroData?.IROno}_Receipt.pdf`}
+                        style={{ color: 'blue' }}
+                      >
+                        {`${iroData?.IROno}_Receipt.pdf`}
+                      </a>
+                    )
+                  }
+                </BlobProvider>
               )}{' '}
             </Container>
           </DialogContent>
@@ -2041,34 +2050,34 @@ const IROReportFilter = () => {
             <>
               {iroData && mngrName && selectedSignature && FrData && (
                 <>
-                 <BlobProvider
-  document={
-    <IROTemplate
-      rowData={iroData}
-      mngrName={mngrName}
-      prev={true}
-      officeMngrSign={selectedSignature}
-      fr={FrData as FR}
-      president={signaturePresident}
-    />
-  }
->
-  {({ blob, loading }) => (
-    <Button
-      variant="contained"
-      color="info"
-      onClick={async () => {
-        if (blob) {
-          setLoading(true);
-          await attach(blob);
-        }
-      }}
-      disabled={loading || printIroLoading}
-    >
-      {loading || printIroLoading ? 'Loading...' : 'Yes, Attach'}
-    </Button>
-  )}
-</BlobProvider>
+                  <BlobProvider
+                    document={
+                      <IROTemplate
+                        rowData={iroData}
+                        mngrName={mngrName}
+                        prev={true}
+                        officeMngrSign={selectedSignature}
+                        fr={FrData as FR}
+                        president={signaturePresident}
+                      />
+                    }
+                  >
+                    {({ blob, loading }) => (
+                      <Button
+                        variant="contained"
+                        color="info"
+                        onClick={async () => {
+                          if (blob) {
+                            setLoading(true);
+                            await attach(blob);
+                          }
+                        }}
+                        disabled={loading || printIroLoading}
+                      >
+                        {loading || printIroLoading ? 'Loading...' : 'Yes, Attach'}
+                      </Button>
+                    )}
+                  </BlobProvider>
 
                 </>
               )}
@@ -2154,58 +2163,58 @@ const IROReportFilter = () => {
         <Dialog open={print} onClose={() => setPrint(false)} maxWidth="xs" fullWidth>
           <DialogTitle> Print IRO</DialogTitle>
           <DialogContent>
-           <Container>
+            <Container>
   Downloading Custom report iro
-  <br />
+              <br />
 
-  {selectedData.length === 7 ? (
-    <BlobProvider
-      document={
-        <PDFTemplateCustom
-          rowData={data as any}
-          headers={selectedData}
-        />
-      }
-    >
-      {({ loading, url }) =>
-        loading ? (
-          <span style={{ color: 'blue' }}>....</span>
-        ) : (
-          <a
-            href={url ?? ''}
-            download="CustomReport.pdf"
-            style={{ color: 'blue' }}
-          >
+              {selectedData.length === 7 ? (
+                <BlobProvider
+                  document={
+                    <PDFTemplateCustom
+                      rowData={data as any}
+                      headers={selectedData}
+                    />
+                  }
+                >
+                  {({ loading, url }) =>
+                    loading ? (
+                      <span style={{ color: 'blue' }}>....</span>
+                    ) : (
+                      <a
+                        href={url ?? ''}
+                        download="CustomReport.pdf"
+                        style={{ color: 'blue' }}
+                      >
             CustomReport.pdf
-          </a>
-        )
-      }
-    </BlobProvider>
-  ) : (
-    <BlobProvider
-      document={
-        <PDFTemplateCustomAll
-          rowData={data as any}
-          headers={selectedData}
-        />
-      }
-    >
-      {({ loading, url }) =>
-        loading ? (
-          <span style={{ color: 'blue' }}>....</span>
-        ) : (
-          <a
-            href={url ?? ''}
-            download="CustomReport.pdf"
-            style={{ color: 'blue' }}
-          >
+                      </a>
+                    )
+                  }
+                </BlobProvider>
+              ) : (
+                <BlobProvider
+                  document={
+                    <PDFTemplateCustomAll
+                      rowData={data as any}
+                      headers={selectedData}
+                    />
+                  }
+                >
+                  {({ loading, url }) =>
+                    loading ? (
+                      <span style={{ color: 'blue' }}>....</span>
+                    ) : (
+                      <a
+                        href={url ?? ''}
+                        download="CustomReport.pdf"
+                        style={{ color: 'blue' }}
+                      >
             CustomReport.pdf
-          </a>
-        )
-      }
-    </BlobProvider>
-  )}
-</Container>
+                      </a>
+                    )
+                  }
+                </BlobProvider>
+              )}
+            </Container>
           </DialogContent>
           <DialogActions>
             <Button

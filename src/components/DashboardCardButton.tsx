@@ -16,58 +16,106 @@ const DashboardCardButton = (props: { primaryText: string;icon?: React.ReactNode
         component: StyledLink,
         to: props.targetRoute,
       })}
+      sx={{
+        'borderRadius': 3,
+        'boxShadow': '14px 20px 24px rgba(2, 2, 2, 0.08)',
+        'backgroundColor': '#ffffff',
+        'height': { xs: 80, sm: 90 },
+        'display': 'flex',
+        'alignItems': 'stretch',
+        'cursor': 'pointer',
+        'transition': 'all 0.25s ease',
+        'borderColor': '#e5e7eb',
+        'borderWidth': 1,
+        'borderStyle': 'solid',
+        '&:hover': {
+          boxShadow: '20px 20px 22px rgba(0, 0, 0, 0.12)',
+          transform: 'translateY(-2px)',
+          backgroundColor: '#e9e9fc',
+        },
+      }}
     >
-      <CardActionArea
+      {/* LEFT COLOR STRIP */}
+      {/* <Box
         sx={{
-          'fontSize': '12px',
-          'border': '2px solid #3B32E6',
-          'backgroundColor': props.color,
-          'color': 'white',
-          'borderRadius': 3,
-          'transition': 'all 0.3s',
-          'padding': 1,
-          'height': 190,
-          '&:hover': {
-            boxShadow: '0 8px 16px 0 rgba(0, 0, 0, 0.6)',
-            transform: 'translate(0, -2px)',
-            cursor: 'pointer',
-          },
-          '&:active': {
-            boxShadow: 'none !important',
-            transform: 'translate(0, 2px)',
-            cursor: 'pointer',
-          },
+          width: 4,
+          backgroundColor: '#ffffff',
+          borderRadius: '2px 0 0 2px',
+        }}
+      /> */}
+
+      {/* CONTENT */}
+      <CardContent
+        sx={{
+          flex: 1,
+          position: 'relative', // ✅ important
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          px: 2.5,
+          py: 0,
         }}
       >
-        <CardContent sx={{ padding: 1 }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', color: 'black' }}>
-            <Typography variant="h6">{props.primaryText}</Typography>
-            <Typography variant="h6" sx={{ color: 'black' }}>{props.secondaryText ?? <>&nbsp;</>}</Typography>
-            <Box sx={{ display: 'flex', alignItems: 'end', justifyContent: 'end', width: '100%' }}>
-              {/* <Box>{props.icon}</Box> */}
-              <Button
-                variant="contained"
-                endIcon={<KeyboardDoubleArrowRightOutlinedIcon />}
-                sx={{
-                  'color': 'white',
-                  'bgcolor': 'orange',
-                  '&:hover': {
-                    color: 'white',
-                    bgcolor: 'black',
-                  },
-                  '&:active': {
-                    color: 'white',
-                    bgcolor: 'black',
-                  },
-                }}
-              >
-        Go
-              </Button>
-            </Box>
+        {/* LEFT: ICON + TEXT */}
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 1.5,
+          }}
+        >
+          {/* ICON */}
+          <Box
+            sx={{
+              width: 34,
+              height: 34,
+              borderRadius: '50%',
+              backgroundColor: '#eef2ff',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0,
+            }}
+          >
+            {props.icon}
           </Box>
-        </CardContent>
 
-      </CardActionArea>
+          {/* TEXT */}
+          <Typography
+            fontSize={{ xs: 14, sm: 15 }}
+            fontWeight={600}
+            color="text.primary"
+          >
+            {props.primaryText}
+          </Typography>
+        </Box>
+
+        {/* GO BUTTON – bottom right */}
+        {/* <Button
+          size="small"
+          variant="contained"
+          sx={{
+            'position': 'absolute',
+            'bottom': 8,
+            'right': 8,
+            'minWidth': 44,
+            'height': 26,
+            'fontSize': 12,
+            'borderRadius': 100,
+            'textTransform': 'none',
+            'backgroundColor': '#ff7c24',
+            'boxShadow': 'none',
+            '&:hover': {
+              backgroundColor: '#0c37c9',
+            },
+          }}
+          onClick={(e) => {
+            e.stopPropagation(); // ✅ prevent card click
+          }}
+        >
+          <KeyboardDoubleArrowRightOutlinedIcon fontSize="small" />
+        </Button> */}
+      </CardContent>
     </Card>
   );
 };

@@ -7,6 +7,7 @@ export default {
 
 
   getCount: (conditions?: unknown) => getStandardResponse<number>(axios.get('/fr/count', { params: conditions, headers: { ...getAuthHeader() } })),
+  getCustomCount: (conditions?: unknown) => getStandardResponse<number>(axios.get('/fr/ReSubmittedCount', { params: conditions, headers: { ...getAuthHeader() } })),
 
   imageget: () => getStandardResponse<FR>(axios.get('/image', { headers: { ...getAuthHeader() } })),
   reopen: (fRId:string) => getStandardResponse<FR>(axios.post(`/fr/${fRId}/reopen`, { headers: { ...getAuthHeader() } })),
@@ -37,7 +38,7 @@ export default {
     updatedAt: moment(fr.updatedAt),
     frVerifiedOn: fr.frVerifiedOn ? moment(fr.frVerifiedOn) : null,
   }))),
-  getAllOptimizedExSupprt: (conditions?: {dateRange?: DateRange; support?: 'Expanse' | 'Support'|'All'|'Resubmitted' |null; status?: any}) => getStandardResponse<FR[]>(axios.get('/fr/support-expanse/',
+  getAllOptimizedExSupprt: (conditions?: {dateRange?: DateRange; support?: 'Expanse' | 'Support'|'All'|'Resubmitted' |'Custom'|null; status?: any}) => getStandardResponse<FR[]>(axios.get('/fr/support-expanse/',
     { params: conditions, headers: { ...getAuthHeader() } }),
   (data) => data.map((fr: FR) => ({
     ...fr,

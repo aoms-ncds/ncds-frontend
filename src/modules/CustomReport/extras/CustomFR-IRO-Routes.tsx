@@ -9,7 +9,7 @@ const customFrIroRoute: ModuleRoute = {
   base: '/custom-report',
   pages: [
     {
-      title: 'Custom Report',
+      title: 'Reports',
       path: '/',
       element: <CustomReport />,
       private: true,

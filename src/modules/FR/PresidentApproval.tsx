@@ -10,6 +10,7 @@ import {
   Box,
   Button,
   Card,
+  CardContent,
   Dialog,
   DialogActions,
   DialogContent,
@@ -23,6 +24,8 @@ import {
   Radio,
   RadioGroup,
   TextField,
+  ToggleButton,
+  ToggleButtonGroup,
   Typography,
 } from '@mui/material';
 import FRServices from './extras/FRServices';
@@ -394,54 +397,54 @@ const PresidentApproval = () => {
     //   headerClassName: 'super-app-theme--cell',
     //   headerAlign: 'center',
     // },
-    {
-      field: 'sanctionedAsPer',
-      renderHeader: () => (<b>Special Sanction</b>),
-      renderCell: (props) => (
-        <p style={{
-          maxWidth: 200,
-          whiteSpace: 'normal',
-          wordBreak: 'break-word',
-          justifyContent: 'center',
-          textAlign: 'center',
-        }}> {props.row.sanctionedAsPer?.toString()}</p>
-      ),
-      width: 200,
-      align: 'center',
-      headerClassName: 'super-app-theme--cell',
-      headerAlign: 'center',
-    },
-    {
-      field: 'status',
-      renderHeader: () => (<b>Status</b>),
-      width: 250,
-      align: 'center',
-      headerClassName: 'super-app-theme--cell',
-      headerAlign: 'center',
-      // renderCell: (props) => (
-      //   <p
-      //     style={{
-      //       maxWidth: 250,
-      //       whiteSpace: 'normal',
-      //       wordBreak: 'break-word',
-      //     }}
-      //   >
-      //     {IROLifeCycleStates.getStatusNameByCodeTransaction(props.value).replaceAll('_', ' ')}
-      //   </p>
-      // ),
-      valueGetter: (params) => {
-        return IROLifeCycleStates.getStatusNameByCodeTransaction(params.value).replaceAll('_', ' ');
-      },
-    },
-    {
-      field: 'updatedAt',
-      renderHeader: () => (<b>Last Updated</b>),
-      valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
-      width: 130,
-      align: 'center',
-      headerClassName: 'super-app-theme--cell',
-      headerAlign: 'center',
-    },
+    // {
+    //   field: 'sanctionedAsPer',
+    //   renderHeader: () => (<b>Special Sanction</b>),
+    //   renderCell: (props) => (
+    //     <p style={{
+    //       maxWidth: 200,
+    //       whiteSpace: 'normal',
+    //       wordBreak: 'break-word',
+    //       justifyContent: 'center',
+    //       textAlign: 'center',
+    //     }}> {props.row.sanctionedAsPer?.toString()}</p>
+    //   ),
+    //   width: 200,
+    //   align: 'center',
+    //   headerClassName: 'super-app-theme--cell',
+    //   headerAlign: 'center',
+    // },
+    // {
+    //   field: 'status',
+    //   renderHeader: () => (<b>Status</b>),
+    //   width: 250,
+    //   align: 'center',
+    //   headerClassName: 'super-app-theme--cell',
+    //   headerAlign: 'center',
+    //   // renderCell: (props) => (
+    //   //   <p
+    //   //     style={{
+    //   //       maxWidth: 250,
+    //   //       whiteSpace: 'normal',
+    //   //       wordBreak: 'break-word',
+    //   //     }}
+    //   //   >
+    //   //     {IROLifeCycleStates.getStatusNameByCodeTransaction(props.value).replaceAll('_', ' ')}
+    //   //   </p>
+    //   // ),
+    //   valueGetter: (params) => {
+    //     return IROLifeCycleStates.getStatusNameByCodeTransaction(params.value).replaceAll('_', ' ');
+    //   },
+    // },
+    // {
+    //   field: 'updatedAt',
+    //   renderHeader: () => (<b>Last Updated</b>),
+    //   valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
+    //   width: 130,
+    //   align: 'center',
+    //   headerClassName: 'super-app-theme--cell',
+    //   headerAlign: 'center',
+    // },
 
   ];
 
@@ -459,9 +462,9 @@ const PresidentApproval = () => {
         permissions={['READ_FR']}
         granted={(
           <>
-            <Card sx={{ maxWidth: '78vw', height: '85vh', alignItems: 'center' }}>
-              <Grid container padding={2}>
-                <Grid item xs={4}>
+            <Card sx={{ Width: '100%', height: '85vh', alignItems: 'center' }}>
+              <Grid container padding={2} p={2}>
+                <Grid item xs={6} p={1}>
                   {/* <div style={{ display: 'flex', alignItems: 'center' }}> */}
                   <TextField
                     label="Search"
@@ -474,79 +477,39 @@ const PresidentApproval = () => {
                   />
                   {/* </div> */}
                 </Grid>
-                <Grid item p={1}>
-                  <FormControl>
-                    <RadioGroup
-                      aria-labelledby="Filter"
-                      value={statusFilter1}
-                      onChange={(e) =>
-                        setStatusFilter1(
-                          e.target.value === 'Support' ?
-                            'Support' :
-                            e.target.value === 'Expanse' ?
-                              'Expanse' :
-                              'All',
-                        )
-                      }
-                      name="Filter"
-                      row
-                    >
-                      <FormControlLabel value="All" control={<Radio />} label="All" />
-                      <FormControlLabel value="Support" control={<Radio />} label="Support" />
-                      <FormControlLabel value="Expanse" control={<Radio />} label="Expense" />
-                    </RadioGroup>
-                  </FormControl>
-                </Grid>
-                <Grid item xs={4} sx={{ px: -0 }}>
-                  <PermissionChecks
-                    permissions={['PRESIDENT_ACCESS']}
-                    granted={(
-                      <Button
-                        onClick={async () => {
-                          const sheet =
-                    FRRequests ?
-                      FRRequests.map((fr:FR) => ([
-                        fr.FRno,
-                        fr.FRdate.format('DD/MM/YYYY'),
-                        fr.division?.details.name,
-                        fr.purposeSubdivision?.name,
-                        fr.mainCategory,
-                        fr.particulars?.reduce(
-                          (total, particular) => total + Number(particular.requestedAmount),
-                          0,
-                        ),
-                        fr.sanctionedAmount,
-                        fr.sanctionedBank,
-                        fr.sanctionedAsPer,
-                        IROLifeCycleStates.getStatusNameByCodeTransaction(fr.status).replaceAll('_', ' '),
-                      ])) :
-                      [];
-                          const headers=[
-                            'FR No',
-                            'Date',
-                            'Division',
-                            'Sub Division',
-                            'Main Category',
-                            'Requested Amt',
-                            'Sanctioned Amt',
-                            'Sanctioned Bank',
-                            'Sanctioned As per',
-                            'Status',
-                          ];
-                          const worksheet = XLSX.utils.json_to_sheet(sheet);
-                          const workbook = XLSX.utils.book_new();
-                          XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet');
-                          XLSX.utils.sheet_add_aoa(worksheet, [headers], { origin: 'A1' });
-                          XLSX.writeFile(workbook, 'President_FR_Report.xlsx', { compression: true });
-                        }}
-                        startIcon={<DownloadIcon />}
-                        color="primary" sx={{ float: 'right', mt: 2, mr: 2, mb: 2 }}
-                        variant="contained"
+                <Grid item xs={6} p={1} display="flex" justifyContent="flex-end" alignItems="center">
+                  {/* <Card elevation={2}>
+                    <CardContent> */}
+                  <Grid
+                    container
+                    spacing={2}
+                    alignItems="center"
+                    sx={{
+                      flexWrap: { xs: 'wrap', md: 'nowrap' },
+                    }}
+                  >
+                    {/* STATUS */}
+                    <Grid item xs={12} md={12}>
+                      <ToggleButtonGroup
+                        fullWidth
+                        exclusive
+                        size="small"
+                        value={statusFilter1}
+                        onChange={(_, val) => val && setStatusFilter1(val)}
                       >
-                              Export
-                      </Button>
-                    )}/>
+                        {/* <ToggleButton value="Resubmitted">Re-Submitted</ToggleButton> */}
+                        <ToggleButton value="Support">Support</ToggleButton>
+                        <ToggleButton value="Expanse">Expense</ToggleButton>
+                        <ToggleButton value="All">Both</ToggleButton>
+                      </ToggleButtonGroup>
+                    </Grid>
+
+                    {/* CATEGORY */}
+                  </Grid>
+                  {/* </CardContent> */}
+                  {/* </Card> */}
                 </Grid>
+
                 <Grid item xs={12} md={12}>
                   <Box sx={{
                     'height': 400,

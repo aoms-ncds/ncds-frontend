@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 
-import { Grid, TextField, Button, Box, Card, Container, Dialog, DialogActions, DialogContent, DialogTitle, Typography, FormControl, FormControlLabel, Radio, RadioGroup } from '@mui/material';
+import { Grid, TextField, Button, Box, Card, Container, Dialog, DialogActions, DialogContent, DialogTitle, Typography, FormControl, FormControlLabel, Radio, RadioGroup, ToggleButton, ToggleButtonGroup, Checkbox, InputLabel, ListItemText, ListSubheader, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import { GridColDef, GridCellParams, DataGrid } from '@mui/x-data-grid';
 import { BlobProvider, PDFDownloadLink } from '@react-pdf/renderer';
 import moment from 'moment';
@@ -29,6 +29,7 @@ import CommonLifeCycleStates from '../../extras/CommonLifeCycleStates';
 import ReleaseAmountDialogEdit from './components/ReleaseAmountDialogEdit';
 import ReleaseAmountDialog from './components/ReleaseAmountDialog';
 import TransactionLogDialog from '../FR/components/TransactionLogDialog';
+import formatAmount from '../Common/formatcode';
 
 const ReopenedIRO = () => {
   const [closedFRs, setClosedFRs] = useState<IROrder[] | null>(null);
@@ -317,6 +318,51 @@ const ReopenedIRO = () => {
     signature: {},
     specialsanction: '',
   });
+  const toggleSx = {
+    'border': '1px solid #dcdcdc',
+    'borderRadius': 1,
+    'overflow': 'hidden',
+    'display': 'flex',
+    '& .MuiToggleButton-root': {
+      'border': 'none',
+      'borderRight': '1px solid #dcdcdc',
+      'textTransform': 'none',
+      'fontSize': '0.85rem',
+      'fontWeight': 500,
+      'px': 2.5,
+      'whiteSpace': 'nowrap',
+      'minHeight': 36,
+      '&:last-of-type': { borderRight: 'none' },
+      '&.Mui-selected': {
+        backgroundColor: '#eaeaea',
+        color: '#000',
+      },
+    },
+  };
+  const [divisions, setDivisions] = useState<string[]>([]);
+  const [divisionSearch, setDivisionSearch] = useState('');
+  const [selectedDivisions, setSelectedDivisions] = useState<string[]>([]);
+
+  useEffect(() => {
+    DivisionsServices.getDivisions().then((res) => {
+      const names = res.data.map((d: any) => d.details.name);
+      setDivisions(names);
+    });
+  }, []);
+  const filteredDivisions = divisions.filter((name) =>
+    name
+    .toLowerCase()
+    .replace(/\s/g, '') // remove spaces
+    .includes(divisionSearch.toLowerCase().replace(/\s/g, '')),
+  );
+  const handleDivisionChange = (event: SelectChangeEvent<string[]>) => {
+    const value = event.target.value as string[];
+    if (value.includes('__ALL__')) {
+      ([]); // empty = show all
+      return;
+    }
+    setSelectedDivisions(value);
+  };
   const [pdfProps, setPdfProps] = useState<{
     purpose: FRPurpose | null;
     divisionId: string | null;
@@ -408,16 +454,33 @@ const ReopenedIRO = () => {
       });
   }, []);
   const filteredRows = (closedFRs ?? []).filter((row) => {
-    if ((row.IROno && row.IROno?.toLowerCase().includes(searchText?.toLowerCase())) ||
-    (row.IRODate && row.IRODate.format('DD/MM/YYYY').toLowerCase().includes(searchText?.toLowerCase()))||
-    // (row.particulars[0]?.subCategory1 && row.particulars[0]?.subCategory1.toLowerCase().includes(searchText.toLowerCase())) ||
-    //   (row.particulars[0]?.subCategory2 && row.particulars[0]?.subCategory2.toLowerCase().includes(searchText.toLowerCase())) ||
-    //   (row.particulars[0]?.subCategory3 && row.particulars[0]?.subCategory3.toLowerCase().includes(searchText.toLowerCase())) ||
-      (row.division?.details.name && row.division?.details.name.toLowerCase().includes(searchText.toLowerCase()))
-    ) {
-      return true;
-    }
-    return Object.values(row).some((value) => value && value.toString().toLowerCase().includes(searchText.toLowerCase()));
+    const divisionMatch = selectedDivisions.length === 0 ||
+    selectedDivisions.includes(row?.division?.details.name ?? '');
+
+    if (!searchText) return divisionMatch;
+
+    const searchLower = searchText.toLowerCase();
+
+    // Check all searchable fields
+    const searchMatch =
+    (row.IROno && row.IROno.toLowerCase().includes(searchLower)) ||
+    (row.IRODate && row.IRODate.format('DD/MM/YYYY').toLowerCase().includes(searchLower)) ||
+    (row.division?.details.name && row.division?.details.name.toLowerCase().includes(searchLower)) ||
+    (row.purposeSubdivision?.name && row.purposeSubdivision.name.toLowerCase().includes(searchLower)) ||
+    // Add subCategory search
+    (row.particulars && row.particulars.some((particular:any) =>
+      (particular.subCategory1 && particular.subCategory1.toLowerCase().includes(searchLower)) ||
+      (particular.subCategory2 && particular.subCategory2.toLowerCase().includes(searchLower)) ||
+      (particular.subCategory3 && particular.subCategory3.toLowerCase().includes(searchLower)),
+    )) ||
+    // Add mainCategory search
+    (row.particulars && row.particulars.some((particular:any) =>
+      particular.mainCategory && particular.mainCategory.toLowerCase().includes(searchLower),
+    )) ||
+    // Add beneficiary name search
+    (row.sanctionedBank && row.sanctionedBank.toLowerCase().includes(searchLower));
+
+    return divisionMatch && searchMatch;
   });
   if (searchText && filteredRows.length ===0) {
     enqueueSnackbar({
@@ -728,7 +791,7 @@ const ReopenedIRO = () => {
       headerName: 'IRODate',
       width: 130,
       valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
-      renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
+      renderHeader: (params) => <b style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</b>,
       align: 'center',
       headerAlign: 'center',
     },
@@ -825,6 +888,46 @@ const ReopenedIRO = () => {
         return <p>{particularAmount.toFixed(2)}</p>;
       },
     },
+    {
+      field: 'Transferred',
+      headerName: 'Transferred Amount',
+      width: 180,
+      renderHeader: () => <b>Transferred Amount</b>,
+
+      valueGetter: (params: any) => {
+        if (params.row.sanctionedAmount !== undefined) {
+          return formatAmount(Number(params.row.sanctionedAmount));
+        }
+
+        if (Array.isArray(params.row.particulars)) {
+          const total = params.row.particulars.reduce(
+            (sum: number, item: any) =>
+              sum + (Number(item.sanctionedAmount) || 0),
+            0,
+          );
+
+          return formatAmount(total);
+        }
+
+        return formatAmount(0);
+      },
+      align: 'center' as const,
+      headerAlign: 'center' as const,
+    },
+
+    {
+      field: 'totalTransferred',
+      headerName: 'Total Transferred Amount',
+      width: 180,
+      renderHeader: () => <b>Total Transferred Amount</b>,
+      valueGetter: (params: any) => {
+        return formatAmount(
+          Number(params.row.releaseAmount?.transferredAmount) || 0,
+        );
+      },
+      align: 'center' as const,
+      headerAlign: 'center' as const,
+    },
     { field: 'updatedAt', align: 'center',
       headerAlign: 'center',
       renderHeader: () => (<b>Last Updated</b>),
@@ -852,7 +955,7 @@ const ReopenedIRO = () => {
       });
   }, [dateRange, statusFilter1, exstatusFilter]);
   return (
-    <CommonPageLayout title="Reopened IRO" momentFilter={{
+    <CommonPageLayout status='REOPENED ' title="Reopened IRO" momentFilter={{
       dateRange: dateRange,
       onChange: (newDateRange) => {
         setDateRange(newDateRange);
@@ -876,59 +979,120 @@ const ReopenedIRO = () => {
             />
             {/* </div> */}
           </Grid>
-          <Grid
-            item
-            sx={{ alignContent: 'start', display: 'flex', justifyContent: 'space-between' }}
-          >
-            <FormControl>
-              <RadioGroup
-                aria-labelledby="Filter"
-                value={
-                  exstatusFilter.includes(69) ? 'NonBankTransfers' :'All'
-                }
-                onChange={(e) => {
-                  const value = e.target.value;
+          <Grid item xs={3}>
+            {hasPermissions(['MANAGE_IRO']) && (
+              <Grid item xs={12} md="auto" sx={{
+                display: 'flex',
+                alignItems: 'center', // ✅ vertical center
+              }}>
+                <FormControl
+                  sx={{
+                    'minWidth': 200,
+                    '& .MuiOutlinedInput-root': {
+                      // height: 45, // ✅ control select height
+                      fontSize: 13,
+                      borderRadius: 1.5,
+                    },
+                  }}
+                >
+                  <InputLabel id="division-label">
+  Division
+                  </InputLabel>
+                  <Select
+                    multiple
+                    value={selectedDivisions}
+                    label="Division"
+                    onChange={handleDivisionChange}
+                    renderValue={(selected) =>
+                      selected.length === 0 ? 'None' : selected.join(', ')
+                    }
+                    MenuProps={{
+                      PaperProps: {
+                        style: { maxHeight: 300, width: 250 },
+                      },
+                    }}
+                  >
+                    <ListSubheader>
+                      <TextField
+                        size="small"
+                        placeholder="Search division..."
+                        fullWidth
+                        autoFocus
+                        value={divisionSearch}
+                        onChange={(e) => setDivisionSearch(e.target.value)}
+                        onKeyDown={(e) => e.stopPropagation()}
+                      />
+                    </ListSubheader>
+
+                    <MenuItem value="__ALL__">
+                      <Checkbox checked={selectedDivisions.length === 0} />
+                      <ListItemText primary="None" />
+                    </MenuItem>
+
+                    {filteredDivisions.map((name) => (
+                      <MenuItem key={name} value={name}>
+                        <Checkbox checked={selectedDivisions.includes(name)} />
+                        <ListItemText primary={name} />
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
+            )}
+          </Grid>
+
+          <>
+            <Grid item>
+              <ToggleButtonGroup
+                exclusive
+                size="small"
+                value={statusFilter1}
+                onChange={(_, value) => {
+                  if (!value) return;
+
+                  setStatusFilter1(
+                    value === 'Support' ?
+                      'Support' :
+                      value === 'Expanse' ?
+                        'Expanse' :
+                        'All',
+                  );
+                }}
+                sx={toggleSx}
+              >
+                <ToggleButton value="Support">SUPPORT</ToggleButton>
+                <ToggleButton value="Expanse">EXPENSE</ToggleButton>
+                <ToggleButton value="All">BOTH CATEGORIES</ToggleButton>
+              </ToggleButtonGroup>
+            </Grid>
+            {/* ===== STATUS FILTER (ALL / NON BANK TRANSFERS) ===== */}
+            <Grid item>
+              <ToggleButtonGroup
+                exclusive
+                size="small"
+                value={exstatusFilter.includes(69) ? 'NonBankTransfers' : 'All'}
+                onChange={(_, value) => {
+                  if (!value) return;
+
                   if (value === 'NonBankTransfers') {
                     setExStatusFilter([69]);
                   } else {
                     setExStatusFilter([]);
                     setStatusFilter([IROLifeCycleStates.REOPENED]);
-                    // setStatusFilter([]);
                   }
                 }}
-                name="Filter"
-                row
+                sx={toggleSx}
               >
-                <FormControlLabel value="All" control={<Radio />} label="All" />
-                <FormControlLabel value="NonBankTransfers" control={<Radio />} label="NON BANK TRANSFERS" />
-              </RadioGroup>
-            </FormControl>
-          </Grid>
-          <Grid item >
-            <FormControl>
-              <RadioGroup
-                aria-labelledby="Filter"
-                value={statusFilter1}
-                onChange={(e) =>
-                  setStatusFilter1(
-                    e.target.value === 'Support' ?
-                      'Support' :
-                      e.target.value === 'Expanse' ?
-                        'Expanse' :
-                        'All',
-                  )
-                }
-                name="Filter"
-                row
-              >
-                {/* <FormControlLabel value="All" control={<Radio />} label="All" /> */}
-                <FormControlLabel value="Support" control={<Radio />} label="Support" />
-                <FormControlLabel value="Expanse" control={<Radio />} label="Expense" />
-                <FormControlLabel value="All" control={<Radio />} label="BOTH CATEGORIES " />
+                <ToggleButton value="All">ALL</ToggleButton>
+                <ToggleButton value="NonBankTransfers">
+        NON BANK TRANSFERS
+                </ToggleButton>
+              </ToggleButtonGroup>
+            </Grid>
 
-              </RadioGroup>
-            </FormControl>
-          </Grid>
+            {/* ===== CATEGORY FILTER (SUPPORT / EXPENSE / BOTH) ===== */}
+
+          </>
 
           {/* <Grid item>
 
@@ -1012,12 +1176,18 @@ const ReopenedIRO = () => {
               }}
             >
 
-              <DataGrid rows={filteredRows ?? []} columns={columns} getRowId={(row) => row._id} loading={closedFRs === null} style={{ height: '70vh', width: '100%' }} getRowClassName={(params) => {
-                if (params.row.specialsanction == 'Yes') {
-                  return 'special-sanction'; // Class for rows with special sanction
+              <DataGrid rows={filteredRows ?? []} columns={columns} getRowId={(row) => row._id} loading={closedFRs === null} style={{ height: '70vh', width: '100%' }}
+                isRowSelectable={(params:any) =>
+                  selectedDivisions.length === 0 ?
+                    true :
+                    selectedDivisions.includes(params?.row?.division?.details?.name)
                 }
-                return params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'; // Default classes
-              }}
+                getRowClassName={(params) => {
+                  if (params.row.specialsanction == 'Yes') {
+                    return 'special-sanction'; // Class for rows with special sanction
+                  }
+                  return params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'; // Default classes
+                }}
               />
             </Box>
           </Grid>
@@ -1027,40 +1197,40 @@ const ReopenedIRO = () => {
       <Dialog open={Boolean(conform1)} onClose={() => setConform1(false)} maxWidth="xs" fullWidth>
         <DialogTitle>Warning</DialogTitle>
         <DialogContent>
-         <Container>
-  {`Are you sure you want to close this IRO No ${iroData?.IROno}
+          <Container>
+            {`Are you sure you want to close this IRO No ${iroData?.IROno}
     from ${iroData?.division?.details.name}
     related to FR No ${FrData?.FRno ?? ''} ?`}
-  <br />
+            <br />
 
-  {iroData && mngrName && selectedSignature && (
-    <BlobProvider
-      document={
-        <IROTemplate
-          rowData={iroData}
-          mngrName={mngrName}
-          officeMngrSign={selectedSignature}
-          fr={FrData as FR}
-          president={signaturePresident}
-        />
-      }
-    >
-      {({ loading, url }) =>
-        loading || printIroLoading ? (
-          <span style={{ color: 'blue' }}>....</span>
-        ) : (
-          <a
-            href={url ?? ''}
-            download={`${iroData?.IROno}_Receipt.pdf`}
-            style={{ color: 'blue' }}
-          >
-            {`${iroData?.IROno}_Receipt.pdf`}
-          </a>
-        )
-      }
-    </BlobProvider>
-  )}
-</Container>
+            {iroData && mngrName && selectedSignature && (
+              <BlobProvider
+                document={
+                  <IROTemplate
+                    rowData={iroData}
+                    mngrName={mngrName}
+                    officeMngrSign={selectedSignature}
+                    fr={FrData as FR}
+                    president={signaturePresident}
+                  />
+                }
+              >
+                {({ loading, url }) =>
+                  loading || printIroLoading ? (
+                    <span style={{ color: 'blue' }}>....</span>
+                  ) : (
+                    <a
+                      href={url ?? ''}
+                      download={`${iroData?.IROno}_Receipt.pdf`}
+                      style={{ color: 'blue' }}
+                    >
+                      {`${iroData?.IROno}_Receipt.pdf`}
+                    </a>
+                  )
+                }
+              </BlobProvider>
+            )}
+          </Container>
         </DialogContent>
         <DialogActions>
           <Button
@@ -1075,33 +1245,33 @@ const ReopenedIRO = () => {
             {iroData && mngrName&&selectedSignature&& (
 
               <>
-               <BlobProvider
-  document={
-    <IROTemplate
-      rowData={iroData}
-      mngrName={mngrName}
-      officeMngrSign={selectedSignature}
-      fr={FrData as FR}
-      president={signaturePresident}
-    />
-  }
->
-  {({ blob, loading }) => (
-    <Button
-      variant="contained"
-      color="info"
-      onClick={async () => {
-        if (blob) {
-          setLoading(true);
-          await attach(blob);
-        }
-      }}
-      disabled={loading || printIroLoading}
-    >
-      {loading || printIroLoading ? 'Loading...' : 'Yes, Close'}
-    </Button>
-  )}
-</BlobProvider>
+                <BlobProvider
+                  document={
+                    <IROTemplate
+                      rowData={iroData}
+                      mngrName={mngrName}
+                      officeMngrSign={selectedSignature}
+                      fr={FrData as FR}
+                      president={signaturePresident}
+                    />
+                  }
+                >
+                  {({ blob, loading }) => (
+                    <Button
+                      variant="contained"
+                      color="info"
+                      onClick={async () => {
+                        if (blob) {
+                          setLoading(true);
+                          await attach(blob);
+                        }
+                      }}
+                      disabled={loading || printIroLoading}
+                    >
+                      {loading || printIroLoading ? 'Loading...' : 'Yes, Close'}
+                    </Button>
+                  )}
+                </BlobProvider>
 
               </>
             )}

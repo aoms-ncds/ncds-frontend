@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 import { SetStateAction, useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import { Grid, Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Alert, Typography, Divider, Box, Tooltip, FormControl, FormControlLabel, Radio, RadioGroup } from '@mui/material';
+import { Grid, Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Alert, Typography, Divider, Box, Tooltip, FormControl, FormControlLabel, Radio, RadioGroup, ToggleButton, ToggleButtonGroup, Checkbox, InputLabel, ListItemText, ListSubheader, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 // eslint-disable-next-line max-len
 import {
   Edit as EditIcon,
@@ -34,6 +34,7 @@ import EditNoteIcon from '@mui/icons-material/EditNote';
 import * as XLSX from 'xlsx';
 import clsx from 'clsx';
 import TransactionLogDialog from '../FR/components/TransactionLogDialog';
+import DivisionsServices from '../Divisions/extras/DivisionsServices';
 
 const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
   const [openRemarks, toggleOpenRemarks] = useState(false);
@@ -51,7 +52,32 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
   const [addSignature, toggleAddSignature] = useState(false);
   const [searchText, setSearchText] = useState('');
   const [openLog, setOpenLog] = useState(false);
-  const [statusFilter1, setStatusFilter1] = useState<'Support' |'All' | 'Expanse'| null>('All'); // default WFA: Waiting for access or Reverted
+  const [statusFilter1, setStatusFilter1] = useState<'Support' |'All' | 'Expanse'| 'Sanctioned'| null>('All'); // default WFA: Waiting for access or Reverted
+  const toggleSx = {
+    'border': '1px solid #dcdcdc',
+    'borderRadius': 1,
+    'overflow': 'hidden',
+    'display': 'flex',
+    '& .MuiToggleButton-root': {
+      'border': 'none',
+      'borderRight': '1px solid #dcdcdc',
+      'textTransform': 'none',
+      'fontSize': '0.85rem',
+      'fontWeight': 500,
+      'px': 2.5,
+      'whiteSpace': 'nowrap',
+      'minHeight': 36,
+      '&:last-of-type': {
+        borderRight: 'none',
+      },
+      '&.Mui-selected': {
+        backgroundColor: '#eaeaea',
+        color: '#000',
+      },
+    },
+  };
+  const [selectedDivisions, setSelectedDivisions] = useState<string[]>([]);
+  const [divisionSearch, setDivisionSearch] = useState('');
 
   const [selectedIRO, setSelectedIRO] = useState<IROrder>({
     _id: '',
@@ -325,8 +351,27 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
   const [fileUploaderAction, setFileUploaderAction] = useState<'add' | 'manage'>('add');
   const [statusFilter, setStatusFilter] = useState([IROLifeCycleStates.WAITING_FOR_OFFICE_MNGR, IROLifeCycleStates.IRO_IN_PROCESS]); // default WFA: Waiting for access or Reverted
   const [exstatusFilter, setExStatusFilter] = useState<any>([]); // default WFA: Waiting for access or Reverted
-
-
+  const [divisions, setDivisions] = useState<string[]>([]);
+  useEffect(() => {
+    DivisionsServices.getDivisions().then((res) => {
+      const names = res.data.map((d: any) => d.details.name);
+      setDivisions(names);
+    });
+  }, []);
+  const handleDivisionChange = (event: SelectChangeEvent<string[]>) => {
+    const value = event.target.value as string[];
+    if (value.includes('__ALL__')) {
+      setSelectedDivisions([]); // empty = show all
+      return;
+    }
+    setSelectedDivisions(value);
+  };
+  const filteredDivisions = divisions.filter((name) =>
+    name
+    .toLowerCase()
+    .replace(/\s/g, '') // remove spaces
+    .includes(divisionSearch.toLowerCase().replace(/\s/g, '')),
+  );
   // const userPermissions = (user.user as User)?.permissions;
   //   useEffect(() => {
   //     if (props.action === 'release') {
@@ -378,16 +423,30 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
   };
 
   const filteredRows = (IROrder ?? []).filter((row) => {
-    if ((row.IROno && row.IROno.toLowerCase().includes(searchText.toLowerCase())) ||
-      (row.IRODate && row.IRODate.format('DD/MM/YYYY').toLowerCase().includes(searchText.toLowerCase())) ||
-      // (row.particulars[0]?.subCategory1 && row.particulars[0]?.subCategory1.toLowerCase().includes(searchText.toLowerCase())) ||
-      // (row.particulars[0]?.subCategory2 && row.particulars[0]?.subCategory2.toLowerCase().includes(searchText.toLowerCase())) ||
-      // (row.particulars[0]?.subCategory3 && row.particulars[0]?.subCategory3.toLowerCase().includes(searchText.toLowerCase())) ||
-      (row.division?.details.name && row.division?.details.name.toLowerCase().includes(searchText.toLowerCase()))
-    ) {
-      return true;
-    }
-    return Object.values(row).some((value) => value && value.toString().toLowerCase().includes(searchText.toLowerCase()));
+    const divisionMatch = selectedDivisions.length === 0 ||
+    selectedDivisions.includes(row?.division?.details.name?? '');
+    if (!searchText) return divisionMatch;
+    const searchLower = searchText.toLowerCase();
+
+    const searchMatch =
+    (row.IROno && row.IROno.toLowerCase().includes(searchLower)) ||
+    (row.IRODate && row.IRODate.format('DD/MM/YYYY').toLowerCase().includes(searchLower)) ||
+    (row.division?.details.name && row.division?.details.name.toLowerCase().includes(searchLower)) ||
+    (row.purposeSubdivision?.name && row.purposeSubdivision.name.toLowerCase().includes(searchLower)) ||
+    // Add subCategory search
+    (row.particulars && row.particulars.some((particular:any) =>
+      (particular.subCategory1 && particular.subCategory1.toLowerCase().includes(searchLower)) ||
+      (particular.subCategory2 && particular.subCategory2.toLowerCase().includes(searchLower)) ||
+      (particular.subCategory3 && particular.subCategory3.toLowerCase().includes(searchLower)),
+    )) ||
+    // Add mainCategory search
+    (row.particulars && row.particulars.some((particular:any) =>
+      particular.mainCategory && particular.mainCategory.toLowerCase().includes(searchLower),
+    )) ||
+    // Add beneficiary name search
+    (row.sanctionedBank && row.sanctionedBank.toLowerCase().includes(searchLower));
+
+    return divisionMatch && searchMatch;
   });
   if (searchText && filteredRows.length ===0) {
     enqueueSnackbar({
@@ -436,8 +495,10 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
     {
       field: '_manage',
       headerName: '',
-      width: 50,
+      width: 70,
       align: 'center',
+      renderHeader: () => <b>Action</b>,
+
       headerAlign: 'center',
       type: 'string',
       renderCell: (params) => (
@@ -449,13 +510,24 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
           items={[
             {
               id: 'View',
-              text: 'View Details ',
+              text: 'View & Manage',
               // component: Link,
               // to: `/iro/${params.row._id}`,
               onClick: () => {
                 window.open( `/iro/${params.row._id}`, '_blank');
               },
               icon: PreviewIcon,
+            },
+            {
+              id: 'View',
+              text: 'View Fr ',
+              icon: PreviewIcon,
+              // component: Link,
+              // to: `/fr/${(params.row as any).FR}/view`,
+              onClick: () => {
+                window.open( `/fr/${(params.row as any).FR._id}/view`, '_blank');
+              },
+
             },
             ...(hasPermissions(['OFFICE_MNGR_ACCESS']) ?
               [
@@ -583,6 +655,15 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
                 setOpenLog(true);
               },
             },
+            {
+              id: 'log',
+              text: 'FR Log',
+              icon: PreviewIcon,
+              onClick: () => {
+                setSelectedIROId((params.row.FR as any)?._id);
+                setOpenLog(true);
+              },
+            },
             // {
             //   id: 'signature',
             //   text: 'Add signature',
@@ -641,13 +722,86 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
         />
       ),
     },
-    { field: 'IROno', headerName: 'IRO No', width: 130, renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>, align: 'center', headerAlign: 'center' },
+    // {
+    //   field: 'status',
+    //   renderHeader: () => <b>Status</b>,
+    //   width: 250,
+    //   align: 'center',
+    //   headerAlign: 'center',
+    //   cellClassName: (params) => {
+    //     const statusName = params.formattedValue;
+    //     if (params.value == null) {
+    //       return '';
+    //     }
+    //     switch (statusName) {
+    //     case 'WAITING FOR APPROVAL':
+    //       return clsx('yellow-light');
+    //     case 'WAITING FOR ACCOUNTS MNGR':
+    //       return clsx('yellow-dark');
+    //     case 'IRO APPROVED':
+    //       return clsx('orange-light');
+    //     case 'WAITING FOR RELEASE AMOUNT':
+    //       return clsx('orange-dark');
+    //     case 'AMOUNT RELEASED':
+    //       return clsx('green-light');
+    //     case 'RECONCILIATION DONE':
+    //       return clsx('green-medium');
+    //     case 'IRO CLOSED':
+    //       return clsx('green-dark');
+    //     case 'IRO DISAPPROVED':
+    //       return clsx('red-light');
+    //     case 'IRO IN PROCESS':
+    //       return clsx('dark-orange');
+    //     default:
+    //       // console.log('No class applied');
+    //       return '';
+    //     }
+    //   },
+
+    //   valueGetter: (params) => {
+    //     let statusName = IROLifeCycleStates.getStatusNameByCodeTransaction(params.value);
+    //     // Check if the status name needs to be changed
+    //     console.log(statusName, 'sjhivi');
+    //     switch (statusName) {
+    //     case 'SEND_BACK':
+    //       statusName = 'REVERTED';
+    //       break;
+    //     case 'FR_APPROVED':
+    //       statusName = 'FR VERIFIED'; // Change to whatever new name you want
+    //       break;
+    //     case 'FR_REJECTED':
+    //       statusName = 'IRO DISAPPROVED'; // Change to whatever new name you want
+    //       break;
+    //     case 'WAITING_FOR_OFFICE_MNGR':
+    //       statusName = 'WAITING FOR APPROVAL'; // Change to whatever new name you want
+    //       break;
+    //     case 'WAITING_FOR_ACCOUNTS_STATE':
+    //       statusName = 'IRO APPROVED'; // Change to whatever new name you want
+    //       break;
+    //     case 'IRO_IN_PROCESS':
+    //       statusName = 'IRO IN PROCESS'; // Change to whatever new name you want
+    //       break;
+    //       // case 'WAITING_FOR_ACCOUNTS_MNGR':
+    //       //   statusName = 'WAITING FOR ACCOUNTS MNGR';
+    //       //   if (props.action === 'release') {
+    //       //     statusName = 'WAITTING FOR RELEASE AMOUNT'; // Change to whatever new name you want
+    //       //   }
+    //       break;
+    //       // Add more cases for other status names you want to change
+    //     default:
+    //       statusName = statusName.replaceAll('_', ' ');
+    //       break;
+    //     }
+    //     return statusName;
+    //   },
+    // },
+    { field: 'IROno', headerName: 'IRO No', width: 130, renderHeader: (params) => <b style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</b>, align: 'center', headerAlign: 'center' },
     {
       field: 'IRODate',
       headerName: 'IRO Date',
       width: 130,
       valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
-      renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
+      renderHeader: (params) => <b style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</b>,
       align: 'center',
       headerAlign: 'center',
     },
@@ -660,79 +814,7 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
       align: 'center',
       headerAlign: 'center',
     },
-    {
-      field: 'status',
-      renderHeader: () => <b>Status</b>,
-      width: 250,
-      align: 'center',
-      headerAlign: 'center',
-      cellClassName: (params) => {
-        const statusName = params.formattedValue;
-        if (params.value == null) {
-          return '';
-        }
-        switch (statusName) {
-        case 'WAITING FOR APPROVAL':
-          return clsx('yellow-light');
-        case 'WAITING FOR ACCOUNTS MNGR':
-          return clsx('yellow-dark');
-        case 'IRO APPROVED':
-          return clsx('orange-light');
-        case 'WAITING FOR RELEASE AMOUNT':
-          return clsx('orange-dark');
-        case 'AMOUNT RELEASED':
-          return clsx('green-light');
-        case 'RECONCILIATION DONE':
-          return clsx('green-medium');
-        case 'IRO CLOSED':
-          return clsx('green-dark');
-        case 'IRO DISAPPROVED':
-          return clsx('red-light');
-        case 'IRO IN PROCESS':
-          return clsx('dark-orange');
-        default:
-          // console.log('No class applied');
-          return '';
-        }
-      },
 
-      valueGetter: (params) => {
-        let statusName = IROLifeCycleStates.getStatusNameByCodeTransaction(params.value);
-        // Check if the status name needs to be changed
-        console.log(statusName, 'sjhivi');
-        switch (statusName) {
-        case 'SEND_BACK':
-          statusName = 'REVERTED';
-          break;
-        case 'FR_APPROVED':
-          statusName = 'FR VERIFIED'; // Change to whatever new name you want
-          break;
-        case 'FR_REJECTED':
-          statusName = 'IRO DISAPPROVED'; // Change to whatever new name you want
-          break;
-        case 'WAITING_FOR_OFFICE_MNGR':
-          statusName = 'WAITING FOR APPROVAL'; // Change to whatever new name you want
-          break;
-        case 'WAITING_FOR_ACCOUNTS_STATE':
-          statusName = 'IRO APPROVED'; // Change to whatever new name you want
-          break;
-        case 'IRO_IN_PROCESS':
-          statusName = 'IRO IN PROCESS'; // Change to whatever new name you want
-          break;
-          // case 'WAITING_FOR_ACCOUNTS_MNGR':
-          //   statusName = 'WAITING FOR ACCOUNTS MNGR';
-          //   if (props.action === 'release') {
-          //     statusName = 'WAITTING FOR RELEASE AMOUNT'; // Change to whatever new name you want
-          //   }
-          break;
-          // Add more cases for other status names you want to change
-        default:
-          statusName = statusName.replaceAll('_', ' ');
-          break;
-        }
-        return statusName;
-      },
-    },
     {
       field: 'subDivisionName',
       renderHeader: () => <b>Sub Division Name</b>,
@@ -803,7 +885,7 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
       width: 150,
       align: 'center',
       headerAlign: 'center',
-      renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
+      renderHeader: (params) => <b style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</b>,
       valueGetter(params) {
         const IRORequest = params.row as IROrder;
         const particularAmount = IRORequest.particulars?.reduce((total, particular) => total + Number(particular.requestedAmount), 0);
@@ -858,14 +940,14 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
       headerName: 'Last Updated',
       width: 130,
       valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
-      renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
+      renderHeader: (params) => <b style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</b>,
       align: 'center',
       headerAlign: 'center',
     },
   ];
 
   return (
-    <CommonPageLayout title={'Office Manager Verify'} momentFilter={
+    <CommonPageLayout title={'Office Manager Verify '} status={'WAITING FOR APPROVAL'} momentFilter={
 
       {
         dateRange: dateRange,
@@ -884,7 +966,7 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
           <>
             <Card sx={{ maxWidth: '78vw', height: '100vh', alignItems: 'center' }}>
               <Grid container spacing={2} padding={2}>
-                <Grid item xs={4}>
+                <Grid item xs={6}>
                   {/* <div style={{ display: 'flex', alignItems: 'center' }}> */}
                   <TextField
                     label="Search"
@@ -897,80 +979,176 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
                   />
                   {/* </div> */}
                 </Grid>
-                <Grid
-                  item
-                  sx={{ alignContent: 'start', display: 'flex', justifyContent: 'space-between' }}
-                >
-                  <FormControl>
-                    <RadioGroup
-                      aria-labelledby="Filter"
-                      value={
-                        exstatusFilter.includes(69) ? 'NonBankTransfers' :'All'
-                      }
-                      onChange={(e) => {
-                        const value = e.target.value;
-                        if (value === 'NonBankTransfers') {
-                          setExStatusFilter([69]);
-                        } else {
-                          setExStatusFilter([]);
-                          setStatusFilter([IROLifeCycleStates.WAITING_FOR_OFFICE_MNGR, IROLifeCycleStates.IRO_IN_PROCESS]);
-                          // setStatusFilter([]);
-                        }
-                      }}
-                      name="Filter"
-                      row
-                    >
-                      <FormControlLabel value="All" control={<Radio />} label="All" />
-                      <FormControlLabel value="NonBankTransfers" control={<Radio />} label="NON BANK TRANSFERS" />
-                    </RadioGroup>
-                    <Grid item>
-                      <FormControl>
-                        <RadioGroup
-                          aria-labelledby="Filter"
-                          value={statusFilter1}
-                          onChange={(e) =>
-                            setStatusFilter1(
-                              e.target.value === 'Support' ?
-                                'Support' :
-                                e.target.value === 'Expanse' ?
-                                  'Expanse' :
-                                  'All',
-                            )
+                <Grid item xs={6}>
+                  {/* <div style={{ display: 'flex', alignItems: 'center' }}> */}
+                  {hasPermissions(['MANAGE_IRO']) && (
+                    <Grid item xs={12} md="auto" sx={{
+                      display: 'flex',
+                      alignItems: 'center', // ✅ vertical center
+                    }}>
+                      <FormControl
+                        sx={{
+                          'minWidth': 200,
+                          '& .MuiOutlinedInput-root': {
+                            // height: 45, // ✅ control select height
+                            fontSize: 13,
+                            borderRadius: 1.5,
+                          },
+                        }}
+                      >
+                        <InputLabel id="division-label">
+                    Division
+                        </InputLabel>
+                        <Select
+                          multiple
+                          value={selectedDivisions}
+                          label="Division"
+                          onChange={handleDivisionChange}
+                          renderValue={(selected) =>
+                            selected.length === 0 ? 'None' : selected.join(', ')
                           }
-                          name="Filter"
-                          row
+                          MenuProps={{
+                            PaperProps: {
+                              style: { maxHeight: 300, width: 250 },
+                            },
+                          }}
                         >
-                          {/* <FormControlLabel value="All" control={<Radio />} label="All" /> */}
-                          <FormControlLabel value="Support" control={<Radio />} label="Support" />
-                          <FormControlLabel value="Expanse" control={<Radio />} label="Expense" />
-                          <FormControlLabel value="All" control={<Radio />} label="BOTH CATEGORIES " />
-                        </RadioGroup>
+                          <ListSubheader>
+                            <TextField
+                              size="small"
+                              placeholder="Search division..."
+                              fullWidth
+                              autoFocus
+                              value={divisionSearch}
+                              onChange={(e) => setDivisionSearch(e.target.value)}
+                              onKeyDown={(e) => e.stopPropagation()}
+                            />
+                          </ListSubheader>
+
+                          <MenuItem value="__ALL__">
+                            <Checkbox checked={selectedDivisions.length === 0} />
+                            <ListItemText primary="None" />
+                          </MenuItem>
+
+                          {filteredDivisions.map((name) => (
+                            <MenuItem key={name} value={name}>
+                              <Checkbox checked={selectedDivisions.includes(name)} />
+                              <ListItemText primary={name} />
+                            </MenuItem>
+                          ))}
+                        </Select>
                       </FormControl>
                     </Grid>
-                  </FormControl>
-                  <Grid item xs={2}>
+                  )}
+                </Grid>
+                <Grid
+                  container
+                  spacing={2}
+                  alignItems="center"
+                  wrap="wrap"
+                >
+                  {/* ================= LEFT FILTERS ================= */}
+                  <Grid item xs={12} md>
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        gap: 2,
+                        flexWrap: 'wrap',
+                        alignItems: 'center',
+                        pl: 2,
+                      }}
+                    >
+                      {/* -------- STATUS FILTER -------- */}
+                      <ToggleButtonGroup
+                        exclusive
+                        size="small"
+                        value={exstatusFilter.includes(69) ? 'NonBankTransfers' :exstatusFilter.includes(70) ? 'BankTransfers' :'All'}
+                        onChange={(_, value) => {
+                          if (!value) return;
+
+                          if (value === 'NonBankTransfers') {
+                            setExStatusFilter([69]);
+                          } else if (value === 'BankTransfers') {
+                            setExStatusFilter([70]);
+                          } else {
+                            setExStatusFilter([]);
+                            setStatusFilter([
+                              IROLifeCycleStates.WAITING_FOR_OFFICE_MNGR,
+                              IROLifeCycleStates.IRO_IN_PROCESS,
+                            ]);
+                          }
+                        }}
+                        sx={toggleSx}
+                      >
+                        <ToggleButton value="All">ALL</ToggleButton>
+                        <ToggleButton value="NonBankTransfers">
+          NON BANK TRANSFERS
+                        </ToggleButton>
+                        <ToggleButton value="BankTransfers">
+          BANK TRANS.               </ToggleButton>
+                      </ToggleButtonGroup>
+
+                      {/* -------- CATEGORY FILTER -------- */}
+                      <ToggleButtonGroup
+                        exclusive
+                        size="small"
+                        value={statusFilter1}
+                        onChange={(_, value) => {
+                          if (!value) return;
+
+                          setStatusFilter1(
+                            value === 'Support' ?
+                              'Support' :
+                              value === 'Sanctioned' ?
+                                'Sanctioned' :
+                                value === 'Expanse' ?
+                                  'Expanse' :
+                                  'All',
+                          );
+                        }}
+                        sx={toggleSx}
+                      >
+                        <ToggleButton value="All">ALL </ToggleButton>
+                        <ToggleButton value="Support">SUPPORT</ToggleButton>
+                        <ToggleButton value="Expanse">EXPENSE</ToggleButton>
+                        <ToggleButton value="Sanctioned">SANCTIONED</ToggleButton>
+                      </ToggleButtonGroup>
+                    </Box>
+                  </Grid>
+
+                  {/* ================= EXPORT BUTTON ================= */}
+                  <Grid
+                    item
+                    xs={12}
+                    md="auto"
+                    sx={{
+                      display: 'flex',
+                      justifyContent: { xs: 'flex-start', md: 'flex-end' },
+                    }}
+                  >
                     <Button
                       onClick={async () => {
-                        const sheet =
-                        IROrder ?
-                          IROrder.map((iro: IROrder) => ([
+                        const sheet = IROrder ?
+                          IROrder.map((iro: IROrder) => [
                             iro.IROno,
                             iro.IRODate.format('DD/MM/YYYY'),
                             iro.division?.details.name,
                             iro.purposeSubdivision?.name,
                             iro.mainCategory,
                             iro.particulars?.reduce(
-                              (total, particular) => total + Number(particular.requestedAmount),
+                              (total, particular) =>
+                                total + Number(particular.requestedAmount),
                               0,
                             ),
                             iro.sanctionedAmount,
                             iro.sanctionedBank,
                             iro.sanctionedAsPer,
-                            // iro.releaseAmount?.releaseAmount,
-                            // iro.releaseAmount?.transferredDate?.format('DD/MM/YYYY'),
-                            IROLifeCycleStates.getStatusNameByCodeTransaction(iro.status).replaceAll('_', ' '),
-                          ])) :
+                            IROLifeCycleStates.getStatusNameByCodeTransaction(
+                              iro.status,
+                            ).replaceAll('_', ' '),
+                          ]) :
                           [];
+
                         const headers = [
                           'IRO No',
                           'Date',
@@ -981,21 +1159,21 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
                           'Sanctioned Amt',
                           'Sanctioned Bank',
                           'Sanctioned As per',
-                          // 'Released Amt',
-                          // 'Released Date',
                           'Status',
                         ];
+
                         const worksheet = XLSX.utils.json_to_sheet(sheet);
                         const workbook = XLSX.utils.book_new();
                         XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet');
                         XLSX.utils.sheet_add_aoa(worksheet, [headers], { origin: 'A1' });
-                        XLSX.writeFile(workbook, 'IRO_Office_Mngr.xlsx', { compression: true });
+                        XLSX.writeFile(workbook, 'IRO_Office_Mngr.xlsx', {
+                          compression: true,
+                        });
                       }}
                       startIcon={<DownloadIcon />}
-                      color="primary" sx={{ float: 'right' }}
                       variant="contained"
                     >
-                    Export
+      Export
                     </Button>
                   </Grid>
                 </Grid>
@@ -1068,6 +1246,13 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
                       getRowId={(row) => row._id}
                       checkboxSelection={props.action == 'release'}
                       disableRowSelectionOnClick={props.action == 'release'}
+
+                      isRowSelectable={(params:any) =>
+                        selectedDivisions.length === 0 ?
+                          true :
+                          selectedDivisions.includes(params?.row?.division?.details?.name)
+                      }
+
                       onRowSelectionModelChange={(newRowSelectionModel) => {
                         setReleaseAmountIROs(() => {
                           const selectedIROs = IROrder ? IROrder.filter((iro) => newRowSelectionModel.includes(iro._id)) : [];

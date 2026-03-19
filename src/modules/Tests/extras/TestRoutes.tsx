@@ -24,7 +24,7 @@ const testsPageRoutes: ModuleRoute = {
       showInDrawer: false,
     },
     {
-      title: 'Forgot Password Page',
+      title: 'Reset Password Page',
       path: '/ForgotPasswordForm',
       element: <ForgotPasswordFormPage />,
       private: false,

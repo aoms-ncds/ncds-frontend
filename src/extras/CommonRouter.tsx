@@ -19,22 +19,24 @@ import UserServices from '../modules/User/extras/UserServices';
 import usersPageRoutes from '../modules/User/extras/UsersRoutes';
 import UnauthorizedPage from '../modules/User/UnauthorizedPage';
 import customFrIroRoute from '../modules/CustomReport/extras/CustomFR-IRO-Routes';
+import AnalyticsPageRoutes from '../modules/Analytics/extras/AnalyticsRoutes';
 
 export const allModuleRoutes = [
   homePageRoutes,
-  hrPageRoutes,
   divisionsPageRoutes,
   workersPageRoutes,
-  usersPageRoutes,
   frPageRoutes,
   iroPageRoutes,
+  // AnalyticsPageRoutes,
+  applicationRoutes,
+  customFrIroRoute,
+  hrPageRoutes,
+  settingsRoutes,
+  usersPageRoutes,
   // testPageRoutes,
   testsPageRoutes,
   // samplesPageRoutes,
-  applicationRoutes,
   notificationPageRoutes,
-  settingsRoutes,
-  customFrIroRoute,
 
 ];
 const Router = () => {

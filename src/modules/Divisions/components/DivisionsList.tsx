@@ -23,39 +23,68 @@ const DivisionsList = (arg: any) => {
   const [rowID, setRowID] = useState('');
 
 
-  // useEffect(() => {e
-  //   DivisionsServices.getDivisions()
-  //     .then((res) => {
-  //       setDivisions(res.data);
-  //     })
-  //     .catch((err) => {
-  //       console.log({ err });
-  //     });
-
-  //   }, []);
+  useEffect(() => {
+    DivisionsServices.getDivCount()
+      .then((res) => {
+        console.log(res, 'rese43');
+      })
+      .catch((err) => {
+        console.log({ err });
+      });
+  }, []);
 
   const myArray: any = [];
   useEffect(() => {
-    if ((auth?.user as unknown as User)?.permissions?.EDIT_DIVISION_ACCESS == true) {
-      const divisionId = auth?.user && auth.user.division ? auth.user.division : null;
-      console.log(divisionId, 'divisionId');
+    if ((auth?.user as unknown as User)?.permissions?.EDIT_DIVISION_ACCESS === true) {
+      const divisionId = (auth?.user as User)?.division ?? null;
 
       if (divisionId) {
-        DivisionsServices.getDivisionById(divisionId?.toString()).then((res) => {
-          myArray?.push(res.data);
-          setDivisions(myArray);
+        Promise.all([
+          DivisionsServices.getDivisionById(divisionId.toString()),
+          DivisionsServices.getDivCount(),
+        ]).then(([divRes, countRes]) => {
+          const countMap = (Array.isArray(countRes.data) ? countRes.data : []).reduce(
+            (acc: Record<string, number>, item: any) => {
+              acc[item._id] = item.totalWorkers;
+              return acc;
+            },
+            {},
+          );
+
+          const mergedDivision = {
+            ...divRes.data,
+            totalWorkers: countMap[divRes.data._id] ?? 0,
+          };
+
+          setDivisions([mergedDivision]); // ✅ single division row
         });
       }
     } else {
-      DivisionsServices.getDivisions()
-        .then((res) => {
-          setDivisions(res.data);
-        })
-        .catch((err) => {
-          console.log({ err });
-        });
+      Promise.all([
+        DivisionsServices.getDivisions(),
+        DivisionsServices.getDivCount(),
+      ])
+      .then(([divRes, countRes]) => {
+        const countMap = (Array.isArray(countRes.data) ? countRes.data : []).reduce(
+          (acc: Record<string, number>, item: any) => {
+            acc[item._id] = item.totalWorkers;
+            return acc;
+          },
+          {},
+        );
+
+        const mergedDivisions = divRes.data.map((div: any) => ({
+          ...div,
+          totalWorkers: countMap[div._id] ?? 0,
+        }));
+
+        setDivisions(mergedDivisions); // ✅ merged list
+      })
+      .catch((err) => console.log(err));
     }
   }, []);
+  console.log(divisions, 'popds');
+
   // useEffect(() => {
   //   DivisionsServices.getDivisions()
   //     .then((res) => {
@@ -160,7 +189,7 @@ const DivisionsList = (arg: any) => {
                 icon: DeleteIcon,
                 onClick: () => {
                   setDeleteModel(true);
-                  setRowID(props.row._id)
+                  setRowID(props.row._id);
                   // removeDivisions(props.row._id);
                 },
               },
@@ -218,8 +247,8 @@ const DivisionsList = (arg: any) => {
       headerClassName: 'super-app-theme--cell',
       headerAlign: 'center',
       renderHeader: () => (<b>Coordinator Name</b>),
-      valueGetter: (props) => props.row.details.coordinator?.name?.basicDetails?.firstName ?? '',
-      width: 150,
+      valueGetter: (props) => ((props.row.details.coordinator?.name?.basicDetails?.firstName ?? '') + ' ' + (props.row.details.coordinator?.name?.basicDetails?.lastName ?? '')).trim(),
+      width: 200,
 
 
     },
@@ -230,7 +259,7 @@ const DivisionsList = (arg: any) => {
       headerAlign: 'center',
       renderHeader: () => (<b>Coordinator Email</b>),
       valueGetter: (props) => props.row.details.coordinator?.name?.basicDetails?.email,
-      width: 150,
+      width: 250,
     },
     {
       field: 'coordinatorPhone',
@@ -250,7 +279,7 @@ const DivisionsList = (arg: any) => {
       headerAlign: 'center',
       renderHeader: () => (<b>No. of Workers</b>),
 
-      valueGetter: (props) => props.row.details?.noOfWorkers,
+      valueGetter: (props:any) => props.row.totalWorkers ?? 0,
       width: 130,
     },
     {

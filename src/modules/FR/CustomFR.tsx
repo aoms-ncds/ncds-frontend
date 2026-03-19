@@ -16,7 +16,7 @@ import {
 } from '@mui/icons-material';
 import InfoIcon from '@mui/icons-material/Info';
 import { Link } from 'react-router-dom';
-import { Alert, Box, Button, Card, Container, Dialog, DialogActions, DialogContent, DialogTitle, Divider, FormControl, FormControlLabel, FormLabel, Grid, IconButton, InputAdornment, InputLabel, MenuItem, Radio, RadioGroup, Select, TextField, Tooltip, Typography } from '@mui/material';
+import { Alert, Box, Button, Card, Container, Dialog, DialogActions, DialogContent, DialogTitle, Divider, FormControl, FormControlLabel, FormLabel, Grid, IconButton, InputAdornment, InputLabel, MenuItem, Radio, RadioGroup, Select, Tab, Tabs, TextField, Tooltip, Typography } from '@mui/material';
 import FRServices from './extras/FRServices';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 // import SendIcon from '@mui/icons-material/Send';
@@ -39,6 +39,8 @@ import IROReconciliationPdf from '../IRO/components/IROReconciliationPdf';
 import FileUploaderServices from '../../components/FileUploader/extras/FileUploaderServices';
 import FRReceiptTemplateCustom from './components/FRReceiptTemplateCustom';
 import TransactionLogDialog from './components/TransactionLogDialog';
+import CustomIRO from '../IRO/CustomIRO';
+import CustomIROTab from '../IRO/CustomIROTab';
 
 const CustomFR = () => {
   const [FRRequests, setFRRequests] = useState<FR[] | null>(null);
@@ -112,6 +114,7 @@ const CustomFR = () => {
 
 
   const [statusFilter, setStatusFilter] = useState([FRLifeCycleStates.WAITING_FOR_ACCOUNTS]); // default WFA: Waiting for access or Reverted
+  const [tab, setTab] = useState(1);
   useEffect(() => {
     ESignatureService.getESignature()
       .then((res) => {
@@ -363,10 +366,10 @@ const CustomFR = () => {
                       division: {
                         ...props.row.division,
                         details: {
-                               ...delhiHQ.details,            // ✅ USE DELHI HQ
-      coordinator: props.row as any,
-      seniorLeader: delhiHQ.details.seniorLeader,
-      juniorLeader: delhiHQ.details.juniorLeader,
+                          ...delhiHQ.details, // ✅ USE DELHI HQ
+                          coordinator: props.row as any,
+                          seniorLeader: delhiHQ.details.seniorLeader,
+                          juniorLeader: delhiHQ.details.juniorLeader,
                         },
                       },
                     });
@@ -511,7 +514,7 @@ const CustomFR = () => {
       headerClassName: 'super-app-theme--cell',
       width: 130,
       valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
-      renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
+      renderHeader: (params) => <b style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</b>,
       align: 'center',
       headerAlign: 'center',
     },
@@ -821,7 +824,7 @@ const CustomFR = () => {
 
   return (
     <CommonPageLayout
-      title="Custom FR"
+      title="Custom FR/IRO"
       momentFilter={{
         dateRange: dateRange,
         onChange: (newDateRange) => {
@@ -832,80 +835,93 @@ const CustomFR = () => {
         initialRange: 'months',
       }}
     >
-      <PermissionChecks
-        permissions={['READ_FR']}
-        granted={
-          <>
-            <Grid item xs={12} lg={6}>
-              <Grid item xs={12} md={12}>
-                <Card sx={{ maxWidth: '78vw', height: '85vh', alignItems: 'center' }}>
-                  <Grid container spacing={2} padding={2}>
-                    <Grid item xs={6}>
-                      {/* <div style={{ display: 'flex', alignItems: 'center' }}> */}
-                      <TextField
-                        label="Search"
-                        variant="outlined"
-                        value={searchText}
-                        placeholder='Enter FRno or FRDate or Division or SubCategory'
-                        onChange={handleSearchChange}
-                        fullWidth
+      <Tabs
+        value={tab}
+        onChange={(e, newValue) => setTab(newValue)}
+        variant="scrollable"
+        scrollButtons="auto"
+        allowScrollButtonsMobile
+
+      >
+        <Tab label="Custom FR" value={1} />
+        <Tab label="Custom IRO" value={2} />
+      </Tabs>
+      {tab === 1 ? (
+
+        <PermissionChecks
+          permissions={['READ_FR']}
+          granted={
+            <>
+              <Grid item xs={12} lg={6}>
+                <Grid item xs={12} md={12}>
+                  <Card sx={{ maxWidth: '78vw', height: '85vh', alignItems: 'center' }}>
+                    <Grid container spacing={2} padding={2}>
+                      <Grid item xs={6}>
+                        {/* <div style={{ display: 'flex', alignItems: 'center' }}> */}
+                        <TextField
+                          label="Search"
+                          variant="outlined"
+                          value={searchText}
+                          placeholder='Enter FRno or FRDate or Division or SubCategory'
+                          onChange={handleSearchChange}
+                          fullWidth
                         // style={{ width: '80%' }}
-                      />
-                      {/* </div> */}
-                    </Grid>
+                        />
+                        {/* </div> */}
+                      </Grid>
 
-                    <Grid item xs={6} sx={{ px: 2 }}>
-                      {/* <br /> */}
+                      <Grid item xs={6} sx={{ px: 2 }}>
+                        {/* <br /> */}
 
-                      <PermissionChecks
-                        permissions={['MANAGE_FR']}
-                        granted={
-                          <Button
-                            onClick={async () => {
-                              const sheet = FRRequests ?
-                                FRRequests.map((fr: FR) => [
-                                  fr.FRno,
-                                  fr.FRdate.format('DD/MM/YYYY'),
-                                  fr.division?.details.name,
-                                  fr.purposeSubdivision?.name,
-                                  fr?.mainCategory,
-                                  fr.particulars?.reduce((total, particular) => total + Number(particular.requestedAmount), 0),
-                                  fr.sanctionedAmount,
-                                  fr.sanctionedBank,
-                                  fr.sanctionedAsPer,
-                                  IROLifeCycleStates.getStatusNameByCodeTransaction(fr.status).replaceAll('_', ' '),
-                                ]) :
-                                [];
-                              const headers = ['FR No', 'Date', 'Division', 'Sub Division', 'Main Category', 'Requested Amt', 'Sanctioned Amt', 'Sanctioned Bank', 'Sanctioned As per', 'Status'];
-                              const worksheet = XLSX.utils.json_to_sheet(sheet);
-                              const workbook = XLSX.utils.book_new();
-                              XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet');
-                              XLSX.utils.sheet_add_aoa(worksheet, [headers], { origin: 'A1' });
-                              XLSX.writeFile(workbook, 'FRReport.xlsx', { compression: true });
-                            }}
-                            startIcon={<DownloadIcon />}
-                            color="primary"
-                            sx={{ float: 'right', marginBottom: 3, mr: 2 }}
-                            variant="contained"
-                          >
+                        <PermissionChecks
+                          permissions={['MANAGE_FR']}
+                          granted={
+                            <Button
+                              onClick={async () => {
+                                const sheet = FRRequests ?
+                                  FRRequests.map((fr: FR) => [
+                                    fr.FRno,
+                                    fr.FRdate.format('DD/MM/YYYY'),
+                                    fr.division?.details.name,
+                                    fr.purposeSubdivision?.name,
+                                    fr?.mainCategory,
+                                    fr.particulars?.reduce((total, particular) => total + Number(particular.requestedAmount), 0),
+                                    fr.sanctionedAmount,
+                                    fr.sanctionedBank,
+                                    fr.sanctionedAsPer,
+                                    IROLifeCycleStates.getStatusNameByCodeTransaction(fr.status).replaceAll('_', ' '),
+                                  ]) :
+                                  [];
+                                const headers = ['FR No', 'Date', 'Division', 'Sub Division', 'Main Category', 'Requested Amt', 'Sanctioned Amt', 'Sanctioned Bank', 'Sanctioned As per', 'Status'];
+                                const worksheet = XLSX.utils.json_to_sheet(sheet);
+                                const workbook = XLSX.utils.book_new();
+                                XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet');
+                                XLSX.utils.sheet_add_aoa(worksheet, [headers], { origin: 'A1' });
+                                XLSX.writeFile(workbook, 'FRReport.xlsx', { compression: true });
+                              }}
+                              startIcon={<DownloadIcon />}
+                              color="primary"
+                              sx={{ float: 'right', marginBottom: 3, mr: 2 }}
+                              variant="contained"
+                            >
                             Export
-                          </Button>
-                        }
-                      />
+                            </Button>
+                          }
+                        />
 
-                      <Button
-                        variant="contained"
-                        sx={{ float: 'right', marginBottom: 3, mr: 2 }}
-                        startIcon={<AddIcon />}
-                        component={Link}
-                        to="/fr/applyCustom"
+                        <Button
+                          variant="contained"
+                          sx={{ float: 'right', marginBottom: 3, mr: 2 }}
+                          startIcon={<AddIcon />}
+                          component={Link}
+                          to="/fr/applyCustom"
                         // onClick={() => {
                         // }}
-                      >
+                        >
                               Add new
-                      </Button>
-                    </Grid>
-                    {/* <Grid item >
+                        </Button>
+                      </Grid>
+                      {/* <Grid item >
                       <FormControl>
                         <RadioGroup
                           aria-labelledby="Filter"
@@ -920,77 +936,77 @@ const CustomFR = () => {
                         </RadioGroup>
                       </FormControl>
                     </Grid> */}
-                  </Grid>
-
-                  <Box
-                    sx={{
-                      'height': 300,
-                      'width': '100%',
-                      '& .super-app-theme--cell': {
-                        backgroundColor: '#f1f5fa',
-                        color: 'black',
-                        fontWeight: '600',
-                      },
-                      '& .super-app.negative': {
-                        backgroundColor: 'rgba(157, 255, 118, 0.49)',
-                        color: '#1a3e72',
-                        fontWeight: '600',
-                      },
-                      '& .super-app.positive': {
-                        backgroundColor: '#d47483',
-                        color: '#1a3e72',
-                        fontWeight: '600',
-                      },
-                      '& .even': {
-                        backgroundColor: '#DEDAFF',
-                      },
-                      '& .odd': {
-                        backgroundColor: '#fff',
-                      },
-                      '& .green': {
-                        backgroundColor: '#80f76a',
-                      },
-                      '& .orange': {
-                        backgroundColor: '#ffd35c',
-                      },
-                      '& .red': {
-                        backgroundColor: '#ff6166',
-                      },
-                      '& .red-light': {
-                        backgroundColor: '#ff7f7f',
-                      },
-                      '& .red-dark': {
-                        backgroundColor: '#c90606',
-                      },
-                    }}
-                  >
-                    <DataGrid
-                      rows={filteredRows ?? []}
-                      columns={columns}
-                      getRowId={(row) => row._id}
-                      loading={FRRequests === null}
-                      style={{ height: '66vh', width: '100%' }}
-                      getRowClassName={(params) => {
-                        if (params.row.specialsanction == 'Yes') {
-                          return 'special-sanction'; // Class for rows with special sanction
-                        }
-                        return params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'; // Default classes
-                      }}
-                    />
-                  </Box>
-                </Card>
-              </Grid>
-              <Dialog open={sendNotification} sx={{ width: 400, margin: '0 auto' }}>
-                <DialogContent style={{ display: 'flex', justifyContent: 'center' }}>
-                  <Grid container spacing={2} sx={{ display: 'grid', alignItems: 'center', justifyItems: 'center' }}>
-                    <Grid item>
-                      <Typography variant="h6" fontWeight={700} sx={{ textAlign: 'center' }}>
-                        Send Notifications
-                      </Typography>
-                      <Divider />
                     </Grid>
-                    <Grid item xs={12}>
-                      {/* <Button
+
+                    <Box
+                      sx={{
+                        'height': 300,
+                        'width': '100%',
+                        '& .super-app-theme--cell': {
+                          backgroundColor: '#f1f5fa',
+                          color: 'black',
+                          fontWeight: '600',
+                        },
+                        '& .super-app.negative': {
+                          backgroundColor: 'rgba(157, 255, 118, 0.49)',
+                          color: '#1a3e72',
+                          fontWeight: '600',
+                        },
+                        '& .super-app.positive': {
+                          backgroundColor: '#d47483',
+                          color: '#1a3e72',
+                          fontWeight: '600',
+                        },
+                        '& .even': {
+                          backgroundColor: '#DEDAFF',
+                        },
+                        '& .odd': {
+                          backgroundColor: '#fff',
+                        },
+                        '& .green': {
+                          backgroundColor: '#80f76a',
+                        },
+                        '& .orange': {
+                          backgroundColor: '#ffd35c',
+                        },
+                        '& .red': {
+                          backgroundColor: '#ff6166',
+                        },
+                        '& .red-light': {
+                          backgroundColor: '#ff7f7f',
+                        },
+                        '& .red-dark': {
+                          backgroundColor: '#c90606',
+                        },
+                      }}
+                    >
+                      <DataGrid
+                        rows={filteredRows ?? []}
+                        columns={columns}
+                        getRowId={(row) => row._id}
+                        loading={FRRequests === null}
+                        style={{ height: '66vh', width: '100%' }}
+                        getRowClassName={(params) => {
+                          if (params.row.specialsanction == 'Yes') {
+                            return 'special-sanction'; // Class for rows with special sanction
+                          }
+                          return params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'; // Default classes
+                        }}
+                      />
+                    </Box>
+                  </Card>
+                </Grid>
+                <Dialog open={sendNotification} sx={{ width: 400, margin: '0 auto' }}>
+                  <DialogContent style={{ display: 'flex', justifyContent: 'center' }}>
+                    <Grid container spacing={2} sx={{ display: 'grid', alignItems: 'center', justifyItems: 'center' }}>
+                      <Grid item>
+                        <Typography variant="h6" fontWeight={700} sx={{ textAlign: 'center' }}>
+                        Send Notifications
+                        </Typography>
+                        <Divider />
+                      </Grid>
+                      <Grid item xs={12}>
+                        {/* <Button
                         variant="contained"
                         color="success"
                         sx={{ width: 260 }}
@@ -1008,92 +1024,92 @@ const CustomFR = () => {
                         {' '}
                         Send to President
                       </Button> */}
-                    </Grid>
-                    <Grid item xs={12}>
-                      <Button
-                        variant="contained"
-                        color="info"
-                        sx={{ width: 260 }}
-                        onClick={() => {
-                          FRServices.sendNotifications('accounts', selectedFR ?? '')
+                      </Grid>
+                      <Grid item xs={12}>
+                        <Button
+                          variant="contained"
+                          color="info"
+                          sx={{ width: 260 }}
+                          onClick={() => {
+                            FRServices.sendNotifications('accounts', selectedFR ?? '')
                             .then((res) => {
                               console.log(res);
                             })
                             .catch((res) => {
                               console.log(res);
                             });
-                        }}
-                        endIcon={<SendIcon />}
-                      >
-                        {' '}
+                          }}
+                          endIcon={<SendIcon />}
+                        >
+                          {' '}
                         Send to accounts
-                      </Button>
-                    </Grid>
-                    <Grid item xs={12}>
-                      <Button
-                        variant="contained"
-                        color="inherit"
-                        sx={{ width: 260 }}
-                        onClick={() => {
-                          FRServices.sendNotifications('division_head', selectedFR ?? '')
+                        </Button>
+                      </Grid>
+                      <Grid item xs={12}>
+                        <Button
+                          variant="contained"
+                          color="inherit"
+                          sx={{ width: 260 }}
+                          onClick={() => {
+                            FRServices.sendNotifications('division_head', selectedFR ?? '')
                             .then((res) => {
                               console.log(res);
                             })
                             .catch((res) => {
                               console.log(res);
                             });
-                        }}
-                        endIcon={<SendIcon />}
-                      >
-                        {' '}
+                          }}
+                          endIcon={<SendIcon />}
+                        >
+                          {' '}
                         Send to division head
-                      </Button>
-                      <br />
-                      <br />
-                    </Grid>
+                        </Button>
+                        <br />
+                        <br />
+                      </Grid>
 
-                    <Grid item xs={12}>
-                      <Button
-                        variant="contained"
-                        onClick={() => {
-                          toggleSendNotification(false);
-                          setSelectedFR(null);
-                        }}
-                        sx={{ marginBottom: 3, width: 260 }}
-                        endIcon={<CloseIcon />}
-                      >
+                      <Grid item xs={12}>
+                        <Button
+                          variant="contained"
+                          onClick={() => {
+                            toggleSendNotification(false);
+                            setSelectedFR(null);
+                          }}
+                          sx={{ marginBottom: 3, width: 260 }}
+                          endIcon={<CloseIcon />}
+                        >
                         close
-                      </Button>
-                    </Grid>
-                    {/* <Grid item xs={12}>
+                        </Button>
+                      </Grid>
+                      {/* <Grid item xs={12}>
                         <Button variant="contained" color='inherit'> Send to division head</Button>
 
                       </Grid> */}
-                  </Grid>
-                </DialogContent>
-              </Dialog>
-              <Dialog open={openRemarks} fullWidth maxWidth="md">
-                <DialogTitle>Remarks</DialogTitle>
-                <DialogContent>
-                  {remarks.length > 0 ?
-                    remarks.map((remark) => (
+                    </Grid>
+                  </DialogContent>
+                </Dialog>
+                <Dialog open={openRemarks} fullWidth maxWidth="md">
+                  <DialogTitle>Remarks</DialogTitle>
+                  <DialogContent>
+                    {remarks.length > 0 ?
+                      remarks.map((remark) => (
                       // eslint-disable-next-line max-len
-                      <MessageItem
-                        key={remark._id}
-                        sender={remark.createdBy.basicDetails.firstName + ' ' + remark.createdBy.basicDetails.lastName}
-                        time={remark.updatedAt}
-                        body={remark.remark}
-                        isSent={true}
-                      />
-                    )) :
-                    'No Data Found '}
-                </DialogContent>
-                <form
-                  onSubmit={(e) => {
-                    e.preventDefault();
+                        <MessageItem
+                          key={remark._id}
+                          sender={remark.createdBy.basicDetails.firstName + ' ' + remark.createdBy.basicDetails.lastName}
+                          time={remark.updatedAt}
+                          body={remark.remark}
+                          isSent={true}
+                        />
+                      )) :
+                      'No Data Found '}
+                  </DialogContent>
+                  <form
+                    onSubmit={(e) => {
+                      e.preventDefault();
 
-                    if (remark.remark) {
-                      FRServices.addRemarks(remark)
+                      if (remark.remark) {
+                        FRServices.addRemarks(remark)
                         .then((res) => {
                           const x = [...remarks, res.data];
                           console.log('🚀 ~ file: CustomFR.tsx:201 ~ .then ~ x:', x);
@@ -1110,267 +1126,271 @@ const CustomFR = () => {
                             message: error.message,
                           });
                         });
-                    }
-                  }}
-                >
-                  <DialogActions>
-                    <TextField
-                      id="remarkTextfield"
-                      placeholder="Remarks"
-                      multiline
-                      value={remark?.remark}
-                      onChange={(e) =>
-                        setRemark((remark) => ({
-                          ...remark,
-                          FR: selectedFR ?? '',
-                          remark: e.target.value,
-                        }))
                       }
-                      InputProps={{
-                        endAdornment: (
-                          <InputAdornment position="end">
-                            <IconButton type="submit">
-                              <SendIcon />
-                            </IconButton>
-                          </InputAdornment>
-                        ),
-                      }}
-                      fullWidth
-                    />
-                    <Button
-                      variant="contained"
-                      onClick={() => {
-                        toggleOpenRemarks(false);
-                        setSelectedFR(null);
-                      }}
+                    }}
+                  >
+                    <DialogActions>
+                      <TextField
+                        id="remarkTextfield"
+                        placeholder="Remarks"
+                        multiline
+                        value={remark?.remark}
+                        onChange={(e) =>
+                          setRemark((remark) => ({
+                            ...remark,
+                            FR: selectedFR ?? '',
+                            remark: e.target.value,
+                          }))
+                        }
+                        InputProps={{
+                          endAdornment: (
+                            <InputAdornment position="end">
+                              <IconButton type="submit">
+                                <SendIcon />
+                              </IconButton>
+                            </InputAdornment>
+                          ),
+                        }}
+                        fullWidth
+                      />
+                      <Button
+                        variant="contained"
+                        onClick={() => {
+                          toggleOpenRemarks(false);
+                          setSelectedFR(null);
+                        }}
                       // sx={{ ml: 'auto' }}
-                    >
+                      >
                       close
-                    </Button>
-                  </DialogActions>
-                </form>
+                      </Button>
+                    </DialogActions>
+                  </form>
+                </Dialog>
+              </Grid>
+              <Dialog open={supportAttachment} onClose={() => setSupportAttachment(false)} maxWidth="xs" fullWidth>
+                <DialogTitle> Signature Attachment </DialogTitle>
+                <DialogContent>
+                  <Container>Please download the signature sheet: &nbsp;
+                    {data3?.signatureSheet ?<> <a href="#" onClick={async () => {
+                      const file = (await FileUploaderServices.getFile(data3?.signatureSheet ?? '')).data;
+                      if (file.downloadURL) {
+                        const link = document.createElement('a');
+                        link.href = file.downloadURL;
+                        link.download = 'WorkersSignatureSheet.pdf'; // You can specify a custom file name here
+                        link.click();
+                      }
+                    }}>WorkersSignatureSheet.pdf</a> <br /></>: (pdfProps &&
+              <>
+                <PDFDownloadLink
+                  document={<IROReconciliationPdf data={pdfProps} />}
+                  fileName="WorkersSignatureSheet.pdf"
+                  style={{ color: 'blue' }}
+                >
+                  {((params: any) => (
+                    <span>
+                      {params.loading ? '....' : 'WorkersSignatureSheet.pdf'}
+                    </span>
+                  )) as any}
+                </PDFDownloadLink>
+              </>)} NB: Ignore if already attached </Container>
+                </DialogContent>
+                <DialogActions>
+                  <Button
+                    onClick={() => {
+                      setSupportAttachment(false);
+                    }}
+                    variant="text"
+                  >
+            Ok
+                  </Button>
+                </DialogActions>
               </Dialog>
-            </Grid>
-            <Dialog open={supportAttachment} onClose={() => setSupportAttachment(false)} maxWidth="xs" fullWidth>
-              <DialogTitle> Signature Attachment </DialogTitle>
-              <DialogContent>
-                <Container>Please download the signature sheet: &nbsp;
-                  {data3?.signatureSheet ?<> <a href="#" onClick={async () => {
-                    const file = (await FileUploaderServices.getFile(data3?.signatureSheet ?? '')).data;
-                    if (file.downloadURL) {
-                      const link = document.createElement('a');
-                      link.href = file.downloadURL;
-                      link.download = 'WorkersSignatureSheet.pdf'; // You can specify a custom file name here
-                      link.click();
-                    }
-                  }}>WorkersSignatureSheet.pdf</a> <br /></>: (pdfProps &&
+              <Dialog open={supportAttachmentChild} onClose={() => setSupportAttachmentChild(false)} maxWidth="xs" fullWidth>
+                <DialogTitle> Signature Attachment </DialogTitle>
+                <DialogContent>
+                  <Container>Please download the signature sheet: &nbsp;
+                    {data3?.signatureSheet ?<> <a href="#" onClick={async () => {
+                      const file = (await FileUploaderServices.getFile(data3?.signatureSheet ?? '')).data;
+                      if (file.downloadURL) {
+                        const link = document.createElement('a');
+                        link.href = file.downloadURL;
+                        link.download = 'ChildrenSignatureSheet.pdf'; // You can specify a custom file name here
+                        link.click();
+                      }
+                    }}>ChildrenSignatureSheet.pdf</a> <br /></>: (pdfProps &&
               <>
-               <PDFDownloadLink
-  document={<IROReconciliationPdf data={pdfProps} />}
-  fileName="WorkersSignatureSheet.pdf"
-  style={{ color: 'blue' }}
->
-  {((params: any) => (
-    <span>
-      {params.loading ? '....' : 'WorkersSignatureSheet.pdf'}
-    </span>
-  )) as any}
-</PDFDownloadLink>
-              </>)} NB: Ignore if already attached </Container>
-              </DialogContent>
-              <DialogActions>
-                <Button
-                  onClick={() => {
-                    setSupportAttachment(false);
-                  }}
-                  variant="text"
-                >
-            Ok
-                </Button>
-              </DialogActions>
-            </Dialog>
-            <Dialog open={supportAttachmentChild} onClose={() => setSupportAttachmentChild(false)} maxWidth="xs" fullWidth>
-              <DialogTitle> Signature Attachment </DialogTitle>
-              <DialogContent>
-                <Container>Please download the signature sheet: &nbsp;
-                  {data3?.signatureSheet ?<> <a href="#" onClick={async () => {
-                    const file = (await FileUploaderServices.getFile(data3?.signatureSheet ?? '')).data;
-                    if (file.downloadURL) {
-                      const link = document.createElement('a');
-                      link.href = file.downloadURL;
-                      link.download = 'ChildrenSignatureSheet.pdf'; // You can specify a custom file name here
-                      link.click();
-                    }
-                  }}>ChildrenSignatureSheet.pdf</a> <br /></>: (pdfProps &&
-              <>
-               <BlobProvider document={<IROReconciliationPdf data={pdfProps} />}>
-  {({ loading, url }) =>
-    loading ? (
-      <span style={{ color: 'blue' }}>....</span>
-    ) : (
-      <a
-        href={url ?? ''}
-        download="ChildrenSignatureSheet.pdf"
-        style={{ color: 'blue' }}
-      >
+                <BlobProvider document={<IROReconciliationPdf data={pdfProps} />}>
+                  {({ loading, url }) =>
+                    loading ? (
+                      <span style={{ color: 'blue' }}>....</span>
+                    ) : (
+                      <a
+                        href={url ?? ''}
+                        download="ChildrenSignatureSheet.pdf"
+                        style={{ color: 'blue' }}
+                      >
         ChildrenSignatureSheet.pdf
-      </a>
-    )
-  }
-</BlobProvider>
-<br />
+                      </a>
+                    )
+                  }
+                </BlobProvider>
+                <br />
               </>)} NB: Ignore if already attached </Container>
-              </DialogContent>
-              <DialogActions>
-                <Button
-                  onClick={() => {
-                    setSupportAttachmentChild(false);
-                    window.location.reload();
-                  }}
-                  variant="text"
-                >
+                </DialogContent>
+                <DialogActions>
+                  <Button
+                    onClick={() => {
+                      setSupportAttachmentChild(false);
+                      window.location.reload();
+                    }}
+                    variant="text"
+                  >
             Ok
-                </Button>
-              </DialogActions>
-            </Dialog>
-            <Dialog
-              open={open}
-              // TransitionComponent={Transition}
-              keepMounted
-              // onClose={handleClose}
-              aria-describedby="alert-dialog-slide-description"
-            >
-              <DialogTitle>{'Use Google\'s location service?'}</DialogTitle>
-              <DialogContent>
-                {/* <DialogContentText id="alert-dialog-slide-description"> */}
+                  </Button>
+                </DialogActions>
+              </Dialog>
+              <Dialog
+                open={open}
+                // TransitionComponent={Transition}
+                keepMounted
+                // onClose={handleClose}
+                aria-describedby="alert-dialog-slide-description"
+              >
+                <DialogTitle>{'Use Google\'s location service?'}</DialogTitle>
+                <DialogContent>
+                  {/* <DialogContentText id="alert-dialog-slide-description"> */}
                 Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running.
-                {/* </DialogContentText> */}
-              </DialogContent>
-              <DialogActions>
-                {/* <Button onClick={handleClose}>Disagree</Button>
+                  {/* </DialogContentText> */}
+                </DialogContent>
+                <DialogActions>
+                  {/* <Button onClick={handleClose}>Disagree</Button>
                 <Button onClick={handleClose}>Agree</Button> */}
-              </DialogActions>
-            </Dialog>
-            <Dialog open={Boolean(data)} onClose={() => setData(null)} maxWidth="xs" fullWidth>
-              <DialogTitle> Print Fr</DialogTitle>
-              <DialogContent>
-               <Container>
+                </DialogActions>
+              </Dialog>
+              <Dialog open={Boolean(data)} onClose={() => setData(null)} maxWidth="xs" fullWidth>
+                <DialogTitle> Print Fr</DialogTitle>
+                <DialogContent>
+                  <Container>
   Download the FR Receipt, Delhi for {data?.FRno}
-  <br />
+                    <br />
 
-  {data && (
-    <BlobProvider
-      document={
-        <FRReceiptTempForDelhiDivision
-          label={Label}
-          president={selectedSignaturePresident}
-          rowData={data as FR}
-        />
-      }
-    >
-      {({ loading, url }) =>
-        loading || openPrintFr ? (
-          <span style={{ color: 'blue' }}>....</span>
-        ) : (
-          <a
-            href={url ?? ''}
-            download="FRReceiptDelhi.pdf"
-            style={{ color: 'blue' }}
-          >
+                    {data && (
+                      <BlobProvider
+                        document={
+                          <FRReceiptTempForDelhiDivision
+                            label={Label}
+                            president={selectedSignaturePresident}
+                            rowData={data as FR}
+                          />
+                        }
+                      >
+                        {({ loading, url }) =>
+                          loading || openPrintFr ? (
+                            <span style={{ color: 'blue' }}>....</span>
+                          ) : (
+                            <a
+                              href={url ?? ''}
+                              download="FRReceiptDelhi.pdf"
+                              style={{ color: 'blue' }}
+                            >
             FRReceiptDelhi.pdf
-          </a>
-        )
-      }
-    </BlobProvider>
-  )}
-</Container>
-              </DialogContent>
-              <DialogActions>
-                <Button
-                  onClick={() => {
-                    setData(null);
-                  }}
-                  variant="text"
-                >
+                            </a>
+                          )
+                        }
+                      </BlobProvider>
+                    )}
+                  </Container>
+                </DialogContent>
+                <DialogActions>
+                  <Button
+                    onClick={() => {
+                      setData(null);
+                    }}
+                    variant="text"
+                  >
                   Cancel
-                </Button>
-              </DialogActions>
-            </Dialog>
-            <Dialog open={Boolean(data2)} onClose={() => setData2(null)} maxWidth="xs" fullWidth>
-              <DialogTitle> Print Fr</DialogTitle>
-              <DialogContent>
-               
-<Container>
+                  </Button>
+                </DialogActions>
+              </Dialog>
+              <Dialog open={Boolean(data2)} onClose={() => setData2(null)} maxWidth="xs" fullWidth>
+                <DialogTitle> Print Fr</DialogTitle>
+                <DialogContent>
+
+                  <Container>
   Downloading the FRReceipt for {data2?.FRno}
-  <br />
+                    <br />
 
-  {data2 && (
-    <BlobProvider
-      document={
-        <FRReceiptTemplateCustom
-          rowData={data2 as FR}
-          president={selectedSignaturePresident}
-        />
-      }
-    >
-      {({ loading, url }) =>
-        loading || openPrintFr ? (
-          <span style={{ color: 'blue' }}>....</span>
-        ) : (
-          <a
-            href={url ?? ''}
-            download="FRReceipt.pdf"
-            style={{ color: 'blue' }}
-          >
+                    {data2 && (
+                      <BlobProvider
+                        document={
+                          <FRReceiptTemplateCustom
+                            rowData={data2 as FR}
+                            president={selectedSignaturePresident}
+                          />
+                        }
+                      >
+                        {({ loading, url }) =>
+                          loading || openPrintFr ? (
+                            <span style={{ color: 'blue' }}>....</span>
+                          ) : (
+                            <a
+                              href={url ?? ''}
+                              download="FRReceipt.pdf"
+                              style={{ color: 'blue' }}
+                            >
             FRReceipt.pdf
-          </a>
-        )
-      }
-    </BlobProvider>
-  )}
-</Container>
-              </DialogContent>
-              <DialogActions>
-                <Button
-                  onClick={() => {
-                    setData2(null);
-                  }}
-                  variant="text"
-                >
+                            </a>
+                          )
+                        }
+                      </BlobProvider>
+                    )}
+                  </Container>
+                </DialogContent>
+                <DialogActions>
+                  <Button
+                    onClick={() => {
+                      setData2(null);
+                    }}
+                    variant="text"
+                  >
                   Cancel
-                </Button>
-              </DialogActions>
-            </Dialog>
-            <Dialog open={Boolean(deleteModel)} onClose={() => setDeleteModel(false)}>
-              <DialogContent>
-                <Typography sx={{ color: 'red' }}>{`Are you sure you want to delete this FR No ${FR?.FRno} from  ${FR?.division?.details.name} ?`}</Typography>
-              </DialogContent>
+                  </Button>
+                </DialogActions>
+              </Dialog>
+              <Dialog open={Boolean(deleteModel)} onClose={() => setDeleteModel(false)}>
+                <DialogContent>
+                  <Typography sx={{ color: 'red' }}>{`Are you sure you want to delete this FR No ${FR?.FRno} from  ${FR?.division?.details.name} ?`}</Typography>
+                </DialogContent>
 
-              <DialogActions>
-                <Button onClick={()=>setDeleteModel(false)}>Close</Button>
-                <Button
-                  endIcon={<DeleteIcon />}
-                  variant="contained"
-                  color="info"
-                  onClick={async () => {
-                    deleteFR(selectedFR?.toString() ?? '');
-                  } }
-                >
+                <DialogActions>
+                  <Button onClick={()=>setDeleteModel(false)}>Close</Button>
+                  <Button
+                    endIcon={<DeleteIcon />}
+                    variant="contained"
+                    color="info"
+                    onClick={async () => {
+                      deleteFR(selectedFR?.toString() ?? '');
+                    } }
+                  >
                  Delete
-                </Button>
-              </DialogActions>
+                  </Button>
+                </DialogActions>
 
-            </Dialog>
-          </>
-        }
-        denied={(missingPermissions) => (
-          <Grid item xs={12} lg={6}>
-            <Alert severity="error">
+              </Dialog>
+            </>
+          }
+          denied={(missingPermissions) => (
+            <Grid item xs={12} lg={6}>
+              <Alert severity="error">
               Missing permissions: <b>{missingPermissions.join(', ').replaceAll('_', ' ')}</b>
-            </Alert>
-          </Grid>
-        )}
-      />
+              </Alert>
+            </Grid>
+          )}
+        />
+
+      ):(
+        <CustomIROTab dateRange={dateRange} />
+      )}
       {frId&&<TransactionLogDialog open={openLog} onClose={()=>setOpenLog(false)} TRId={frId}/>}
 
     </CommonPageLayout>

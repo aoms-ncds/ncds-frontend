@@ -69,31 +69,33 @@ const SettingsDashboard = () => {
         <PermissionChecks
           permissions={['SETTINGS_MANAGE_LANGUAGES_ACCESS']}
           granted={(
-            <Grid item xs={12} md={4} xl={3} width={350}>
-              <ButtonCard secondaryText="Manage Languages" count={LanguageCount?.toString()} color="#fff" targetRoute="/settings/Languages" />
+            <Grid item xs={12} sm={6} md={4} xl={3}>
+              <ButtonCard secondaryText="Manage Languages" count={LanguageCount?.toString()} color="#ff0000" targetRoute="/settings/Languages" />
             </Grid>
           )} />
         <PermissionChecks
           permissions={[]}
           granted={(
-            <Grid item xs={12} md={4} xl={3} width={350}>
-              <ButtonCard secondaryText="Add Custom User" count={LanguageCount?.toString()} color="#fff" targetRoute="/settings/customUsers" />
+            <Grid item xs={12} sm={6} md={4} xl={3}>
+              <ButtonCard secondaryText="Add Custom User" count={LanguageCount?.toString()} color="#fffb00" targetRoute="/settings/customUsers" />
             </Grid>
           )} />
         <PermissionChecks
           permissions={['SETTINGS_DESIGNATION_ACCESS']}
           granted={(
-            <Grid item xs={12} md={4} xl={3} width={350}>
-              <ButtonCard secondaryText="Manage Designation" count={DesignationCount?.toString()} color="#fff" targetRoute="/settings/Designation" />
+            <Grid item xs={12} sm={6} md={4} xl={3}>
+              <ButtonCard secondaryText="Manage Designation" count={DesignationCount?.toString()} color="#00ff0d" targetRoute="/settings/Designation" />
             </Grid>
           )} />
         <PermissionChecks
           permissions={['SETTINGS_CHILD_SUPPORT_ACCESS']}
           granted={(
             <Grid item xs={12} md={4} xl={3} width={350}>
-              <ButtonCard secondaryText="Child support" count={ChildSupportCount?.toString()} color="#fff " targetRoute="/settings/ChildSupport" />
+              <ButtonCard secondaryText="Child support" count={ChildSupportCount?.toString()} color="#00ffea " targetRoute="/settings/ChildSupport" />
             </Grid>
           )} />
+
+
         <PermissionChecks
           permissions={['SETTINGS_E_SIGN_ACCESS']}
           granted={(

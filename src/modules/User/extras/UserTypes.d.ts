@@ -81,6 +81,9 @@ declare global {
   interface BasicDetails {
     firstName: string;
     middleName: string;
+    organization?: string;
+    title?: string;
+   daughterOrganization?:string;
     lastName: string;
     dateOfBirth: Moment;
     gender?: IGender;

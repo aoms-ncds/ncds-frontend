@@ -307,7 +307,7 @@ const LoginPage = () => {
                   {isLoading ? 'Login in...' : 'LOG IN'}
                 </Button>
                 <Button variant="text" sx={{ float: 'right', fontSize: 10, marginTop: 2, color: 'white' }} component={Link} to="/users/reset_password_form">
-                  Forgot Password?
+                  Reset Password?
                 </Button>
               </Grid>
             </Grid>

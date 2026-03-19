@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 import React, { SetStateAction, useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import { Grid, Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Box, Container, Tooltip, FormControl, FormControlLabel, Radio, RadioGroup, ToggleButton, ToggleButtonGroup } from '@mui/material';
+import { Grid, Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Box, Container, Tooltip, FormControl, FormControlLabel, Radio, RadioGroup, ToggleButton, ToggleButtonGroup, Checkbox, InputLabel, ListItemText, ListSubheader, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import { Preview as PreviewIcon, Download as DownloadIcon } from '@mui/icons-material';
 import PrintIcon from '@mui/icons-material/Print';
 import { DataGrid, GridCellParams, GridColDef } from '@mui/x-data-grid';
@@ -29,8 +29,11 @@ import InfoIcon from '@mui/icons-material/Info';
 import ReleaseAmount from './components/ReleaseAmountDialog';
 import FRLifeCycleStates from '../FR/extras/FRLifeCycleStates';
 import TransactionLogDialog from '../FR/components/TransactionLogDialog';
+import DivisionsServices from '../Divisions/extras/DivisionsServices';
+import { hasPermissions } from '../User/components/PermissionChecks';
+import formatAmount from '../Common/formatcode';
 
-const RejectedIRO = () => {
+const RevertedIRO = () => {
   const [openRemarks, toggleOpenRemarks] = useState(false);
   const [IROrder, setIROrder] = useState<IROrder[]>();
   const [selectedIROId, setSelectedIROId] = useState<string | null>(null);
@@ -57,7 +60,7 @@ const RejectedIRO = () => {
   const [openAttachReceipt, setOpenAttachReceipt] = useState(false);
   const [openRelease, setOpenRelease] = useState(false);
   const [releaseAmountIROs, setReleaseAmountIROs] = useState<IROrder[]>([]);
-  const [statusFilter, setStatusFilter] = useState([IROLifeCycleStates.REJECTED]); // default WFA: Waiting for access or Reverted
+  const [statusFilter, setStatusFilter] = useState([IROLifeCycleStates.REVERTED_TO_DIVISION]); // default WFA: Waiting for access or Reverted
   const [exstatusFilter, setExStatusFilter] = useState<any>([]); // default WFA: Waiting for access or Reverted
   const [openLog, setOpenLog] = useState(false);
   const [statusFilter1, setStatusFilter1] = useState<'Support' |'All' | 'Expanse'| null>('All'); // default WFA: Waiting for access or Reverted
@@ -116,6 +119,30 @@ const RejectedIRO = () => {
         color: '#000',
       },
     },
+  };
+  const [divisions, setDivisions] = useState<string[]>([]);
+  const [divisionSearch, setDivisionSearch] = useState('');
+  const [selectedDivisions, setSelectedDivisions] = useState<string[]>([]);
+
+  useEffect(() => {
+    DivisionsServices.getDivisions().then((res) => {
+      const names = res.data.map((d: any) => d.details.name);
+      setDivisions(names);
+    });
+  }, []);
+  const filteredDivisions = divisions.filter((name) =>
+    name
+    .toLowerCase()
+    .replace(/\s/g, '') // remove spaces
+    .includes(divisionSearch.toLowerCase().replace(/\s/g, '')),
+  );
+  const handleDivisionChange = (event: SelectChangeEvent<string[]>) => {
+    const value = event.target.value as string[];
+    if (value.includes('__ALL__')) {
+      ([]); // empty = show all
+      return;
+    }
+    setSelectedDivisions(value);
   };
   useEffect(() => {
     ESignatureService.getESignature()
@@ -182,16 +209,33 @@ const RejectedIRO = () => {
     setSearchText(event.target.value);
   };
   const filteredRows = (IROrder ?? []).filter((row) => {
-    if ((row.IROno && row.IROno.toLowerCase().includes(searchText.toLowerCase())) ||
-      (row.IRODate && row.IRODate.format('DD/MM/YYYY').toLowerCase().includes(searchText.toLowerCase())) ||
-      // (row.particulars[0]?.subCategory1 && row.particulars[0]?.subCategory1.toLowerCase().includes(searchText.toLowerCase())) ||
-      // (row.particulars[0]?.subCategory2 && row.particulars[0]?.subCategory2.toLowerCase().includes(searchText.toLowerCase())) ||
-      // (row.particulars[0]?.subCategory3 && row.particulars[0]?.subCategory3.toLowerCase().includes(searchText.toLowerCase())) ||
-      (row.division?.details.name && row.division?.details.name.toLowerCase().includes(searchText.toLowerCase()))
-    ) {
-      return true;
-    }
-    return Object.values(row).some((value) => value && value.toString().toLowerCase().includes(searchText.toLowerCase()));
+    const divisionMatch = selectedDivisions.length === 0 ||
+    selectedDivisions.includes(row?.division?.details.name ?? '');
+
+    if (!searchText) return divisionMatch;
+
+    const searchLower = searchText.toLowerCase();
+
+    // Check all searchable fields
+    const searchMatch =
+    (row.IROno && row.IROno.toLowerCase().includes(searchLower)) ||
+    (row.IRODate && row.IRODate.format('DD/MM/YYYY').toLowerCase().includes(searchLower)) ||
+    (row.division?.details.name && row.division?.details.name.toLowerCase().includes(searchLower)) ||
+    (row.purposeSubdivision?.name && row.purposeSubdivision.name.toLowerCase().includes(searchLower)) ||
+    // Add subCategory search
+    (row.particulars && row.particulars.some((particular:any) =>
+      (particular.subCategory1 && particular.subCategory1.toLowerCase().includes(searchLower)) ||
+      (particular.subCategory2 && particular.subCategory2.toLowerCase().includes(searchLower)) ||
+      (particular.subCategory3 && particular.subCategory3.toLowerCase().includes(searchLower)),
+    )) ||
+    // Add mainCategory search
+    (row.particulars && row.particulars.some((particular:any) =>
+      particular.mainCategory && particular.mainCategory.toLowerCase().includes(searchLower),
+    )) ||
+    // Add beneficiary name search
+    (row.sanctionedBank && row.sanctionedBank.toLowerCase().includes(searchLower));
+
+    return divisionMatch && searchMatch;
   });
   if (searchText && filteredRows.length ===0) {
     enqueueSnackbar({
@@ -528,8 +572,44 @@ const RejectedIRO = () => {
       headerAlign: 'center', width: 130,
     },
     {
-      field: 'released amount ', headerName: 'Amount Transferred ', width: 150, renderHeader: () => <b>Amount Transferred</b>, align: 'center', headerAlign: 'center',
-      valueGetter: (params) => params.row.releaseAmount?.transferredAmount,
+      field: 'Transferred',
+      headerName: 'Transferred Amount',
+      width: 180,
+      renderHeader: () => <b>Transferred Amount</b>,
+
+      valueGetter: (params: any) => {
+        if (params.row.sanctionedAmount !== undefined) {
+          return formatAmount(Number(params.row.sanctionedAmount));
+        }
+
+        if (Array.isArray(params.row.particulars)) {
+          const total = params.row.particulars.reduce(
+            (sum: number, item: any) =>
+              sum + (Number(item.sanctionedAmount) || 0),
+            0,
+          );
+
+          return formatAmount(total);
+        }
+
+        return formatAmount(0);
+      },
+      align: 'center' as const,
+      headerAlign: 'center' as const,
+    },
+
+    {
+      field: 'totalTransferred',
+      headerName: 'Total Transferred Amount',
+      width: 180,
+      renderHeader: () => <b>Total Transferred Amount</b>,
+      valueGetter: (params: any) => {
+        return formatAmount(
+          Number(params.row.releaseAmount?.transferredAmount) || 0,
+        );
+      },
+      align: 'center' as const,
+      headerAlign: 'center' as const,
     },
     {
       field: 'reasonForRejectIRO',
@@ -584,7 +664,7 @@ const RejectedIRO = () => {
       });
   }, [dateRange, statusFilter, statusFilter1]);
   return (
-    <CommonPageLayout title="Rejected IRO" momentFilter={
+    <CommonPageLayout status='REVERTED IRO' title="Reverted IRO" momentFilter={
 
       {
         dateRange: dateRange,
@@ -599,7 +679,7 @@ const RejectedIRO = () => {
     }>
       <Card sx={{ maxWidth: '78vw', height: '120vh', alignItems: 'center' }} >
         <Grid container spacing={2} padding={2}>
-          <Grid item xs={8}>
+          <Grid item xs={6}>
             {/* <div style={{ display: 'flex', alignItems: 'center' }}> */}
             <TextField
               label="Search"
@@ -612,8 +692,69 @@ const RejectedIRO = () => {
             />
             {/* </div> */}
           </Grid>
+          <Grid item xs={3}>
+            {hasPermissions(['MANAGE_IRO']) && (
+              <Grid item xs={12} md="auto" sx={{
+                display: 'flex',
+                alignItems: 'center', // ✅ vertical center
+              }}>
+                <FormControl
+                  sx={{
+                    'minWidth': 200,
+                    '& .MuiOutlinedInput-root': {
+                      // height: 45, // ✅ control select height
+                      fontSize: 13,
+                      borderRadius: 1.5,
+                    },
+                  }}
+                >
+                  <InputLabel id="division-label">
+  Division
+                  </InputLabel>
+                  <Select
+                    multiple
+                    value={selectedDivisions}
+                    label="Division"
+                    onChange={handleDivisionChange}
+                    renderValue={(selected) =>
+                      selected.length === 0 ? 'None' : selected.join(', ')
+                    }
+                    MenuProps={{
+                      PaperProps: {
+                        style: { maxHeight: 300, width: 250 },
+                      },
+                    }}
+                  >
+                    <ListSubheader>
+                      <TextField
+                        size="small"
+                        placeholder="Search division..."
+                        fullWidth
+                        autoFocus
+                        value={divisionSearch}
+                        onChange={(e) => setDivisionSearch(e.target.value)}
+                        onKeyDown={(e) => e.stopPropagation()}
+                      />
+                    </ListSubheader>
 
-          <Grid item xs={4}>
+                    <MenuItem value="__ALL__">
+                      <Checkbox checked={selectedDivisions.length === 0} />
+                      <ListItemText primary="None" />
+                    </MenuItem>
+
+                    {filteredDivisions.map((name) => (
+                      <MenuItem key={name} value={name}>
+                        <Checkbox checked={selectedDivisions.includes(name)} />
+                        <ListItemText primary={name} />
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
+            )}
+          </Grid>
+
+          <Grid item xs={3}>
             <Button
               onClick={async () => {
                 const sheet =
@@ -677,7 +818,7 @@ const RejectedIRO = () => {
                     setExStatusFilter([69]);
                   } else {
                     setExStatusFilter([]);
-                    setStatusFilter([IROLifeCycleStates.REJECTED]);
+                    setStatusFilter([IROLifeCycleStates.REVERTED_TO_DIVISION]);
                   }
                 }}
                 sx={toggleSx}
@@ -743,12 +884,18 @@ const RejectedIRO = () => {
               }}
             >
 
-              <DataGrid rows={filteredRows ?? []} columns={columns} getRowId={(row) => row._id} style={{ height: '75vh', width: '100%' }} getRowClassName={(params) => {
-                if (params.row.specialsanction == 'Yes') {
-                  return 'special-sanction'; // Class for rows with special sanction
+              <DataGrid rows={filteredRows ?? []} columns={columns} getRowId={(row) => row._id} style={{ height: '75vh', width: '100%' }}
+                isRowSelectable={(params:any) =>
+                  selectedDivisions.length === 0 ?
+                    true :
+                    selectedDivisions.includes(params?.row?.division?.details?.name)
                 }
-                return params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'; // Default classes
-              }}
+                getRowClassName={(params) => {
+                  if (params.row.specialsanction == 'Yes') {
+                    return 'special-sanction'; // Class for rows with special sanction
+                  }
+                  return params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'; // Default classes
+                }}
               />
             </Box>
           </Grid>
@@ -964,4 +1111,4 @@ const RejectedIRO = () => {
   );
 };
 
-export default RejectedIRO;
+export default RevertedIRO;

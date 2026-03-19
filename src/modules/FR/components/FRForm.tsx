@@ -282,7 +282,7 @@ const FRForm = (props: FormComponentProps<any>) => {
       setParticulars(props.value.particulars);
     }
   }, [props.value.particulars]);
-  console.log(props.action, 'propd');
+  console.log(props.value, 'propd');
 
   const addParticulars = () => {
     setParticularDialog('add');
@@ -758,7 +758,20 @@ const FRForm = (props: FormComponentProps<any>) => {
                   />
                 </Grid>
               )}
-
+              <Grid item xs={12} md={6}>
+                <TextField
+                  label="Raised By (Only Applicable For Delhi Staff)"
+                  value={props.value.raisedBy}
+                  onChange={(e) =>
+                    props.onChange({
+                      ...props.value,
+                      raisedBy: e.target.value,
+                    })
+                  }
+                  variant="outlined"
+                  fullWidth
+                />
+              </Grid>
               {props.value.purpose === 'Subdivision' ? (
                 <Grid item xs={12} md={6}>
                   <Autocomplete
@@ -910,7 +923,7 @@ const FRForm = (props: FormComponentProps<any>) => {
                         {particulars.map((item, index) => (
                           <TableRow key={item._id}>
                             <TableCell component="th" sx={{ display: 'flex' }}>
-                              {props.action !== 'view'&& props.actionAdi !=='view' && (
+                              {props.action !== 'view'&& props.actionAdi !=='view' && !props.disable && (
                                 <>
                                   <PermissionChecks
                                     permissions={['WRITE_FR']}
@@ -1521,6 +1534,111 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
                   />
 
                 </Grid>
+                {props.action == 'customIRO' &&(
+                  <>
+
+                    <Grid item xs={12}>
+                      <span style={{ fontWeight: 600, fontSize: 20 }}>
+                    Adjustment Details
+                      </span>
+                    </Grid>
+
+                    <Grid item xs={12} md={4}>
+                      <TextField
+                        label="Adjusted IRO"
+                        type="tel"
+                        value={props.value?.adjustedIro}
+                        onChange={(e) =>
+                          props.onChange(() => ({
+                            ...props?.value,
+                            adjustedIro: e.target?.value,
+                          }))
+                        }
+                        InputLabelProps={{
+                          shrink: Boolean(props.value?.adjustedIro),
+                        }}
+                        fullWidth
+                        inputProps={{
+                          onWheel: (event: React.WheelEvent<HTMLInputElement>) => {
+                            event.preventDefault();
+                            event.currentTarget.blur();
+                          },
+                        }}
+                        variant="outlined"
+                        // disabled={props.action !== 'add'}
+
+                        // required
+                      />
+                    </Grid>
+                    <Grid item xs={12} md={4}>
+                      <TextField
+                        label="Adjusted Amount"
+                        type="number"
+                        value={props.value?.adjustedAmount }
+                        onChange={(e) =>
+                        // Number(e.target.value) <= (releaseAmount.adjustedAmount ?? 0) &&
+                          props.onChange(() => ({
+                            ...props?.value,
+                            adjustedAmount: Number(e.target?.value),
+                          }))
+                        }
+                        fullWidth
+                        // inputProps={{
+                        //   max: releaseAmount.releaseAmount ?? 0, min: 0, step: 0.01,
+                        //   onWheel: (event: React.WheelEvent<HTMLInputElement>) => {
+                        //     event.preventDefault();
+                        //     event.currentTarget.blur();
+                        //   },
+                        // }}
+                        variant="outlined"
+                        // disabled={props.action !== 'add'}
+
+                        // required
+                      />
+                    </Grid>
+                    <Grid item xs={12} md={3} style={{ display: 'flex', alignItems: 'center' }}>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            name="closingBalance"
+                            // Use double negation (!!) to ensure it's a boolean value
+                            checked={props.value?.closingBalance}
+                            onChange={(e) =>
+                              props.onChange(() => ({
+                                ...props?.value,
+                                closingBalance: e.target?.checked,
+                              }))
+                            }
+                            // disabled={props.action !== 'add'}
+                            color="primary"
+                          />
+                        }
+                        label="Closing Balance"
+                      />
+                    </Grid>
+                    {props.value?.closingBalance &&(
+
+                      <Grid item xs={12} md={3}>
+                        <TextField
+                          label="Closing Balance Remark"
+                          type="tel"
+                          value={props.value?.closingBalanceRemark }
+                          onChange={(e) =>
+                            props.onChange(() => ({
+                              ...props.value,
+                              closingBalanceRemark: e.target.value,
+                            }))
+                          }
+                          fullWidth
+                          variant="outlined"
+                          // disabled={props.action !== 'add'}
+
+                          // required
+                        />
+                      </Grid>
+                    )}
+                  </>
+                )}
                 {props.action == 'customIRO' ?(
 
                   <Grid item xs={12} md={12}>
@@ -1716,54 +1834,65 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
                   )}
                   &nbsp;
 
-                  {props.action === 'add' || props.action === 'multi'|| props.action === 'edit' || props.action === 'custom' || props.action === 'customIRO' ||props.action === 'customEdit' ? (
-                    <>
-                      {/* Only display buttons if props.action is 'view' */}
-                      <PermissionChecks
-                        permissions={['WRITE_FR']}
-                        granted={
-                          <Button
-                            variant="contained"
-                            color="info"
-                            disabled={props.actionAdi=='view'}
-                            type="submit"
-                            onClick={() => {
-                              if (props.value.status == FRLifeCycleStates.REOPENED) {
-                                setSubmit(3);
-                              } else {
-                                setSubmit(1);
-                              }
-                            }}
-                          // disabled={particulars.length==0}
-                          >
-                            Submit{' '}
-                          </Button>
-                        }
-
-                      />
-                      &nbsp;
-                      &nbsp;
-                      {FRLifeCycleStates.REOPENED !== props.value.status&& props.action !=='custom'&& props.action !=='customIRO'&& props.action !== 'customEdit' ? (
-
+                  {(
+                    props.action === 'add' ||
+  props.action === 'multi' ||
+  props.action === 'edit' ||
+  props.action === 'custom' ||
+  props.action === 'customIRO' ||
+  props.action === 'customEdit'
+                  ) ? (
+                      <Box
+                        sx={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: 1.5, // spacing between buttons
+                          flexWrap: 'wrap', // optional: wrap on very small screens
+                        }}
+                      >
                         <PermissionChecks
                           permissions={['WRITE_FR']}
                           granted={
                             <Button
                               variant="contained"
-                              color="warning"
+                              color="info"
+                              disabled={props.actionAdi === 'view'}
                               type="submit"
-                              // disabled={particulars.length==0}
                               onClick={() => {
-                                setSubmit(2);
+                                if (props.value.status === FRLifeCycleStates.REOPENED) {
+                                  setSubmit(3);
+                                } else {
+                                  setSubmit(1);
+                                }
                               }}
                             >
-                              Submit to President
+          Submit
                             </Button>
                           }
                         />
-                      ):[]}
-                    </>
-                  ) : null}
+
+                        {FRLifeCycleStates.REOPENED !== props.value.status &&
+      props.action !== 'custom' &&
+      props.action !== 'customIRO' &&
+      props.action !== 'customEdit' && (
+                          <PermissionChecks
+                            permissions={['WRITE_FR']}
+                            granted={
+                              <Button
+                                variant="contained"
+                                color="warning"
+                                type="submit"
+                                onClick={() => {
+                                  setSubmit(2);
+                                }}
+                              >
+              Submit to President
+                              </Button>
+                            }
+                          />
+                        )}
+                      </Box>
+                    ) : null}
                 </div>
               </Grid>
             </Grid>
@@ -1867,6 +1996,7 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
                 </Grid>
                 <Grid item md={12}>
                   <Autocomplete
+
                     disabled={props.disable == true}
                     value={selectedSubCategory3}
                     options={selectedSubCategory2?.subcategory3 ?? []}
@@ -1883,6 +2013,7 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
                     }}
                     renderInput={(params) => <TextField {...params} label="Sub Category 3" />}
                     fullWidth
+
                   />
                 </Grid>
                 <Grid item md={12}>
@@ -2047,6 +2178,7 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
                     value={newParticular.narration}
                     multiline
                     maxRows={4}
+                    required
                     onChange={(e) =>
                       setNewParticular((particularDetails) => ({
                         ...particularDetails,
@@ -2054,6 +2186,7 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
                       }))
                     }
                     fullWidth
+
                   />
                 </Grid>
                 <Grid item md={12}>
@@ -2804,17 +2937,17 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
         //   }));
         //   return FileUploaderServices.renameFile(fileId, newName);
         // }}
-        
-deleteFile={(fileId: string) => {
-  props.onChange({
-    ...props.value,
-    CoordinatorSign: (props.value.CoordinatorSign ?? []).filter(
-      (file: any) => file._id !== fileId
-    ),
-  });
 
-  return FileUploaderServices.deleteFile(fileId);
-}}
+        deleteFile={(fileId: string) => {
+          props.onChange({
+            ...props.value,
+            CoordinatorSign: (props.value.CoordinatorSign ?? []).filter(
+              (file: any) => file._id !== fileId,
+            ),
+          });
+
+          return FileUploaderServices.deleteFile(fileId);
+        }}
       />
       <FileUploader
         title="Attachments"
@@ -2850,7 +2983,7 @@ deleteFile={(fileId: string) => {
         //   return FileUploaderServices.renameFile(fileId, newName);
         // }}
         deleteFile={(fileId: string) => {
-          console.log('call came')
+          console.log('call came');
           props.onChange({
             ...props.value,
             attachment: props.value.attachment.filter((file: any) => file._id !== fileId),
@@ -2891,16 +3024,16 @@ deleteFile={(fileId: string) => {
         //   }));
         //   return FileUploaderServices.renameFile(fileId, newName);
         // }}
-          deleteFile={(fileId: string) => {
-    props.onChange({
-      ...props.value,
-      jrLeaderSign: (props.value.jrLeaderSign ?? []).filter(
-        (file: any) => file._id !== fileId
-      ),
-    });
+        deleteFile={(fileId: string) => {
+          props.onChange({
+            ...props.value,
+            jrLeaderSign: (props.value.jrLeaderSign ?? []).filter(
+              (file: any) => file._id !== fileId,
+            ),
+          });
 
-    return FileUploaderServices.deleteFile(fileId);
-  }}
+          return FileUploaderServices.deleteFile(fileId);
+        }}
       />
       <FileUploader
         title="Attachments"
@@ -2943,16 +3076,16 @@ deleteFile={(fileId: string) => {
         //   return FileUploaderServices.deleteFile(fileId);
         // }}
 
-          deleteFile={(fileId: string) => {
-    props.onChange({
-      ...props.value,
-      srLeaderSign: (props.value.srLeaderSign ?? []).filter(
-        (file: any) => file._id !== fileId
-      ),
-    });
+        deleteFile={(fileId: string) => {
+          props.onChange({
+            ...props.value,
+            srLeaderSign: (props.value.srLeaderSign ?? []).filter(
+              (file: any) => file._id !== fileId,
+            ),
+          });
 
-    return FileUploaderServices.deleteFile(fileId);
-  }}
+          return FileUploaderServices.deleteFile(fileId);
+        }}
       />
       <FileUploader
         title="Attachments"
@@ -2995,18 +3128,18 @@ deleteFile={(fileId: string) => {
         //   return FileUploaderServices.deleteFile(fileId);
         // }}
 
-         deleteFile={(fileId: string) => {
-  props.onChange({
-    ...props.value,
-    presidentSign: (props.value.presidentSign ?? []).filter(
-      (file: any) => file._id !== fileId
-    ),
-  });
+        deleteFile={(fileId: string) => {
+          props.onChange({
+            ...props.value,
+            presidentSign: (props.value.presidentSign ?? []).filter(
+              (file: any) => file._id !== fileId,
+            ),
+          });
 
-  return FileUploaderServices.deleteFile(fileId);
-}}
+          return FileUploaderServices.deleteFile(fileId);
+        }}
 
-        
+
       />
       <FileUploader
         title="Attachments"

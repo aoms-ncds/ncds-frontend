@@ -2,7 +2,19 @@
 /* eslint-disable no-constant-condition */
 import { SetStateAction, useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import { Grid, Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Alert, Typography, Divider, Box, Container, Tooltip, FormControl, FormControlLabel, Radio, RadioGroup, ListSubheader } from '@mui/material';
+import { Grid, Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Alert, Typography, Divider, Box, Container, Tooltip, FormControl, FormControlLabel, Radio, RadioGroup, ListSubheader,
+  InputLabel,
+  Select,
+  MenuItem,
+  Checkbox,
+  ListItemText,
+  SelectChangeEvent,
+  CardContent,
+  ToggleButton,
+  ToggleButtonGroup,
+  ListItemIcon,
+  Menu,
+} from '@mui/material';
 // eslint-disable-next-line max-len
 import {
   Print as PrintIcon,
@@ -15,15 +27,9 @@ import {
   Close as CloseIcon,
   Message as MessageIcon,
   Delete as DeleteIcon,
+  MoreHorizOutlined,
 } from '@mui/icons-material';
-import {
-  InputLabel,
-  Select,
-  MenuItem,
-  Checkbox,
-  ListItemText,
-  SelectChangeEvent
-} from "@mui/material";
+
 import { DataGrid, GridCellParams, GridColDef } from '@mui/x-data-grid';
 import { Link, useLocation } from 'react-router-dom';
 import DropdownButton from '../../components/DropDownButton';
@@ -57,6 +63,8 @@ import FRLifeCycleStates from '../FR/extras/FRLifeCycleStates';
 import DivisionsServices from '../Divisions/extras/DivisionsServices';
 import TransactionLogDialog from '../FR/components/TransactionLogDialog';
 import SanctionLetter from '../FR/components/authLatter';
+import formatAmount from '../Common/formatcode';
+import React from 'react';
 
 
 type BankDetails = {
@@ -73,7 +81,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   const [remarks, setRemarks] = useState<Remark[]>([]);
   const [statusFilter, setStatusFilter] = useState([IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE]); // default WFA: Waiting for access or Reverted
   const [exstatusFilter, setExStatusFilter] = useState<any>([]); // default WFA: Waiting for access or Reverted
-  const [statusFilter1, setStatusFilter1] = useState<'Support' |'All' | 'Expanse'| null>('All'); // default WFA: Waiting for access or Reverted
+  const [statusFilter1, setStatusFilter1] = useState<'Support' |'All' | 'Expanse'|'Custom'|'Sanctioned'| null>('All'); // default WFA: Waiting for access or Reverted
   const [openPrintFr, setOpenPrintFr] = useState(false);
   const [data6, setData6] = useState<FR | null>(null);
   const [divisions, setDivisions] = useState<string[]>([]);
@@ -104,7 +112,29 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   const [isCoordinator, setisCoordinator] = useState<any>(false);
   console.log(releaseAmountIROs, 'exstatusFilter');
   const [openLog, setOpenLog] = useState(false);
+  const toggleSx = {
+    'display': 'flex',
+    'flexWrap': 'wrap', // ✅ allow natural wrapping
+    'gap': 1, // spacing between buttons
 
+    '& .MuiToggleButton-root': {
+      'border': '1px solid #dcdcdc',
+      'borderRadius': 2,
+      'textTransform': 'none',
+      'fontSize': '0.85rem',
+      'fontWeight': 500,
+      'px': 2.5,
+      'py': 1,
+      'minWidth': 'fit-content', // ✅ important
+      'whiteSpace': 'nowrap', // prevent text break
+
+      '&.Mui-selected': {
+        backgroundColor: '#eaeaea',
+        color: '#000',
+        fontWeight: 600,
+      },
+    },
+  };
   const [selectedIRO, setSelectedIRO] = useState<IROrder>({
     _id: '',
     IROno: '',
@@ -349,6 +379,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     signature: {},
     specialsanction: '',
   });
+  const [openReason, setOpenReason] = useState(false);
 
   const [openReleaseConform, setOpenReleaseConform] = useState(false);
   const [selectedIROId, setSelectedIROId] = useState<string | null>(null);
@@ -367,6 +398,8 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   const [printIroLoading, setPrintIroLoading] = useState(false);
   const [openPrintIro, setOpenPrintIro] = useState(false);
   const [deleteModel, setDeleteModel] = useState(false);
+  const [selectedIROData, setSelectedIROData] = useState<IROrder | null>(null);
+
   let total = 0;
   selectedIRO?.particulars?.forEach((particular) => {
     if (particular?.sanctionedAmount) {
@@ -386,7 +419,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     date: string | null;
   } | null>(null);
   const [loading, setLoading] = useState(false);
-  console.log(props.action, 'selectedIROId');
+  console.log(statusFilter, 'selectedIROId');
   useEffect(() => {
     if (finder === 1|| 0) {
       setStatusFilter([IROLifeCycleStates.AMOUNT_RELEASED]);
@@ -462,7 +495,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       //     });
       // }
       if (userPermissions?.FCRA_ACCOUNTS_ACCESS && !userPermissions?.LOCAL_ACCOUNT_ACCESS) {
-        IROServices.getAllOptimized({ Exstatus: exstatusFilter, dateRange: dateRange, sourceOfAccount: 'FCRA', ...(statusFilter !== undefined && { status: statusFilter }), })
+        IROServices.getAllOptimized({ Exstatus: exstatusFilter, dateRange: dateRange, sourceOfAccount: 'FCRA', ...(statusFilter !== undefined && { status: statusFilter }) })
           .then((res) => {
             // console.log(res.data, 'KKK');
             setNotFound(true);
@@ -493,9 +526,34 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
         });
       }
     } else {
-      IROServices.getAllOptimized({ Exstatus: exstatusFilter, dateRange: dateRange, status: statusFilter }).then((res) => {
+      Promise.all([
+        IROServices.getAllOptimized({
+          Exstatus: exstatusFilter,
+          dateRange: dateRange,
+          status: statusFilter,
+        }),
+        IROServices.getAllCustom({
+          dateRange: dateRange,
+          status: statusFilter,
+        }),
+      ]).then(([optimizedRes, customRes]) => {
         setNotFound(true);
-        setIROrder(res.data.filter((iro) => iro.IRODate.isSameOrAfter(dateRange.startDate) && iro.IRODate.isSameOrBefore(dateRange.endDate)));
+
+        const filteredOptimized = optimizedRes.data.filter((iro) =>
+          iro.IRODate.isSameOrAfter(dateRange.startDate) &&
+    iro.IRODate.isSameOrBefore(dateRange.endDate),
+        );
+        // let filteredCustom;
+        const filteredCustom = customRes.data.filter((iro) =>
+          iro.IRODate.isSameOrAfter(dateRange.startDate) &&
+      iro.IRODate.isSameOrBefore(dateRange.endDate),
+        );
+
+
+        // ✅ MERGE BOTH
+        const combinedData = [...filteredOptimized, ...filteredCustom];
+
+        setIROrder(combinedData); // or whatever main list state
       });
     }
   }, [attachment, addSignature, dateRange, iroData, statusFilter, exstatusFilter]);
@@ -517,7 +575,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
         setIROrder(res.data.filter((iro) => iro.IRODate.isSameOrAfter(dateRange.startDate) && iro.IRODate.isSameOrBefore(dateRange.endDate)));
       });
     }
-  }, [statusFilter1, statusFilter, finder]);
+  }, [statusFilter1, finder]);
 
   const [selectedSignature, setSignature] = useState<Esignature>({
     _id: '',
@@ -615,99 +673,98 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     }
   }, [file]);
 
-//  const getTransferredAccountNumber = (iro: IROrder): string | null => {
-//   const division = iro.division;
-//   if (!division || !iro.sanctionedBank) return null;
+  //  const getTransferredAccountNumber = (iro: IROrder): string | null => {
+  //   const division = iro.division;
+  //   if (!division || !iro.sanctionedBank) return null;
 
-//   const bank = iro.sanctionedBank.split('-')[0].trim();
-//   console.log(bank, 'bank here');
+  //   const bank = iro.sanctionedBank.split('-')[0].trim();
+  //   console.log(bank, 'bank here');
 
-//   switch (bank) {
-//     case 'FCRA Bank Details':
-//       return division.FCRABankDetails?.accountNumber ?? null;
+  //   switch (bank) {
+  //     case 'FCRA Bank Details':
+  //       return division.FCRABankDetails?.accountNumber ?? null;
 
-//     case 'local Bank Details':
-//       return division.localBankDetails?.accountNumber ?? null;
+  //     case 'local Bank Details':
+  //       return division.localBankDetails?.accountNumber ?? null;
 
-//     case 'otherBankDetails':
-//       return division.otherBankDetails?.accountNumber ?? null;
+  //     case 'otherBankDetails':
+  //       return division.otherBankDetails?.accountNumber ?? null;
 
-//     case 'Division Bank FCRA':
-//       return division.DivisionBankFCRA?.accountNumber ?? null;
+  //     case 'Division Bank FCRA':
+  //       return division.DivisionBankFCRA?.accountNumber ?? null;
 
-//     case 'Division Bank Local':
-//       return division.DivisionBankLocal?.accountNumber ?? null;
+  //     case 'Division Bank Local':
+  //       return division.DivisionBankLocal?.accountNumber ?? null;
 
-//     case 'Local Bank':
-//       return division.localBankDetails?.accountNumber ?? null;
+  //     case 'Local Bank':
+  //       return division.localBankDetails?.accountNumber ?? null;
 
-//     case 'FCRA':
-//       return division.FCRABankDetails?.accountNumber ?? null;
+  //     case 'FCRA':
+  //       return division.FCRABankDetails?.accountNumber ?? null;
 
-//     case 'Beneficiary Bank 1':
-//       return division.BeneficiaryBank1?.accountNumber ?? null;
+  //     case 'Beneficiary Bank 1':
+  //       return division.BeneficiaryBank1?.accountNumber ?? null;
 
-//     case 'Beneficiary Bank 2':
-//       return division.BeneficiaryBank2?.accountNumber ?? null;
+  //     case 'Beneficiary Bank 2':
+  //       return division.BeneficiaryBank2?.accountNumber ?? null;
 
-//     case 'Beneficiary Bank 3':
-//       return division.BeneficiaryBank3?.accountNumber ?? null;
+  //     case 'Beneficiary Bank 3':
+  //       return division.BeneficiaryBank3?.accountNumber ?? null;
 
-//     case 'Beneficiary Bank 4':
-//       return division.BeneficiaryBank4?.accountNumber ?? null;
+  //     case 'Beneficiary Bank 4':
+  //       return division.BeneficiaryBank4?.accountNumber ?? null;
 
-//     case 'Beneficiary Bank 5':
-//       return division.BeneficiaryBank5?.accountNumber ?? null;
+  //     case 'Beneficiary Bank 5':
+  //       return division.BeneficiaryBank5?.accountNumber ?? null;
 
-//     case 'Beneficiary Bank 6':
-//       return division.BeneficiaryBank6?.accountNumber ?? null;
+  //     case 'Beneficiary Bank 6':
+  //       return division.BeneficiaryBank6?.accountNumber ?? null;
 
-//     case 'Beneficiary Bank 7':
-//       return division.BeneficiaryBank7?.accountNumber ?? null;
+  //     case 'Beneficiary Bank 7':
+  //       return division.BeneficiaryBank7?.accountNumber ?? null;
 
-//     default:
-//       return null;
-//   }
-// };
+  //     default:
+  //       return null;
+  //   }
+  // };
 
 
-
-const getTransferredAccountNumber = (iro: IROrder): string | null => {
-  const division = iro.division;
-  if (!division || !iro.sanctionedBank) return null;
-  const [bankName, beneficiaryName] = iro.sanctionedBank
+  const getTransferredAccountNumber = (iro: IROrder): string | null => {
+    const division = iro.division;
+    if (!division || !iro.sanctionedBank) return null;
+    const [bankName, beneficiaryName] = iro.sanctionedBank
     .split('-')
-    .map(v => v.trim());
-  const divisionRecord =
+    .map((v) => v.trim());
+    const divisionRecord =
     division as unknown as Record<string, BankDetails | undefined>;
-  if (bankName.startsWith('Beneficiary Bank')) {
-    for (const key in divisionRecord) {
-      if (!key.startsWith('BeneficiaryBank')) continue;
+    if (bankName.startsWith('Beneficiary Bank')) {
+      for (const key in divisionRecord) {
+        if (!key.startsWith('BeneficiaryBank')) continue;
 
-      const bank = divisionRecord[key];
+        const bank = divisionRecord[key];
 
-      if (bank?.beneficiary === beneficiaryName) {
-        return bank.accountNumber ?? null;
+        if (bank?.beneficiary === beneficiaryName) {
+          return bank.accountNumber ?? null;
+        }
       }
+      return divisionRecord['otherBankDetails']?.accountNumber ?? null;
     }
-    return divisionRecord['otherBankDetails']?.accountNumber ?? null;
-  }
 
-  const fixedMap: Record<string, string> = {
-    'FCRA Bank Details': 'FCRABankDetails',
-    'local Bank Details': 'localBankDetails',
-    'otherBankDetails': 'otherBankDetails',
-    'Division Bank FCRA': 'DivisionBankFCRA',
-    'Division Bank Local': 'DivisionBankLocal',
-    'Local Bank': 'localBankDetails',
-    'FCRA': 'FCRABankDetails',
+    const fixedMap: Record<string, string> = {
+      'FCRA Bank Details': 'FCRABankDetails',
+      'local Bank Details': 'localBankDetails',
+      'otherBankDetails': 'otherBankDetails',
+      'Division Bank FCRA': 'DivisionBankFCRA',
+      'Division Bank Local': 'DivisionBankLocal',
+      'Local Bank': 'localBankDetails',
+      'FCRA': 'FCRABankDetails',
+    };
+    const key = fixedMap[bankName];
+    if (key) {
+      return divisionRecord[key]?.accountNumber ?? null;
+    }
+    return null;
   };
-  const key = fixedMap[bankName];
-  if (key) {
-    return divisionRecord[key]?.accountNumber ?? null;
-  }
-  return null;
-};
 
 
   useEffect(() => {
@@ -720,469 +777,443 @@ const getTransferredAccountNumber = (iro: IROrder): string | null => {
   // Handle division selection change
   const handleDivisionChange = (event: SelectChangeEvent<string[]>) => {
     const value = event.target.value as string[];
-     if (value.includes('__ALL__')) {
-    setSelectedDivisions([]); // empty = show all
-    return;
-  }
+    if (value.includes('__ALL__')) {
+      setSelectedDivisions([]); // empty = show all
+      return;
+    }
     setSelectedDivisions(value);
   };
   const filteredDivisions = divisions.filter((name) =>
-  name
+    name
     .toLowerCase()
-    .replace(/\s/g, '')          // remove spaces
-    .includes(divisionSearch.toLowerCase().replace(/\s/g, ''))
-);
-
+    .replace(/\s/g, '') // remove spaces
+    .includes(divisionSearch.toLowerCase().replace(/\s/g, '')),
+  );
 
 
   const columns: GridColDef<IROrder>[] = [
     {
       field: '_manage',
-      headerClassName: 'super-app-theme--cell',
+
       headerName: '',
       renderHeader: () => <b>Action</b>,
       width: 80,
       align: 'center',
       headerAlign: 'center',
       type: 'string',
-      renderCell: (params) => (
-        <DropdownButton
-          useIconButton={true}
-          id="IRO action"
-          primaryText="Actions"
-          key={'IRO action'}
-          items={[
-            ...(params.row.status == IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE || (IROLifeCycleStates.WAITING_FOR_ACCOUNTS_MNGR && props.action == 'release') ?
-              [
-                {
-                  id: 'Release',
-                  text: 'Release Amount',
-                  component: Link,
-                  onClick: () => [setOpenRelease(true), setReleaseAmountIROs([params.row])],
-                  icon: CurrencyRupeeIcon,
+      renderCell: (params) => {
+        const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+        const open = Boolean(anchorEl);
+
+        // eslint-disable-next-line react/no-multi-comp
+        const Section = ({ title }: { title: string }) => (
+          <Typography
+            sx={{
+              px: 2,
+              pt: 1.5,
+              pb: 0.5,
+              fontSize: 12,
+              fontWeight: 700,
+              color: 'text.secondary',
+            }}
+          >
+            {title}
+          </Typography>
+        );
+
+        return (
+          <>
+            <IconButton size="small" onClick={(e) => setAnchorEl(e.currentTarget)}>
+              <MoreHorizOutlined fontSize="small" />
+            </IconButton>
+
+            <Menu
+              anchorEl={anchorEl}
+              open={open}
+              onClose={() => setAnchorEl(null)}
+              PaperProps={{
+                sx: {
+                  width: 280,
+                  borderRadius: 2,
+                  boxShadow: '0 8px 24px rgba(0,0,0,0.12)',
                 },
-                // {
-                //   id: 'Close IRO',
-                //   text: 'Close IRO',
-                //   icon: PreviewIcon,
-                //   onClick: () => {
-                //     setIroData(params.row);
-                //     if (params?.row.FR) {
-                //       FRServices.getById(params.row.FR).then((res) => {
-                //         setFrData(res.data);
-                //         console.log(res.data, 'fr');
-                //       });
-                //     }
-                //     setPrintIroLoading(true);
-                //     setTimeout(() => {
-                //       setPrintIroLoading(false);
-                //     }, 2000);
-                //     // IROServices.close(params.row._id)
-                //     //     .then((res) => {
-                //     //       // if (IROrder) {
-                //     //       // eslint-disable-next-line @typescript-eslint/naming-convention
-                //     //       const filterIRO = IROrder?.filter((iro) => {
-                //     //         return iro._id !== params.row._id;
-                //     //       });
-                //     //       setIROrder(filterIRO);
-                //     //       // }
+              }}
+            >
 
-                //     //       enqueueSnackbar({
-                //     //         message: res.message,
-                //     //         variant: 'success',
-                //     //       });
-                //     //     })
+              {/* ================= VIEW ================= */}
 
-              //     //     .catch((err) => {
-              //     //       enqueueSnackbar({
-              //     //         message: err.message,
-              //     //         variant: 'error',
-              //     //       });
-              //     //     });
-              //   },
-              // },
-              ] :
-              []),
-            {
-              id: 'View',
-              text: 'View Details ',
-              // component: Link,
-              // to: `/iro/${params.row._id}`,
-              icon: PreviewIcon,
-              onClick: () => {
-                window.open( `/iro/${params.row._id}`, '_blank');
-              },
-            },
-            {
-              id: 'View',
-              text: 'View Fr ',
-              icon: PreviewIcon,
-              // component: Link,
-              // to: `/fr/${(params.row as any).FR}/view`,
-              onClick: () => {
-                window.open( `/fr/${(params.row as any).FR._id}/view`, '_blank');
-              },
-
-            },
-            ...(props.action != 'manage' && (hasPermissions(['ACCOUNTS_MNGR_ACCESS']) || hasPermissions(['FCRA_ACCOUNTS_ACCESS']) || hasPermissions(['LOCAL_ACCOUNT_ACCESS']) ||hasPermissions(['ADMIN_ACCESS'])) || IROLifeCycleStates.REVERTED_TO_DIVISION ==params.row.status&& !isCoordinator ?
-              [
-                {
-                  id: 'edit',
-                  text: 'Edit',
-                  component: Link,
-                  // to: `/iro/${params.row._id}/edit`,
-                  onClick: () => {
-                    window.open(`/iro/${params.row._id}/edit`, '_blank');
-                  },
-                  icon: EditIcon,
-                },
-              ] :
-              []),
-            ...(isCoordinator || hasPermissions(['ADMIN_ACCESS'])) && (params.row.status==IROLifeCycleStates.REOPENED || params.row.status==IROLifeCycleStates.REVERTED_TO_DIVISION) ?
-              [
-                {
-                  id: 'edit',
-                  text: 'Edit for coordinator',
-                  component: Link,
-                  // to: `/iro/${params.row._id}/edit`,
-                  onClick: () => {
-                    window.open(`/iro/${params.row._id}/EditIROForRevert`, '_blank');
-                  },
-                  icon: EditIcon,
-                },
-              ] :
-              [],
-            ...(hasPermissions(['ADMIN_ACCESS']) && props.action =='manage' ?
-              [
-                {
-                  id: 'edit',
-                  text: 'Edit for admin',
-                  component: Link,
-                  // to: `/iro/${params.row._id}/edit`,
-                  onClick: () => {
-                    window.open(`/iro/${params.row._id}/edit`, '_blank');
-                  },
-                  icon: EditIcon,
-                },
-              ] :
-              []),
+              <Section title="VIEW" />
 
 
-            ...(params.row.status >= IROLifeCycleStates.AMOUNT_RELEASED ?
-              [
-                {
-                  id: 'Release',
-                  text: 'View Release Amount',
-                  onClick: () => [setOpenRelease(true), setReleaseAmountIROs([params.row])],
-                  icon: PreviewIcon,
-                },
-              ] :
-              []),
+              {/* Release Amount */}
+              {(
+                params.row.status === IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE ||
+  (params.row.status === IROLifeCycleStates.WAITING_FOR_ACCOUNTS_MNGR &&
+    props.action === 'release')
+              ) && (
+                <MenuItem onClick={() => [setOpenRelease(true), setReleaseAmountIROs([params.row])]}>
+                  <ListItemIcon>
+                    <CurrencyRupeeIcon fontSize="small" />
+                  </ListItemIcon>
+                  <ListItemText primary="Release Amount" />
+                </MenuItem>
+              )}
 
-            {
-              id: 'remarks',
-              text: 'Remarks',
-              icon: EditNoteIcon,
+              {/* View Release Amount */}
+              {params.row.status >= IROLifeCycleStates.AMOUNT_RELEASED && (
+                <MenuItem onClick={() => [setOpenRelease(true), setReleaseAmountIROs([params.row])]}>
+                  <ListItemIcon>
+                    <PreviewIcon fontSize="small" />
+                  </ListItemIcon>
+                  <ListItemText primary="View Release Amount" />
+                </MenuItem>
+              )}
+              <MenuItem onClick={() => window.open(`/iro/${params.row._id}`, '_blank')}>
+                <ListItemIcon><PreviewIcon fontSize="small"/></ListItemIcon>
+                <ListItemText primary="View & Manage"/>
+              </MenuItem>
 
-              onClick: () => {
-                toggleOpenRemarks(true);
-                setSelectedIROId(params.row._id);
-                IROServices.getAllRemarksById(params.row._id)
-                  .then((res) => setRemarks(res.data ?? []))
-                  .catch((error) => {
-                    enqueueSnackbar({
-                      variant: 'error',
-                      message: error.message,
-                    });
-                  });
-              },
+              <MenuItem onClick={() => window.open(`/fr/${(params?.row?.FR as any)?._id}/view`, '_blank')}>
+                <ListItemIcon><PreviewIcon fontSize="small"/></ListItemIcon>
+                <ListItemText primary="View FR"/>
+              </MenuItem>
 
-            },
-            ...(params.row.closedIroPdf ?
-              [
-                {
-                  id: 'print',
-                  text: 'Print IRO',
-                  icon: PrintIcon,
-                  onClick: () => {
-                    setSelectedIRO(params.row);
-                    setOpenPrintIro(true);
-                  },
-                },
-              ] :
-              []),
-            ...(params.row.specialsanction =='Yes' ?
-              [
+              {(params.row.reasonForRejectIRO || (params.row as any).reasonForRevertToDivision) && (
+                <MenuItem onClick={()=>{
+                  setOpenReason(true);
+                  setSelectedIROData(params.row);
+                }}>
+                  <ListItemIcon><EditNoteIcon fontSize="small"/></ListItemIcon>
+                  <ListItemText primary="View Reasons"/>
+                </MenuItem>
+              )}
 
-                {
-                  id: 'print',
-                  text: 'Print FR Auth letter',
-                  icon: PrintIcon,
-                  onClick: () => {
-                    FRServices.getAllOptimizedById((params.row as any)?.FR?._id).then((res)=>{
-                      console.log(res.data, 'daa98');
-                      setData6(res.data);
-                    });
-                    setOpenPrintFr(true);
-                    setTimeout(() => {
-                      setOpenPrintFr(false);
-                    }, 2000);
-                  },
-                },
-              ]:[]),
-            {
-              id: 'notification',
-              text: 'Send notification',
-              onClick: () => {
-                setSelectedIROId(params.row._id);
-                toggleSendNotification(true);
-              },
-              icon: MessageIcon,
-            },
+              {params.row.status >= IROLifeCycleStates.AMOUNT_RELEASED && (
+                <MenuItem onClick={() => [setOpenRelease(true), setReleaseAmountIROs([params.row])]}>
+                  <ListItemIcon><PreviewIcon fontSize="small"/></ListItemIcon>
+                  <ListItemText primary="View Release Amount"/>
+                </MenuItem>
+              )}
 
-            // {
-            //   id: 'signature',
-            //   text: 'Add signature',
-            //   onClick: () => {
-            //     setSelectedIROId(params.row._id);
-            //     setSelectedIRO(params.row);
-            //     toggleAddSignature(true);
-            //   },
-            //   icon: FingerprintIcon,
-            // },
-            ...(hasPermissions(['WRITE_IRO']) ||
-            params.row.status == IROLifeCycleStates.AMOUNT_RELEASED) ?
-              (
-                isCoordinator && params.row.status == IROLifeCycleStates.AMOUNT_RELEASED ?
-                  [
-                    {
-                      id: 'Attachments',
-                      text: 'Attachments',
-                      icon: AttachmentIcon,
-                      onClick: () => {
-                        setAttachment(true);
-                        setFileUploaderAction('add');
-                        setSelectedIRO(params.row);
-                        if (params.row.workerSupport) {
-                          setPdfProps({
-                            purpose: params.row.purpose ?? 'Division',
-                            divisionId: params.row.division?._id ?? null,
-                            workerId:
-                                 params.row.purpose == 'Coordinator' && params.row.purposeCoordinator ?
-                                   params.row.purposeCoordinator?._id :
-                                   params.row.purpose == 'Worker' && params.row.purposeWorker?._id ?
-                                     params.row.purposeWorker?._id :
-                                     null,
-                            subDivisionId: params.row.purposeSubdivision?._id ?? null,
-                            designationParticularID: params.row.designationParticular ?? null,
-                            IRONo: params.row.IROno,
-                            month: params.row.particulars[0].month,
-                            date: moment(params.row.releaseAmount?.transferredDate).format('DD/MM/YYYY'),
-                          });
-                          // setSupportAttachment(true);
-                        }
-                      },
-                    },
-                  ] :
-                  [{
-                    id: 'Attachments',
-                    text: 'View Attachments',
-                    icon: AttachmentIcon,
-                    onClick: () => {
-                      setViewFileUploader(true);
-                      setSelectedIRO(params.row);
-                    },
-                  }]
-              ) :
-              [
-                {
-                  id: 'Attachments',
-                  text: 'View Attachments',
-                  icon: AttachmentIcon,
-                  onClick: () => {
-                    setViewFileUploader(true);
-                    setSelectedIRO(params.row);
-                  },
-                },
-              ],
-
-            // {
-            //   id: 'Send Back',
-            //   text: 'Send Back',
-            //   icon: ReplyIcon,
-            //   onClick: ()=>{
-            //     IROServices.
-            //     sendBack(params.row._id)
-            //     .then((res)=>{
-            //       if (IROrder) {
-            //         // eslint-disable-next-line @typescript-eslint/naming-convention
-            //         const filterIRO = IROrder?.filter((IROrders) => {
-            //           return IROrders._id !== params.row._id;
-            //         });
-            //         setIROrder(filterIRO);
-            //       }
-            //
-            //       enqueueSnackbar({
-            //         message: res.message,
-            //         variant: 'success',
-            //       });
-            //     })
-
-            //     .catch((err) => {
-            //       enqueueSnackbar({
-            //         message: err.message,
-            //         variant: 'error',
-            //       });
-            //     });
-            //   },
-            // },
-            {
-              id: 'log',
-              text: 'IRO Log',
-              icon: PreviewIcon,
-              onClick: () => {
+              <MenuItem onClick={()=>{
                 setSelectedIROId(params.row._id);
                 setOpenLog(true);
-              },
-            },
-            ...(hasPermissions(['ADMIN_ACCESS']) ?
-              [
-                {
-                  id: 'delete',
-                  text: 'Delete',
-                  component: Link,
-                  icon: DeleteIcon,
-                  onClick: () => {
-                    FRServices.getById((params.row?.FR as any)?._id?? '').then((res) => {
-                      console.log(res.data, 'daa');
+              }}>
+                <ListItemIcon><PreviewIcon fontSize="small"/></ListItemIcon>
+                <ListItemText primary="IRO Log"/>
+              </MenuItem>
+
+              <Divider/>
+
+              {/* ================= EDIT / UPDATE ================= */}
+
+              <Section title="EDIT / UPDATE"/>
+              {(hasPermissions(['ADMIN_ACCESS']) ||
+  hasPermissions(['FCRA_ACCOUNTS_ACCESS']) ||
+  hasPermissions(['LOCAL_ACCOUNT_ACCESS']) ||
+  hasPermissions(['ACCOUNTS_MNGR_ACCESS'])) && (
+                <MenuItem onClick={() => [setOpenRelease(true), setReleaseAmountIROs([params.row])]}>
+                  <ListItemIcon>
+                    <EditIcon fontSize="small" />
+                  </ListItemIcon>
+                  <ListItemText primary="Edit Release Amount" />
+                </MenuItem>
+              )}
+              {(props.action !== 'manage' &&
+        (hasPermissions(['ACCOUNTS_MNGR_ACCESS']) ||
+        hasPermissions(['FCRA_ACCOUNTS_ACCESS']) ||
+        hasPermissions(['LOCAL_ACCOUNT_ACCESS']) ||
+        hasPermissions(['ADMIN_ACCESS'])) ||
+        IROLifeCycleStates.REVERTED_TO_DIVISION === params.row.status && !isCoordinator) && (
+                <MenuItem onClick={()=> window.open(`/iro/${params.row._id}/edit`, '_blank')}>
+                  <ListItemIcon><EditIcon fontSize="small"/></ListItemIcon>
+                  <ListItemText primary="Edit"/>
+                </MenuItem>
+              )}
+
+              {(isCoordinator || hasPermissions(['ADMIN_ACCESS'])) &&
+      (params.row.status === IROLifeCycleStates.REOPENED ||
+      params.row.status === IROLifeCycleStates.REVERTED_TO_DIVISION) && (
+                <MenuItem onClick={()=> window.open(`/iro/${params.row._id}/EditIROForRevert`, '_blank')}>
+                  <ListItemIcon><EditIcon fontSize="small"/></ListItemIcon>
+                  <ListItemText primary="Edit for coordinator"/>
+                </MenuItem>
+              )}
+
+              {/* {(params.row.status == IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE ||
+      (IROLifeCycleStates.WAITING_FOR_ACCOUNTS_MNGR && props.action === 'release')) && (
+                <MenuItem onClick={()=>[setOpenRelease(true), setReleaseAmountIROs([params.row])]}>
+                  <ListItemIcon><CurrencyRupeeIcon fontSize="small"/></ListItemIcon>
+                  <ListItemText primary="Release Amount"/>
+                </MenuItem>
+              )} */}
+
+              <MenuItem onClick={()=>{
+                toggleOpenRemarks(true);
+                setSelectedIROId(params.row._id);
+
+                IROServices.getAllRemarksById(params.row._id)
+          .then((res)=> setRemarks(res.data ?? []))
+          .catch((error)=>{
+            enqueueSnackbar({
+              variant: 'error',
+              message: error.message,
+            });
+          });
+              }}>
+                <ListItemIcon><EditNoteIcon fontSize="small"/></ListItemIcon>
+                <ListItemText primary="Remarks"/>
+              </MenuItem>
+
+              <Divider/>
+
+              {/* ================= PRINT ================= */}
+
+              <Section title="PRINT"/>
+
+              {params.row.closedIroPdf && (
+                <MenuItem onClick={()=>{
+                  setSelectedIRO(params.row);
+                  setOpenPrintIro(true);
+                }}>
+                  <ListItemIcon><PrintIcon fontSize="small"/></ListItemIcon>
+                  <ListItemText primary="Print IRO"/>
+                </MenuItem>
+              )}
+
+              {params.row.specialsanction === 'Yes' && (
+                <MenuItem onClick={()=>{
+                  FRServices.getAllOptimizedById((params.row?.FR as any)?._id).then((res)=>{
+                    setData6(res.data);
+                  });
+                  setOpenPrintFr(true);
+                  setTimeout(()=>setOpenPrintFr(false), 2000);
+                }}>
+                  <ListItemIcon><PrintIcon fontSize="small"/></ListItemIcon>
+                  <ListItemText primary="Print FR Auth Letter"/>
+                </MenuItem>
+              )}
+
+              <Divider/>
+
+              {/* ================= COMMUNICATION ================= */}
+
+              <Section title="COMMUNICATION"/>
+
+              <MenuItem onClick={()=>{
+                setSelectedIROId(params.row._id);
+                toggleSendNotification(true);
+              }}>
+                <ListItemIcon><MessageIcon fontSize="small"/></ListItemIcon>
+                <ListItemText primary="Send Notification"/>
+              </MenuItem>
+
+              <Divider/>
+
+              {/* ================= DOCUMENTS ================= */}
+
+              <Section title="DOCUMENTS"/>
+
+              <MenuItem onClick={()=>{
+                setViewFileUploader(true);
+                setSelectedIRO(params.row);
+              }}>
+                <ListItemIcon><AttachmentIcon fontSize="small"/></ListItemIcon>
+                <ListItemText primary="Attachments"/>
+              </MenuItem>
+
+              <Divider/>
+
+              {/* ================= SYSTEM ================= */}
+
+              <Section title="SYSTEM"/>
+
+              {hasPermissions(['ADMIN_ACCESS']) && (
+                <MenuItem
+                  sx={{ color: 'error.main' }}
+                  onClick={()=>{
+                    FRServices.getById((params.row?.FR as any)?._id ?? '').then((res)=>{
                       setFR(res.data);
                     });
+
                     setSelectedIROId(params.row._id);
                     setDeleteModel(true);
                     setIRO(params.row);
-                  // deleteIRO(params.row._id);
-                  },
-                },
-              ] :
-              []),
-          ]}
-        />
-      ),
+                  }}
+                >
+                  <ListItemIcon sx={{ color: 'error.main' }}>
+                    <DeleteIcon fontSize="small"/>
+                  </ListItemIcon>
+                  <ListItemText primary="Delete"/>
+                </MenuItem>
+              )}
+
+            </Menu>
+          </>
+        );
+      },
     },
+    ...(props.action === 'manage' ?
+      [
+        {
+          field: 'status',
+          headerClassName: 'status-header',
+
+          renderHeader: () => <b>Status</b>,
+          width: 250,
+          align: 'center' as const,
+          headerAlign: 'center' as const,
+
+          cellClassName: (params: any) => {
+            const statusName = params.formattedValue;
+
+            if (params.value == null) {
+              return '';
+            }
+
+            switch (statusName) {
+            case 'WAITING APPROV.':
+              return clsx('status-cell', 'yellow-light');
+
+            case 'WAITING FOR ACCOUNTS MNGR':
+              return clsx('status-cell', 'yellow-dark');
+
+            case 'IRO APPROVED':
+              return clsx('status-cell', 'orange-light');
+            // case 'RE-SUBMITTED':
+            case 'CUSTOM IRO':
+              return clsx('status-cell', 'status-cell', 're-sum');
+
+            case 'WAITING RELEASE.':
+              return clsx('status-cell', 'orange-dark');
+            case 'REOPENED':
+              return clsx('status-cell', 'status-cell', 're-color');
+
+            case 'AMT RELEASED':
+              return clsx('status-cell', 'green-light');
+
+            case 'RECONCILIATION DONE':
+              return clsx('status-cell', 'green-medium');
+
+            case 'IRO CLOSED':
+              return clsx('status-cell', 'green-dark');
+
+            case 'IRO DISAPPROVED':
+              return clsx('status-cell', 'status-cell', 'status-cell', 'red-light');
+
+            case 'IN PROCESS':
+              return clsx('status-cell', 'status-cell', 'dark-orange');
+
+            case 'REVERTED':
+              return clsx('status-cell', 'revert');
+            case 'DISAPPROVED':
+              return clsx('status-cell', 'DISAPPROVED');
+            case 'IRO PROCESS':
+              return clsx('status-cell', 'DISAPPROVED');
+
+            default:
+              return '';
+            }
+          },
+
+          valueGetter: (params: any) => {
+            let statusName =
+            IROLifeCycleStates.getStatusNameByCodeTransaction(params.value);
+
+            const iscustom = (params.row as any)?.isCustom;
+
+            if (iscustom === true) {
+              return 'CUSTOM IRO';
+            }
+
+            switch (statusName) {
+            case 'SEND_BACK':
+              statusName = 'REVERTED';
+              break;
+            case 'REVERTED_TO_DIVISION':
+              statusName = 'REVERTED';
+              break;
+            case 'REOPENED':
+              statusName = 'REOPENED';
+              break;
+
+            case 'FR_APPROVED':
+              statusName = 'FR VERIFIED';
+              break;
+
+            case 'FR_REJECTED':
+              statusName = 'DISAPPROVED';
+              break;
+
+            case 'WAITING_FOR_OFFICE_MNGR':
+              statusName = 'WAITING APPROV.';
+              break;
+            case 'WAITTING_FOR_RELEASE_AMOUNT':
+              statusName = 'WAITING RELEASE.';
+              break;
+
+            case 'WAITING_FOR_ACCOUNTS_STATE':
+              statusName = 'IRO APPROVED';
+              break;
+            case 'AMOUNT_RELEASED':
+              statusName = 'AMT RELEASED';
+              break;
+
+            case 'IRO_IN_PROCESS':
+              statusName = 'IRO PROCESS';
+              break;
+
+            default:
+              statusName = statusName?.replaceAll('_', ' ');
+              break;
+            }
+
+            return statusName;
+          },
+        },
+      ] :
+      []),
+
+
     {
       field: 'IROno',
-      headerClassName: 'super-app-theme--cell',
       headerName: 'IRO No',
       width: 130,
-      renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
+      renderHeader: (params) => <b style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</b>,
       align: 'center',
       headerAlign: 'center',
     },
     {
       field: 'IRODate',
-      headerClassName: 'super-app-theme--cell',
       headerName: 'IRO Date',
       width: 130,
       valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
-      renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
+      renderHeader: (params) => <b style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</b>,
       align: 'center',
       headerAlign: 'center',
     },
-    {
-      field: 'status',
-      headerClassName: 'super-app-theme--cell',
-      renderHeader: () => <b>Status</b>,
-      width: 250,
-      align: 'center',
-      headerAlign: 'center',
-      cellClassName: (params) => {
-        const statusName = params.formattedValue;
-        if (params.value == null) {
-          return '';
-        }
-        switch (statusName) {
-        case 'WAITING FOR APPROVAL':
-          return clsx('yellow-light');
-        case 'WAITING FOR ACCOUNTS MNGR':
-          return clsx('yellow-dark');
-        case 'IRO APPROVED':
-          return clsx('orange-light');
-        case 'WAITING FOR RELEASE AMOUNT':
-          return clsx('orange-dark');
-        case 'AMOUNT RELEASED':
-          return clsx('green-light');
-        case 'RECONCILIATION DONE':
-          return clsx('green-medium');
-        case 'IRO CLOSED':
-          return clsx('green-dark');
-        case 'IRO DISAPPROVED':
-          return clsx('red-light');
-        case 'IRO IN PROCESS':
-          return clsx('dark-orange');
-        default:
-          // console.log('No class applied');
-          return '';
-        }
-      },
 
-      valueGetter: (params) => {
-        let statusName = IROLifeCycleStates.getStatusNameByCodeTransaction(params.value);
-        // Check if the status name needs to be changed
-        console.log(statusName, 'sjhivi');
-        switch (statusName) {
-        case 'SEND_BACK':
-          statusName = 'REVERTED';
-          break;
-        case 'FR_APPROVED':
-          statusName = 'FR VERIFIED'; // Change to whatever new name you want
-          break;
-        case 'FR_REJECTED':
-          statusName = 'IRO DISAPPROVED'; // Change to whatever new name you want
-          break;
-        case 'WAITING_FOR_OFFICE_MNGR':
-          statusName = 'WAITING FOR APPROVAL'; // Change to whatever new name you want
-          break;
-        case 'WAITING_FOR_ACCOUNTS_STATE':
-          statusName = 'IRO APPROVED'; // Change to whatever new name you want
-          break;
-        case 'IRO_IN_PROCESS':
-          statusName = 'IRO IN PROCESS'; // Change to whatever new name you want
-          break;
-          // case 'WAITING_FOR_ACCOUNTS_MNGR':
-          //   statusName = 'WAITING FOR ACCOUNTS MNGR';
-          //   if (props.action === 'release') {
-          //     statusName = 'WAITTING FOR RELEASE AMOUNT'; // Change to whatever new name you want
-          //   }
-          break;
-          // Add more cases for other status names you want to change
-        default:
-          statusName = statusName.replaceAll('_', ' ');
-          break;
-        }
-        return statusName;
-      },
-    },
     {
       field: 'divisionName',
       renderHeader: () => <b>Division Name</b>,
-      headerClassName: 'super-app-theme--cell',
-      valueGetter: (params) => params.row.division?.details.name,
-      width: 130,
+      valueGetter: (params) =>
+        `${params.row.division?.details?.name || ''}${
+          params.row.purposeSubdivision?.name ? ' / ' : ''
+        }${params.row.purposeSubdivision?.name || ''}`,
+      width: 200,
       align: 'center',
       headerAlign: 'center',
     },
-    {
-      field: 'subDivisionName',
-      headerClassName: 'super-app-theme--cell',
-      renderHeader: () => <b>Sub Division Name</b>,
-      valueGetter: (params) => params.row.purposeSubdivision?.name,
-      width: 160,
-      align: 'center',
-      headerAlign: 'center',
-    },
+    // {
+    //   field: 'subDivisionName',
+    //   renderHeader: () => <b>Sub Division Name</b>,
+    //   valueGetter: (params) => params.row.purposeSubdivision?.name,
+    //   width: 160,
+    //   align: 'center',
+    //   headerAlign: 'center',
+    // },
     {
       field: 'mainCategory',
-      headerClassName: 'super-app-theme--cell',
       renderHeader: () => <b>Main Category</b>,
       width: 240,
       align: 'center',
@@ -1203,7 +1234,6 @@ const getTransferredAccountNumber = (iro: IROrder): string | null => {
     },
     {
       field: 'subCategory',
-      headerClassName: 'super-app-theme--cell',
       renderHeader: () => <b>Sub Category</b>,
       width: 240,
       align: 'center',
@@ -1238,42 +1268,40 @@ const getTransferredAccountNumber = (iro: IROrder): string | null => {
     },
     {
       field: 'requestAmount',
-      headerClassName: 'super-app-theme--cell',
       headerName: 'Requested Amount',
       width: 150,
       align: 'center',
       headerAlign: 'center',
-      renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
+      renderHeader: (params) => <b style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</b>,
       valueGetter(params) {
         const IRORequest = params.row as IROrder;
         const particularAmount = IRORequest.particulars?.reduce((total, particular) => total + Number(particular.requestedAmount), 0);
-        return particularAmount.toFixed(2);
+        return formatAmount(particularAmount.toFixed(2));
       },
     },
     // {
     //   field: 'updatedAt',
     //   headerName: 'Last Updated',
-    //   headerClassName: 'super-app-theme--cell',
+
     //   width: 130,
     //   valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
     //   renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
     //   align: 'center',
     //   headerAlign: 'center',
     // },
-    {
-      field: 'Amount Release Date',
-      headerName: 'Amount Release Date',
-      headerClassName: 'super-app-theme--cell',
-      width: 200,
-      valueGetter: (params) => params.row.releaseAmount?.transferredDate?.format('DD/MM/YYYY') ?? 'N/A',
-      renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
-      align: 'center',
-      headerAlign: 'center',
-    },
+    // {
+    //   field: 'Amount Release Date',
+    //   headerName: 'Amount Release Date',
+    //   width: 200,
+    //   valueGetter: (params) => params.row.releaseAmount?.transferredDate?.format('DD/MM/YYYY') ?? 'N/A',
+    //   renderHeader: (params) => <b style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</b>,
+    //   align: 'center',
+    //   headerAlign: 'center',
+    // },
     // { field: 'sanction', headerName: 'Special Sanction', width: 150, renderHeader: () => <b>Special Sanction</b>, align: 'center', headerAlign: 'center' },
     // {
     //   field: 'sanctionedAmount',
-    //   headerClassName: 'super-app-theme--cell',
+
     //   headerName: 'Sanctioned Amount',
     //   width: 150,
     //   renderHeader: () => <b>Sanctioned Amount</b>,
@@ -1282,28 +1310,72 @@ const getTransferredAccountNumber = (iro: IROrder): string | null => {
     // },
     {
       field: 'sanctionedAmount',
-      headerClassName: 'super-app-theme--cell',
       headerName: 'Sanctioned Amount',
       width: 180,
       renderHeader: () => <b>Sanctioned Amount</b>,
       valueGetter: (params) => {
         if (params.row.sanctionedAmount !== undefined) {
-          return params.row.sanctionedAmount;
+          return formatAmount(params.row.sanctionedAmount as number);
         }
         if (Array.isArray(params.row.particulars)) {
-          return params.row.particulars.reduce(
-            (sum, item) => sum + (Number(item.sanctionedAmount) || 0),
-            0,
-          ).toFixed(2);
+          return formatAmount(
+            params.row.particulars.reduce(
+              (sum, item) => sum + (Number(item.sanctionedAmount) || 0),
+              0,
+            ).toFixed(2));
         }
         return 0; // or return a suitable default value
       }, align: 'center',
       headerAlign: 'center',
     },
+    ...(props.action === 'manage' ?
+      [
+        {
+          field: 'Transferred',
+          headerName: 'Transferred Amount',
+          width: 180,
+          renderHeader: () => <b>Transferred Amount</b>,
+
+          valueGetter: (params: any) => {
+            if (params.row.sanctionedAmount !== undefined) {
+              return formatAmount(Number(params.row.sanctionedAmount));
+            }
+
+            if (Array.isArray(params.row.particulars)) {
+              const total = params.row.particulars.reduce(
+                (sum: number, item: any) =>
+                  sum + (Number(item.sanctionedAmount) || 0),
+                0,
+              );
+
+              return formatAmount(total);
+            }
+
+            return formatAmount(0);
+          },
+          align: 'center' as const,
+          headerAlign: 'center' as const,
+        },
+
+        {
+          field: 'totalTransferred',
+          headerName: 'Total Transferred Amount',
+          width: 180,
+          renderHeader: () => <b>Total Transferred Amount</b>,
+          valueGetter: (params: any) => {
+            return formatAmount(
+              Number(params.row.releaseAmount?.transferredAmount) || 0,
+            );
+          },
+          align: 'center' as const,
+          headerAlign: 'center' as const,
+        },
+      ] :
+      []),
 
     // {
     //   field: 'sanctionedAsPer',
-    //   headerClassName: 'super-app-theme--cell',
+
     //   renderHeader: () => <b>Sanction As Per</b>,
     //   renderCell: (props) => (
     //     <p
@@ -1326,7 +1398,6 @@ const getTransferredAccountNumber = (iro: IROrder): string | null => {
 
     {
       field: 'specialsanction',
-      headerClassName: 'super-app-theme--cell',
       renderHeader: () => <b>Sanction as per</b>,
       renderCell: (props) => (
         <p
@@ -1348,7 +1419,6 @@ const getTransferredAccountNumber = (iro: IROrder): string | null => {
     },
     {
       field: 'sanctionedBank',
-      headerClassName: 'super-app-theme--cell',
       headerName: 'Sanctioned Bank',
       width: 150,
       renderHeader: () => <b>Sanctioned Bank</b>,
@@ -1371,7 +1441,6 @@ const getTransferredAccountNumber = (iro: IROrder): string | null => {
     },
     {
       field: 'beneficiary',
-      headerClassName: 'super-app-theme--cell',
       headerName: 'Beneficiary Name',
       width: 200,
       renderHeader: () => <b>Beneficiary Name</b>,
@@ -1392,66 +1461,65 @@ const getTransferredAccountNumber = (iro: IROrder): string | null => {
       headerAlign: 'center',
       valueGetter: (params) => params.row.sanctionedBank?.split('-')[1] || '',
     },
-    ...(props.action !== 'release' ?
-      [
-        {
-          field: 'reasonForRejectIRO',
-          headerClassName: 'super-app-theme--cell',
-          headerName: 'Beneficiary Name',
-          width: 200,
-          renderHeader: () => <b>Reason For Reject</b>,
-          renderCell: (props:any) => (
-            <p
-              style={{
-                maxWidth: 300,
-                whiteSpace: 'normal',
-                wordBreak: 'break-word',
-                justifyContent: 'center',
-                textAlign: 'center',
-              }}
-            >
-              {props.row.reasonForRejectIRO}
-            </p>
-          ),
-          align: 'center' as const, // Explicitly cast to `GridAlignment`
-          headerAlign: 'center' as const,
-        },
-      ] :
-      []),
-    ...(props.action !== 'release' ?
-      [
-        {
-          field: 'reasonForRevertToDivision',
-          headerClassName: 'super-app-theme--cell',
-          headerName: 'Beneficiary Name',
-          width: 250,
-          renderHeader: () => <b>Reason For Revert To Division</b>,
-          renderCell: (props:any) => (
-            <p
-              style={{
-                maxWidth: 300,
-                whiteSpace: 'normal',
-                wordBreak: 'break-word',
-                justifyContent: 'center',
-                textAlign: 'center',
-              }}
-            >
-              {props.row.reasonForRevertToDivision}
-            </p>
-          ),
-          align: 'center' as const, // Explicitly cast to `GridAlignment`
-          headerAlign: 'center' as const,
-        },
-      ] :
-      []),
+    // ...(props.action !== 'release' ?
+    //   [
+    //     {
+    //       field: 'reasonForRejectIRO',
+
+    //       headerName: 'Beneficiary Name',
+    //       width: 200,
+    //       renderHeader: () => <b>Reason For Reject</b>,
+    //       renderCell: (props:any) => (
+    //         <p
+    //           style={{
+    //             maxWidth: 300,
+    //             whiteSpace: 'normal',
+    //             wordBreak: 'break-word',
+    //             justifyContent: 'center',
+    //             textAlign: 'center',
+    //           }}
+    //         >
+    //           {props.row.reasonForRejectIRO}
+    //         </p>
+    //       ),
+    //       align: 'center' as const, // Explicitly cast to `GridAlignment`
+    //       headerAlign: 'center' as const,
+    //     },
+    //   ] :
+    //   []),
+    // ...(props.action !== 'release' ?
+    //   [
+    //     {
+    //       field: 'reasonForRevertToDivision',
+
+    //       headerName: 'Beneficiary Name',
+    //       width: 250,
+    //       renderHeader: () => <b>Reason For Revert To Division</b>,
+    //       renderCell: (props:any) => (
+    //         <p
+    //           style={{
+    //             maxWidth: 300,
+    //             whiteSpace: 'normal',
+    //             wordBreak: 'break-word',
+    //             justifyContent: 'center',
+    //             textAlign: 'center',
+    //           }}
+    //         >
+    //           {props.row.reasonForRevertToDivision}
+    //         </p>
+    //       ),
+    //       align: 'center' as const, // Explicitly cast to `GridAlignment`
+    //       headerAlign: 'center' as const,
+    //     },
+    //   ] :
+    //   []),
 
     {
       field: 'updatedAt',
       headerName: 'Last Updated',
-      headerClassName: 'super-app-theme--cell',
       width: 130,
       valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
-      renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
+      renderHeader: (params) => <b style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</b>,
       align: 'center',
       headerAlign: 'center',
     },
@@ -1463,34 +1531,34 @@ const getTransferredAccountNumber = (iro: IROrder): string | null => {
   // Update the filteredRows function to include division filtering
   const filteredRows = (IROrder ?? []).filter((row: any) => {
   // Division filtering logic
-  const divisionMatch = selectedDivisions.length === 0 || 
+    const divisionMatch = selectedDivisions.length === 0 ||
     selectedDivisions.includes(row?.division?.details.name);
-  
-  if (!searchText) return divisionMatch;
-  
-  const searchLower = searchText.toLowerCase();
-  
-  // Check all searchable fields
-  const searchMatch = 
+
+    if (!searchText) return divisionMatch;
+
+    const searchLower = searchText.toLowerCase();
+
+    // Check all searchable fields
+    const searchMatch =
     (row.IROno && row.IROno.toLowerCase().includes(searchLower)) ||
     (row.IRODate && row.IRODate.format('DD/MM/YYYY').toLowerCase().includes(searchLower)) ||
     (row.division?.details.name && row.division?.details.name.toLowerCase().includes(searchLower)) ||
     (row.purposeSubdivision?.name && row.purposeSubdivision.name.toLowerCase().includes(searchLower)) ||
     // Add subCategory search
-    (row.particulars && row.particulars.some((particular:any) => 
+    (row.particulars && row.particulars.some((particular:any) =>
       (particular.subCategory1 && particular.subCategory1.toLowerCase().includes(searchLower)) ||
       (particular.subCategory2 && particular.subCategory2.toLowerCase().includes(searchLower)) ||
-      (particular.subCategory3 && particular.subCategory3.toLowerCase().includes(searchLower))
+      (particular.subCategory3 && particular.subCategory3.toLowerCase().includes(searchLower)),
     )) ||
     // Add mainCategory search
-    (row.particulars && row.particulars.some((particular:any) => 
-      particular.mainCategory && particular.mainCategory.toLowerCase().includes(searchLower)
+    (row.particulars && row.particulars.some((particular:any) =>
+      particular.mainCategory && particular.mainCategory.toLowerCase().includes(searchLower),
     )) ||
     // Add beneficiary name search
     (row.sanctionedBank && row.sanctionedBank.toLowerCase().includes(searchLower));
-  
-  return divisionMatch && searchMatch;
-});
+
+    return divisionMatch && searchMatch;
+  });
   if (searchText && filteredRows.length ===0) {
     enqueueSnackbar({
       message: ` ${searchText} not found`,
@@ -1501,6 +1569,7 @@ const getTransferredAccountNumber = (iro: IROrder): string | null => {
   return (
     <CommonPageLayout
       title={props.action == 'manage' ? 'Manage IRO' : 'Release Amount'}
+      status={props.action == 'manage' ? '' : 'IRO APPROVED'}
       momentFilter={
         {
           dateRange: dateRange,
@@ -1519,18 +1588,79 @@ const getTransferredAccountNumber = (iro: IROrder): string | null => {
           <>
             <Card sx={{ maxWidth: '78vw', height: '100vh', alignItems: 'center' }}>
               <Grid container spacing={2} padding={2}>
-                <Grid item xs={6}>
+                <Grid item xs={5}>
                   <TextField
                     label="Search"
                     variant="outlined"
                     value={searchText}
-                    placeholder='Enter IROno or IRODate or Division or SubCategory'
+                    placeholder='Enter IROno, IRODate, Division,Sub ,Division, Main & SubCategory, Sanctioned Bank, Beneficiary Name'
                     onChange={handleSearchChange}
                     fullWidth
                   />
                 </Grid>
+                <Grid item xs={3}>
+                  {hasPermissions(['MANAGE_IRO']) && (
+                    <Grid item xs={12} md="auto" sx={{
+                      display: 'flex',
+                      alignItems: 'center', // ✅ vertical center
+                    }}>
+                      <FormControl
+                        sx={{
+                          'minWidth': 200,
+                          '& .MuiOutlinedInput-root': {
+                            // height: 45, // ✅ control select height
+                            fontSize: 13,
+                            borderRadius: 1.5,
+                          },
+                        }}
+                      >
+                        <InputLabel id="division-label">
+  Division
+                        </InputLabel>
+                        <Select
+                          multiple
+                          value={selectedDivisions}
+                          label="Division"
+                          onChange={handleDivisionChange}
+                          renderValue={(selected) =>
+                            selected.length === 0 ? 'None' : selected.join(', ')
+                          }
+                          MenuProps={{
+                            PaperProps: {
+                              style: { maxHeight: 300, width: 250 },
+                            },
+                          }}
+                        >
+                          <ListSubheader>
+                            <TextField
+                              size="small"
+                              placeholder="Search division..."
+                              fullWidth
+                              autoFocus
+                              value={divisionSearch}
+                              onChange={(e) => setDivisionSearch(e.target.value)}
+                              onKeyDown={(e) => e.stopPropagation()}
+                            />
+                          </ListSubheader>
 
-                <Grid item xs={6}>
+                          <MenuItem value="__ALL__">
+                            <Checkbox checked={selectedDivisions.length === 0} />
+                            <ListItemText primary="None" />
+                          </MenuItem>
+
+                          {filteredDivisions.map((name) => (
+                            <MenuItem key={name} value={name}>
+                              <Checkbox checked={selectedDivisions.includes(name)} />
+                              <ListItemText primary={name} />
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
+                    </Grid>
+                  )}
+                </Grid>
+
+                <Grid item xs={4}>
                   <PermissionChecks
                     permissions={['MANAGE_IRO']}
                     granted={
@@ -1610,19 +1740,19 @@ const getTransferredAccountNumber = (iro: IROrder): string | null => {
                           'Credit Card',
                           'Closing Balance Adjsted',
                           'Website Payment',
-                        ].map(method => method.toLowerCase().trim());
+                        ].map((method) => method.toLowerCase().trim());
 
                         const allowedPaymentMethodsInclude = releaseAmountIROs.some(
-                          iro =>
+                          (iro) =>
                             iro.sanctionedBank &&
-                            allowedPaymentMethods.some(method =>
-                              iro.sanctionedBank.toLowerCase().trim().includes(method)
-                            )
+                            allowedPaymentMethods.some((method) =>
+                              iro.sanctionedBank.toLowerCase().trim().includes(method),
+                            ),
                         );
-                        
+
                         if (allowedPaymentMethodsInclude) {
                           const sameSanctionedBank = releaseAmountIROs.every(
-                            iro => iro.sanctionedBank === releaseAmountIROs[0].sanctionedBank
+                            (iro) => iro.sanctionedBank === releaseAmountIROs[0].sanctionedBank,
                           );
 
                           if (!sameSanctionedBank) {
@@ -1638,7 +1768,7 @@ const getTransferredAccountNumber = (iro: IROrder): string | null => {
                           }
                         } else {
                           const sameSanctionedBank = releaseAmountIROs.every(
-                            (iro) => iro.sanctionedBank === releaseAmountIROs[0].sanctionedBank
+                            (iro) => iro.sanctionedBank === releaseAmountIROs[0].sanctionedBank,
                           );
                           if (!sameSanctionedBank) {
                             enqueueSnackbar({
@@ -1648,11 +1778,11 @@ const getTransferredAccountNumber = (iro: IROrder): string | null => {
                             return;
                           }
                           const normalizeAccount = (acc?: string | null) =>
-  acc?.toString().replace(/\s+/g, '').trim() ?? null;
+                            acc?.toString().replace(/\s+/g, '').trim() ?? null;
 
-const accountNumbers = releaseAmountIROs.map((iro) =>
-  normalizeAccount(getTransferredAccountNumber(iro))
-);
+                          const accountNumbers = releaseAmountIROs.map((iro) =>
+                            normalizeAccount(getTransferredAccountNumber(iro)),
+                          );
                           console.log(accountNumbers, 'accountNumbers');
 
                           if (accountNumbers.some((acc) => !acc)) {
@@ -1664,7 +1794,7 @@ const accountNumbers = releaseAmountIROs.map((iro) =>
                           }
 
                           const isSameAccountNumber = accountNumbers.every(
-                            (acc) => acc === accountNumbers[0]
+                            (acc) => acc === accountNumbers[0],
                           );
 
                           if (!isSameAccountNumber) {
@@ -1684,158 +1814,182 @@ const accountNumbers = releaseAmountIROs.map((iro) =>
                     </Button>
                   ) : null}
                 </Grid>
-                              
-                {props.action =='manage' && (
-                  <Grid
-                    item
-                    sx={{ alignContent: 'start', display: 'flex', justifyContent: 'space-between' }}
-                  >
-                    <FormControl>
-                      <RadioGroup
-                        aria-labelledby="Filter"
-                        value={
-                          exstatusFilter.includes(69) ? 'NonBankTransfers' :
-                            statusFilter.includes(IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE) ? 'WFA' :
-                              statusFilter.includes(IROLifeCycleStates.AMOUNT_RELEASED) ? 'AMT' :
-                                statusFilter.includes(IROLifeCycleStates.REVERTED_TO_DIVISION) ? 'RTD' :
-                                  'ALL'
-                        }
-                        onChange={(e) => {
-                          const value = e.target.value;
-                          if (value === 'WFA') {
-                            setExStatusFilter([]);
-                            setStatusFilter([IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE]);
-                          } else if (value === 'RTD') {
-                            setExStatusFilter([]);
-                            setStatusFilter([IROLifeCycleStates.REVERTED_TO_DIVISION]);
-                          } else if (value === 'AMT') {
-                            setExStatusFilter([]);
-                            setStatusFilter([IROLifeCycleStates.AMOUNT_RELEASED]);
-                          } else if (value === 'NonBankTransfers') {
-                            setExStatusFilter([69]);
-                            setStatusFilter([]);
-                          } else {
-                            setExStatusFilter([]);
-                            setStatusFilter([]);
-                          }
-                        }}
-                        name="Filter"
-                        row
-                      >
-                        <FormControlLabel value="ALL" control={<Radio />} label="ALL" />
-                        <FormControlLabel value="WFA" control={<Radio />} label="IRO APPROVED" />
-                        <FormControlLabel value="RTD" control={<Radio />} label="REVERTED TO DIVISION" />
-                        <FormControlLabel value="AMT" control={<Radio />} label="AMOUNT RELEASED" />
-                        <FormControlLabel value="NonBankTransfers" control={<Radio />} label="NON BANK TRANSFERS" />
-                      </RadioGroup>
-                    </FormControl>
-                  </Grid>
-                )}
-                
-                {props.action =='release' && (
-                  <Grid
-                    item
-                    sx={{ alignContent: 'start', display: 'flex', justifyContent: 'space-between' }}
-                  >
-                    <FormControl>
-                      <RadioGroup
-                        aria-labelledby="Filter"
-                        value={
-                          exstatusFilter.includes(69) ? 'NonBankTransfers' :'All'
-                        }
-                        onChange={(e) => {
-                          const value = e.target.value;
-                          if (value === 'NonBankTransfers') {
-                            setExStatusFilter([69]);
-                          } else {
-                            setExStatusFilter([]);
-                            setStatusFilter([IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE]);
-                          }
-                        }}
-                        name="Filter"
-                        row
-                      >
-                        <FormControlLabel value="All" control={<Radio />} label="ALL" />
-                        <FormControlLabel value="NonBankTransfers" control={<Radio />} label="NON BANK TRANSFERS" />
-                      </RadioGroup>
-                    </FormControl>
-                  </Grid>
-                )}
-                
-                <Grid item>
-                  <FormControl>
-                    <RadioGroup
-                      aria-labelledby="Filter"
-                      value={statusFilter1}
-                      onChange={(e) =>
-                        setStatusFilter1(
-                          e.target.value === 'Support' ?
-                            'Support' :
-                            e.target.value === 'Expanse' ?
-                              'Expanse' :
-                              'All',
-                        )
-                      }
-                      name="Filter"
-                      row
+
+                <Grid container spacing={2}>
+                  <Grid item xs={12}>
+                    <Card
+                      elevation={2}
+                      sx={{
+                        border: '1px solid #dcdcdc',
+                        borderRadius: 1,
+                        overflow: 'hidden',
+                      }}
                     >
-                      <FormControlLabel value="Support" control={<Radio />} label="SUPPORT" />
-                      <FormControlLabel value="Expanse" control={<Radio />} label="EXPENSE" />
-                      <FormControlLabel value="All" control={<Radio />} label="BOTH CATEGORIES " />
-                    </RadioGroup>
-                  </FormControl>
-                   {hasPermissions(['MANAGE_IRO']) && props.action == 'release' ? (
-                  <FormControl sx={{maxWidth:150, minWidth: 150, ml: 5 }}>
-  <InputLabel>Division</InputLabel>
+                      <CardContent sx={{ pb: '20px !important' }}>
 
-  <Select
-    multiple
-    value={selectedDivisions}
-    label="Division"
-    onChange={handleDivisionChange}
-    sx={{ maxHeight: 50 }}
-    renderValue={(selected) =>
-      selected.length === 0 ? 'None' : selected.join(', ')
-    }
+                        <Grid
+                          container
+                          spacing={2}
+                          alignItems="center"
+                          wrap="wrap"
+                        >
+                          {/* ================= MANAGE MODE ================= */}
+                          {props.action === 'manage' && (
+                            <>
+                              {/* LEFT STATUS FILTER */}
+                              <Grid item xs={12} lg={12}>
+                                <ToggleButtonGroup
+                                  exclusive
+                                  size="small"
+                                  value={
+                                    exstatusFilter.includes(69) ? 'NonBankTransfers' :
+                                      exstatusFilter.includes(71) ? 'BankTransfers' :
+                                        exstatusFilter.includes(70) ? 'Custom' :
+                                          statusFilter.includes(IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE) ? 'WFA' :
+                                            statusFilter.includes(IROLifeCycleStates.AMOUNT_RELEASED) ? 'AMT' :
+                                              statusFilter.includes(IROLifeCycleStates.WAITING_FOR_OFFICE_MNGR) ? 'WFORA' :
+                                                statusFilter.includes(IROLifeCycleStates.IRO_CLOSED) ? 'CLS' :
+                                                  statusFilter.includes(IROLifeCycleStates.REJECTED) ? 'DIS' :
+                                                    statusFilter.includes(IROLifeCycleStates.REOPENED) ? 'REOPN' :
+                                                      statusFilter.includes(IROLifeCycleStates.IRO_IN_PROCESS) ? 'INP' :
+                                                        statusFilter.includes(IROLifeCycleStates.WAITTING_FOR_RELEASE_AMOUNT) ? 'WR' :
+                                                          statusFilter.includes(IROLifeCycleStates.REVERTED_TO_DIVISION) ? 'RTD' :
+                                                            'ALL'
+                                  }
+                                  onChange={(_, value) => {
+                                    if (!value) return;
 
-    MenuProps={{
-      PaperProps: {
-        style: { maxHeight: 300, width: 250 },
-      },
-    }}
-  >
-    {/* 🔍 SEARCH FIELD */}
-    <ListSubheader>
-      <TextField
-        size="small"
-        placeholder="Search division..."
-        fullWidth
-        autoFocus
-        value={divisionSearch}
-        onChange={(e) => setDivisionSearch(e.target.value)}
-        onKeyDown={(e) => e.stopPropagation()} // VERY IMPORTANT
-      />
-    </ListSubheader>
+                                    if (value === 'WFA') {
+                                      setExStatusFilter([]);
+                                      setStatusFilter([IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE]);
+                                    } else if (value === 'RTD') {
+                                      setExStatusFilter([]);
+                                      setStatusFilter([IROLifeCycleStates.REVERTED_TO_DIVISION]);
+                                    } else if (value === 'AMT') {
+                                      setExStatusFilter([]);
+                                      setStatusFilter([IROLifeCycleStates.AMOUNT_RELEASED]);
+                                    } else if (value === 'WFORA') {
+                                      setExStatusFilter([]);
+                                      setStatusFilter([IROLifeCycleStates.WAITING_FOR_OFFICE_MNGR]);
+                                    } else if (value === 'CLS') {
+                                      setExStatusFilter([]);
+                                      setStatusFilter([IROLifeCycleStates.IRO_CLOSED]);
+                                    } else if (value === 'DIS') {
+                                      setExStatusFilter([]);
+                                      setStatusFilter([IROLifeCycleStates.REJECTED]);
+                                    } else if (value === 'REOPN') {
+                                      setExStatusFilter([]);
+                                      setStatusFilter([IROLifeCycleStates.REOPENED]);
+                                    } else if (value === 'INP') {
+                                      setExStatusFilter([]);
+                                      setStatusFilter([IROLifeCycleStates.IRO_IN_PROCESS]);
+                                    } else if (value === 'WR') {
+                                      setExStatusFilter([]);
+                                      setStatusFilter([IROLifeCycleStates.WAITTING_FOR_RELEASE_AMOUNT]);
+                                    } else if (value === 'Custom') {
+                                      setExStatusFilter([70]);
+                                      setStatusFilter([]);
+                                    } else if (value === 'NonBankTransfers') {
+                                      setExStatusFilter([69]);
+                                      setStatusFilter([]);
+                                    } else if (value === 'BankTransfers') {
+                                      setExStatusFilter([71]);
+                                      setStatusFilter([]);
+                                    } else {
+                                      setExStatusFilter([]);
+                                      setStatusFilter([]);
+                                    }
+                                  }}
+                                  sx={toggleSx}
+                                >
+                                  <ToggleButton value="ALL">ALL</ToggleButton>
+                                  <ToggleButton value="WFORA">WAITING APPROV.</ToggleButton>
+                                  <ToggleButton value="WFA">APPROVED</ToggleButton>
+                                  <ToggleButton value="INP">IN PROCESS</ToggleButton>
+                                  <ToggleButton value="WR">WAITING RELEASE</ToggleButton>
+                                  <ToggleButton value="AMT">AMT RELEASED</ToggleButton>
+                                  <ToggleButton value="RTD">REVERTED</ToggleButton>
+                                  <ToggleButton value="CLS">CLOSED</ToggleButton>
+                                  <ToggleButton value="DIS">DISPROVED</ToggleButton>
+                                  <ToggleButton value="REOPN">REOPENED</ToggleButton>
+                                  <ToggleButton value="Custom">CUSTOM</ToggleButton>
+                                  <ToggleButton value="NonBankTransfers">NON BANK TRANSFERS</ToggleButton>
+                                  <ToggleButton value="BankTransfers">BANK TRANSFERS</ToggleButton>
+                                </ToggleButtonGroup>
+                              </Grid>
 
-    {/* NONE OPTION */}
-    <MenuItem value="__ALL__">
-      <Checkbox checked={selectedDivisions.length === 0} />
-      <ListItemText primary="None" />
-    </MenuItem>
+                              {/* RIGHT CATEGORY FILTER */}
+                            </>
+                          )}
+                          <Grid item xs={12} lg={5}>
+                            <ToggleButtonGroup
+                              exclusive
+                              size="small"
+                              value={statusFilter1}
+                              onChange={(_, value) => {
+                                if (!value) return;
+                                setStatusFilter1(
+                                  value === 'Support' ?
+                                    'Support' :
+                                    value === 'Expanse' ?
+                                      'Expanse' :
+                                      value === 'Sanctioned' ?
+                                        'Sanctioned' :
+                                        value === 'Custom' ?
+                                          'Custom' :
+                                          'All',
+                                );
+                              }}
+                              sx={toggleSx}
+                            >
+                              <ToggleButton value="All">All</ToggleButton>
+                              <ToggleButton value="Support">SUPPORT</ToggleButton>
+                              <ToggleButton value="Expanse">EXPENSE</ToggleButton>
+                              <ToggleButton value="Sanctioned">SANCTIONED</ToggleButton>
+                              {/* <ToggleButton value="NonBankTransfers">Non Bank Transfers</ToggleButton> */}
 
-    {/* FILTERED LIST */}
-    {filteredDivisions.map((name) => (
-      <MenuItem key={name} value={name}>
-        <Checkbox checked={selectedDivisions.includes(name)} />
-        <ListItemText primary={name} />
-      </MenuItem>
-    ))}
-  </Select>
-</FormControl>
-) : null}
+                              {/* <ToggleButton value="Custom">Custom IRO</ToggleButton> */}
+                            </ToggleButtonGroup>
+                          </Grid>
 
+
+                          {/* ================= RELEASE MODE ================= */}
+                          {props.action === 'release' && (
+                            <>
+                              {/* RELEASE STATUS */}
+                              <Grid item xs={12} md="auto">
+                                <ToggleButtonGroup
+                                  exclusive
+                                  size="small"
+                                  value={exstatusFilter.includes(69) ? 'NonBankTransfers' : 'All'}
+                                  onChange={(_, value) => {
+                                    if (!value) return;
+
+                                    if (value === 'NonBankTransfers') {
+                                      setExStatusFilter([69]);
+                                    } else {
+                                      setExStatusFilter([]);
+                                      setStatusFilter([IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE]);
+                                    }
+                                  }}
+                                  sx={toggleSx}
+                                >
+                                  <ToggleButton value="All">ALL</ToggleButton>
+                                  <ToggleButton value="NonBankTransfers">NON BANK TRANSFERS</ToggleButton>
+                                  <ToggleButton value="BANK TRANS.">BANK TRANS.</ToggleButton>
+                                </ToggleButtonGroup>
+                              </Grid>
+
+                              {/* DIVISION FILTER */}
+                            </>
+                          )}
+
+
+                        </Grid>
+                      </CardContent>
+                    </Card>
+                  </Grid>
                 </Grid>
-                
                 <Grid item xs={12}>
                   <Card
                     sx={{
@@ -1874,25 +2028,36 @@ const accountNumbers = releaseAmountIROs.map((iro) =>
                           backgroundColor: '#fff',
                         },
                         '& .orange-light': {
-                          backgroundColor: '#ffa500',
+                          backgroundColor: '#7EC82F',
+                          // backgroundColor: '#3949AB',
+                          color: '#fff',
+                          fontWeight: '600',
                         },
                         '& .orange-dark': {
-                          backgroundColor: '#cc8400',
+                          backgroundColor: '#3949AB',
+                          color: '#fff',
+                          fontWeight: '600',
                         },
                         '& .yellow-light': {
-                          backgroundColor: '#ffffe0',
+                          backgroundColor: '#a964f4',
+                          color: '#fff',
+                          fontWeight: '600',
                         },
                         '& .yellow-dark ': {
                           backgroundColor: '#ffd700',
                         },
                         '& .green-light ': {
-                          backgroundColor: '#90ee90',
+                          backgroundColor: '#E2445C',
+                          color: '#fff',
+                          fontWeight: '600',
                         },
                         '& .green-medium': {
                           backgroundColor: '#32cd32',
                         },
                         '& .green-dark ': {
-                          backgroundColor: '#008000',
+                          backgroundColor: '#3b32e6 ',
+                          color: '#fff',
+                          fontWeight: '600',
                         },
                         '&  .red-light ': {
                           backgroundColor: '#ff7f7f',
@@ -1901,7 +2066,29 @@ const accountNumbers = releaseAmountIROs.map((iro) =>
                           backgroundColor: '#ff0000',
                         },
                         '&   .dark-orange': {
-                          backgroundColor: '#FFD243',
+                          backgroundColor: '#00897B',
+                          color: '#fff',
+                          fontWeight: '600',
+                        },
+                        '&   .revert': {
+                          backgroundColor: '#F57C00',
+                          color: '#fff',
+                          fontWeight: '600',
+                        },
+                        '&   .DISAPPROVED': {
+                          backgroundColor: '#D32F2F',
+                          color: '#fff',
+                          fontWeight: '600',
+                        },
+                        '&   .InPro': {
+                          backgroundColor: '#FDAB3D',
+                          color: '#fff',
+                          fontWeight: '600',
+                        },
+                        '& .re-color': {
+                          backgroundColor: '#7B1FA2',
+                          color: '#fff',
+                          fontWeight: '600',
                         },
                       }} >
                       <DataGrid
@@ -1911,22 +2098,22 @@ const accountNumbers = releaseAmountIROs.map((iro) =>
                         checkboxSelection={props.action == 'release'}
                         disableRowSelectionOnClick={props.action == 'release'}
                         rowSelectionModel={rowSelectionModel}
-                        
+
                         isRowSelectable={(params:any) =>
-                          selectedDivisions.length === 0
-                            ? true
-                            : selectedDivisions.includes(params?.row?.division?.details?.name)
+                          selectedDivisions.length === 0 ?
+                            true :
+                            selectedDivisions.includes(params?.row?.division?.details?.name)
                         }
-                        
+
                         onRowSelectionModelChange={(newSelection) => {
                           setRowSelectionModel(newSelection as string[]);
-                          
+
                           const selectedIROs =
                             IROrder?.filter((iro) => newSelection.includes(iro._id)) ?? [];
-                          
+
                           setReleaseAmountIROs(selectedIROs);
                         }}
-                        
+
                         getRowClassName={(params) => {
                           if (params.row.specialsanction == 'Yes') {
                             return 'special-sanction';
@@ -2078,7 +2265,7 @@ const accountNumbers = releaseAmountIROs.map((iro) =>
                   </Grid>
                 </DialogContent>
               </Dialog>
-              
+
               {/* Rest of the dialogs and components remain the same */}
               <Dialog open={Boolean(data6)} onClose={() => setData6(null)} maxWidth="xs" fullWidth>
                 <DialogTitle> Print Fr</DialogTitle>
@@ -2116,7 +2303,7 @@ const accountNumbers = releaseAmountIROs.map((iro) =>
                   </Button>
                 </DialogActions>
               </Dialog>
-              
+
               <Dialog open={addSignature} sx={{ width: 400, margin: '0 auto' }}>
                 <DialogContent style={{ display: 'flex', justifyContent: 'center' }}>
                   <Grid container spacing={2} sx={{ display: 'grid', alignItems: 'center', justifyItems: 'center' }}>
@@ -2183,7 +2370,219 @@ const accountNumbers = releaseAmountIROs.map((iro) =>
                 </DialogContent>
               </Dialog>
             </Grid>
-            
+            <Dialog
+              open={openReason}
+              onClose={() => setOpenReason(false)}
+              maxWidth="sm"
+              fullWidth
+              PaperProps={{
+                sx: {
+                  borderRadius: 3,
+                  p: 2,
+                },
+              }}
+            >
+              {/* HEADER */}
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  mb: 1,
+                }}
+              >
+                <Typography fontWeight={700} fontSize={18}>
+                  {(selectedIROData as any)?.reasonForRevertToDivision? 'IRO REASON FOR REVERT': 'IRO REASON FOR DISAPPROVE'}
+                </Typography>
+
+                <IconButton onClick={() => setOpenReason(false)}>
+                  <CloseIcon />
+                </IconButton>
+              </Box>
+
+              <Divider />
+
+              {/* CONTENT */}
+              <Box sx={{ mt: 2 }}>
+                <Typography fontSize={14} mb={1}>
+                  <b>FR No:</b> {selectedIROData?.IROno}
+                </Typography>
+
+                {/* REVERT REASON */}
+                {(selectedIROData as any)?.reasonForRevertToDivision && (
+                  <Box
+                    sx={{
+                      backgroundColor: '#FFF9E6',
+                      borderLeft: '5px solid #FFA000',
+                      p: 2,
+                      borderRadius: 2,
+                      mb: 2,
+                      boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+                    }}
+                  >
+                    {/* Reason Row */}
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        mb: 1,
+                      }}
+                    >
+                      <Typography
+                        sx={{
+                          fontWeight: 700,
+                          fontSize: 14,
+                          minWidth: 140,
+                          color: '#333',
+                        }}
+                      >
+        Reason for Revert:
+                      </Typography>
+
+                      <Typography
+                        sx={{
+                          fontSize: 14,
+                          fontWeight: 600,
+                          color: '#D84315',
+                        }}
+                      >
+                        {(selectedIROData as any)?.reasonForRevertToDivision}
+                      </Typography>
+                    </Box>
+
+                    {/* Reverted By Row */}
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        mb: 1,
+                      }}
+                    >
+                      <Typography
+                        sx={{
+                          fontWeight: 700,
+                          fontSize: 14,
+                          minWidth: 140,
+                          color: '#333',
+                        }}
+                      >
+        Reverted By:
+                      </Typography>
+
+                      <Typography
+                        sx={{
+                          fontSize: 14,
+                          fontWeight: 600,
+                          color: '#1976D2',
+                        }}
+                      >
+                        {(selectedIROData as any)?.revertedBy || 'Admin'}
+                      </Typography>
+                    </Box>
+
+                    {/* Info */}
+                    <Typography
+                      sx={{
+                        fontSize: 13,
+                        fontWeight: 500,
+                        color: '#1976D2',
+                        mt: 1,
+                      }}
+                    >
+      ℹ️ Info: Resubmit the FR within 3 days
+                    </Typography>
+                  </Box>
+                )}
+
+                {/* REJECT REASON */}
+                {selectedIROData?.reasonForRejectIRO && (
+                  <Box
+                    sx={{
+                      backgroundColor: '#FFF5F5',
+                      borderLeft: '5px solid #D32F2F',
+                      p: 2,
+                      borderRadius: 2,
+                      mb: 2,
+                      boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+                    }}
+                  >
+                    {/* Reason Row */}
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        mb: 1,
+                      }}
+                    >
+                      <Typography
+                        sx={{
+                          fontWeight: 700,
+                          fontSize: 14,
+                          minWidth: 140,
+                          color: '#333',
+                        }}
+                      >
+        Reason for Disapprove:
+                      </Typography>
+
+                      <Typography
+                        sx={{
+                          fontSize: 14,
+                          fontWeight: 600,
+                          color: '#D32F2F',
+                        }}
+                      >
+                        {(selectedIROData as any)?.reasonForRejectIRO}
+                      </Typography>
+                    </Box>
+
+                    {/* Disapproved By Row */}
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                      }}
+                    >
+                      <Typography
+                        sx={{
+                          fontWeight: 700,
+                          fontSize: 14,
+                          minWidth: 140,
+                          color: '#333',
+                        }}
+                      >
+        Disapproved By:
+                      </Typography>
+
+                      <Typography
+                        sx={{
+                          fontSize: 14,
+                          fontWeight: 600,
+                          color: '#1976D2',
+                        }}
+                      >
+                        {(selectedIROData as any)?.disapprovedBy || 'ASL'}
+                      </Typography>
+                    </Box>
+                  </Box>
+                )}
+              </Box>
+
+              {/* FOOTER */}
+              <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3 }}>
+                <Button
+                  variant="contained"
+                  sx={{
+                    backgroundColor: '#5B4BEB',
+                    borderRadius: 2,
+                    px: 3,
+                  }}
+                  onClick={() => setOpenReason(false)}
+                >
+      Close
+                </Button>
+              </Box>
+            </Dialog>
             <Dialog open={openRemarks} fullWidth maxWidth="md">
               <DialogTitle>Remarks</DialogTitle>
               <DialogContent>
@@ -2262,7 +2661,7 @@ const accountNumbers = releaseAmountIROs.map((iro) =>
                 </Button>
               </DialogActions>
             </Dialog>
-            
+
             <FileUploader
               title="HR Signature"
               action="add"
@@ -2298,7 +2697,7 @@ const accountNumbers = releaseAmountIROs.map((iro) =>
                 return FileUploaderServices.deleteFile(fileId);
               }}
             />
-            
+
             <FileUploader
               title="Account manager Signature"
               action="add"
@@ -2334,7 +2733,7 @@ const accountNumbers = releaseAmountIROs.map((iro) =>
                 return FileUploaderServices.deleteFile(fileId);
               }}
             />
-            
+
             <FileUploader
               title="Accountant Signature"
               action="add"
@@ -2370,7 +2769,7 @@ const accountNumbers = releaseAmountIROs.map((iro) =>
                 return FileUploaderServices.deleteFile(fileId);
               }}
             />
-            
+
             <Dialog open={Boolean(openReleaseConform)} onClose={() => setOpenReleaseConform(false)}>
               <DialogTitle>Reminder</DialogTitle>
               <DialogContent>
@@ -2392,7 +2791,7 @@ const accountNumbers = releaseAmountIROs.map((iro) =>
                 </Button>
               </DialogActions>
             </Dialog>
-            
+
             <FileUploader
               title=" Bill Upload"
               types={['application/pdf', 'image/png', 'image/jpeg', 'image/jpg']}
@@ -2424,7 +2823,7 @@ const accountNumbers = releaseAmountIROs.map((iro) =>
                 return FileUploaderServices.deleteFile(fileId);
               }}
             />
-            
+
             <ReleaseAmount action={props.action == 'release' ? 'add' : 'view'} onClose={() => setOpenRelease(false)} open={openRelease} data={releaseAmountIROs?.length === 0 ? newTest : releaseAmountIROs} />
           </>
         }
@@ -2436,7 +2835,7 @@ const accountNumbers = releaseAmountIROs.map((iro) =>
           </Grid>
         )}
       />
-      
+
       <FileUploader
         title="Attachments"
         types={['application/pdf', 'image/png', 'image/jpeg', 'image/jpg']}
@@ -2450,7 +2849,7 @@ const accountNumbers = releaseAmountIROs.map((iro) =>
         onClose={() => setViewFileUploader(false)}
         getFiles={selectedIRO?.billAttachment ?? []}
       />
-      
+
       <Dialog open={supportAttachment} onClose={() => setSupportAttachment(false)} maxWidth="xs" fullWidth>
         <DialogTitle> Signature Attachment </DialogTitle>
         <DialogContent>
@@ -2463,7 +2862,7 @@ const accountNumbers = releaseAmountIROs.map((iro) =>
                   e.preventDefault();
                   const file = (
                     await FileUploaderServices.getFile(
-                      selectedIRO?.signatureSheet ?? ''
+                      selectedIRO?.signatureSheet ?? '',
                     )
                   ).data;
 
@@ -2513,7 +2912,7 @@ const accountNumbers = releaseAmountIROs.map((iro) =>
           </Button>
         </DialogActions>
       </Dialog>
-      
+
       <Dialog open={openPrintIro} onClose={() => setOpenPrintIro(false)} maxWidth="xs" fullWidth>
         <DialogTitle> Print IRO Receipt </DialogTitle>
         <DialogContent>
@@ -2541,7 +2940,7 @@ const accountNumbers = releaseAmountIROs.map((iro) =>
           </Button>
         </DialogActions>
       </Dialog>
-      
+
       <Dialog open={Boolean(iroData)} onClose={() => setIroData(null)} maxWidth="xs" fullWidth>
         <DialogTitle>Warning</DialogTitle>
         <DialogContent>
@@ -2621,7 +3020,7 @@ const accountNumbers = releaseAmountIROs.map((iro) =>
           </>
         </DialogActions>
       </Dialog>
-      
+
       <Dialog open={Boolean(deleteModel)} onClose={() => setDeleteModel(false)}>
         <DialogContent>
           <Typography sx={{ color: 'red' }}>{`Are you sure you want to delete this IRO No ${IRO?.IROno?? '...'} from ${IRO?.division?.details?.name?? '...'} related to FR No ${FR?.FRno?? ''} ?`}</Typography>
@@ -2640,7 +3039,7 @@ const accountNumbers = releaseAmountIROs.map((iro) =>
           </Button>
         </DialogActions>
       </Dialog>
-      
+
       {loading &&
         <Lottie
           options={{

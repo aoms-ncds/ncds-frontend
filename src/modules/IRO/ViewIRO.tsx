@@ -60,6 +60,7 @@ import FileUploaderServices from '../../components/FileUploader/extras/FileUploa
 import ReceiptIcon from '@mui/icons-material/Receipt';
 import SanctionLetter from '../FR/components/authLatter';
 import FRServices from '../FR/extras/FRServices';
+import formatAmount from '../Common/formatcode';
 
 
 const ViewIRO = (props: any) => {
@@ -355,7 +356,7 @@ const ViewIRO = (props: any) => {
   });
   const [openRelease, setOpenRelease] = useState(false);
 
-  console.log(Data, 'ORRO');
+  console.log(IRO, 'ORRO');
   const totalRequestedAmount = IRO?.particulars && IRO?.particulars.reduce((total: number, item: { requestedAmount: any}) => total + Number(item.requestedAmount), 0);
   const IROstatus = IROLifeCycleStates.getStatusNameByCodeTransaction(Number(IRO?.status));
   const [sanctionedAsPer, setSanctionedAsPer] = useState<ISanctionedAsPer[]>([]);
@@ -534,6 +535,37 @@ const ViewIRO = (props: any) => {
                           </Grid>
                           <Grid item xs={12} md={6}>
                             <TextField
+                              label="Raised By (Only Applicable For Delhi Staff)"
+                              value={IRO.raisedBy}
+                              // onChange={(e) =>
+                              //   props.onChange({
+                              //     ...props.value,
+                              //     raisedBy: e.target.value,
+                              //   })
+                              // }
+                              variant="outlined"
+                              fullWidth
+                              InputLabelProps={{ shrink: true }}
+
+                              disabled
+                              // sx={{
+                              //   '& .MuiInputBase-input.Mui-disabled': {
+                              //     WebkitTextFillColor: '#000', // text color
+                              //     color: '#000',
+                              //     opacity: 1,
+                              //   },
+                              //   '& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline': {
+                              //     borderColor: '#c4c4c4', // normal border color
+                              //   },
+                              //   '& .MuiInputLabel-root.Mui-disabled': {
+                              //     color: 'rgba(0,0,0,0.6)',
+                              //   },
+                              // }}
+                            />
+                          </Grid>
+
+                          <Grid item xs={12} md={6}>
+                            <TextField
                               label="Worker Code"
                               value={IRO.purposeWorker?.kind === 'staff' ? (IRO.purposeWorker as Staff | undefined)?.staffCode : (IRO.purposeWorker as unknown as IWorker)?.workerCode}
 
@@ -650,8 +682,8 @@ const ViewIRO = (props: any) => {
                                     <TableCell align="center">{item.narration}</TableCell>
                                     <TableCell align="center">{item.quantity}</TableCell>
                                     <TableCell align="center">{item.month}</TableCell>
-                                    <TableCell align="center">{item.requestedAmount?.toFixed(2)}</TableCell>
-                                    <TableCell align="center">{(item as any).sanctionedAmount?.toFixed(2)}</TableCell>
+                                    <TableCell align="center">{ formatAmount(item.requestedAmount?.toFixed(2))}</TableCell>
+                                    <TableCell align="center">{formatAmount((item as any).sanctionedAmount?.toFixed(2))}</TableCell>
                                     <TableCell align="center">{item.sanctionedAsPer}</TableCell>
                                     <TableCell align="center">{item.applicationReferenceNo}</TableCell>
                                     {(item as any).presidentSanctionAmt && <TableCell align="center">{(item as any).presidentSanctionAmt}</TableCell> }
@@ -668,14 +700,14 @@ const ViewIRO = (props: any) => {
                         </Grid>
                       ):[]}
                       <Grid item xs={12} md={6}>
-                        <TextField label="Requested Amount" InputLabelProps={{ shrink: true }} value={totalRequestedAmount.toFixed(2)} fullWidth disabled />
+                        <TextField label="Requested Amount" InputLabelProps={{ shrink: true }} value={formatAmount(totalRequestedAmount.toFixed(2))} fullWidth disabled />
                       </Grid>
 
                       <Grid item xs={12} md={6}>
                         <TextField
                           label="Sanctioned Amount"
                           type={'number'}
-                          value={IRO.sanctionedAmount ?? total.toFixed(2)}
+                          value={ IRO.sanctionedAmount ?? total.toFixed(2)}
                           onChange={(e) => {
                             if (IRO) {
                               // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -1105,6 +1137,110 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
                           />
 
                         </Grid>
+                        {props.action == 'custom' &&(
+                          <>
+
+                            <Grid item xs={12}>
+                              <span style={{ fontWeight: 600, fontSize: 20 }}>
+                  Adjustment Details
+                              </span>
+                            </Grid>
+
+                            <Grid item xs={12} md={4}>
+                              <TextField
+                                label="Adjusted IRO"
+                                type="tel"
+                                value={IRO?.adjustedIro}
+                                onChange={(e) =>
+                                  props.onChange(() => ({
+                                    ...props?.value,
+                                    adjustedIro: e.target?.value,
+                                  }))
+                                }
+                                disabled
+                                InputLabelProps={{
+                                  shrink: Boolean(IRO?.adjustedIro),
+                                }}
+                                fullWidth
+                                inputProps={{
+                                  onWheel: (event: React.WheelEvent<HTMLInputElement>) => {
+                                    event.preventDefault();
+                                    event.currentTarget.blur();
+                                  },
+                                }}
+                                variant="outlined"
+                                // disabled={props.action !== 'add'}
+
+                                // required
+                              />
+                            </Grid>
+                            <Grid item xs={12} md={4}>
+                              <TextField
+                                label="Adjusted Amount"
+                                type="number"
+                                value={IRO?.adjustedAmount }
+                                onChange={(e) =>
+                                // Number(e.target.value) <= (releaseAmount.adjustedAmount ?? 0) &&
+                                  props.onChange(() => ({
+                                    ...props?.value,
+                                    adjustedAmount: Number(e.target?.value),
+                                  }))
+                                }
+                                disabled
+                                fullWidth
+                                InputLabelProps={{
+                                  shrink: Boolean(IRO?.adjustedAmount),
+                                }}
+                                variant="outlined"
+                                // disabled={props.action !== 'add'}
+
+                                // required
+                              />
+                            </Grid>
+                            <Grid item xs={12} md={3} style={{ display: 'flex', alignItems: 'center' }}>
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    name="closingBalance"
+                                    checked={!!IRO?.closingBalance}
+                                    onChange={(e) =>
+                                      props.onChange(() => ({
+                                        ...props?.value,
+                                        closingBalance: e.target.checked,
+                                      }))
+                                    }
+                                    disabled
+                                    color="primary"
+                                  />
+                                }
+                                label="Closing Balance"
+                              />
+                            </Grid>
+                            {IRO?.closingBalance &&(
+
+                              <Grid item xs={12} md={3}>
+                                <TextField
+                                  label="Closing Balance Remark"
+                                  type="tel"
+                                  value={IRO?.closingBalanceRemark }
+                                  onChange={(e) =>
+                                    props.onChange(() => ({
+                                      ...props?.value,
+                                      closingBalanceRemark: e.target.value,
+                                    }))
+                                  }
+                                  disabled
+                                  fullWidth
+                                  variant="outlined"
+                                  // disabled={props.action !== 'add'}
+
+                                  // required
+                                />
+                              </Grid>
+                            )}
+                          </>
+                        )}
+
                         {props.action == 'custom' ?(
 
                           <Grid item xs={12} md={12}>

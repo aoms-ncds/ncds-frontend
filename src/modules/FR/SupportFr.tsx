@@ -17,7 +17,7 @@ import {
 } from '@mui/icons-material';
 import InfoIcon from '@mui/icons-material/Info';
 import { Link } from 'react-router-dom';
-import { Alert, Box, Button, Card, Container, Dialog, DialogActions, DialogContent, DialogTitle, Divider, FormControl, FormControlLabel, FormLabel, Grid, IconButton, InputAdornment, Radio, RadioGroup, TextField, Tooltip, Typography } from '@mui/material';
+import { Alert, Box, Button, Card, Checkbox, Container, Dialog, DialogActions, DialogContent, DialogTitle, Divider, FormControl, FormControlLabel, FormLabel, Grid, IconButton, InputAdornment, InputLabel, ListItemText, ListSubheader, MenuItem, Radio, RadioGroup, Select, SelectChangeEvent, TextField, Tooltip, Typography } from '@mui/material';
 import FRServices from './extras/FRServices';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 // import SendIcon from '@mui/icons-material/Send';
@@ -66,7 +66,30 @@ const SupportFrPage = () => {
   const [open, setOpen] = useState(false);
   const [delateModel, setDelateModel] = useState(false);
   const [openPrintFr, setOpenPrintFr] = useState(false);
+  const [divisions, setDivisions] = useState<string[]>([]);
+  const [divisionSearch, setDivisionSearch] = useState('');
+  const [selectedDivisions, setSelectedDivisions] = useState<string[]>([]);
 
+  useEffect(() => {
+    DivisionsServices.getDivisions().then((res) => {
+      const names = res.data.map((d: any) => d.details.name);
+      setDivisions(names);
+    });
+  }, []);
+  const filteredDivisions = divisions.filter((name) =>
+    name
+    .toLowerCase()
+    .replace(/\s/g, '') // remove spaces
+    .includes(divisionSearch.toLowerCase().replace(/\s/g, '')),
+  );
+  const handleDivisionChange = (event: SelectChangeEvent<string[]>) => {
+    const value = event.target.value as string[];
+    if (value.includes('__ALL__')) {
+      ([]); // empty = show all
+      return;
+    }
+    setSelectedDivisions(value);
+  };
   const [Label, setLeaderHeading] = useState<ILeaderDetails[] | null>(null);
   const [selectedSignaturePresident, setSignaturePresident] = useState<EsignaturePresident>({
     _id: '',
@@ -496,7 +519,7 @@ const SupportFrPage = () => {
       headerClassName: 'super-app-theme--cell',
       width: 130,
       valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
-      renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
+      renderHeader: (params) => <b style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</b>,
       align: 'center',
       headerAlign: 'center',
     },
@@ -737,29 +760,34 @@ const SupportFrPage = () => {
     setSearchText(event.target.value);
   };
   const filteredRows = (FRRequests ?? []).filter((row) => {
-    const searchTextLower = searchText.toLowerCase();
+    const divisionMatch = selectedDivisions.length === 0 ||
+    selectedDivisions.includes(row?.division?.details.name?? '');
 
-    if (
-      (row.FRno && row.FRno.toLowerCase().includes(searchTextLower)) ||
-            (row.FRdate && row.FRdate.format('DD/MM/YYYY').toLowerCase().includes(searchTextLower)) ||
-            (row.division?.details.name && row.division?.details.name.toLowerCase().includes(searchTextLower))
-    ) {
-      return true;
-    }
-    // Check for subcategories within the particulars
-    // const subCategoryMatch = row.particulars?.some((particular) =>
-    //   (particular?.subCategory1?.toLowerCase().includes(searchTextLower) || '') ||
-    //   (particular?.subCategory2?.toLowerCase().includes(searchTextLower) || '') ||
-    //   (particular?.subCategory3?.toLowerCase().includes(searchTextLower) || ''),
-    // );
-    // if (subCategoryMatch) {
-    //   return true;
-    // }
-    // Main filter logic
+    if (!searchText) return divisionMatch;
 
-    // Fallback: Check if any other row value matches the search text
-    return Object.values(row).some((value) => value && value.toString().toLowerCase().includes(searchTextLower));
+    const searchLower = searchText.toLowerCase();
+
+    const searchMatch =
+    (row.FRno && row.FRno.toLowerCase().includes(searchLower)) ||
+    (row.FRdate && row.FRdate.format('DD/MM/YYYY').toLowerCase().includes(searchLower)) ||
+    (row.division?.details.name && row.division?.details.name.toLowerCase().includes(searchLower)) ||
+    (row.purposeSubdivision?.name && row.purposeSubdivision.name.toLowerCase().includes(searchLower)) ||
+    // Add subCategory search
+    (row.particulars && row.particulars.some((particular:any) =>
+      (particular.subCategory1 && particular.subCategory1.toLowerCase().includes(searchLower)) ||
+      (particular.subCategory2 && particular.subCategory2.toLowerCase().includes(searchLower)) ||
+      (particular.subCategory3 && particular.subCategory3.toLowerCase().includes(searchLower)),
+    )) ||
+    // Add mainCategory search
+    (row.particulars && row.particulars.some((particular:any) =>
+      particular.mainCategory && particular.mainCategory.toLowerCase().includes(searchLower),
+    )) ||
+    // Add beneficiary name search
+    (row.sanctionedBank && row.sanctionedBank.toLowerCase().includes(searchLower));
+
+    return divisionMatch && searchMatch;
   });
+
 
   if (searchText && filteredRows.length === 0) {
     enqueueSnackbar({
@@ -803,8 +831,69 @@ const SupportFrPage = () => {
                       />
                       {/* </div> */}
                     </Grid>
+                    <Grid item xs={3}>
+                      {hasPermissions(['MANAGE_IRO']) && (
+                        <Grid item xs={12} md="auto" sx={{
+                          display: 'flex',
+                          alignItems: 'center', // ✅ vertical center
+                        }}>
+                          <FormControl
+                            sx={{
+                              'minWidth': 200,
+                              '& .MuiOutlinedInput-root': {
+                                // height: 45, // ✅ control select height
+                                fontSize: 13,
+                                borderRadius: 1.5,
+                              },
+                            }}
+                          >
+                            <InputLabel id="division-label">
+                      Division
+                            </InputLabel>
+                            <Select
+                              multiple
+                              value={selectedDivisions}
+                              label="Division"
+                              onChange={handleDivisionChange}
+                              renderValue={(selected) =>
+                                selected.length === 0 ? 'None' : selected.join(', ')
+                              }
+                              MenuProps={{
+                                PaperProps: {
+                                  style: { maxHeight: 300, width: 250 },
+                                },
+                              }}
+                            >
+                              <ListSubheader>
+                                <TextField
+                                  size="small"
+                                  placeholder="Search division..."
+                                  fullWidth
+                                  autoFocus
+                                  value={divisionSearch}
+                                  onChange={(e) => setDivisionSearch(e.target.value)}
+                                  onKeyDown={(e) => e.stopPropagation()}
+                                />
+                              </ListSubheader>
 
-                    <Grid item xs={6} sx={{ px: 2 }}>
+                              <MenuItem value="__ALL__">
+                                <Checkbox checked={selectedDivisions.length === 0} />
+                                <ListItemText primary="None" />
+                              </MenuItem>
+
+                              {filteredDivisions.map((name) => (
+                                <MenuItem key={name} value={name}>
+                                  <Checkbox checked={selectedDivisions.includes(name)} />
+                                  <ListItemText primary={name} />
+                                </MenuItem>
+                              ))}
+                            </Select>
+                          </FormControl>
+                        </Grid>
+                      )}
+                    </Grid>
+
+                    <Grid item xs={3} sx={{ px: 2 }}>
                       {/* <br /> */}
 
                       <PermissionChecks
@@ -918,6 +1007,12 @@ const SupportFrPage = () => {
                       getRowId={(row) => row._id}
                       loading={FRRequests === null}
                       style={{ height: '66vh', width: '100%' }}
+
+                      isRowSelectable={(params:any) =>
+                        selectedDivisions.length === 0 ?
+                          true :
+                          selectedDivisions.includes(params?.row?.division?.details?.name)
+                      }
                       getRowClassName={(params) => (params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd')}
                     />
                   </Box>
