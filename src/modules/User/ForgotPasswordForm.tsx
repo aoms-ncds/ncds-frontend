@@ -54,7 +54,7 @@ const ForgottenPasswordFormPage = () => {
         paddingBottom: '0',
         paddingTop: '0',
         backgroundImage:
-          'url(/loginBg.jpg)',
+          'url(/loginBg.jpeg)',
         backgroundSize: 'cover',
         backgroundPosition: 'center center', /* Center the background image */
         backgroundAttachment: 'fixed',
@@ -91,34 +91,61 @@ const ForgottenPasswordFormPage = () => {
               </Grid>
             )} */}
             <Grid item xs={12}>
-              <Box >
+              <Box>
                 <InputBase
                   value={email}
                   onChange={(e) => {
                     setEmail(e.target.value);
                     setUnknownError(null);
                   }}
-                  placeholder="Email ID/User Name "
-                  sx={{
-                    background: '#f4f5f4',
-                    borderRadius: 40,
-                    padding: 1.5,
-                    opacity: 0.85,
-                  }}
-                  // disabled={loading}
+                  placeholder="Email ID/User Name"
                   fullWidth
                   startAdornment={
                     <InputAdornment position="start">
-                      <EmailIcon />
+                      <EmailIcon sx={{ color: '#fff' }} />
                     </InputAdornment>
                   }
                   required
                   disabled={success === true}
+                  sx={{
+                    'background': 'rgba(255,255,255,0.15)',
+                    'borderRadius': 40,
+                    'px': 2,
+                    'py': 1.5,
+                    'backdropFilter': 'blur(5px)',
+                    'border': '1px solid rgba(255,255,255,0.2)',
+                    'transition': '0.3s',
 
+                    // 🔥 FIX INNER INPUT
+                    '& input': {
+                      color: '#fff',
+                      background: 'transparent !important',
+                    },
+
+                    '& input::placeholder': {
+                      color: 'rgba(255,255,255,0.7)',
+                    },
+
+                    '& input:-webkit-autofill': {
+                      WebkitBoxShadow: '0 0 0 100px transparent inset',
+                      WebkitTextFillColor: '#fff',
+                    },
+
+                    // ✨ hover + focus effect
+                    '&:hover': {
+                      background: 'rgba(255,255,255,0.2)',
+                    },
+                    '&:focus-within': {
+                      boxShadow: '0 0 0 2px rgba(255,255,255,0.25)',
+                    },
+
+                    // disabled style
+                    ...(success === true && {
+                      opacity: 0.6,
+                    }),
+                  }}
                 />
-
               </Box>
-
             </Grid>
             <Grid item xs={12}>
               {success && <Alert severity="success">A password reset email has been sent to {email}!</Alert>}
