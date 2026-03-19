@@ -11,8 +11,10 @@ import { useLoader } from './hooks/Loader';
 const serverURL = 'http://localhost:8002';
 // const serverURL = 'https://iet-staging.apis.pro910.app/';
 // const serverURLOld = 'https://iet-apis.pro910.app';//old
+ const serverURL = 'https://iet-apis.ietapps.org';// neww
 
-// const serverURL = 'https://iet-apis.ietapps.org';// neww
+const serverURL = 'https://iet-apis.ietapps.org';// neww
+
 axios.defaults.baseURL = serverURL;
 // window.location.hostname === 'localhost' ? 'http://localhost:8002' : 'https://iet-apis.pro910.app';
 
@@ -20,7 +22,6 @@ const App = () => {
   // const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
   CommonHelpers.setLoader(useLoader());
   CommonHelpers.setEnqueueSnackbar(enqueueSnackbar);
-
   const theme = useMemo(
     () =>
       createTheme({
