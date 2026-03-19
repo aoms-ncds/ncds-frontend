@@ -2,12 +2,13 @@ import React, { SetStateAction, useEffect, useState } from 'react';
 import {
   Edit as EditIcon, Preview as PreviewIcon, Add as AddIcon, Download as DownloadIcon,
   Attachment as AttachmentIcon,
+  Delete,
 } from '@mui/icons-material';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import CloseIcon from '@mui/icons-material/Close';
 import DoneIcon from '@mui/icons-material/Done';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import { Autocomplete, Box, Button, Card, Container, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField, Typography } from '@mui/material';
+import { Autocomplete, Box, Button, Card, CardContent, Container, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
 import { DataGrid, GridColDef, GridRowParams } from '@mui/x-data-grid';
 import ApplicationServices from './extras/ApplicationServices';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
@@ -27,9 +28,11 @@ import { useNavigate } from 'react-router-dom';
 import clsx from 'clsx';
 import ApplicationNamesService from '../Settings/extras/ApplicationNamesService';
 import AppliedForService from '../Settings/extras/AppliedForService';
+import formatAmount from '../Common/formatcode';
+import WorkersServices from '../Workers/extras/WorkersServices';
 
 
-const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' }) => {
+const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' |'welfare'}) => {
   const [applications, setApplications] = useState<Application[] | null>(null);
   const [action, setAction] = useState<'add' | 'edit'>('add');
   const [showApplicationFormDialog, setShowApplicationFormDialog] = useState<boolean>(false);
@@ -40,6 +43,11 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
   const [statusId, setStatusId] = useState<string>();
   const [applicationsNames, setApplicationsNames] = useState<any >();
   const [appliedFor, setAppliedFor] = useState<any >();
+  const [deleteModel, setDeleteModel] = useState(false);
+  const [workers, setWorkers] = useState<any[] | any[]>();
+  const [workersName, setWorkersName] = useState<IWorker[] | Staff[]>();
+  const [statusFilter, setStatusFilter] = useState([ApplicationLifeCycleStates.CREATED]); // default WFA: Waiting for access or Reverted
+  console.log(statusFilter, 'statusFilter');
 
   const [applicationFormState, setApplicationFormState] = useState<CreatableApplication>({
     applicationCode: '',
@@ -233,6 +241,8 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
     },
     attachment: [],
   });
+  console.log(workers, 'ui99');
+
   const [reason, setReason] = useState<IReason[]>([]);
   const [reasonForDeactivation, setReasonForDeactivation] = useState<IReason | null | string>();
   const [remark, setRemark] = useState<IReason | null | string>();
@@ -244,7 +254,43 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
     rangeType: 'months',
   });
   const showLinkAction = props.action === 'manage';
+  const removeDivisions = (id: any) => {
+    const snackbarId = enqueueSnackbar({
+      message: 'Removing Application',
+      variant: 'info',
+    });
+    ApplicationServices.delete(id)
+        .then((res) => {
+          if (applications) {
+            const newDivisions = applications.filter((appl) => {
+              return appl._id !== id;
+            });
+            setApplications(newDivisions);
+          }
+          setDeleteModel(false);
+          // closeSnackbar(snackbarId);
+          enqueueSnackbar({
+            message: res.message,
+            variant: 'success',
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+          closeSnackbar(snackbarId);
+          enqueueSnackbar({
+            message: err.message,
+            variant: 'error',
+          });
+        });
+  };
   useEffect(() => {
+    WorkersServices.getWorkersByDivision()
+        .then((res) => {
+          setWorkers(res.data);
+        })
+        .catch((res) => {
+          console.log(res);
+        });
     if (props.action == 'hr') {
       ApplicationServices.getAll({ dateRange: dateRange, status: UserLifeCycleStates.CREATED })
         .then((res) => {
@@ -266,8 +312,19 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
             variant: 'error',
           });
         });
-    } else {
+    } else if (props.action == 'welfare') {
       ApplicationServices.getAll({ dateRange: dateRange })
+        .then((res) => {
+          setApplications(res.data.filter((res)=>res.name =='For Welfare Help'));
+        })
+        .catch((error) => {
+          enqueueSnackbar({
+            message: error.message,
+            variant: 'error',
+          });
+        });
+    } else {
+      ApplicationServices.getAll({ dateRange: dateRange, statusFilter: statusFilter })
         .then((res) => {
           setApplications(res.data);
         })
@@ -301,7 +358,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
         variant: 'error',
       });
     });
-  }, [dateRange]);
+  }, [dateRange, statusFilter]);
   console.log(applicationFormState, '787');
 
   const EditApplication = (e: React.FormEvent<HTMLFormElement>) => {
@@ -509,6 +566,16 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
           });
           }}
         />,
+        <GridLinkAction
+          key={5}
+          label="Delete"
+          icon={<Delete />}
+          showInMenu
+          onClick={() => {
+            setDeleteModel(true);
+            setStatusId(params.id as string);
+          }}
+        />,
         props.action === 'hr' && hasPermissions(['MANAGE_APPLICATION']) &&
         <GridLinkAction
           key={4}
@@ -577,6 +644,92 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
         </p>), width: 150,
     },
     {
+      field: 'createdBy',
+      headerClassName: 'super-app-theme--header',
+      headerAlign: 'center',
+      align: 'center',
+      renderHeader: () => (<b>Applied By</b>),
+      renderCell: (props) => (
+        <p>
+          {props.row.createdBy?.basicDetails?.firstName || ''} {' '}
+          {props.row.createdBy?.basicDetails?.middleName || ''} {' '}
+          {props.row.createdBy?.basicDetails?.lastName || ''}
+        </p>
+      ),
+      width: 170,
+      // Adding valueGetter for filter compatibility
+      valueGetter: (props) => [
+        props.row.createdBy?.basicDetails?.firstName || '',
+        props.row.createdBy?.basicDetails?.middleName || '',
+        props.row.createdBy?.basicDetails?.lastName || '',
+      ].join(' ').trim(),
+    },
+    {
+      field: 'applicantName', align: 'center', headerClassName: 'super-app-theme--header',
+      headerAlign: 'center', renderHeader: () => (<b>Applicant Name</b>),
+      renderCell: (params) => (
+        <p style={{
+          maxWidth: 250,
+          whiteSpace: 'normal',
+          wordBreak: 'break-word',
+          display: '-webkit-box',
+          WebkitBoxOrient: 'vertical',
+          WebkitLineClamp: 3,
+        }}>
+          {params.row?.applicantName}
+        </p>),
+      width: 250,
+    },
+    {
+      field: 'appliedFor', align: 'center', headerClassName: 'super-app-theme--header',
+      headerAlign: 'center', renderHeader: () => (<b>Applied For</b>),
+      renderCell: (params) => (
+        <p style={{
+          maxWidth: 250,
+          whiteSpace: 'normal',
+          wordBreak: 'break-word',
+          display: '-webkit-box',
+          WebkitBoxOrient: 'vertical',
+          WebkitLineClamp: 3,
+        }}>
+          {params.row?.appliedFor}
+        </p>),
+      width: 250,
+    },
+
+    {
+      field: 'requestedAmount', align: 'center', headerClassName: 'super-app-theme--header',
+      headerAlign: 'center', renderHeader: () => (<b>Requested Amount</b>),
+      renderCell: (params) => (
+        <p style={{
+          maxWidth: 250,
+          whiteSpace: 'normal',
+          wordBreak: 'break-word',
+          display: '-webkit-box',
+          WebkitBoxOrient: 'vertical',
+          WebkitLineClamp: 3,
+        }}>
+          {formatAmount(params.row?.requestedAmount)}
+        </p>),
+      width: 250,
+    },
+    {
+      field: 'sanctionedAmount', align: 'center', headerClassName: 'super-app-theme--header',
+      headerAlign: 'center', renderHeader: () => (<b>Sanctioned Amount</b>),
+      renderCell: (params) => (
+        <p style={{
+          maxWidth: 250,
+          whiteSpace: 'normal',
+          wordBreak: 'break-word',
+          display: '-webkit-box',
+          WebkitBoxOrient: 'vertical',
+          WebkitLineClamp: 3,
+        }}>
+          {formatAmount(params.row?.sanctionedAmount)?? 'N/A'}
+        </p>),
+      width: 250,
+    },
+    {
       field: 'coorName', align: 'center', headerClassName: 'super-app-theme--header',
       headerAlign: 'center', renderHeader: () => (<b>Coordinator Name</b>), renderCell: (params) => (
         <p style={{
@@ -610,70 +763,8 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
     //     </p>),
     //   width: 250,
     // },
-    {
-      field: 'appliedFor', align: 'center', headerClassName: 'super-app-theme--header',
-      headerAlign: 'center', renderHeader: () => (<b>Applied For</b>),
-      renderCell: (params) => (
-        <p style={{
-          maxWidth: 250,
-          whiteSpace: 'normal',
-          wordBreak: 'break-word',
-          display: '-webkit-box',
-          WebkitBoxOrient: 'vertical',
-          WebkitLineClamp: 3,
-        }}>
-          {params.row?.appliedFor}
-        </p>),
-      width: 250,
-    },
-    {
-      field: 'applicantName', align: 'center', headerClassName: 'super-app-theme--header',
-      headerAlign: 'center', renderHeader: () => (<b>Applicant Name</b>),
-      renderCell: (params) => (
-        <p style={{
-          maxWidth: 250,
-          whiteSpace: 'normal',
-          wordBreak: 'break-word',
-          display: '-webkit-box',
-          WebkitBoxOrient: 'vertical',
-          WebkitLineClamp: 3,
-        }}>
-          {params.row?.applicantName}
-        </p>),
-      width: 250,
-    },
-    {
-      field: 'requestedAmount', align: 'center', headerClassName: 'super-app-theme--header',
-      headerAlign: 'center', renderHeader: () => (<b>Requested Amount</b>),
-      renderCell: (params) => (
-        <p style={{
-          maxWidth: 250,
-          whiteSpace: 'normal',
-          wordBreak: 'break-word',
-          display: '-webkit-box',
-          WebkitBoxOrient: 'vertical',
-          WebkitLineClamp: 3,
-        }}>
-          {params.row?.requestedAmount}
-        </p>),
-      width: 250,
-    },
-    {
-      field: 'sanctionedAmount', align: 'center', headerClassName: 'super-app-theme--header',
-      headerAlign: 'center', renderHeader: () => (<b>Sanctioned Amount</b>),
-      renderCell: (params) => (
-        <p style={{
-          maxWidth: 250,
-          whiteSpace: 'normal',
-          wordBreak: 'break-word',
-          display: '-webkit-box',
-          WebkitBoxOrient: 'vertical',
-          WebkitLineClamp: 3,
-        }}>
-          {params.row?.sanctionedAmount?? 'N/A'}
-        </p>),
-      width: 250,
-    },
+
+
     {
       field: 'President Remarks', align: 'center', headerClassName: 'super-app-theme--header',
       headerAlign: 'center', renderHeader: () => (<b>President Remarks</b>), renderCell: (params) => (
@@ -747,27 +838,6 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
       valueGetter: (params) => params.row.presidentSanction ? 'Yes' : 'No',
     },
 
-    {
-      field: 'createdBy',
-      headerClassName: 'super-app-theme--header',
-      headerAlign: 'center',
-      align: 'center',
-      renderHeader: () => (<b>Applied By</b>),
-      renderCell: (props) => (
-        <p>
-          {props.row.createdBy?.basicDetails?.firstName || ''} {' '}
-          {props.row.createdBy?.basicDetails?.middleName || ''} {' '}
-          {props.row.createdBy?.basicDetails?.lastName || ''}
-        </p>
-      ),
-      width: 170,
-      // Adding valueGetter for filter compatibility
-      valueGetter: (props) => [
-        props.row.createdBy?.basicDetails?.firstName || '',
-        props.row.createdBy?.basicDetails?.middleName || '',
-        props.row.createdBy?.basicDetails?.lastName || '',
-      ].join(' ').trim(),
-    },
 
     {
       field: 'division',
@@ -820,7 +890,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
           </Typography>
         </Grid> */}
         <form onSubmit={action === 'add' ? AddApplication : EditApplication}>
-          <DialogTitle>{action === 'add' ? 'Add Request' : 'Edit Request:'}</DialogTitle>
+          <DialogTitle>{action === 'add' ? 'Create New Application' : 'Edit  Application:'}</DialogTitle>
           <DialogContent>
             <Container>
               <Grid container spacing={2}>
@@ -841,7 +911,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
 
                     renderInput={(params) => (
 
-                      <TextField {...params} label="Name" fullWidth required />
+                      <TextField {...params} label="Application Name" fullWidth required />
                     )}
                   />
                 </Grid>
@@ -864,7 +934,43 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                     )}
                   />
                 </Grid>
+                {applicationFormState.appliedFor =='Worker' &&(
 
+                  <><Grid item xs={12} md={12}>
+                    <Autocomplete
+                      options={workers as any || []}
+
+                      getOptionLabel={(w) => `${w?.basicDetails?.firstName || ''} ${w?.basicDetails?.middleName || ''} ${w?.basicDetails?.lastName || ''}`}
+
+                      value={workers?.find(
+                        (w) => w._id === applicationFormState.workersName,
+                      ) || null}
+
+                      isOptionEqualToValue={(option, value) => option._id === value._id}
+
+                      onChange={(_e, selectedWorker) => {
+                        setApplicationFormState((prev: any) => ({
+                          ...prev,
+                          workersName: selectedWorker?._id || '',
+                        }));
+                      } }
+
+                      renderInput={(params) => (
+                        <TextField {...params} label="Choose Worker" required />
+                      )}
+
+                      fullWidth />
+                  </Grid><Grid item xs={12} md={12}>
+                    <TextField
+                      label="Worker Code"
+                      value={(workers?.find(
+                        (res) => String(res._id) === String(((applicationFormState.workersName))))?.workerCode ??
+                          (workers?.find((res) => String(res._id) === String(((applicationFormState.workersName)))) as any)?.staffCode) || ''}
+                      fullWidth
+                      disabled
+                      InputLabelProps={{ shrink: true }} />
+                  </Grid></>
+                )}
                 <Grid item md={12}>
                   <TextField label="Applicant Name" value={applicationFormState.applicantName}
                     onChange={(e)=>setApplicationFormState((prevRequest) => ({
@@ -1027,26 +1133,26 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
       <Grid item xs={12} md={12}>
         <Card sx={{ maxWidth: '78vw', alignItems: 'center' }}>
           <Grid container spacing={0} justifyContent="space-between" padding={2}>
-            <Grid item xs={6}>
-              {/* <Grid sx={{ width: '30px', paddingLeft: '85%', paddingTop: '2px' }}> */}
-              <TextField
-                label="Search"
-                variant="outlined"
-                value={searchText}
-                onChange={handleSearchChange}
-                fullWidth
-                style={{ width: '25%', alignItems: 'start' }}
-              />
-              {/* </Grid> */}
-            </Grid>
-            <Grid item xs={6} >
-              <>
-                <PermissionChecks
-                  permissions={['MANAGE_APPLICATION']}
-                  granted={(
-                    <Button
-                      onClick={async () => {
-                        const sheet =
+            <Grid container spacing={2} alignItems="center">
+
+              {/* LEFT - SEARCH */}
+              <Grid item xs={12} md={6}>
+                <TextField
+                  label="Search"
+                  variant="outlined"
+                  value={searchText}
+                  onChange={handleSearchChange}
+                  fullWidth
+                />
+              </Grid>
+              <Grid item xs={6} >
+                <>
+                  <PermissionChecks
+                    permissions={['MANAGE_APPLICATION']}
+                    granted={(
+                      <Button
+                        onClick={async () => {
+                          const sheet =
                           applications ?
                             applications.map((application: Application) => ([
                               application.applicationCode,
@@ -1061,54 +1167,108 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                                       Number(application.status) == ApplicationLifeCycleStates.SENT_TO_PRESIDENT ? 'WAITING FOR PRESIDENT' : 'Unknown Status ',
                             ])) :
                             [];
-                        const headers = [
-                          'Application No',
-                          'Name',
-                          'Reason',
-                          'President Sanction',
-                          'Applied By',
-                          'Division',
-                          'Status',
-                        ];
-                        const worksheet = XLSX.utils.json_to_sheet(sheet);
-                        const workbook = XLSX.utils.book_new();
-                        XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet');
-                        XLSX.utils.sheet_add_aoa(worksheet, [headers], { origin: 'A1' });
-                        XLSX.writeFile(workbook, 'ApplicationReport.xlsx', { compression: true });
-                      }}
-                      startIcon={<DownloadIcon />}
-                      color="primary" sx={{ float: 'right', m: 2 }}
-                      variant="contained"
-                    >Export</Button>
-                  )}
-                />
+                          const headers = [
+                            'Application No',
+                            'Name',
+                            'Reason',
+                            'President Sanction',
+                            'Applied By',
+                            'Division',
+                            'Status',
+                          ];
+                          const worksheet = XLSX.utils.json_to_sheet(sheet);
+                          const workbook = XLSX.utils.book_new();
+                          XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet');
+                          XLSX.utils.sheet_add_aoa(worksheet, [headers], { origin: 'A1' });
+                          XLSX.writeFile(workbook, 'ApplicationReport.xlsx', { compression: true });
+                        }}
+                        startIcon={<DownloadIcon />}
+                        color="primary" sx={{ float: 'right', m: 2 }}
+                        variant="contained"
+                      >Export</Button>
+                    )}
+                  />
 
-                <PermissionChecks
-                  permissions={['WRITE_APPLICATION']}
-                  granted={(
-                    <Button
-                      style={{ display: props.action !== 'manage' ? 'none' : '' }}
-                      variant="contained"
-                      sx={{ float: 'right', m: 2 }}
-                      startIcon={<AddIcon />}
-                      onClick={() => {
-                        setShowApplicationFormDialog(true);
-                        setAction('add');
-                        setApplicationFormState({
-                          applicationCode: '',
-                          name: '',
-                          reason: '',
-                          status: '',
-                          attachment: [],
-                        });
-                      }}
-                    >
+                  <PermissionChecks
+                    permissions={['WRITE_APPLICATION']}
+                    granted={(
+                      <Button
+                        style={{ display: props.action !== 'manage' ? 'none' : '' }}
+                        variant="contained"
+                        sx={{ float: 'right', m: 2 }}
+                        startIcon={<AddIcon />}
+                        onClick={() => {
+                          setShowApplicationFormDialog(true);
+                          setAction('add');
+                          setApplicationFormState({
+                            applicationCode: '',
+                            name: '',
+                            reason: '',
+                            status: '',
+                            attachment: [],
+                          });
+                        }}
+                      >
                       Add new
-                    </Button>
-                  )}
-                />
-              </>
+                      </Button>
+                    )}
+                  />
+                </>
+              </Grid>
+              {/* RIGHT - FILTER */}
+              <Grid item xs={12} md={12}>
+                <Box >
+                  <Card elevation={2}>
+                    <CardContent sx={{ p: 1 }}>
+                      <ToggleButtonGroup
+                        exclusive
+                        size="medium"
+                        value={
+                          statusFilter.includes(ApplicationLifeCycleStates.APPROVED) ?
+                            'a2' :
+                            statusFilter.includes(ApplicationLifeCycleStates.REJECTED) ?
+                              '`a3`' :
+                              statusFilter.includes(ApplicationLifeCycleStates.CREATED) ?
+                                'a4' :
+                                statusFilter.includes(ApplicationLifeCycleStates.SENT_TO_PRESIDENT) ?
+                                  'a5' :
+                                  statusFilter.includes(70) ?
+                                    'a6' :
+                                    'a1'
+                        }
+                        onChange={(_, val) => {
+                          if (!val) return;
+                          setStatusFilter(
+                            val === 'a2' ?
+                              [ApplicationLifeCycleStates.APPROVED] :
+                              val === 'a3' ?
+                                [ApplicationLifeCycleStates.REJECTED] :
+                                val === 'a4' ?
+                                  [ApplicationLifeCycleStates.CREATED] :
+                                  val === 'a5' ?
+                                    [ApplicationLifeCycleStates.SENT_TO_PRESIDENT] :
+                                    val === 'a6' ?
+                                      [70] :
+                                      [],
+                          );
+                        }}
+                        sx={{ whiteSpace: 'nowrap' }}
+                      >
+                        <ToggleButton value="a1">All</ToggleButton>
+                        <ToggleButton value="a2">Approved</ToggleButton>
+                        <ToggleButton value="a3">Reject</ToggleButton>
+                        <ToggleButton value="a4">Waiting For Hr</ToggleButton>
+                        <ToggleButton value="a5">Waiting For President</ToggleButton>
+                        <ToggleButton value="a6">Sanctioned</ToggleButton>
+                      </ToggleButtonGroup>
+                    </CardContent>
+                  </Card>
+                </Box>
+              </Grid>
+
             </Grid>
+
+
             <Grid item xs={12} >
               <Card sx={{
                 'height': '66vh', 'width': '100%',
@@ -1179,6 +1339,26 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
         </Card>
 
       </Grid>
+      <Dialog open={Boolean(deleteModel)} onClose={() => setDeleteModel(false)}>
+        <DialogContent>
+          <Typography sx={{ color: 'red' }}>{'Are you sure you want to delete this Application ?'}</Typography>
+        </DialogContent>
+
+        <DialogActions>
+          <Button onClick={()=>setDeleteModel(false)}>Close</Button>
+          <Button
+            endIcon={<Delete />}
+            variant="contained"
+            color="info"
+            onClick={async () => {
+              removeDivisions(statusId);
+            } }
+          >
+                 Delete
+          </Button>
+        </DialogActions>
+
+      </Dialog>
       <Dialog open={reasonDialog} fullWidth maxWidth="md">
         <DialogTitle>Remark</DialogTitle>
         <DialogContent>

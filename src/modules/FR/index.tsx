@@ -23,27 +23,27 @@ const frDashboard = () => {
   const actions = [
     {
       label: 'New FR',
-      color: 'linear-gradient(90deg, #ff6a00, #ff8f00)',
+      color: 'linear-gradient(90deg, #a3fa51, #020957)',
       route: '/fr/apply',
     },
     {
       label: 'New Worker Support',
-      color: 'linear-gradient(90deg, #1d4ed8, #2563eb)',
+      color: 'linear-gradient(90deg, #54fcd2, #041338)',
       route: '/fr/worker_support',
     },
     {
       label: 'New Child Support',
-      color: 'linear-gradient(90deg, #0284c7, #0ea5e9)',
+      color: 'linear-gradient(90deg, #0284c7, #002231)',
       route: '/fr/child_support',
     },
     {
       label: 'New Custom FR',
-      color: 'linear-gradient(90deg, #0a772a, #014404)',
+      color: 'linear-gradient(90deg, #46ff7d, #013003)',
       route: '/fr/applyCustom',
     },
     {
       label: 'New Custom IRO',
-      color: 'linear-gradient(90deg, #750e94, #0ea5e9)',
+      color: 'linear-gradient(90deg, #bf50e0, #3b004d)',
       route: '/iro/applyCustom',
     },
   ];

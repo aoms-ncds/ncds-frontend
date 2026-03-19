@@ -8,6 +8,7 @@ export default {
    * @return {Promise<StandardResponse<number>>} A promise that resolves to the response containing the count of workers.
    */
   getCount: (conditions?: unknown) => getStandardResponse<number>(axios.get('/workers/count', { params: conditions, headers: { ...getAuthHeader() } })),
+  recentActivity: (conditions?: unknown) => getStandardResponse<number>(axios.get('/workers/recentActivity', { params: conditions, headers: { ...getAuthHeader() } })),
 
   /**
    * Creates a new worker.

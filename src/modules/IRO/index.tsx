@@ -80,17 +80,17 @@ const IRODashboard = () => {
     const start = currentFYStartYear - i;
     return `${start}-${String(start + 1).slice(2)}`;
   });
-  useEffect(() => {
-    IROServices.totalAmount({ total: 'sanctioned', year: year }).then((res) => {
-      setTotalSanctionedAmount((res.data as any).totalSanctionedAmount);
-    });
-    IROServices.totalAmount({ total: 'transferred', year: year }).then((res) => {
-      setTotaltransferredAmount((res.data as any).totalTranfferedAmount);
-    });
-    IROServices.totalAmount({ total: 'reconciliation' }).then((res) => {
-      setTotaltransferredTotalAmount((res.data as any).totalTranfferedAmount);
-    });
-  }, [year]);
+  // useEffect(() => {
+  //   IROServices.totalAmount({ total: 'sanctioned', year: year }).then((res) => {
+  //     setTotalSanctionedAmount((res.data as any).totalSanctionedAmount);
+  //   });
+  //   IROServices.totalAmount({ total: 'transferred', year: year }).then((res) => {
+  //     setTotaltransferredAmount((res.data as any).totalTranfferedAmount);
+  //   });
+  //   IROServices.totalAmount({ total: 'reconciliation' }).then((res) => {
+  //     setTotaltransferredTotalAmount((res.data as any).totalTranfferedAmount);
+  //   });
+  // }, [year]);
 
 
   useEffect(() => {
@@ -150,7 +150,7 @@ const IRODashboard = () => {
        setDivisionBasedCount(res.data as number);
      });
 
-    IROServices.getCount({ status: IROLifeCycleStates.IRO_CLOSED })
+    IROServices.getCount({ status: IROLifeCycleStates.IRO_CLOSED, year: year})
       .then((res) => setClosedIROCount(res.data))
       .catch((error) => {
         console.log(error);
@@ -283,7 +283,7 @@ const IRODashboard = () => {
                   flexWrap: 'wrap',
                 }}
               >
-                <Typography variant="h6" fontWeight={600} color="text.primary">
+                <Typography variant="h6" fontWeight={600} color="#060f71">
       Financial Year Summary (Count -Based to FY)
                 </Typography>
 
@@ -422,7 +422,7 @@ const IRODashboard = () => {
             </Grid>
 
             <Grid item xs={12} md={12} xl={12}>
-              <Typography variant="h6" fontWeight={600} color="text.primary">
+              <Typography variant="h6" fontWeight={600} color="#060f71">
                Operational Summary (Amount-Based to FY filters)
                 {/* <Divider /> */}
               </Typography>
@@ -454,7 +454,7 @@ const IRODashboard = () => {
                 }
                 count={pendingRelease?.toString()}
                 onClick={() => navigate(`/iro/manage?id=${5}`)}
-                secondaryText="Rele_Amt. Pending"
+                secondaryText="Rele Amt. Pending"
                 color="#ff0000"
               />
             </Grid>
@@ -519,10 +519,10 @@ const IRODashboard = () => {
               />
             </Grid>
 
-            <Grid item xs={12} md={12} xl={12}>
-              <Typography variant="h6" fontWeight={600} color="text.primary">
+            {/* <Grid item xs={12} md={12} xl={12}>
+              <Typography variant="h6" fontWeight={600} color="#060f71">
                Financial Exposure
-                {/* <Divider /> */}
+               
               </Typography>
             </Grid>
             <Grid item xs={12} md={3} xl={4}>
@@ -570,9 +570,9 @@ const IRODashboard = () => {
                 secondaryText="Pending Reconciliation Amount"
                 color="#68006b"
               />
-            </Grid>
+            </Grid> */}
             <Grid item xs={12} md={12} xl={12}>
-              <Typography variant="h6" fontWeight={600} color="text.primary">
+              <Typography variant="h6" fontWeight={600} color="#060f71">
                Overdue & Compliance
                 {/* <Divider /> */}
               </Typography>
@@ -806,7 +806,7 @@ const IRODashboard = () => {
           background: '#fff',
         }}
       >
-        <Typography variant="h6" fontWeight={600} color="text.primary">
+        <Typography variant="h6" fontWeight={600} color="#060f71">
                 Manage
           {/* <Divider /> */}
         </Typography>

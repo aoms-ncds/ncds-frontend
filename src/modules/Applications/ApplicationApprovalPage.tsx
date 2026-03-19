@@ -91,6 +91,13 @@ const ApplicationApprovalPage = () => {
             <Typography variant="body1" component="h2" align='left'>
               <span style={{ fontWeight: 800 }}>Applied For: </span>  {applications?.appliedFor?? 'N/A'}
             </Typography>
+            {applications?.workersName &&(
+
+              <><br /><Typography variant="body1" component="h2" align='left'>
+                <span style={{ fontWeight: 800 }}>Worker Name: </span>
+                {(((applications?.workersName as any)?.basicDetails?.firstName ?? '') + ((applications?.workersName as any)?.basicDetails?.lastName ?? ''))}
+              </Typography></>
+            )}
             <br />
             <Typography variant="body1" component="h2" align='left'>
               <span style={{ fontWeight: 800 }}>Applicant Name: </span>  {applications?.applicantName?? 'N/A'}
@@ -352,27 +359,27 @@ const ApplicationApprovalPage = () => {
         <DialogContent>
           <Container>
   Download the SanctionLetter
-  <br />
-  {data && (
-    <BlobProvider
-      document={<SanctionLetter data={data} />}
-    >
-      {({ loading, url }) =>
-        loading || openPrintFr ? (
-          <span style={{ color: 'blue' }}>....</span>
-        ) : (
-          <a
-            href={url ?? ''}
-            download="SanctionLetter.pdf"
-            style={{ color: 'blue' }}
-          >
+            <br />
+            {data && (
+              <BlobProvider
+                document={<SanctionLetter data={data} />}
+              >
+                {({ loading, url }) =>
+                  loading || openPrintFr ? (
+                    <span style={{ color: 'blue' }}>....</span>
+                  ) : (
+                    <a
+                      href={url ?? ''}
+                      download="SanctionLetter.pdf"
+                      style={{ color: 'blue' }}
+                    >
             SanctionLetter.pdf
-          </a>
-        )
-      }
-    </BlobProvider>
-  )}
-</Container>
+                    </a>
+                  )
+                }
+              </BlobProvider>
+            )}
+          </Container>
 
         </DialogContent>
         <DialogActions>

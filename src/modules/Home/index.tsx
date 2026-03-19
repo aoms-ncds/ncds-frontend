@@ -36,6 +36,7 @@ const HomePage = () => {
   const [subDivisionsCount, setSubDivisionsCount] = useState<string | null>(null);
   const [subDivisionsCountit, setSubDivisionsCountit] = useState<string | null>(null);
   const [staffsCount, setStaffsCount] = useState<string | null>(null);
+  const [recentActivity, setRecentActivity] = useState<any | null>(null);
   const user = useAuth();
   console.log(divisionsCount, '00909');
   const navigate = useNavigate();
@@ -147,6 +148,10 @@ const HomePage = () => {
     WorkersServices.getCount()
     .then((res) => {
       setWorkersCount(res.data.toString());
+    });
+    WorkersServices.recentActivity()
+    .then((res) => {
+      setRecentActivity(res.data);
     })
     .catch((error) => {
       setWorkersCount('Unable to load!');
@@ -1019,7 +1024,7 @@ Total Sub-Div                          </Typography>
 
                 <Box display="flex" alignItems="center" gap={1}>
                   <Typography fontWeight={600} color="#5a5fcf">
-                    {divisionsCount}
+                    {(Number(divisionsCount) || 0) - (Number(divisionsCountit) || 0)}
                   </Typography>
                   <RampRight fontSize="small" />
                 </Box>
@@ -1106,14 +1111,14 @@ Total Sub-Div                          </Typography>
                   </Box>
 
                   <Typography fontSize={15}>
-                    <b>17</b> New FRs Submitted
+                    <b>{(recentActivity)?.FR}</b> New FRs Submitted
                   </Typography>
                 </Box>
 
                 <Box display="flex" alignItems="center" gap={1}>
-                  <Typography fontSize={13} color="text.secondary">
+                  {/* <Typography fontSize={13} color="text.secondary">
           5m ago
-                  </Typography>
+                  </Typography> */}
                   <RampRight fontSize="small" />
                 </Box>
               </Box>
@@ -1144,14 +1149,14 @@ Total Sub-Div                          </Typography>
                   </Box>
 
                   <Typography fontSize={15}>
-                    <b>5</b> Divisions Added
+                    <b>{(recentActivity)?.IRO}</b> IRO Crated
                   </Typography>
                 </Box>
 
                 <Box display="flex" alignItems="center" gap={1}>
-                  <Typography fontSize={13} color="text.secondary">
+                  {/* <Typography fontSize={13} color="text.secondary">
           15m ago
-                  </Typography>
+                  </Typography> */}
                   <RampRight fontSize="small" />
                 </Box>
               </Box>
@@ -1181,14 +1186,14 @@ Total Sub-Div                          </Typography>
                   </Box>
 
                   <Typography fontSize={15}>
-                    <b>25</b> Sub-Divisions Joined
+                    <b>{recentActivity?.Users}</b> Users Joined
                   </Typography>
                 </Box>
 
                 <Box display="flex" alignItems="center" gap={1}>
-                  <Typography fontSize={13} color="text.secondary">
+                  {/* <Typography fontSize={13} color="text.secondary">
           1h ago
-                  </Typography>
+                  </Typography> */}
                   <RampRight fontSize="small" />
                 </Box>
               </Box>

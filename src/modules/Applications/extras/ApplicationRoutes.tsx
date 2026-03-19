@@ -54,6 +54,13 @@ const applicationRoutes: ModuleRoute = {
       private: true,
       requiredAccessRights: ['PRESIDENT_ACCESS'],
     },
+    {
+      title: 'Welfare',
+      path: '/Welfare',
+      element: <ApplicationsListingPage action={'welfare'} />,
+      private: true,
+      requiredAccessRights: [],
+    },
 
   ],
 };
