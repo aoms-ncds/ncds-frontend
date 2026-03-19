@@ -378,7 +378,7 @@ const NewOfficialDetailsForm = (
       </Grid>
       <Grid item xs={12} md={6} lg={4}>
         {props.options?.kind === 'worker' && <TextField
-          label="Churches Planted"
+          label="Centers Started"
           type={'number'}
           value={props.value.noOfChurches == 0 ? '' : props.value.noOfChurches}
           onChange={(e) =>

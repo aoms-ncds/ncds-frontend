@@ -87,7 +87,6 @@ const LoginPage = () => {
 
   useEffect(() => {
     if (user) {
-      
       navigate('/');
     }
   }, [user]);
@@ -109,7 +108,7 @@ const LoginPage = () => {
           paddingRight: '0',
           paddingBottom: '0',
           paddingTop: '0',
-          backgroundImage: 'url(/loginBg.jpg)',
+          backgroundImage: 'url(/loginBg.jpeg)',
           backgroundSize: 'cover',
           backgroundPosition: 'center center' /* Center the background image */,
           backgroundAttachment: 'fixed',
@@ -134,16 +133,34 @@ const LoginPage = () => {
       >
         {/* <CardContent
         > */}
+        {/* <Typography variant='body1' > molestias maiores debitis repellendus. Deleniti fugit eveniet reiciendis sint enim unde itaque. Voluptates, nostrum.</Typography> */}
         {verifyOTP ? (
-          <Grid container>
+          <Grid container justifyContent="center">
             <Grid item xs={12}>
-              {/* <Grid item xs={12}>
-                <Typography variant="h5" sx={{ textAlign: 'center', color: 'white' }}>
-                  Enter OTP
-                </Typography>
-              </Grid> */}
-              <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <div style={{ borderRadius: '50%', backgroundColor: '#f4f5f4', width: '40px', height: '40px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  p: 2,
+                  borderRadius: 4,
+                  backdropFilter: 'blur(5px)',
+                  background: 'rgba(255,255,255,0.1)',
+                  border: '1px solid rgba(255,255,255,0.2)',
+                  boxShadow: '0 8px 32px rgba(0,0,0,0.2)',
+                }}
+              >
+                {/* 🔙 Back Button */}
+                <Box
+                  sx={{
+                    borderRadius: '50%',
+                    background: 'rgba(255,255,255,0.2)',
+                    width: 40,
+                    height: 40,
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                >
                   <IconButton
                     onClick={() => {
                       setverifyOTP(false);
@@ -152,14 +169,18 @@ const LoginPage = () => {
                         auth_process_id: '',
                       });
                     }}
+                    sx={{ color: '#fff' }}
                   >
                     <ArrowBackIcon />
                   </IconButton>
-                </div>
-                &nbsp; &nbsp;
+                </Box>
+
+      &nbsp;&nbsp;
+
+                {/* 🔢 OTP Input */}
                 <InputBase
-                  type="number"
-                  value={otpRequest.OTP}
+                  type="text"
+                  // inputProps={{ inputMode: 'numeric', maxLength: 4 }} value={otpRequest.OTP}
                   onChange={(e) => {
                     setotpRequest((otpRequest: any) => ({
                       ...otpRequest,
@@ -167,52 +188,76 @@ const LoginPage = () => {
                     }));
                     if (e.target.value.length === 4) {
                       setLoading(true);
-                      /* I know its dumb but since the state update is asynchronous , the request will get send before updating the 4th digit
-                         to the state. 
-                      */
+
                       UserServices.verifyOTP({
                         auth_process_id: otpRequest.auth_process_id,
                         OTP: e.target.value,
                       })
-                        .then((res) => {
-                          console.log(res, 'res');
-                          
-                          setLoading(false);
-                          localStorage.setItem('userToken', res.data.token);
-                          localStorage.setItem('userData', JSON.stringify(res.data.user));
-                          setUser(res.data.user as Staff | IWorker);
-                          console.log(user,'dd');
-                          const urlParams = new URLSearchParams(window.location.search);
-                          subscribe();
-                          const redirectURL = urlParams.get('redirect');
-                          // navigate(redirectURL ?? '/');
-                          navigate('/');
-                        })
-                        .catch((err) => {
-                          console.log(err);
-                          setLoading(false);
-                          if (err.message === 'OTP Expired! Generate a new one!') {
-                            setverifyOTP(false);
-                            setotpRequest({
-                              OTP: '',
-                              auth_process_id: '',
-                            });
-                            setUnknownError(err.message);
-                          }
-                        });
+              .then((res) => {
+                console.log(res, 'res');
+
+                setLoading(false);
+                localStorage.setItem('userToken', res.data.token);
+                localStorage.setItem('userData', JSON.stringify(res.data.user));
+                setUser(res.data.user as Staff | IWorker);
+                console.log(user, 'dd');
+                const urlParams = new URLSearchParams(window.location.search);
+                subscribe();
+                const redirectURL = urlParams.get('redirect');
+                navigate('/');
+              })
+              .catch((err) => {
+                console.log(err);
+                setLoading(false);
+                if (err.message === 'OTP Expired! Generate a new one!') {
+                  setverifyOTP(false);
+                  setotpRequest({
+                    OTP: '',
+                    auth_process_id: '',
+                  });
+                  setUnknownError(err.message);
+                }
+              });
                     }
                   }}
                   placeholder="OTP"
                   sx={{
-                    background: '#f4f5f4',
-                    borderRadius: 50,
-                    padding: 1,
-                    paddingLeft: 4,
-                    latterSpacing: 5,
-                    textAlign: 'center',
-                    fontWeight: 'bold',
+                    'flex': 1,
+                    'borderRadius': 50,
+                    'px': 3,
+                    'py': 1.2,
+                    'background': 'rgba(255,255,255,0.15)',
+                    'backdropFilter': 'blur(10px)',
+
+                    // 🔥 remove white input box
+                    '& input': {
+                      textAlign: 'center',
+                      letterSpacing: '20px',
+                      fontWeight: 'bold',
+                      fontSize: 18,
+                      color: '#fff',
+                      background: 'transparent !important',
+                    },
+
+                    '& input::placeholder': {
+                      color: 'rgba(255,255,255,0.6)',
+                      letterSpacing: '20px',
+                    },
+
+                    '& input:-webkit-autofill': {
+                      WebkitBoxShadow: '0 0 0 100px transparent inset',
+                      WebkitTextFillColor: '#fff',
+                    },
+
+                    // ✨ focus glow
+                    '&:focus-within': {
+                      boxShadow: '0 0 0 2px rgba(255,255,255,0.2)',
+                    },
                   }}
-                  inputProps={{ maxLength: 4, style: { letterSpacing: 40, textAlign: 'center' } }}
+                  inputProps={{
+                    maxLength: 4,
+                    style: { letterSpacing: 20, textAlign: 'center' },
+                  }}
                   disabled={isLoading}
                   fullWidth
                 />
@@ -221,96 +266,187 @@ const LoginPage = () => {
           </Grid>
         ) : (
           <form onSubmit={doLogin}>
-            <Grid container spacing={1}>
-              {/* <Grid item xs={12}>
-              <Typography variant="h5" sx={{ textAlign: 'center' }}>
-                Log in to AOMS
-              </Typography>
-            </Grid> */}
+            <Box
 
-              <Grid item xs={12}>
-                <Box>
-                  <InputBase
-                    value={loginCred.email}
-                    onChange={(e) =>
-                      setLoginCred((loginCred) => ({
-                        ...loginCred,
-                        email: e.target.value,
-                      }))
-                    }
-                    placeholder="Email ID/User Name "
-                    sx={{
-                      background: '#f4f5f4',
-                      borderRadius: 40,
-                      padding: 1.5,
-                      opacity: 0.85,
-                    }}
-                    // disabled={loading}
-                    fullWidth
-                    startAdornment={
-                      <InputAdornment position="start">
-                        <EmailIcon />
-                      </InputAdornment>
-                    }
-                    required
-                  />
-                  {emailError && <Typography sx={{ color: 'red', ml: 5, textAlign: 'left' }}>Please enter a valid email</Typography>}
-                </Box>
-              </Grid>
-              <Grid item xs={12}>
-                <Box>
-                  <InputBase
-                    value={loginCred.password}
-                    onChange={(e) =>
-                      setLoginCred((loginCred) => ({
-                        ...loginCred,
-                        password: e.target.value,
-                      }))
-                    }
-                    placeholder="Password"
-                    type={passwordVisible ? 'text' : 'password'}
-                    sx={{
-                      background: '#f4f5f4',
-                      borderRadius: 40,
-                      padding: 1.5,
-                      opacity: 0.85,
-                    }}
-                    // disabled={loading}
-                    fullWidth
-                    startAdornment={
-                      <InputAdornment position="start">
-                        <KeyIcon />
-                      </InputAdornment>
-                    }
-                    endAdornment={
-                      <InputAdornment position="start">
-                        <IconButton onClick={() => setPasswordVisibility((visible) => !visible)}>{!passwordVisible ? <VisibilityIcon /> : <VisibilityOffIcon />}</IconButton>
-                      </InputAdornment>
-                    }
-                    required
-                  />
-
-                  {passwordError && <Typography sx={{ color: 'red', ml: 5, textAlign: 'left' }}>Please enter a valid password</Typography>}
-                </Box>
-                <br />
-                <br />
-              </Grid>
-              <Grid item xs={12}>
-                <Button
-                  type="submit"
-                  variant="contained"
-                  sx={{ p: 1, backgroundColor: 'gray', borderRadius: 40 }}
-                  disabled={isLoading}
-                  startIcon={isLoading && <CircularProgress size={20} />}
-                  fullWidth
+            >
+              <Box
+                sx={{
+                  flexWrap: 'wrap', // responsive for small screens
+                  width: 350,
+                  p: 4,
+                  borderRadius: 4,
+                  backdropFilter: 'blur(5px)',
+                  background: 'rgba(255,255,255,0.1)',
+                  border: '1px solid rgba(255,255,255,0.2)',
+                  boxShadow: '0 8px 32px rgba(0,0,0,0.2)',
+                  color: '#fff',
+                }}
+              >
+                {/* 🔹 Small Header */}
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: 1.5,
+                    flexWrap: 'wrap', // responsive for small screens
+                    textAlign: 'center',
+                  }}
                 >
-                  {isLoading ? 'Login in...' : 'LOG IN'}
-                </Button>
-                <Button variant="text" sx={{ float: 'right', fontSize: 10, marginTop: 2, color: 'white' }} component={Link} to="/users/reset_password_form">
-                  Reset Password?
-                </Button>
-              </Grid>
-            </Grid>
+                  <Box
+                    component="img"
+                    src="/favicon.ico"
+                    alt="logo"
+                    sx={{
+                      width: { xs: 30, sm: 40, md: 60 },
+                      height: { xs: 30, sm: 40, md: 60 },
+                    }}
+                  />
+
+                  <Typography
+                    variant="body1"
+                    sx={{
+                      fontWeight: 600,
+                      letterSpacing: 1,
+                      fontSize: { xs: 12, sm: 14, md: 16 },
+                    }}
+                  >
+    NAVJEEVAN COMMUNITY DEVELOPMENT SOCIETY
+                  </Typography>
+                </Box>
+                <Typography
+                  variant="h5"
+                  sx={{
+                    textAlign: 'center',
+                    fontWeight: 600,
+                    mb: 3,
+                    letterSpacing: 1,
+                  }}
+                >
+      NCDS LOGIN
+                </Typography>
+
+                <Grid container spacing={2}>
+                  {/* Email */}
+                  <Grid item xs={12}>
+                    <InputBase
+                      value={loginCred.email}
+                      onChange={(e) =>
+                        setLoginCred((prev) => ({
+                          ...prev,
+                          email: e.target.value,
+                        }))
+                      }
+                      placeholder="Email / Username"
+                      fullWidth
+                      startAdornment={
+                        <InputAdornment position="start">
+                          <EmailIcon sx={{ color: '#fff' }} />
+                        </InputAdornment>
+                      }
+                      sx={{
+                        background: 'rgba(255,255,255,0.15)',
+                        borderRadius: 40,
+                        px: 2,
+                        py: 1.2,
+                        color: '#fff',
+                        backdropFilter: 'blur(10px)',
+                      }}
+                    />
+                    {emailError && (
+                      <Typography sx={{ color: '#ff6b6b', mt: 1, fontSize: 12 }}>
+            Please enter a valid email
+                      </Typography>
+                    )}
+                  </Grid>
+
+                  {/* Password */}
+                  <Grid item xs={12}>
+                    <InputBase
+                      value={loginCred.password}
+                      onChange={(e) =>
+                        setLoginCred((prev) => ({
+                          ...prev,
+                          password: e.target.value,
+                        }))
+                      }
+                      placeholder="Password"
+                      type={passwordVisible ? 'text' : 'password'}
+                      fullWidth
+                      startAdornment={
+                        <InputAdornment position="start">
+                          <KeyIcon sx={{ color: '#fff' }} />
+                        </InputAdornment>
+                      }
+                      endAdornment={
+                        <InputAdornment position="end">
+                          <IconButton
+                            onClick={() =>
+                              setPasswordVisibility((visible) => !visible)
+                            }
+                            sx={{ color: '#fff' }}
+                          >
+                            {passwordVisible ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                          </IconButton>
+                        </InputAdornment>
+                      }
+                      sx={{
+                        background: 'rgba(255,255,255,0.15)',
+                        borderRadius: 40,
+                        px: 2,
+                        py: 1.2,
+                        color: '#fff',
+                        backdropFilter: 'blur(10px)',
+                      }}
+                    />
+                    {passwordError && (
+                      <Typography sx={{ color: '#ff6b6b', mt: 1, fontSize: 12 }}>
+            Please enter a valid password
+                      </Typography>
+                    )}
+                  </Grid>
+
+                  {/* Button */}
+                  <Grid item xs={12}>
+                    <Button
+                      type="submit"
+                      fullWidth
+                      variant="contained"
+                      disabled={isLoading}
+                      startIcon={isLoading && <CircularProgress size={20} />}
+                      sx={{
+                        'mt': 1,
+                        'borderRadius': 40,
+                        'py': 1,
+                        'background': 'linear-gradient(135deg, #ffffff, #dcdcff)',
+                        'color': '#3B32E6',
+                        'fontWeight': 600,
+                        '&:hover': {
+                          background: '#fff',
+                        },
+                      }}
+                    >
+                      {isLoading ? 'Logging in...' : 'LOG IN'}
+                    </Button>
+
+                    <Button
+                      variant="text"
+                      sx={{
+                        float: 'right',
+                        fontSize: 11,
+                        mt: 1,
+                        color: '#fff',
+                        textTransform: 'none',
+                      }}
+                      component={Link}
+                      to="/users/reset_password_form"
+                    >
+          Reset Password?
+                    </Button>
+                  </Grid>
+                </Grid>
+              </Box>
+            </Box>
           </form>
         )}
 

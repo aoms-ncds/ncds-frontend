@@ -53,7 +53,7 @@ const divisionsPageRoutes: ModuleRoute = {
       icon: <RequestPageOutlinedIcon />,
     },
     {
-      title: 'Apply New FR',
+      title: 'Create New FR',
       path: '/apply',
       element: <FRFormPage action="add" />,
       private: true,
@@ -61,7 +61,7 @@ const divisionsPageRoutes: ModuleRoute = {
       icon: <RequestPageOutlinedIcon />,
     },
     {
-      title: 'Apply Custom FR',
+      title: 'Create Custom FR',
       path: '/applyCustom',
       element: <FRFormPage action="custom" />,
       private: true,

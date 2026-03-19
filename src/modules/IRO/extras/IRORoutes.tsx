@@ -91,7 +91,7 @@ const iroPageRoutes: ModuleRoute = {
       requiredAccessRights: ['READ_IRO'],
     },
     {
-      title: 'Apply Custom IRO',
+      title: 'Create Custom IRO',
       path: '/applyCustom',
       element: <FRFormPage action="customIRO" />,
       private: true,

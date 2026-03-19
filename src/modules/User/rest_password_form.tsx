@@ -65,7 +65,7 @@ const ResetPasswordFormPage = () => {
           paddingRight: '0',
           paddingBottom: '0',
           paddingTop: '0',
-          backgroundImage: 'url(/loginBg.jpg)',
+          backgroundImage: 'url(/loginBg.jpeg)',
           backgroundSize: 'cover',
           backgroundPosition: 'center center' /* Center the background image */,
           backgroundAttachment: 'fixed',

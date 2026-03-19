@@ -248,7 +248,7 @@ const FRFormPage = (props: FRFormPageProps) => {
     <CommonPageLayout
       title={
         props.action === 'add' ?
-          'Apply New FR' :
+          'Create New FR' :
           props.action === 'edit' ?
             'Edit FR' :
             props.action === 'customIRO' ?
