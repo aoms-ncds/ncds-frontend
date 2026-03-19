@@ -203,7 +203,7 @@ const MinimalModuleDataAnalytics = () => {
           </Grid>} />
           <PermissionChecks permissions={['READ_WORKERS']} granted={<Grid item xs={6} md={3} xl={4}>
             <DashBoardCard icon={<img src="/mod_icons/workers.png" alt="Logo" style={{ width: '70px', height: '70px' }} />}
-              secondaryText=" Workers" count={workersCount?.toString()} color={'#fff'} targetRoute="/workers/" />
+              secondaryText=" Associates" count={workersCount?.toString()} color={'#fff'} targetRoute="/workers/" />
           </Grid>} />
         </>
       }

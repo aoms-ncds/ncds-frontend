@@ -277,7 +277,7 @@ const DivisionsList = (arg: any) => {
       align: 'center',
       headerClassName: 'super-app-theme--cell',
       headerAlign: 'center',
-      renderHeader: () => (<b>No. of Workers</b>),
+      renderHeader: () => (<b>No. of Associates</b>),
 
       valueGetter: (props:any) => props.row.totalWorkers ?? 0,
       width: 130,

@@ -537,7 +537,7 @@ console.log(props.options?.showEditButton, '090');
                         ]);
 
                         const headers = [
-                          'Workers Code',
+                          'Associates Code',
                           'First Name',
                           'Last Name',
                           'Division',
@@ -627,7 +627,7 @@ console.log(props.options?.showEditButton, '090');
                           ]) :
                           [];
                         const headers = [
-                          'Workers Code',
+                          'Associates Code',
                           'First Name',
                           'Last Name',
                           'Division',

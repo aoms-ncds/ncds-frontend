@@ -1180,7 +1180,7 @@ const WorkerSupportPage = () => {
   }));
 
   return (
-    <CommonPageLayout title="Workers Support">
+    <CommonPageLayout title="Associates Support">
       <Card sx={{
         width: {
           xs: '8%', // mobile

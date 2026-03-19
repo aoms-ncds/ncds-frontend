@@ -273,7 +273,7 @@ const HomePage = () => {
                   <Typography
                     sx={{ fontSize: 14, color: 'text.secondary', fontWeight: 500 }}
                   >
-            Workers
+            Associates
                   </Typography>
 
                   <Typography

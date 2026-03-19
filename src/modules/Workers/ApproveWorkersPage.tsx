@@ -256,7 +256,7 @@ const ApproveWorkerPage = () => {
                   ]) :
                   [];
                 const headers = [
-                  'Workers Code',
+                  'Associates Code',
                   'First Name',
                   'Last Name',
                   'Division',

@@ -10,7 +10,7 @@ const workersPageRoutes: ModuleRoute = {
   base: '/workers',
   pages: [
     {
-      title: 'Workers',
+      title: 'Associates',
       path: '/',
       element: <WorkersDashboard />,
       private: true,
@@ -20,7 +20,7 @@ const workersPageRoutes: ModuleRoute = {
       icon: <img src="/mod_icons/workers.png" alt="Logo" style={{ width: '30px', height: '30px' }} />,
     },
     {
-      title: 'Manage Workers',
+      title: 'Manage Associates',
       path: '/manage',
       element: <ManageWorkerPage />,
       private: true,
@@ -34,7 +34,7 @@ const workersPageRoutes: ModuleRoute = {
       requiredAccessRights: ['WRITE_WORKERS'],
     },
     {
-      title: 'Approve Workers',
+      title: 'Approve Associates',
       path: '/approve',
       element: <ApproveWorkerPage />,
       private: true,
@@ -62,21 +62,21 @@ const workersPageRoutes: ModuleRoute = {
     //   requiredAccessRights: ['READ_ACCESS'],
     // },
     {
-      title: 'In Process Workers',
+      title: 'In Process Associates',
       path: '/reject',
       element: <SendBackWorkersPage />,
       private: true,
       requiredAccessRights: ['WRITE_WORKERS'],
     },
     {
-      title: 'Deactivated Workers',
+      title: 'Deactivated Associates',
       path: '/deactivated',
       element: <DeactivatedWorkersPage />,
       private: true,
       requiredAccessRights: ['READ_WORKERS'],
     },
     {
-      title: 'Disapprove Workers',
+      title: 'Disapprove Associates',
       path: '/disapprove',
       element: <DisapproveWorkersPage />,
       private: true,
