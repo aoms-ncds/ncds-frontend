@@ -1,6 +1,5 @@
 {
   "projects": {
-    "default": "pro910-iet",
-    "staging": "pro910-iet-staging"
+    "default": "ncds-production"
   }
 }
