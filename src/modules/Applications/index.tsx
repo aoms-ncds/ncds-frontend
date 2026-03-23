@@ -22,6 +22,8 @@ const APPDashboard = () => {
   const [applicationsPresident, setApplicationsPresident] = useState<number|null >(null);
   const [applicationsApprove, setApplicationsApprove] = useState<number|null >(null);
   const [applicationsReject, setApplicationsReject] = useState<number|null >(null);
+  const [applicationsRevertDiv, setApplicationsRevertDiv] = useState<number|null >(null);
+  const [applicationsRevert, setApplicationsRevert] = useState<number|null >(null);
 
   const auth :any = useAuth();
   useEffect(() => {
@@ -50,6 +52,11 @@ const APPDashboard = () => {
       .catch((error) => {
         console.log(error);
       });
+    ApplicationServices.getCountByDiv({ status: [ApplicationLifeCycleStates.REVERT_TO_DIVISION, ApplicationLifeCycleStates.REVERT_TO_HR]})
+      .then((res) =>setApplicationRejectedCount(res.data))
+      .catch((error) => {
+        console.log(error);
+      });
     ApplicationServices.getCount({ status: UserLifeCycleStates.CREATED })
       .then((res) => {
         setApplications(res.data);
@@ -70,6 +77,14 @@ const APPDashboard = () => {
       .then((res) => {
         setApplicationsReject(res.data);
       });
+    ApplicationServices.getCount({
+      status: [
+        ApplicationLifeCycleStates.REVERT_TO_DIVISION,
+        ApplicationLifeCycleStates.REVERT_TO_HR,
+      ],
+    }).then((res) => {
+      setApplicationsRevert(res.data);
+    });
     ApplicationServices.getAll()
       .then((res) => {
         setApplicationsWelfare(res.data.filter((res)=>res.name =='For Welfare Help').length);
@@ -146,6 +161,17 @@ const APPDashboard = () => {
 
           )}
         </Grid>
+        <Grid item xs={6} md={3} xl={3}>
+          {(hasPermissions(['MANAGE_APPLICATION'])) ?(
+            <FRCountCard icon={<img src="/mod_icons/Rejected.png" alt="Logo"
+              style={{ width: '50px', height: '50px' }} />} count={applicationsRevert?.toString()} secondaryText={'Reverted'} color={'#00ff88'} />
+
+          ):(
+            <FRCountCard icon={<img src="/mod_icons/Rejected.png" alt="Logo"
+              style={{ width: '50px', height: '50px' }} />} count={applicationsRevertDiv?.toString()} secondaryText={'Reverted'} color={'#cf00f8'} />
+
+          )}
+        </Grid>
       </Grid>
       <br />
       <Card
@@ -178,10 +204,28 @@ const APPDashboard = () => {
                   <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '50px', height: '50px' }} />} primaryText="Application Approval President" color='#fff' secondaryText="" targetRoute="/application/president_approve" />
                 </Grid>)} />
             <PermissionChecks
-              permissions={['PRESIDENT_ACCESS']}
+              permissions={[]}
               granted={(
                 <Grid item xs={12} md={4} xl={3}>
                   <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '50px', height: '50px' }} />} primaryText="New Welfare Application" color='#fff' secondaryText="" targetRoute="/application/Welfare" />
+                </Grid>)} />
+            <PermissionChecks
+              permissions={[]}
+              granted={(
+                <Grid item xs={12} md={4} xl={3}>
+                  <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '50px', height: '50px' }} />} primaryText="Reverted Applications" color='#fff' secondaryText="" targetRoute="/application/allRevert" />
+                </Grid>)} />
+            <PermissionChecks
+              permissions={[]}
+              granted={(
+                <Grid item xs={12} md={4} xl={3}>
+                  <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '50px', height: '50px' }} />} primaryText="Reverted To Division" color='#fff' secondaryText="" targetRoute="/application/revertToDivision" />
+                </Grid>)} />
+            <PermissionChecks
+              permissions={[]}
+              granted={(
+                <Grid item xs={12} md={4} xl={3}>
+                  <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '50px', height: '50px' }} />} primaryText="Reverted To Hr" color='#fff' secondaryText="" targetRoute="/application/revertToHr" />
                 </Grid>)} />
           </Grid>
         </CardContent>

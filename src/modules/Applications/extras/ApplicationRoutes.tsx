@@ -61,6 +61,27 @@ const applicationRoutes: ModuleRoute = {
       private: true,
       requiredAccessRights: [],
     },
+    {
+      title: 'RevertToHr',
+      path: '/revertToHr',
+      element: <ApplicationsListingPage action={'revertHr'} />,
+      private: true,
+      requiredAccessRights: [],
+    },
+    {
+      title: 'RevertToDivision',
+      path: '/revertToDivision',
+      element: <ApplicationsListingPage action={'revertDivision'} />,
+      private: true,
+      requiredAccessRights: [],
+    },
+    {
+      title: 'allRevert',
+      path: '/allRevert',
+      element: <ApplicationsListingPage action={'allRevert'} />,
+      private: true,
+      requiredAccessRights: [],
+    },
 
   ],
 };

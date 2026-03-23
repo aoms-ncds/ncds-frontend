@@ -14,6 +14,8 @@ import ApplicationLifeCycleStates from './extras/ApplicationLifCyclrStates';
 import ApplicationNamesService from '../Settings/extras/ApplicationNamesService';
 import { BlobProvider, PDFDownloadLink } from '@react-pdf/renderer';
 import SanctionLetter from './components/authLatter';
+import FileUploaderServices from '../../components/FileUploader/extras/FileUploaderServices';
+import { AttachmentOutlined } from '@mui/icons-material';
 const dataaa = {
   approvalDate: '2025-03-27',
   coordinatorName: 'Jessen S. Philip',
@@ -28,11 +30,15 @@ const ApplicationApprovalPage = () => {
   const navigate = useNavigate();
   const [reasonForDeactivation, setReasonForDeactivation] = useState<IReason | null | string>();
   const [reasonDialog, setReasonDialog] = useState(false);
+  const [reasonRevertDialog, setReasonRevertDialog] = useState(false);
+  const [reasonRevertHRDialog, setReasonRevertHRDialog] = useState(false);
   const [applications, setApplications] = useState<Application >();
   const [applicationsNames, setApplicationsNames] = useState<any >(null);
   const [open, setOpen] = useState(false);
   const [data, setData] = useState<Application| null>();
   const [openPrintFr, setOpenPrintFr] = useState(false);
+  const [resasonForRevert, setResonForRevert] = useState('');
+  const [showFileUploader, setShowFileUploader] = useState<boolean>(false);
 
   useEffect(() => {
     if (!applicationID) {
@@ -186,6 +192,15 @@ const ApplicationApprovalPage = () => {
 
                   View File
               </Button>
+              &nbsp;
+              {Number(applications?.status) == ApplicationLifeCycleStates.REVERT_TO_DIVISION|| Number(applications?.status) == ApplicationLifeCycleStates.REVERT_TO_HR &&(
+
+                <Grid item md={6} pt={2}>
+                  <Button component="span" variant="contained" onClick={() => setShowFileUploader(true)} startIcon={<AttachmentOutlined />}>
+                    Attachments
+                  </Button>
+                </Grid>
+              )}
             </Typography>
 
           </CardContent>
@@ -207,6 +222,30 @@ const ApplicationApprovalPage = () => {
                     >
             Reject
                     </Button>
+                    {Number(applications?.status) ==ApplicationLifeCycleStates.CREATED &&(
+
+                      <Button
+                        variant="contained"
+                        color="info"
+                        onClick={() => {
+                          setReasonRevertDialog(true);
+                        }}
+                      >
+            Revert To Division
+                      </Button>
+                    )}
+                    {Number(applications?.status) ==ApplicationLifeCycleStates.SENT_TO_PRESIDENT &&(
+                      <Button
+                        variant="contained"
+                        color="info"
+                        onClick={() => {
+                          setReasonRevertHRDialog(true);
+                        }}
+                      >
+            Revert To Hr
+                      </Button>
+
+                    )}
                     <Button
                       variant="contained"
                       color="success"
@@ -354,6 +393,215 @@ const ApplicationApprovalPage = () => {
           </Button>
         </DialogActions>
       </Dialog>
+      <Dialog open={reasonRevertDialog} fullWidth maxWidth="md">
+        <DialogTitle>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      Reason For Revert
+            <Button
+              variant="contained"
+              onClick={() => {
+                setReasonRevertDialog(false);
+              }}
+              sx={{
+                'position': 'absolute',
+                'top': 8,
+                'right': 8,
+                'minWidth': 'auto',
+                'padding': '0.1rem',
+                'backgroundColor': 'red',
+                '&:hover': {
+                  backgroundColor: 'darkred',
+                },
+              }}
+            >
+              <CloseIcon sx={{ color: 'white' }} />
+            </Button>
+          </Box>
+        </DialogTitle>
+
+        <DialogContent>
+          <TextField
+            value={reasonForDeactivation}
+            onChange={(e) => setResonForRevert(e.target.value)}
+            label="Reason for Revert"
+            required
+            fullWidth
+          />
+        </DialogContent>
+
+        <DialogActions>
+          {/* <Button
+            variant="contained"
+            onClick={() => {
+              setReasonDialog(false);
+            }}
+            sx={{ mx: '1rem', py: 1.7, height: 50, background: 'red' }}
+          >
+            <CloseIcon sx={{ color: 'white' }} />
+          </Button> */}
+
+          <Button
+            variant="contained"
+            onClick={() => {
+              const snackbarId = enqueueSnackbar({
+                message: 'Rejecting...',
+                variant: 'info',
+              });
+
+              navigate('/application/manage');
+              ApplicationServices.revertToDivision(applicationID as string, resasonForRevert as string)
+          .then((res) => {
+            closeSnackbar(snackbarId);
+            enqueueSnackbar({
+              message: res.message,
+              variant: 'success',
+            });
+          })
+          .catch((err) => {
+            closeSnackbar(snackbarId);
+            enqueueSnackbar({
+              message: err.message,
+              variant: 'error',
+            });
+          });
+
+              setReasonDialog(false);
+            }}
+            sx={{ mx: '1rem', py: 1.7, height: 50, background: 'green' }}
+          >
+      Submit
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog open={reasonRevertHRDialog} fullWidth maxWidth="md">
+        <DialogTitle>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      Reason For Revert
+            <Button
+              variant="contained"
+              onClick={() => {
+                setReasonRevertHRDialog(false);
+              }}
+              sx={{
+                'position': 'absolute',
+                'top': 8,
+                'right': 8,
+                'minWidth': 'auto',
+                'padding': '0.1rem',
+                'backgroundColor': 'red',
+                '&:hover': {
+                  backgroundColor: 'darkred',
+                },
+              }}
+            >
+              <CloseIcon sx={{ color: 'white' }} />
+            </Button>
+          </Box>
+        </DialogTitle>
+
+        <DialogContent>
+          <TextField
+            value={reasonForDeactivation}
+            onChange={(e) => setResonForRevert(e.target.value)}
+            label="Reason for Revert"
+            required
+            fullWidth
+          />
+        </DialogContent>
+
+        <DialogActions>
+          {/* <Button
+            variant="contained"
+            onClick={() => {
+              setReasonDialog(false);
+            }}
+            sx={{ mx: '1rem', py: 1.7, height: 50, background: 'red' }}
+          >
+            <CloseIcon sx={{ color: 'white' }} />
+          </Button> */}
+
+          <Button
+            variant="contained"
+            onClick={() => {
+              const snackbarId = enqueueSnackbar({
+                message: 'Rejecting...',
+                variant: 'info',
+              });
+
+              navigate('/application/manage');
+              ApplicationServices.revertToHr(applicationID as string, resasonForRevert as string)
+          .then((res) => {
+            closeSnackbar(snackbarId);
+            enqueueSnackbar({
+              message: res.message,
+              variant: 'success',
+            });
+          })
+          .catch((err) => {
+            closeSnackbar(snackbarId);
+            enqueueSnackbar({
+              message: err.message,
+              variant: 'error',
+            });
+          });
+
+              setReasonDialog(false);
+            }}
+            sx={{ mx: '1rem', py: 1.7, height: 50, background: 'green' }}
+          >
+      Submit
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <FileUploader
+        title="Attachments"
+        action='add'
+        types={[
+          'application/pdf',
+          'image/png',
+          'image/jpeg',
+          'image/jpg',
+
+        ]}
+        limits={{
+          // types: [],
+          maxItemSize: 1 * MB,
+          maxItemCount: 3,
+          maxTotalSize: 3 * MB,
+        }}
+        // accept={['video/*']}
+        open={showFileUploader}
+        onClose={() => setShowFileUploader(false)}
+        // getFiles={TestServices.getBills}
+        getFiles={applications?.attachment?? []}
+        uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
+          const resp = FileUploaderServices.uploadFile(file, onProgress, 'Applications', file.name)
+                  .then((res) => {
+                    setApplications((applications:any) => ({
+                      ...applications,
+                      attachment: [...applications.attachment, res.data],
+                    }));
+                    return res;
+                  });
+          return resp;
+        }}
+        renameFile={(fileId: string, newName: string) => {
+          setApplications((applications:any) => ({
+            ...applications,
+            attachment: applications.attachment.map((file: { _id: string }) =>
+              file._id === fileId ? { ...file, filename: newName } : file,
+            ),
+          }));
+          return FileUploaderServices.renameFile(fileId, newName);
+        }}
+        deleteFile={(fileId: string) => {
+          setApplications((applications:any) => ({
+            ...applications,
+            attachment: applications.attachment.filter((file: { _id: string }) => file._id !== fileId),
+          }));
+          return FileUploaderServices.deleteFile(fileId);
+        }}
+      />
       <Dialog open={Boolean(data)} onClose={() => setData(null)} maxWidth="xs" fullWidth>
         <DialogTitle> Print Sanction Letter</DialogTitle>
         <DialogContent>

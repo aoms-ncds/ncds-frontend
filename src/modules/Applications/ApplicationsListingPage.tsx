@@ -32,7 +32,7 @@ import formatAmount from '../Common/formatcode';
 import WorkersServices from '../Workers/extras/WorkersServices';
 
 
-const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' |'welfare'}) => {
+const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' |'welfare'| 'revertHr' | 'revertDivision'| 'allRevert'}) => {
   const [applications, setApplications] = useState<Application[] | null>(null);
   const [action, setAction] = useState<'add' | 'edit'>('add');
   const [showApplicationFormDialog, setShowApplicationFormDialog] = useState<boolean>(false);
@@ -323,6 +323,39 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
             variant: 'error',
           });
         });
+    } else if (props.action == 'revertHr') {
+      ApplicationServices.getAll({ dateRange: dateRange, status: ApplicationLifeCycleStates.REVERT_TO_HR })
+        .then((res) => {
+          setApplications(res.data);
+        })
+        .catch((error) => {
+          enqueueSnackbar({
+            message: error.message,
+            variant: 'error',
+          });
+        });
+    } else if (props.action == 'allRevert') {
+      ApplicationServices.getAll({ dateRange: dateRange, status: [ApplicationLifeCycleStates.REVERT_TO_DIVISION, ApplicationLifeCycleStates.REVERT_TO_HR]})
+        .then((res) => {
+          setApplications(res.data);
+        })
+        .catch((error) => {
+          enqueueSnackbar({
+            message: error.message,
+            variant: 'error',
+          });
+        });
+    } else if (props.action == 'revertDivision') {
+      ApplicationServices.getAll({ dateRange: dateRange, status: [ApplicationLifeCycleStates.REVERT_TO_DIVISION]})
+        .then((res) => {
+          setApplications(res.data);
+        })
+        .catch((error) => {
+          enqueueSnackbar({
+            message: error.message,
+            variant: 'error',
+          });
+        });
     } else {
       ApplicationServices.getAll({ dateRange: dateRange, statusFilter: statusFilter })
         .then((res) => {
@@ -483,6 +516,16 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
             setShowApplicationFormDialog(true);
           }}
         />,
+        // <GridLinkAction
+        //   key={2}
+        //   label="Revert to Division"
+        //   icon={<EditIcon />}
+        //   showInMenu
+        //   onClick={() => {
+        //     setRemarkDialog(true);
+        //     setEditId(params.id as string);
+        //   }}
+        // />,
         <GridLinkAction
           key={2}
           label="Add Remark"
@@ -601,7 +644,9 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
         return params.value == CommonLifeCycleStates.CREATED ? 'WAITING FOR HR' :
           params.value == CommonLifeCycleStates.APPROVED ? 'APPROVED' :
             params.value == ApplicationLifeCycleStates.SENT_TO_PRESIDENT ? 'WAITING FOR PRESIDENT':
-              params.value == CommonLifeCycleStates.REJECTED ? 'REJECTED' : 'Unknown Status ';
+              params.value == ApplicationLifeCycleStates.REVERT_TO_DIVISION ? 'REVERTED TO DIVISION':
+                params.value == ApplicationLifeCycleStates.REVERT_TO_HR ? 'REVERTED TO HR':
+                  params.value == CommonLifeCycleStates.REJECTED ? 'REJECTED' : 'Unknown Status ';
       },
       cellClassName: (params) => {
         console.log('CellClassName params:', params);
@@ -619,6 +664,10 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
           return clsx('red');
         case 'WAITING FOR HR':
           return clsx('HR');
+        case 'REVERTED TO DIVISION':
+          return clsx('RevertDivision');
+        case 'REVERTED TO HR':
+          return clsx('HRRevert');
         default:
           console.log('No class applied');
           return '';
@@ -677,6 +726,22 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
           WebkitLineClamp: 3,
         }}>
           {params.row?.applicantName}
+        </p>),
+      width: 250,
+    },
+    {
+      field: 'revertReason', align: 'center', headerClassName: 'super-app-theme--header',
+      headerAlign: 'center', renderHeader: () => (<b>Reason For Revert</b>),
+      renderCell: (params) => (
+        <p style={{
+          maxWidth: 250,
+          whiteSpace: 'normal',
+          wordBreak: 'break-word',
+          display: '-webkit-box',
+          WebkitBoxOrient: 'vertical',
+          WebkitLineClamp: 3,
+        }}>
+          {(params.row as any)?.reasonForRevert}
         </p>),
       width: 250,
     },
@@ -1020,6 +1085,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                       fullWidth />
                   </Grid></>
                 )}
+               
 
                 <Grid item md={12}>
                   <TextField
@@ -1321,6 +1387,16 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                     },
                     '& .HR': {
                       backgroundColor: '#3b32e6',
+                      color: '#fff',
+                      fontWeight: '600',
+                    },
+                    '& .HRRevert': {
+                      backgroundColor: '#c323f3',
+                      color: '#fff',
+                      fontWeight: '600',
+                    },
+                    '& .RevertDivision': {
+                      backgroundColor: '#003764',
                       color: '#fff',
                       fontWeight: '600',
                     },
