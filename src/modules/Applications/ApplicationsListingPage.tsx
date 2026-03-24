@@ -313,7 +313,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
           });
         });
     } else if (props.action == 'welfare') {
-      ApplicationServices.getAll({ dateRange: dateRange })
+      ApplicationServices.getAll({ dateRange: dateRange, status: ApplicationLifeCycleStates.CREATED })
         .then((res) => {
           setApplications(res.data.filter((res)=>res.name =='For Welfare Help'));
         })
@@ -480,6 +480,36 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
         });
       });
   };
+  const ApproveApplication = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const snackbarId = enqueueSnackbar({
+      message: 'Updating Request',
+      variant: 'info',
+    });
+
+    ApplicationServices.editApplication( editid as any, applicationFormState)
+              .then((res) => {
+                if (applications) {
+                  // const filteredApplications = applications?.filter((application) => {
+                  //   return application._id !== params.id;
+                  // });
+                  // setApplications(filteredApplications);
+                  window.location.reload();
+                }
+                closeSnackbar(snackbarId);
+                enqueueSnackbar({
+                  message: res.message,
+                  variant: 'success',
+                });
+              })
+              .catch((err) => {
+                closeSnackbar(snackbarId);
+                enqueueSnackbar({
+                  message: err.message,
+                  variant: 'error',
+                });
+              });
+  };
 
   const columns: GridColDef<Application>[] = [
     {
@@ -503,6 +533,40 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
         //     setShowApplicationFormDialog(true);
         //   }}
         // />,
+
+        Number(params.row.status) === ApplicationLifeCycleStates.REVERT_TO_DIVISION &&
+          <GridLinkAction
+            key="edit"
+            label="Edit"
+            icon={<EditIcon />}
+            showInMenu
+            onClick={() => {
+              setEditId(params.id as string);
+              setAction('edit');
+
+              ApplicationServices.getById(params.row._id)
+        .then((res) => setApplicationFormState(res.data));
+
+              setShowApplicationFormDialog(true);
+            }}
+          />,
+        Number(params.row.status) === ApplicationLifeCycleStates.REVERT_TO_HR &&
+          <GridLinkAction
+            key="edit"
+            label="Edit"
+            icon={<EditIcon />}
+            showInMenu
+            onClick={() => {
+              setEditId(params.id as string);
+              setAction('edit');
+
+              ApplicationServices.getById(params.row._id)
+        .then((res) => setApplicationFormState(res.data));
+
+              setShowApplicationFormDialog(true);
+            }}
+          />,
+
         showLinkAction && params.row.status == ApplicationLifeCycleStates.APPROVED && hasPermissions(['ADMIN_ACCESS']) && <GridLinkAction
           key={2}
           label="Edit for admin"
@@ -516,6 +580,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
             setShowApplicationFormDialog(true);
           }}
         />,
+
         // <GridLinkAction
         //   key={2}
         //   label="Revert to Division"
@@ -536,6 +601,8 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
             setEditId(params.id as string);
           }}
         />,
+
+
         (props.action == 'hr' || props.action == 'president') && (hasPermissions(['MANAGE_APPLICATION']) || hasPermissions(['PRESIDENT_ACCESS'])) &&
         <GridLinkAction
           key={3}
@@ -954,7 +1021,8 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
   X
           </Typography>
         </Grid> */}
-        <form onSubmit={action === 'add' ? AddApplication : EditApplication}>
+        <form onSubmit={action === 'add' ? AddApplication: Number(applicationFormState.status)==ApplicationLifeCycleStates.REVERT_TO_DIVISION ||
+          Number(applicationFormState.status)==ApplicationLifeCycleStates.REVERT_TO_DIVISION ? ApproveApplication: EditApplication}>
           <DialogTitle>{action === 'add' ? 'Create New Application' : 'Edit  Application:'}</DialogTitle>
           <DialogContent>
             <Container>
@@ -1085,7 +1153,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                       fullWidth />
                   </Grid></>
                 )}
-               
+
 
                 <Grid item md={12}>
                   <TextField
@@ -1114,9 +1182,12 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
           </DialogContent>
           <DialogActions>
             <Grid item md={6}>
-              <Button variant="contained" sx={{ backgroundColor: 'orange' }} onClick={() => {
-                if (applicationFormState.name !=''&& applicationFormState.appliedFor!='') {
-                  ApplicationServices.sentToPresident(applicationFormState)
+              {Number(applicationFormState.status) !== ApplicationLifeCycleStates.REVERT_TO_HR &&(
+
+                <Button variant="contained" sx={{ backgroundColor: 'orange' }} onClick={() => {
+                  if (applicationFormState.name !=''&& applicationFormState.appliedFor!='') {
+                    if (Number(applicationFormState.status) == ApplicationLifeCycleStates.REVERT_TO_DIVISION) {
+                      ApplicationServices.active(editid as any)
                        .then((res) => {
                          // handleClose();
                          window.location.reload();
@@ -1127,20 +1198,36 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                            variant: 'success',
                          });
                        });
-                } else {
-                  enqueueSnackbar({
-                    message: 'Enter Required Fields',
-                    variant: 'info',
-                  });
-                }
-              }}>
+                    } else {
+                      ApplicationServices.sentToPresident(applicationFormState)
+                         .then((res) => {
+                           // handleClose();
+                           window.location.reload();
+                           // closeSnackbar(snackbarId);
+                           setShowApplicationFormDialog(false);
+                           enqueueSnackbar({
+                             message: res.message,
+                             variant: 'success',
+                           });
+                         });
+                    }
+                  } else {
+                    enqueueSnackbar({
+                      message: 'Enter Required Fields',
+                      variant: 'info',
+                    });
+                  }
+                }}>
                     Send to president
-              </Button>
+                </Button>
+              )}
             </Grid>
             {/* <Button onClick={() => setShowApplicationFormDialog(false)}>Cancel</Button> */}
             <Grid item md={6}>
 
-              <Button variant="contained" sx={{ backgroundColor: 'blue' }} type="submit">{action === 'add' ? 'Send to Hr' : 'Edit'}</Button>
+              <Button variant="contained" sx={{ backgroundColor: 'blue' }} type="submit">{action === 'add' ?
+                'Send to Hr' : Number(applicationFormState.status) == ApplicationLifeCycleStates.REVERT_TO_DIVISION ||
+                Number(applicationFormState.status) == ApplicationLifeCycleStates.REVERT_TO_HR? 'Submit': 'Edit'}</Button>
             </Grid>
           </DialogActions>
         </form>
@@ -1282,55 +1369,58 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                 </>
               </Grid>
               {/* RIGHT - FILTER */}
-              <Grid item xs={12} md={12}>
-                <Box >
-                  <Card elevation={2}>
-                    <CardContent sx={{ p: 1 }}>
-                      <ToggleButtonGroup
-                        exclusive
-                        size="medium"
-                        value={
-                          statusFilter.includes(ApplicationLifeCycleStates.APPROVED) ?
-                            'a2' :
-                            statusFilter.includes(ApplicationLifeCycleStates.REJECTED) ?
-                              '`a3`' :
-                              statusFilter.includes(ApplicationLifeCycleStates.CREATED) ?
-                                'a4' :
-                                statusFilter.includes(ApplicationLifeCycleStates.SENT_TO_PRESIDENT) ?
-                                  'a5' :
-                                  statusFilter.includes(70) ?
-                                    'a6' :
-                                    'a1'
-                        }
-                        onChange={(_, val) => {
-                          if (!val) return;
-                          setStatusFilter(
-                            val === 'a2' ?
-                              [ApplicationLifeCycleStates.APPROVED] :
-                              val === 'a3' ?
-                                [ApplicationLifeCycleStates.REJECTED] :
-                                val === 'a4' ?
-                                  [ApplicationLifeCycleStates.CREATED] :
-                                  val === 'a5' ?
-                                    [ApplicationLifeCycleStates.SENT_TO_PRESIDENT] :
-                                    val === 'a6' ?
-                                      [70] :
-                                      [],
-                          );
-                        }}
-                        sx={{ whiteSpace: 'nowrap' }}
-                      >
-                        <ToggleButton value="a1">All</ToggleButton>
-                        <ToggleButton value="a2">Approved</ToggleButton>
-                        <ToggleButton value="a3">Reject</ToggleButton>
-                        <ToggleButton value="a4">Waiting For Hr</ToggleButton>
-                        <ToggleButton value="a5">Waiting For President</ToggleButton>
-                        <ToggleButton value="a6">Sanctioned</ToggleButton>
-                      </ToggleButtonGroup>
-                    </CardContent>
-                  </Card>
-                </Box>
-              </Grid>
+              {props.action =='manage' &&(
+
+                <Grid item xs={12} md={12}>
+                  <Box >
+                    <Card elevation={2}>
+                      <CardContent sx={{ p: 1 }}>
+                        <ToggleButtonGroup
+                          exclusive
+                          size="medium"
+                          value={
+                            statusFilter.includes(ApplicationLifeCycleStates.APPROVED) ?
+                              'a2' :
+                              statusFilter.includes(ApplicationLifeCycleStates.REJECTED) ?
+                                '`a3`' :
+                                statusFilter.includes(ApplicationLifeCycleStates.CREATED) ?
+                                  'a4' :
+                                  statusFilter.includes(ApplicationLifeCycleStates.SENT_TO_PRESIDENT) ?
+                                    'a5' :
+                                    statusFilter.includes(70) ?
+                                      'a6' :
+                                      'a1'
+                          }
+                          onChange={(_, val) => {
+                            if (!val) return;
+                            setStatusFilter(
+                              val === 'a2' ?
+                                [ApplicationLifeCycleStates.APPROVED] :
+                                val === 'a3' ?
+                                  [ApplicationLifeCycleStates.REJECTED] :
+                                  val === 'a4' ?
+                                    [ApplicationLifeCycleStates.CREATED] :
+                                    val === 'a5' ?
+                                      [ApplicationLifeCycleStates.SENT_TO_PRESIDENT] :
+                                      val === 'a6' ?
+                                        [70] :
+                                        [],
+                            );
+                          }}
+                          sx={{ whiteSpace: 'nowrap' }}
+                        >
+                          <ToggleButton value="a1">All</ToggleButton>
+                          <ToggleButton value="a2">Approved</ToggleButton>
+                          <ToggleButton value="a3">Reject</ToggleButton>
+                          <ToggleButton value="a4">Waiting For Hr</ToggleButton>
+                          <ToggleButton value="a5">Waiting For President</ToggleButton>
+                          <ToggleButton value="a6">Sanctioned</ToggleButton>
+                        </ToggleButtonGroup>
+                      </CardContent>
+                    </Card>
+                  </Box>
+                </Grid>
+              )}
 
             </Grid>
 

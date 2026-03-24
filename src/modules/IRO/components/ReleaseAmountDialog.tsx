@@ -486,7 +486,7 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
               <Grid item xs={12} md={6}>
                 <TextField
                   label="Amount Transferred"
-                  type="tel"
+                  type="number"
                   value={releaseAmount?.transferredAmount ==0 ? releaseAmount?.releaseAmount: releaseAmount?.transferredAmount }
                   onChange={(e) =>
                     Number(e.target.value) <= (releaseAmount.releaseAmount ?? 0) &&

@@ -85,9 +85,9 @@ const APPDashboard = () => {
     }).then((res) => {
       setApplicationsRevert(res.data);
     });
-    ApplicationServices.getAll()
+    ApplicationServices.countWelfare()
       .then((res) => {
-        setApplicationsWelfare(res.data.filter((res)=>res.name =='For Welfare Help').length);
+        setApplicationsWelfare(res.data);
       });
   }, []);
   return (
@@ -225,7 +225,7 @@ const APPDashboard = () => {
               permissions={[]}
               granted={(
                 <Grid item xs={12} md={4} xl={3}>
-                  <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '50px', height: '50px' }} />} primaryText="Reverted To Hr" color='#fff' secondaryText="" targetRoute="/application/revertToHr" />
+                  <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '50px', height: '50px' }} />} primaryText="Reverted To HR" color='#fff' secondaryText="" targetRoute="/application/revertToHr" />
                 </Grid>)} />
           </Grid>
         </CardContent>
