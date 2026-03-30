@@ -1257,7 +1257,7 @@ Save
                 <TextField
                   label="Adjusted Amount"
                   type="number"
-                  value={rowData?.details?.adjustedAmount&& rowData?.details?.adjustedAmount- newAdjustedAmt||0} // ✅ use state only
+                  value={rowData?.details?.adjustedAmount&& rowData?.details?.adjustedAmount- (newAdjustedAmt as any)||0} // ✅ use state only
                   required
                   autoComplete="off"
                   variant="outlined"

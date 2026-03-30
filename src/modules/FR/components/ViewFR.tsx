@@ -429,6 +429,54 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
 
                 </>
               ) : null}
+              {props.value.purpose === 'Subdivision' || props.value.purpose === 'Division' ? (
+                <>
+                  <Grid item xs={12} md={6}>
+                    <Autocomplete
+                      value={(props.value.workerName as unknown as IWorker) ?? null}
+                      options={[]}
+                      getOptionLabel={(worker) => `${worker.basicDetails.firstName} ${worker.basicDetails.middleName ?? ''} ${worker.basicDetails.lastName}`}
+                      onChange={(_e, selectedWorker) => {
+                        if (selectedWorker && props.action !== 'view') {
+                          props.onChange({
+                            ...props.value,
+                            workerName: selectedWorker as any,
+                          });
+                        }
+                      }}
+                      renderInput={(params) => <TextField {...params} label="Choose Worker" />}
+                      fullWidth
+                    // disabled
+                    />
+                  </Grid>
+                  <Grid item xs={12} md={6}>
+                    <TextField
+                      label="Worker Code"
+                      value={(props.value.workerName as any)?.kind === 'staff' ? (props.value.workerName as Staff | undefined)?.staffCode : (props.value.workerName as unknown as IWorker)?.workerCode}
+                      fullWidth
+                      disabled
+                      sx={{
+                        '& .MuiInputBase-input.Mui-disabled': {
+                          WebkitTextFillColor: '#000', // text color
+                          color: '#000',
+                          opacity: 1,
+                        },
+                        '& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline': {
+                          borderColor: '#c4c4c4', // normal border color
+                        },
+                        '& .MuiInputLabel-root.Mui-disabled': {
+                          color: 'rgba(0,0,0,0.6)',
+                        },
+                      }}
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                    />
+                  </Grid>
+
+
+                </>
+              ) : null}
               {props.value.purpose === 'Subdivision' ? (
                 <><Grid item xs={12} md={6}>
                   <Autocomplete

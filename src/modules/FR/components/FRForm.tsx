@@ -651,6 +651,39 @@ const FRForm = (props: FormComponentProps<any>) => {
                   </Grid>
                 </>
               ) : null}
+              {props.value.purpose === 'Division' ||props.value.purpose === 'Subdivision' ? (
+                <>
+                  <Grid item xs={12} md={6}>
+                    <Autocomplete<IWorker | Staff>
+                      value={props.value.workerName ?? null}
+                      options={(props.action == 'add' ? workers : Allworkers) ?? []}
+                      getOptionLabel={(workers) => `${workers?.basicDetails.firstName} ${workers?.basicDetails.middleName ?? ''} ${workers.basicDetails.lastName}`}
+                      onChange={(_e, selectedWorker) => {
+                        if (selectedWorker && props.action !== 'view') {
+                          props.onChange({
+                            ...props.value,
+                            workerName: selectedWorker,
+                          });
+                        }
+                      }}
+                      renderInput={(params) => <TextField {...params} label="Choose Worker" required />}
+                      fullWidth
+                      disabled={props.disable}
+                    />
+                  </Grid>
+                  <Grid item xs={12} md={6}>
+                    <TextField
+                      label="Worker Code"
+                      value={props.value.workerName?.kind === 'staff' ? (props.value.workerName as Staff | undefined)?.staffCode : (props.value.workerName as unknown as IWorker)?.workerCode}
+                      fullWidth
+                      disabled
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                    />
+                  </Grid>
+                </>
+              ) : null}
               {props.action === 'custom' || props.action === 'customIRO' ||props.action === 'customEdit' ? (
                 <Grid item xs={12} md={6}>
                   {/* <Tooltip open={isFocused?true:false}

@@ -2405,7 +2405,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
               {/* CONTENT */}
               <Box sx={{ mt: 2 }}>
                 <Typography fontSize={14} mb={1}>
-                  <b>FR No:</b> {selectedIROData?.IROno}
+                  <b>IRO No:</b> {selectedIROData?.IROno}
                 </Typography>
 
                 {/* REVERT REASON */}
@@ -2476,7 +2476,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                           color: '#1976D2',
                         }}
                       >
-                        {(selectedIROData as any)?.revertedBy || 'Admin'}
+                        {(selectedIROData as any)?.revertedBy || ''}
                       </Typography>
                     </Box>
 
@@ -2489,7 +2489,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                         mt: 1,
                       }}
                     >
-      ℹ️ Info: Resubmit the FR within 3 days
+      ℹ️ Info: Resubmit the IRO within 3 days
                     </Typography>
                   </Box>
                 )}

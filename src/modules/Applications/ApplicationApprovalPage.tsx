@@ -211,41 +211,6 @@ const ApplicationApprovalPage = () => {
                 permissions={['MANAGE_APPLICATION', 'PRESIDENT_ACCESS']}
                 granted={(
                   <>
-
-                    <Button
-                      variant="contained"
-                      color="error"
-                      sx={{ ml: 'auto' }}
-                      onClick={() => {
-                        setReasonDialog(true);
-                      }}
-                    >
-            Reject
-                    </Button>
-                    {Number(applications?.status) ==ApplicationLifeCycleStates.CREATED &&(
-
-                      <Button
-                        variant="contained"
-                        color="info"
-                        onClick={() => {
-                          setReasonRevertDialog(true);
-                        }}
-                      >
-            Revert To Division
-                      </Button>
-                    )}
-                    {Number(applications?.status) ==ApplicationLifeCycleStates.SENT_TO_PRESIDENT &&(
-                      <Button
-                        variant="contained"
-                        color="info"
-                        onClick={() => {
-                          setReasonRevertHRDialog(true);
-                        }}
-                      >
-            Revert To Hr
-                      </Button>
-
-                    )}
                     <Button
                       variant="contained"
                       color="success"
@@ -284,6 +249,43 @@ const ApplicationApprovalPage = () => {
                     >
             Approve
                     </Button>
+
+                    {Number(applications?.status) ==ApplicationLifeCycleStates.SENT_TO_PRESIDENT &&(
+                      <Button
+                        variant="contained"
+                        color="info"
+                        onClick={() => {
+                          setReasonRevertHRDialog(true);
+                        }}
+                      >
+            Revert To Hr
+                      </Button>
+
+                    )}
+
+
+                    <Button
+                      variant="contained"
+                      color="error"
+                      sx={{ ml: 'auto' }}
+                      onClick={() => {
+                        setReasonDialog(true);
+                      }}
+                    >
+            Reject
+                    </Button>
+                    {Number(applications?.status) ==ApplicationLifeCycleStates.CREATED &&(
+
+                      <Button
+                        variant="contained"
+                        color="info"
+                        onClick={() => {
+                          setReasonRevertDialog(true);
+                        }}
+                      >
+            Revert To Division
+                      </Button>
+                    )}
                   </>
                 )}
               />

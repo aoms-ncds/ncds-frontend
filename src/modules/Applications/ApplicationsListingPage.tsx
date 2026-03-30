@@ -8,7 +8,7 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import CloseIcon from '@mui/icons-material/Close';
 import DoneIcon from '@mui/icons-material/Done';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import { Autocomplete, Box, Button, Card, CardContent, Container, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
+import { Autocomplete, Box, Button, Card, CardContent, Container, Dialog, DialogActions, DialogContent, DialogTitle, Grid, MenuItem, TextField, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
 import { DataGrid, GridColDef, GridRowParams } from '@mui/x-data-grid';
 import ApplicationServices from './extras/ApplicationServices';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
@@ -241,7 +241,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
     },
     attachment: [],
   });
-  console.log(workers, 'ui99');
+  console.log(applicationFormState, 'ui99');
 
   const [reason, setReason] = useState<IReason[]>([]);
   const [reasonForDeactivation, setReasonForDeactivation] = useState<IReason | null | string>();
@@ -393,7 +393,9 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
     });
   }, [dateRange, statusFilter]);
   console.log(applicationFormState, '787');
-
+  const selectedWorker = workers?.find(
+    (w) => w._id === ((applicationFormState.workersName as any)?._id || applicationFormState.workersName),
+  ) || null;
   const EditApplication = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (editid) {
@@ -638,7 +640,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
               });
           }}
         />,
-        props.action == 'hr' && hasPermissions(['MANAGE_APPLICATION']) &&
+        (props.action == 'hr' || props.action == 'welfare') && hasPermissions(['MANAGE_APPLICATION']) &&
         <GridLinkAction
           key={3}
           label="Sent to president"
@@ -760,6 +762,10 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
         </p>), width: 150,
     },
     {
+      field: 'name', align: 'center', headerClassName: 'super-app-theme--header',
+      headerAlign: 'center', renderHeader: () => (<b>Application Name</b>), width: 150,
+    },
+    {
       field: 'createdBy',
       headerClassName: 'super-app-theme--header',
       headerAlign: 'center',
@@ -781,38 +787,6 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
       ].join(' ').trim(),
     },
     {
-      field: 'applicantName', align: 'center', headerClassName: 'super-app-theme--header',
-      headerAlign: 'center', renderHeader: () => (<b>Applicant Name</b>),
-      renderCell: (params) => (
-        <p style={{
-          maxWidth: 250,
-          whiteSpace: 'normal',
-          wordBreak: 'break-word',
-          display: '-webkit-box',
-          WebkitBoxOrient: 'vertical',
-          WebkitLineClamp: 3,
-        }}>
-          {params.row?.applicantName}
-        </p>),
-      width: 250,
-    },
-    {
-      field: 'revertReason', align: 'center', headerClassName: 'super-app-theme--header',
-      headerAlign: 'center', renderHeader: () => (<b>Reason For Revert</b>),
-      renderCell: (params) => (
-        <p style={{
-          maxWidth: 250,
-          whiteSpace: 'normal',
-          wordBreak: 'break-word',
-          display: '-webkit-box',
-          WebkitBoxOrient: 'vertical',
-          WebkitLineClamp: 3,
-        }}>
-          {(params.row as any)?.reasonForRevert}
-        </p>),
-      width: 250,
-    },
-    {
       field: 'appliedFor', align: 'center', headerClassName: 'super-app-theme--header',
       headerAlign: 'center', renderHeader: () => (<b>Applied For</b>),
       renderCell: (params) => (
@@ -828,6 +802,23 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
         </p>),
       width: 250,
     },
+    {
+      field: 'applicantName', align: 'center', headerClassName: 'super-app-theme--header',
+      headerAlign: 'center', renderHeader: () => (<b>Applicant Name</b>),
+      renderCell: (params) => (
+        <p style={{
+          maxWidth: 250,
+          whiteSpace: 'normal',
+          wordBreak: 'break-word',
+          display: '-webkit-box',
+          WebkitBoxOrient: 'vertical',
+          WebkitLineClamp: 3,
+        }}>
+          {params.row?.applicantName}
+        </p>),
+      width: 250,
+    },
+
 
     {
       field: 'requestedAmount', align: 'center', headerClassName: 'super-app-theme--header',
@@ -861,24 +852,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
         </p>),
       width: 250,
     },
-    {
-      field: 'coorName', align: 'center', headerClassName: 'super-app-theme--header',
-      headerAlign: 'center', renderHeader: () => (<b>Coordinator Name</b>), renderCell: (params) => (
-        <p style={{
-          maxWidth: 250,
-          whiteSpace: 'normal',
-          wordBreak: 'break-word',
-          display: '-webkit-box',
-          WebkitBoxOrient: 'vertical',
-          WebkitLineClamp: 3,
-        }}>
-          {(params.row as any)?.coordinatorName?.basicDetails?.firstName} {(params.row as any)?.coordinatorName?.basicDetails?.lastName}
-        </p>), width: 150,
-    },
-    {
-      field: 'name', align: 'center', headerClassName: 'super-app-theme--header',
-      headerAlign: 'center', renderHeader: () => (<b>Name</b>), width: 150,
-    },
+
     // {
     //   field: 'reason', align: 'center', headerClassName: 'super-app-theme--header',
     //   headerAlign: 'center', renderHeader: () => (<b>Remark</b>),
@@ -971,25 +945,54 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
     },
 
 
-    {
-      field: 'division',
-      headerClassName: 'super-app-theme--header',
-      headerAlign: 'center',
-      align: 'center',
-      renderHeader: () => (<b>Division</b>),
-      renderCell: (props) => (
-        <p>{props.row.division?.details?.name || ''}</p>
-      ),
-      width: 170,
-      // Adding valueGetter for filter compatibility
-      valueGetter: (props) => props.row.division?.details?.name || '',
-    },
+    // {
+    //   field: 'division',
+    //   headerClassName: 'super-app-theme--header',
+    //   headerAlign: 'center',
+    //   align: 'center',
+    //   renderHeader: () => (<b>Division</b>),
+    //   renderCell: (props) => (
+    //     <p>{props.row.division?.details?.name || ''}</p>
+    //   ),
+    //   width: 170,
+    //   // Adding valueGetter for filter compatibility
+    //   valueGetter: (props) => props.row.division?.details?.name || '',
+    // },
     {
       field: 'remark', headerClassName: 'super-app-theme--header', renderHeader: () => (<b>Addn. Remark</b>), renderCell: (props) =>
         <p> {props.row?.remark?? 'N/A'}</p>,
       width: 250, headerAlign: 'center', align: 'center',
     },
-
+    {
+      field: 'revertReason', align: 'center', headerClassName: 'super-app-theme--header',
+      headerAlign: 'center', renderHeader: () => (<b>Reason For Revert</b>),
+      renderCell: (params) => (
+        <p style={{
+          maxWidth: 250,
+          whiteSpace: 'normal',
+          wordBreak: 'break-word',
+          display: '-webkit-box',
+          WebkitBoxOrient: 'vertical',
+          WebkitLineClamp: 3,
+        }}>
+          {(params.row as any)?.reasonForRevert}
+        </p>),
+      width: 250,
+    },
+    {
+      field: 'coorName', align: 'center', headerClassName: 'super-app-theme--header',
+      headerAlign: 'center', renderHeader: () => (<b>Coordinator Name</b>), renderCell: (params) => (
+        <p style={{
+          maxWidth: 250,
+          whiteSpace: 'normal',
+          wordBreak: 'break-word',
+          display: '-webkit-box',
+          WebkitBoxOrient: 'vertical',
+          WebkitLineClamp: 3,
+        }}>
+          {(params.row as any)?.coordinatorName?.basicDetails?.firstName} {(params.row as any)?.coordinatorName?.basicDetails?.lastName}
+        </p>), width: 150,
+    },
     // {
     //   field: 'reasonForDeactivation', headerClassName: 'super-app-theme--header', renderHeader: () => (<b>Reason For Reject</b>), renderCell: (props) =>
     //     <p> {props.row.reasonForDeactivation?? 'N/A'}</p>,
@@ -1069,40 +1072,66 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                 </Grid>
                 {applicationFormState.appliedFor =='Worker' &&(
 
-                  <><Grid item xs={12} md={12}>
-                    <Autocomplete
-                      options={workers as any || []}
+                  <>
+                    {/* 1. WORKER SELECTION */}
+                    <Grid item xs={12} md={12}>
+                      <Typography variant="body2" sx={{ color: '#666', mb: 0.5 }}>
+        Choose Worker *
+                      </Typography>
+                      <Autocomplete
+                        fullWidth
+                        options={workers || []}
+                        // Matches the label style from your images
+                        getOptionLabel={(worker) =>
+                          worker?.basicDetails ?
+                            `${worker.basicDetails.firstName} ${worker.basicDetails.lastName} (${worker.staffCode || worker.workerCode || ''})` :
+                            ''
+                        }
+                        // Ensures the field is never empty in Edit OR Add mode
+                        value={selectedWorker}
+                        isOptionEqualToValue={(option, value) => option._id === value?._id}
+                        onChange={(_e, newValue) => {
+                          setApplicationFormState((prev) => ({
+                            ...prev,
+                            // Save the ID to keep the state light for the backend
+                            workersName: newValue?._id || '',
+                          }));
+                        }}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            placeholder="Select a worker..."
+                            required
+                            sx={{
+                              '& .MuiOutlinedInput-root': {
+                                'borderRadius': '8px', // Matching Image 2 style
+                                'backgroundColor': '#fff',
+                                '& fieldset': { borderColor: '#e0e0e0' },
+                              },
+                            }}
+                          />
+                        )}
+                      />
+                    </Grid>
 
-                      getOptionLabel={(w) => `${w?.basicDetails?.firstName || ''} ${w?.basicDetails?.middleName || ''} ${w?.basicDetails?.lastName || ''}`}
-
-                      value={workers?.find(
-                        (w) => w._id === applicationFormState.workersName,
-                      ) || null}
-
-                      isOptionEqualToValue={(option, value) => option._id === value._id}
-
-                      onChange={(_e, selectedWorker) => {
-                        setApplicationFormState((prev: any) => ({
-                          ...prev,
-                          workersName: selectedWorker?._id || '',
-                        }));
-                      } }
-
-                      renderInput={(params) => (
-                        <TextField {...params} label="Choose Worker" required />
-                      )}
-
-                      fullWidth />
-                  </Grid><Grid item xs={12} md={12}>
-                    <TextField
-                      label="Worker Code"
-                      value={(workers?.find(
-                        (res) => String(res._id) === String(((applicationFormState.workersName))))?.workerCode ??
-                          (workers?.find((res) => String(res._id) === String(((applicationFormState.workersName)))) as any)?.staffCode) || ''}
-                      fullWidth
-                      disabled
-                      InputLabelProps={{ shrink: true }} />
-                  </Grid></>
+                    {/* 2. AUTOMATIC WORKER CODE (READ ONLY) */}
+                    <Grid item xs={12} md={12}>
+                      <TextField
+                        label="Worker Code"
+                        // Uses the helper variable 'selectedWorker' to find the code easily
+                        value={selectedWorker?.staffCode || selectedWorker?.workerCode || ''}
+                        fullWidth
+                        disabled
+                        InputLabelProps={{ shrink: true }}
+                        sx={{
+                          '& .MuiInputBase-root': {
+                            backgroundColor: '#f5f5f5', // Visual cue that it's disabled
+                            borderRadius: '8px',
+                          },
+                        }}
+                      />
+                    </Grid>
+                  </>
                 )}
                 <Grid item md={12}>
                   <TextField label="Applicant Name" value={applicationFormState.applicantName}
@@ -1494,9 +1523,16 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                 >
 
 
-                  <DataGrid rows={filteredRows ?? []} columns={columns} getRowId={(row) => row._id} loading={applications === null} getRowClassName={(params) =>
-                    params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
-                  } />
+                  <DataGrid rows={filteredRows ?? []} columns={columns} getRowId={(row) => row._id} loading={applications === null}
+                    getRowClassName={(params) => {
+                      console.log('looh88', params.row.presidentSanction);
+
+                      if (params.row.presidentSanction == true) {
+                        return 'special-sanction'; // Class for rows with special sanction
+                      }
+                      return params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'; // Default classes
+                    }}
+                  />
                 </Box>
               </Card>
             </Grid>

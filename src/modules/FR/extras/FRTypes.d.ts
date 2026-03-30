@@ -10,6 +10,7 @@ declare global {
     // requestAmount: string;
     disable?:boolean;
     IRO?: string;
+    workerName?: FileObject;
     reasonForSentBack?:string;
     reasonForReject?:string;
     designationParticular?:string;

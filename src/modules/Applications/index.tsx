@@ -24,6 +24,8 @@ const APPDashboard = () => {
   const [applicationsReject, setApplicationsReject] = useState<number|null >(null);
   const [applicationsRevertDiv, setApplicationsRevertDiv] = useState<number|null >(null);
   const [applicationsRevert, setApplicationsRevert] = useState<number|null >(null);
+  const [applicationsRevertHr, setApplicationsRevertHr] = useState<number|null >(null);
+  const [applicationsRevertHrDiv, setApplicationsRevertHrDiv] = useState<number|null >(null);
 
   const auth :any = useAuth();
   useEffect(() => {
@@ -52,14 +54,23 @@ const APPDashboard = () => {
       .catch((error) => {
         console.log(error);
       });
-    ApplicationServices.getCountByDiv({ status: [ApplicationLifeCycleStates.REVERT_TO_DIVISION, ApplicationLifeCycleStates.REVERT_TO_HR]})
-      .then((res) =>setApplicationRejectedCount(res.data))
+    ApplicationServices.getCountByDiv({ status: ApplicationLifeCycleStates.REVERT_TO_DIVISION })
+      .then((res) =>setApplicationsRevertDiv(res.data))
+      .catch((error) => {
+        console.log(error);
+      });
+    ApplicationServices.getCountByDiv({ status: ApplicationLifeCycleStates.REVERT_TO_HR })
+      .then((res) =>setApplicationsRevertHrDiv(res.data))
       .catch((error) => {
         console.log(error);
       });
     ApplicationServices.getCount({ status: UserLifeCycleStates.CREATED })
       .then((res) => {
         setApplications(res.data);
+      });
+    ApplicationServices.getCount({ status: ApplicationLifeCycleStates.REVERT_TO_HR })
+      .then((res) => {
+        setApplicationsRevertHr(res.data);
       });
     ApplicationServices.getCount()
       .then((res) => {
@@ -78,12 +89,18 @@ const APPDashboard = () => {
         setApplicationsReject(res.data);
       });
     ApplicationServices.getCount({
-      status: [
+      status:
         ApplicationLifeCycleStates.REVERT_TO_DIVISION,
-        ApplicationLifeCycleStates.REVERT_TO_HR,
-      ],
+
     }).then((res) => {
       setApplicationsRevert(res.data);
+    });
+    ApplicationServices.getCount({
+      status:
+        ApplicationLifeCycleStates.REVERT_TO_HR,
+
+    }).then((res) => {
+      setApplicationsRevertHr(res.data);
     });
     ApplicationServices.countWelfare()
       .then((res) => {
@@ -169,6 +186,17 @@ const APPDashboard = () => {
           ):(
             <FRCountCard icon={<img src="/mod_icons/Rejected.png" alt="Logo"
               style={{ width: '50px', height: '50px' }} />} count={applicationsRevertDiv?.toString()} secondaryText={'Reverted'} color={'#cf00f8'} />
+
+          )}
+        </Grid>
+        <Grid item xs={6} md={3} xl={3}>
+          {(hasPermissions(['MANAGE_APPLICATION'])) ?(
+            <FRCountCard icon={<img src="/mod_icons/Rejected.png" alt="Logo"
+              style={{ width: '50px', height: '50px' }} />} count={applicationsRevertHr?.toString()} secondaryText={'Reverted Div.'} color={'#00ff88'} />
+
+          ):(
+            <FRCountCard icon={<img src="/mod_icons/Rejected.png" alt="Logo"
+              style={{ width: '50px', height: '50px' }} />} count={setApplicationsRevertHrDiv?.toString()} secondaryText={'Reverted Div.'} color={'#cf00f8'} />
 
           )}
         </Grid>
