@@ -174,6 +174,18 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
           />
         </FormControl>
       </Grid>
+      <Grid item xs={12} md={6} lg={4}>
+        <FormControl variant="outlined" fullWidth>
+          <TextField
+            label=" Adjusted Amount"
+            value={props.value.adjustedAmount}
+            onChange={(e) => props.onChange({ ...props.value, adjustedAmount: Number(e.target.value) })}
+            fullWidth
+            InputLabelProps={{ shrink: true }}
+            disabled={props.action == 'view'}
+          />
+        </FormControl>
+      </Grid>
       <Grid item xs={12} md={4}>
         <FormControlLabel
           label="IET's Division"

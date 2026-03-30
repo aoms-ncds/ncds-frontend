@@ -40,6 +40,7 @@ declare global {
   }
   interface DivisionDetails {
     name: string;
+    adjustedAmount?: number;
     isIT?: boolean;
 
     // _id?: string;

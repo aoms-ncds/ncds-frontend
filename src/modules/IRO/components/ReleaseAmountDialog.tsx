@@ -1,3 +1,4 @@
+/* eslint-disable brace-style */
 /* eslint-disable @typescript-eslint/naming-convention */
 import { Autocomplete, Button, Checkbox, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControlLabel, Grid, TextField, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
@@ -15,6 +16,7 @@ import PaymentMethodService from '../../Settings/extras/PaymentMethodService';
 import { IPaymentMethod } from '../../Settings/extras/LanguageTypes';
 import DropdownButton from '../../../components/DropDownButton';
 import formatAmount from '../../Common/formatcode';
+import DivisionsServices from '../../Divisions/extras/DivisionsServices';
 
 // import FileUploader from '../../components/FileUploader/FileUploader';
 // import FileUploaderServices from '../../components/FileUploader/extras/FileUploaderServices';
@@ -37,6 +39,12 @@ interface optioinalBank{
 }
 const ReleaseAmount = (props: ReleaseDialogProps) => {
   const [iroStatus, setIroStatus] = useState(false);
+  const [openAdjustedAmt, setOpenAdjustedAmt] = useState(false);
+  const [newAdjustedAmt, setNewAdjustedAmt] = useState<number|null>(0);
+  const [AdjustedAmt, setAdjustedAmt] = useState<number|null>(null);
+  const [rowData, setRoaData] = useState<Division>();
+  console.log(rowData, 'rowData');
+
   const [open, setOpen] = React.useState(false);
   const [paymnetMethod, setPaymentMethod] = useState<IPaymentMethod[]>([]);
   const [releaseAmount, setReleaseAmount] = useState<IReleaseAmount>({
@@ -84,6 +92,10 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
   // eslint-disable-next-line prefer-const
   saveReleaseAmount = (e: { preventDefault: () => void }) => {// TODO: on release datagrid should updated
     e.preventDefault();
+
+    rowData&& DivisionsServices.editDivision(rowData?._id as any, rowData).then((res)=>{
+      setOpenAdjustedAmt(false);
+    });
     props.onClose();
     const approvalSnack = enqueueSnackbar({ message: 'Releasing Amount ', variant: 'info' });
 
@@ -101,6 +113,9 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
       closeSnackbar(approvalSnack);
     }, 500);
   };
+
+  const originalAdjustedAmount =
+  (rowData as any)?.details.adjustedAmount || 0;
 
 
   // }else{
@@ -299,6 +314,18 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
                 console.log(params.row.FR, '89854');
 
                 window.open( `/fr/${(params.row as any).FR}/view`, '_blank');
+              },
+
+            },
+            {
+              id: 'adjustAmt',
+              text: 'Adjusted Amount',
+              // icon: PreviewIcon,
+              // component: Link,
+              // to: `/fr/${(params.row as any).FR}/view`,
+              onClick: () => {
+                setOpenAdjustedAmt(true);
+                setRoaData(params.row.division);
               },
 
             },
@@ -1066,6 +1093,7 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
             ) : null}
           </DialogActions>
         </form>
+
         <Dialog open={openTransferDialog} onClose={() => setOpenTransferDialog(false)}>
 
           <DialogTitle>Enter Transferred Amount</DialogTitle>
@@ -1189,6 +1217,113 @@ Save
           return FileUploaderServices.deleteFile(fileId);
         }}
       /> */}
+      <Dialog
+        open={openAdjustedAmt}
+        // onClose={handleClose}
+        // PaperComponent={PaperComponent}
+        aria-labelledby="draggable-dialog-title"
+        // sx={{ width: '30%', textAlign: 'center' }}
+      >
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            // DivisionsServices.editDivision(rowData?._id as any, rowData).then((res)=>{
+            setOpenAdjustedAmt(false);
+            setRoaData((prev:any) => ({
+              ...prev,
+              details: {
+                ...prev.details,
+                adjustedAmount: AdjustedAmt,
+              },
+            }));
+            // });
+            // handleClose();
+            // props.onChange({
+            //   ...props.value,
+            //   particulars: props.value.particulars?.map((part, _ind) => (_ind === selectedParticularIndex ? (newParticular as Particular) : part)),
+            // });
+          }}
+
+        >
+
+          <DialogTitle style={{ cursor: 'move' }} id="draggable-dialog-title">
+            Adjusted Amount
+          </DialogTitle>
+          <DialogContent>
+
+
+            <Grid item xs={12} md={12} padding={1}>
+              <Grid item xs={12} md={12}>
+                <TextField
+                  label="Adjusted Amount"
+                  type="number"
+                  value={rowData?.details?.adjustedAmount&& rowData?.details?.adjustedAmount- newAdjustedAmt||0} // ✅ use state only
+                  required
+                  autoComplete="off"
+                  variant="outlined"
+                  fullWidth
+                  disabled
+                  InputLabelProps={{ shrink: true }}
+                />
+              </Grid>
+
+              <br />
+
+              <Grid item xs={12} md={12}>
+
+
+                <TextField
+                  label="New Adjusted Amount"
+                  type="number"
+                  value={newAdjustedAmt}
+                  required
+                  autoComplete="off"
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    const num = Number(value);
+
+                    if (value === '') {
+                      setNewAdjustedAmt(0);
+                      return;
+                    }
+
+                    if (num <= (rowData as any)?.details.adjustedAmount) {
+                      setNewAdjustedAmt(num);
+                      setAdjustedAmt((rowData as any)?.details.adjustedAmount-num);
+                    }
+                  }}
+                  inputProps={{
+                    max: (rowData as any)?.details.adjustedAmount,
+                    min: 0,
+                    step: 0.01,
+                    onWheel: (e: React.WheelEvent<HTMLInputElement>) => {
+                      e.preventDefault();
+                      e.currentTarget.blur(); // 🔥 THIS LINE FIXES IT
+                    },
+                  }}
+                  sx={{
+                    '& input[type=number]::-webkit-outer-spin-button, & input[type=number]::-webkit-inner-spin-button': {
+                      WebkitAppearance: 'none',
+                      margin: 0,
+                    },
+                    '& input[type=number]': {
+                      MozAppearance: 'textfield',
+                    },
+                  }}
+                />
+              </Grid>
+
+            </Grid>
+
+          </DialogContent>
+          <DialogActions>
+            <Button autoFocus onClick={()=>setOpenAdjustedAmt(false)}>
+              Cancel
+            </Button>
+            <Button type="submit">Add</Button>
+          </DialogActions>
+        </form>
+      </Dialog>
       <FileUploader
         title="Attachments"
         action={props.action==='add'?'add':'view'}
