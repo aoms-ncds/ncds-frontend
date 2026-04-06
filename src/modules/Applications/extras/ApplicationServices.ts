@@ -31,7 +31,7 @@ export default {
   // sentToPresident: (applicationID: string) => getStandardResponse<Application>(axios.patch(`/application/${applicationID}/sentTopresident`, null, { headers: { ...getAuthHeader() } })),
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  create: (application: CreatableApplication) => {
+  create: (application: CreatableApplication, form?:any) => {
     return getStandardResponse<Application>(
       new Promise((resolve, rejects) => {
         axios
@@ -42,6 +42,7 @@ export default {
               reason: application.reason,
               status: application.status,
             },
+            form: form,
           }, { headers: { ...getAuthHeader() } })
 
           .then(async (application) => {
