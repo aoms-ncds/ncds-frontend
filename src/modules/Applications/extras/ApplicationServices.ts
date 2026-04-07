@@ -20,6 +20,7 @@ export default {
     { params: conditions, headers: { ...getAuthHeader() } })),
   getById: (applicationID: string) => getStandardResponse<Application>(axios.get(`/application/${applicationID}`, { headers: { ...getAuthHeader() } })),
   addRemark: (applicationID: string, remark: string) => getStandardResponse<Application>(axios.patch(`/application/remark/${applicationID}`, { remark }, { headers: { ...getAuthHeader() } })),
+  formEdit: (applicationID: string, form: string) => getStandardResponse<Application>(axios.patch(`/application/form/${applicationID}`, { form }, { headers: { ...getAuthHeader() } })),
   active: (applicationID: string) => getStandardResponse<Application>(axios.patch(`/application/${applicationID}/active`, null, { headers: { ...getAuthHeader() } })),
   approve: (applicationID: string) => getStandardResponse<Application>(axios.patch(`/application/${applicationID}/approve`, null, { headers: { ...getAuthHeader() } })),
   reject: (applicationID: string, reason: string) => getStandardResponse<Application>(axios.patch(`/application/${applicationID}/reject`, { reason }, { headers: { ...getAuthHeader() } })),

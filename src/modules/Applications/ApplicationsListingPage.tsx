@@ -489,6 +489,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
       .then((res) => {
         setShowApplicationFormDialog(false);
         closeSnackbar(snackbarId);
+        window.location.reload();
         enqueueSnackbar({
           message: res.message,
           variant: 'success',
