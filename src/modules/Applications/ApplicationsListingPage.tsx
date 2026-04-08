@@ -8,7 +8,7 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import CloseIcon from '@mui/icons-material/Close';
 import DoneIcon from '@mui/icons-material/Done';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import { Autocomplete, Box, Button, Card, CardContent, Container, Dialog, DialogActions, DialogContent, DialogTitle, Grid, MenuItem, TextField, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
+import { Autocomplete, Box, Button, Card, CardContent, Checkbox, Container, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel, Grid, MenuItem, Paper, TextField, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
 import { DataGrid, GridColDef, GridRowParams } from '@mui/x-data-grid';
 import ApplicationServices from './extras/ApplicationServices';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
@@ -30,13 +30,20 @@ import ApplicationNamesService from '../Settings/extras/ApplicationNamesService'
 import AppliedForService from '../Settings/extras/AppliedForService';
 import formatAmount from '../Common/formatcode';
 import WorkersServices from '../Workers/extras/WorkersServices';
+import WelfareForm from './WelfareForm';
+import Section from './Section';
 
 
 const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' |'welfare'| 'revertHr' | 'revertDivision'| 'allRevert'}) => {
   const [applications, setApplications] = useState<Application[] | null>(null);
   const [action, setAction] = useState<'add' | 'edit'>('add');
   const [showApplicationFormDialog, setShowApplicationFormDialog] = useState<boolean>(false);
+  const [showApplicationFormDialog1, setShowApplicationFormDialog1] = useState<boolean>(false);
   const [reasonDialog, setReasonDialog] = useState(false);
+  const [form, setForm] = useState(false);
+  const [form2, setForm2] = useState(false);
+  const [form3, setForm3] = useState(false);
+  const [form4, setForm4] = useState(false);
   const [remarkDialog, setRemarkDialog] = useState(false);
   const [editid, setEditId] = useState<string>();
   // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
@@ -253,6 +260,28 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
     endDate: moment().endOf('M'),
     rangeType: 'months',
   });
+
+  const [forms, setForms] = useState<any>({});
+  console.log(forms, ' forms ');
+
+  const handleChange = (e: any) => {
+    setForms({ ...forms, [e.target.name]: e.target.value });
+  };
+
+  const handleChange2 = (e: any) => {
+    setForm({ ...forms, [e.target.name]: e.target.value });
+  };
+
+  const handleCheckbox = (e: any) => {
+    setForm({ ...forms, [e.target.name]: e.target.checked });
+  };
+  const names=[
+    'Education Support',
+    'Window/Widower help',
+    'Marriage help',
+    'Financial Assistance for medical treatment',
+  ];
+
   const showLinkAction = props.action === 'manage';
   const removeDivisions = (id: any) => {
     const snackbarId = enqueueSnackbar({
@@ -456,10 +485,11 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
       variant: 'info',
     });
 
-    ApplicationServices.create(applicationFormState)
+    ApplicationServices.create(applicationFormState, forms)
       .then((res) => {
         setShowApplicationFormDialog(false);
         closeSnackbar(snackbarId);
+        window.location.reload();
         enqueueSnackbar({
           message: res.message,
           variant: 'success',
@@ -1206,6 +1236,8 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                   </Button>
                 </Grid>
 
+                {/* <WelfareForm/> */}
+
               </Grid>
             </Container>
           </DialogContent>
@@ -1260,6 +1292,1299 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
             </Grid>
           </DialogActions>
         </form>
+      </Dialog>
+      <Dialog open={showApplicationFormDialog1} onClose={() => setShowApplicationFormDialog1(false)} PaperProps={{ style: { width: '500px' } }}>
+        {/* <Grid item md={2}>
+
+          <Typography sx={{ display: 'flex', justifyContent: 'flex-end', p: 1 }}>
+  X
+          </Typography>
+        </Grid> */}
+        <form onSubmit={action === 'add' ? AddApplication: Number(applicationFormState.status)==ApplicationLifeCycleStates.REVERT_TO_DIVISION ||
+          Number(applicationFormState.status)==ApplicationLifeCycleStates.REVERT_TO_DIVISION ? ApproveApplication: EditApplication}>
+          <DialogTitle>{action === 'add' ? 'Create New Application' : 'Edit  Application:'}</DialogTitle>
+          <DialogContent>
+            <Container>
+              <Grid container spacing={2}>
+                <Grid item md={12}>
+  &ensp;
+                  <Autocomplete
+                    disablePortal
+                    id="application-name"
+                    options={names} // Array of available application names
+                    getOptionLabel={(option) => (option as any) || ''} // Ensure labels are strings
+                    value={names?.find((app) => app === applicationFormState.name) || null}
+                    onChange={(_e, newValue) => {
+                      setApplicationFormState((prev) => ({
+                        ...prev,
+                        name: newValue ? newValue : '', // Preserve appliedFor
+                      }));
+                    }}
+
+                    renderInput={(params) => (
+
+                      <TextField {...params} label="Application Name" fullWidth required />
+                    )}
+                  />
+                </Grid>
+
+                <Grid item md={12}>
+                  <Autocomplete
+                    disablePortal
+                    id="applied-for"
+                    options={appliedFor} // Array of selectable options
+                    getOptionLabel={(option) => (option as any).name || ''} // Ensure labels are strings
+                    value={appliedFor?.find((option: { name: string | undefined }) => option.name === applicationFormState.appliedFor) || null}
+                    onChange={(_e, newValue) => {
+                      setApplicationFormState((prevRequest) => ({
+                        ...prevRequest,
+                        appliedFor: newValue ? newValue.name : '', // Preserve name
+                      }));
+                    }}
+                    renderInput={(params) => (
+                      <TextField {...params} label="Applied For" fullWidth required />
+                    )}
+                  />
+                </Grid>
+                {applicationFormState.appliedFor =='Worker' &&(
+
+                  <>
+                    {/* 1. WORKER SELECTION */}
+                    <Grid item xs={12} md={12}>
+                      <Typography variant="body2" sx={{ color: '#666', mb: 0.5 }}>
+        Choose Worker *
+                      </Typography>
+                      <Autocomplete
+                        fullWidth
+                        options={workers || []}
+                        // Matches the label style from your images
+                        getOptionLabel={(worker) =>
+                          worker?.basicDetails ?
+                            `${worker.basicDetails.firstName} ${worker.basicDetails.lastName} (${worker.staffCode || worker.workerCode || ''})` :
+                            ''
+                        }
+                        // Ensures the field is never empty in Edit OR Add mode
+                        value={selectedWorker}
+                        isOptionEqualToValue={(option, value) => option._id === value?._id}
+                        onChange={(_e, newValue) => {
+                          setApplicationFormState((prev) => ({
+                            ...prev,
+                            // Save the ID to keep the state light for the backend
+                            workersName: newValue?._id || '',
+                          }));
+                        }}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            placeholder="Select a worker..."
+                            required
+                            sx={{
+                              '& .MuiOutlinedInput-root': {
+                                'borderRadius': '8px', // Matching Image 2 style
+                                'backgroundColor': '#fff',
+                                '& fieldset': { borderColor: '#e0e0e0' },
+                              },
+                            }}
+                          />
+                        )}
+                      />
+                    </Grid>
+
+                    {/* 2. AUTOMATIC WORKER CODE (READ ONLY) */}
+                    <Grid item xs={12} md={12}>
+                      <TextField
+                        label="Worker Code"
+                        // Uses the helper variable 'selectedWorker' to find the code easily
+                        value={selectedWorker?.staffCode || selectedWorker?.workerCode || ''}
+                        fullWidth
+                        disabled
+                        InputLabelProps={{ shrink: true }}
+                        sx={{
+                          '& .MuiInputBase-root': {
+                            backgroundColor: '#f5f5f5', // Visual cue that it's disabled
+                            borderRadius: '8px',
+                          },
+                        }}
+                      />
+                    </Grid>
+                  </>
+                )}
+                <Grid item md={12}>
+                  <TextField label="Applicant Name" value={applicationFormState.applicantName}
+                    onChange={(e)=>setApplicationFormState((prevRequest) => ({
+                      ...prevRequest,
+                      applicantName: e.target.value,
+                    }))}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    fullWidth />
+                </Grid>
+                <Grid item md={12}>
+                  <TextField type='number' label="Requested Amount" value={applicationFormState.requestedAmount}
+                    onChange={(e)=>setApplicationFormState((prevRequest) => ({
+                      ...prevRequest,
+                      requestedAmount: Number(e.target.value),
+                    }))}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    fullWidth />
+                </Grid>
+                {action == 'edit' && applicationFormState.presidentSanction&&(
+                  <><Grid item md={12}>
+                    <TextField type='number' label="Sanctioned Amount" value={applicationFormState.sanctionedAmount}
+                      onChange={(e) => setApplicationFormState((prevRequest) => ({
+                        ...prevRequest,
+                        sanctionedAmount: Number(e.target.value),
+                      }))}
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                      fullWidth />
+                  </Grid><Grid item md={12}>
+                    <TextField type='text' label="Enter Validity" value={applicationFormState.validityDate}
+                      onChange={(e) => setApplicationFormState((prevRequest) => ({
+                        ...prevRequest,
+                        validityDate: String(e.target.value),
+                      }))}
+                      fullWidth />
+                  </Grid><Grid item md={12}>
+                    <TextField type='text' label="President Remarks" value={applicationFormState.presidentRemark}
+                      onChange={(e) => setApplicationFormState((prevRequest) => ({
+                        ...prevRequest,
+                        presidentRemark: String(e.target.value),
+                      }))}
+                      fullWidth />
+                  </Grid></>
+                )}
+
+
+                <Grid item md={12}>
+                  <TextField
+                    label="Remark"
+                    value={applicationFormState.reason}
+                    onChange={(e) => {
+                      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                      setApplicationFormState(() => ({
+                        ...applicationFormState,
+                        reason: e.target.value,
+                      }));
+                    }}
+                    fullWidth
+                    multiline
+                    // required
+                  />
+                </Grid>
+                <Grid item md={6}>
+                  <Button variant="contained" onClick={() => setShowFileUploader(true)} startIcon={<AttachmentIcon />}>
+                    Attachments
+                  </Button>
+                </Grid>
+                <Grid item md={4}>
+                  <Button variant="contained" onClick={() => {
+                    if (applicationFormState.name =='Education Support') {
+                      setForm(true);
+                    } else if (applicationFormState.name =='Window/Widower help') {
+                      setForm2(true);
+                    } else if (applicationFormState.name =='Marriage help') {
+                      setForm3(true);
+                    } else if (applicationFormState.name =='Financial Assistance for medical treatment') {
+                      setForm4(true);
+                    }
+                  }}
+                  >
+                    Fill Form
+                  </Button>
+                </Grid>
+                {/* <WelfareForm/> */}
+
+              </Grid>
+            </Container>
+          </DialogContent>
+          <DialogActions>
+          </DialogActions>
+        </form>
+      </Dialog>
+      <Dialog open={form} onClose={() => setForm(false)} sx={{ width: '100%' }}>
+        <DialogTitle>Application Form</DialogTitle>
+        <DialogContent>
+          <Box sx={{ background: '#f5f7fa', minHeight: '100vh', py: 5 }}>
+            <Box maxWidth="900px" mx="auto" px={2}>
+
+              {/* Header */}
+              <Paper sx={{ p: 3, mb: 3, textAlign: 'center', bgcolor: '#1976d2', color: '#fff' }}>
+                <Typography variant="h5">Welfare Ministry</Typography>
+                <Typography>Application for Educational Support</Typography>
+              </Paper>
+
+              {/* Basic */}
+              <Section title="Basic Information">
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Division" name="division" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Scholarship Help No" name="scholarshipNo" onChange={handleChange} />
+                </Grid>
+              </Section>
+
+              {/* Personal */}
+              <Section title="Personal Details">
+                <Grid item xs={12}>
+                  <TextField fullWidth label="Name of Applicant" name="name" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Worker Code" name="workerCode" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Welfare Scheme ID" name="schemeId" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Father’s Name" name="fatherName" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField type="date" fullWidth label="Joining Date" InputLabelProps={{ shrink: true }} name="joiningDate" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Help Requesting For" name="helpFor" onChange={handleChange} />
+                </Grid>
+              </Section>
+
+              {/* Ministry */}
+              <Section title="Ministry Details">
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Present Ministry" name="ministry" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Place of Ministry" name="place" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Mobile No" name="mobile" onChange={handleChange} />
+                </Grid>
+              </Section>
+
+              {/* Course */}
+              <Section title="Course Details">
+                <Grid item xs={12}>
+                  <TextField fullWidth label="College/University Name" name="college" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Course Name" name="course" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Course Duration" name="duration" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Course Type (Full/Part/Distance)" name="courseType" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField type="date" fullWidth label="Class Start Date" InputLabelProps={{ shrink: true }} name="startDate" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Place" name="collegePlace" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField fullWidth label="College Email ID" name="collegeEmail" onChange={handleChange} />
+                </Grid>
+              </Section>
+
+              {/* Financial */}
+              <Section title="Financial Details">
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Bills Attached" name="bills" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Total Fee (Rs)" name="totalFee" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Yearly Fee (Rs)" name="yearlyFee" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Hostel Fee (Rs)" name="hostelFee" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Other Expenses (Rs)" name="other" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Total Expenses (Rs)" name="total" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Requested Amount (Rs)" name="requested" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={12}>
+                  <TextField fullWidth label="Funds Received" name="received" onChange={handleChange} />
+                </Grid>
+              </Section>
+
+              {/* Recommendations */}
+              <Section title="Recommendations">
+                <Grid item xs={12}>
+                  <TextField fullWidth multiline rows={2} label="Area Supervisor Comments" name="supervisor" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Name & Signature" name="supervisorSign" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={12}>
+                  <TextField fullWidth multiline rows={2} label="Coordinator Comments" name="coordinator" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Signature with Date" name="signDate" onChange={handleChange} />
+                </Grid>
+              </Section>
+
+              {/* Bank */}
+              <Section title="Bank Details">
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Bank Name" name="bankName" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Account Holder Name" name="accountName" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Account Number" name="accountNumber" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Branch Name & Code" name="branch" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField fullWidth label="IFS Code" name="ifsc" onChange={handleChange} />
+                </Grid>
+              </Section>
+
+              {/* Declaration */}
+              <Section title="Declaration">
+                <Typography>
+        I hereby declare that the information provided is true and correct.
+                </Typography>
+
+                <Grid item xs={4}>
+                  <TextField fullWidth label="Signature" name="signature" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={4}>
+                  <TextField fullWidth label="Name" name="declName" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={4}>
+                  <TextField type="date" fullWidth label="Date" InputLabelProps={{ shrink: true }} name="declDate" onChange={handleChange} />
+                </Grid>
+              </Section>
+
+              {/* Office */}
+              <Section title="Office Use Only">
+                <Grid item xs={6}>
+                  <TextField type="date" fullWidth label="Application Received On" InputLabelProps={{ shrink: true }} name="receivedDate" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Amount Sanctioned" name="sanctioned" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField type="date" fullWidth label="Date of Fund Release" InputLabelProps={{ shrink: true }} name="releaseDate" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField type="date" fullWidth label="Date Applicant Informed" InputLabelProps={{ shrink: true }} name="informedDate" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Dealing Person Signature" name="dealingSign" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Authorized Person Signature" name="authSign" onChange={handleChange} />
+                </Grid>
+              </Section>
+
+            </Box>
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Grid item md={6}>
+            {Number(applicationFormState.status) !== ApplicationLifeCycleStates.REVERT_TO_HR &&(
+
+              <Button variant="contained" sx={{ backgroundColor: 'orange' }} onClick={() => {
+                if (applicationFormState.name !=''&& applicationFormState.appliedFor!='') {
+                  if (Number(applicationFormState.status) == ApplicationLifeCycleStates.REVERT_TO_DIVISION) {
+                    ApplicationServices.active(editid as any)
+                       .then((res) => {
+                         // handleClose();
+                         window.location.reload();
+                         // closeSnackbar(snackbarId);
+                         setShowApplicationFormDialog(false);
+                         enqueueSnackbar({
+                           message: res.message,
+                           variant: 'success',
+                         });
+                       });
+                  } else {
+                    ApplicationServices.sentToPresident(applicationFormState)
+                         .then((res) => {
+                           // handleClose();
+                           window.location.reload();
+                           // closeSnackbar(snackbarId);
+                           setShowApplicationFormDialog(false);
+                           enqueueSnackbar({
+                             message: res.message,
+                             variant: 'success',
+                           });
+                         });
+                  }
+                } else {
+                  enqueueSnackbar({
+                    message: 'Enter Required Fields',
+                    variant: 'info',
+                  });
+                }
+              }}>
+                    Send to president
+              </Button>
+            )}
+          </Grid>
+          {/* <Button onClick={() => setShowApplicationFormDialog(false)}>Cancel</Button> */}
+          <Grid item md={6}>
+
+            <form
+              onSubmit={
+                action === 'add' ?
+                  AddApplication :
+                  Number(applicationFormState.status) === ApplicationLifeCycleStates.REVERT_TO_DIVISION ||
+        Number(applicationFormState.status) === ApplicationLifeCycleStates.REVERT_TO_HR ?
+                    ApproveApplication :
+                    EditApplication
+              }
+            >
+              <Button
+                type="submit"
+                variant="contained"
+                sx={{ backgroundColor: 'blue' }}
+              >
+                {action === 'add' ?
+                  'Send to Hr' :
+                  Number(applicationFormState.status) === ApplicationLifeCycleStates.REVERT_TO_DIVISION ||
+        Number(applicationFormState.status) === ApplicationLifeCycleStates.REVERT_TO_HR ?
+                    'Submit' :
+                    'Edit'}
+              </Button>
+            </form>
+          </Grid>
+        </DialogActions>
+      </Dialog>
+      <Dialog open={form2} onClose={() => setForm2(false)} sx={{ width: '100%' }}>
+        <DialogTitle>Application Form</DialogTitle>
+        <DialogContent>
+          <Box sx={{ background: '#f5f7fa', minHeight: '100vh', py: 5 }}>
+            <Box maxWidth="900px" mx="auto" px={2}>
+
+              {/* Header */}
+              <Paper sx={{ p: 3, mb: 3, textAlign: 'center', bgcolor: '#1976d2', color: '#fff' }}>
+                <Typography variant="h5">Welfare Ministry</Typography>
+                <Typography>Widow / Widower Help Application</Typography>
+              </Paper>
+
+              {/* Basic */}
+              <Section title="Basic Information">
+                <Grid item xs={12}>
+                  <TextField fullWidth label="Division" name="division" onChange={handleChange2} />
+                </Grid>
+              </Section>
+
+              {/* Personal */}
+              <Section title="Personal Details">
+                <Grid item xs={12}>
+                  <TextField fullWidth label="Applicant Name" name="name" onChange={handleChange2} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Worker Code" name="workerCode" onChange={handleChange2} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Welfare Scheme ID" name="schemeId" onChange={handleChange2} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField type="date" fullWidth label="Joining Date" InputLabelProps={{ shrink: true }} name="joiningDate"onChange={handleChange2} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Spouse/Husband Name" name="spouse" onChange={handleChange2} />
+                </Grid>
+              </Section>
+
+              {/* Children Table */}
+              <Section title="Children Details">
+                {[0, 1, 2, 3].map((i) => (
+                  <React.Fragment key={i}>
+                    <Grid item xs={3}>
+                      <TextField fullWidth label="Name" name={`childName${i}`} onChange={handleChange2} />
+                    </Grid>
+                    <Grid item xs={2}>
+                      <TextField fullWidth label="Age" name={`childAge${i}`} onChange={handleChange2} />
+                    </Grid>
+                    <Grid item xs={2}>
+                      <TextField fullWidth label="Studying" name={`childStudy${i}`} onChange={handleChange2} />
+                    </Grid>
+                    <Grid item xs={2}>
+                      <TextField fullWidth label="Married" name={`childMarried${i}`} onChange={handleChange2} />
+                    </Grid>
+                    <Grid item xs={3}>
+                      <TextField fullWidth label="Working" name={`childWork${i}`} onChange={handleChange2} />
+                    </Grid>
+                  </React.Fragment>
+                ))}
+              </Section>
+
+              {/* Ministry */}
+              <Section title="Ministry Details">
+                <Grid item xs={12}>
+                  <TextField fullWidth label="Ministry at time of death" name="ministry" onChange={handleChange2} />
+                </Grid>
+
+                <Grid item xs={12}>
+                  <TextField fullWidth label="Place of Ministry" name="place" onChange={handleChange2} />
+                </Grid>
+
+                <Grid item xs={12}>
+                  <TextField fullWidth multiline rows={2} label="Reason for Death" name="reason" onChange={handleChange2} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField type="date" fullWidth label="Date of Death" InputLabelProps={{ shrink: true }} name="deathDate" onChange={handleChange2} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Place of Death (Hospital/Home)" name="deathPlace" onChange={handleChange2} />
+                </Grid>
+
+                <Grid item xs={12}>
+                  <TextField fullWidth label="Doctor Name" name="doctor" onChange={handleChange2} />
+                </Grid>
+              </Section>
+
+              {/* Family */}
+              <Section title="Family Details">
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Spouse Qualification" name="qualification" onChange={handleChange2} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Income Details (Rs)" name="income" onChange={handleChange2} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Requested Amount (Rs)" name="requested" onChange={handleChange2} />
+                </Grid>
+
+                {/* Living */}
+                <Grid item xs={12}>
+                  <Typography>Living Arrangement</Typography>
+                  <FormControlLabel control={<Checkbox onChange={handleCheckbox} name="rented" />} label="Rented House" />
+                  <FormControlLabel control={<Checkbox onChange={handleCheckbox} name="own" />} label="Own House" />
+                  <FormControlLabel control={<Checkbox onChange={handleCheckbox} name="withChildren" />} label="With Children" />
+                </Grid>
+
+                <Grid item xs={12}>
+                  <TextField fullWidth label="Other (Specify)" name="otherLiving" onChange={handleChange2} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Documents Attached" name="documents" onChange={handleChange2} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Death Certificate" name="deathCertificate" onChange={handleChange2} />
+                </Grid>
+              </Section>
+
+              {/* Recommendations */}
+              <Section title="Recommendations">
+                <Grid item xs={12}>
+                  <TextField fullWidth multiline rows={2} label="Supervisor Comments" name="supervisor" onChange={handleChange2} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Supervisor Name & Signature" name="supervisorSign" onChange={handleChange2} />
+                </Grid>
+
+                <Grid item xs={12}>
+                  <TextField fullWidth multiline rows={2} label="Coordinator Comments" name="coordinator" onChange={handleChange2} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Recommended Amount" name="recommend" onChange={handleChange2} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Signature with Date" name="signDate" onChange={handleChange2} />
+                </Grid>
+              </Section>
+
+              {/* Office */}
+              <Section title="Office Use Only">
+                <Grid item xs={6}>
+                  <TextField type="date" fullWidth label="Application Received On" InputLabelProps={{ shrink: true }} name="receivedDate" onChange={handleChange2} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Amount Sanctioned" name="sanctioned" onChange={handleChange2} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField type="date" fullWidth label="Fund Release Date" InputLabelProps={{ shrink: true }} name="releaseDate" onChange={handleChange2} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField type="date" fullWidth label="Applicant Informed Date" InputLabelProps={{ shrink: true }} name="informedDate" onChange={handleChange2} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Dealing Person Signature" name="dealingSign" onChange={handleChange2} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Authorized Person Signature" name="authSign" onChange={handleChange2} />
+                </Grid>
+              </Section>
+
+              {/* <Button variant="contained" fullWidth size="large">
+          Submit
+              </Button> */}
+
+            </Box>
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Grid item md={6}>
+            {Number(applicationFormState.status) !== ApplicationLifeCycleStates.REVERT_TO_HR &&(
+
+              <Button variant="contained" sx={{ backgroundColor: 'orange' }} onClick={() => {
+                if (applicationFormState.name !=''&& applicationFormState.appliedFor!='') {
+                  if (Number(applicationFormState.status) == ApplicationLifeCycleStates.REVERT_TO_DIVISION) {
+                    ApplicationServices.active(editid as any)
+                       .then((res) => {
+                         // handleClose();
+                         window.location.reload();
+                         // closeSnackbar(snackbarId);
+                         setShowApplicationFormDialog(false);
+                         enqueueSnackbar({
+                           message: res.message,
+                           variant: 'success',
+                         });
+                       });
+                  } else {
+                    ApplicationServices.sentToPresident(applicationFormState)
+                         .then((res) => {
+                           // handleClose();
+                           window.location.reload();
+                           // closeSnackbar(snackbarId);
+                           setShowApplicationFormDialog(false);
+                           enqueueSnackbar({
+                             message: res.message,
+                             variant: 'success',
+                           });
+                         });
+                  }
+                } else {
+                  enqueueSnackbar({
+                    message: 'Enter Required Fields',
+                    variant: 'info',
+                  });
+                }
+              }}>
+                    Send to president
+              </Button>
+            )}
+          </Grid>
+          {/* <Button onClick={() => setShowApplicationFormDialog(false)}>Cancel</Button> */}
+          <Grid item md={6}>
+
+            <form
+              onSubmit={
+                action === 'add' ?
+                  AddApplication :
+                  Number(applicationFormState.status) === ApplicationLifeCycleStates.REVERT_TO_DIVISION ||
+        Number(applicationFormState.status) === ApplicationLifeCycleStates.REVERT_TO_HR ?
+                    ApproveApplication :
+                    EditApplication
+              }
+            >
+              <Button
+                type="submit"
+                variant="contained"
+                sx={{ backgroundColor: 'blue' }}
+              >
+                {action === 'add' ?
+                  'Send to Hr' :
+                  Number(applicationFormState.status) === ApplicationLifeCycleStates.REVERT_TO_DIVISION ||
+        Number(applicationFormState.status) === ApplicationLifeCycleStates.REVERT_TO_HR ?
+                    'Submit' :
+                    'Edit'}
+              </Button>
+            </form>
+          </Grid>
+        </DialogActions>
+      </Dialog>
+      <Dialog open={form3} onClose={() => setForm3(false)} sx={{ width: '100%' }}>
+        <DialogTitle>Application Form</DialogTitle>
+        <DialogContent>
+          <Box sx={{ background: '#f5f7fa', minHeight: '100vh', py: 5 }}>
+            <Box maxWidth="900px" mx="auto" px={2}>
+
+              {/* Header */}
+              <Paper sx={{ p: 3, mb: 3, textAlign: 'center', bgcolor: '#1976d2', color: '#fff' }}>
+                <Typography variant="h5">Welfare Ministry</Typography>
+                <Typography>Marriage Help Application</Typography>
+              </Paper>
+
+              {/* Basic */}
+              <Section title="Basic Information">
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Division" name="division" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Marriage Aid No" name="aidNo" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField select fullWidth label="For" name="forWhom" onChange={handleChange}>
+                    <MenuItem value="self">Self</MenuItem>
+                    <MenuItem value="son">Son</MenuItem>
+                    <MenuItem value="daughter">Daughter</MenuItem>
+                  </TextField>
+                </Grid>
+              </Section>
+
+              {/* Personal */}
+              <Section title="Personal Details">
+                <Grid item xs={12}>
+                  <TextField fullWidth label="Applicant Name" name="name" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Worker Code" name="workerCode" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Welfare Scheme ID" name="schemeId" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField type="date" fullWidth label="Joining Date" InputLabelProps={{ shrink: true }} name="joiningDate" onChange={handleChange} />
+                </Grid>
+              </Section>
+
+              {/* Ministry */}
+              <Section title="Ministry Details">
+                <Grid item xs={12}>
+                  <TextField fullWidth label="Ministry Details" name="ministryDetails" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Present Ministry" name="ministry" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Place of Ministry" name="place" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Mobile Number" name="mobile" onChange={handleChange} />
+                </Grid>
+              </Section>
+
+              {/* Marriage */}
+              <Section title="Marriage Details">
+                <Grid item xs={6}>
+                  <TextField type="date" fullWidth label="Marriage Date" InputLabelProps={{ shrink: true }} name="marriageDate" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Marriage Solemnised By" name="solemnisedBy" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={12}>
+                  <TextField fullWidth label="Place & Church" name="church" onChange={handleChange} />
+                </Grid>
+              </Section>
+
+              {/* Documents */}
+              <Section title="Documents Attached">
+                <Grid item xs={4}>
+                  <TextField fullWidth label="Invitation Card" name="invitation" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={4}>
+                  <TextField fullWidth label="Marriage Photo" name="photo" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={4}>
+                  <TextField fullWidth label="Marriage Certificate" name="certificate" onChange={handleChange} />
+                </Grid>
+              </Section>
+
+              {/* Financial */}
+              <Section title="Financial Details">
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Total Expenses (Rs)" name="total" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Requested Amount (Rs)" name="requested" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={12}>
+                  <TextField fullWidth label="Funds Received (Church/Family/Loan)" name="received" onChange={handleChange} />
+                </Grid>
+              </Section>
+
+              {/* Recommendations */}
+              <Section title="Recommendations">
+                <Grid item xs={12}>
+                  <TextField fullWidth multiline rows={2} label="Supervisor Comments" name="supervisor" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Supervisor Name & Signature" name="supervisorSign" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={12}>
+                  <TextField fullWidth multiline rows={2} label="Coordinator Comments" name="coordinator" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Signature with Date" name="signDate" onChange={handleChange} />
+                </Grid>
+              </Section>
+
+              {/* Declaration */}
+              <Section title="Declaration">
+                <Typography>
+            I hereby declare that the information provided is true and correct.
+                </Typography>
+
+                <Grid item xs={4}>
+                  <TextField fullWidth label="Signature" name="signature" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={4}>
+                  <TextField fullWidth label="Name" name="declName" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={4}>
+                  <TextField type="date" fullWidth label="Date" InputLabelProps={{ shrink: true }} name="declDate" onChange={handleChange} />
+                </Grid>
+              </Section>
+
+              {/* Office */}
+              <Section title="Office Use Only">
+                <Grid item xs={6}>
+                  <TextField type="date" fullWidth label="Application Received On" InputLabelProps={{ shrink: true }} name="receivedDate" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Amount Sanctioned" name="sanctioned" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField type="date" fullWidth label="Fund Release Date" InputLabelProps={{ shrink: true }} name="releaseDate" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField type="date" fullWidth label="Applicant Informed Date" InputLabelProps={{ shrink: true }} name="informedDate" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Dealing Person Signature" name="dealingSign" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Authorized Person Signature" name="authSign" onChange={handleChange} />
+                </Grid>
+              </Section>
+
+
+            </Box>
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Grid item md={6}>
+            {Number(applicationFormState.status) !== ApplicationLifeCycleStates.REVERT_TO_HR &&(
+
+              <Button variant="contained" sx={{ backgroundColor: 'orange' }} onClick={() => {
+                if (applicationFormState.name !=''&& applicationFormState.appliedFor!='') {
+                  if (Number(applicationFormState.status) == ApplicationLifeCycleStates.REVERT_TO_DIVISION) {
+                    ApplicationServices.active(editid as any)
+                       .then((res) => {
+                         // handleClose();
+                         window.location.reload();
+                         // closeSnackbar(snackbarId);
+                         setShowApplicationFormDialog(false);
+                         enqueueSnackbar({
+                           message: res.message,
+                           variant: 'success',
+                         });
+                       });
+                  } else {
+                    ApplicationServices.sentToPresident(applicationFormState)
+                         .then((res) => {
+                           // handleClose();
+                           window.location.reload();
+                           // closeSnackbar(snackbarId);
+                           setShowApplicationFormDialog(false);
+                           enqueueSnackbar({
+                             message: res.message,
+                             variant: 'success',
+                           });
+                         });
+                  }
+                } else {
+                  enqueueSnackbar({
+                    message: 'Enter Required Fields',
+                    variant: 'info',
+                  });
+                }
+              }}>
+                    Send to president
+              </Button>
+            )}
+          </Grid>
+          {/* <Button onClick={() => setShowApplicationFormDialog(false)}>Cancel</Button> */}
+          <Grid item md={6}>
+
+            <form
+              onSubmit={
+                action === 'add' ?
+                  AddApplication :
+                  Number(applicationFormState.status) === ApplicationLifeCycleStates.REVERT_TO_DIVISION ||
+        Number(applicationFormState.status) === ApplicationLifeCycleStates.REVERT_TO_HR ?
+                    ApproveApplication :
+                    EditApplication
+              }
+            >
+              <Button
+                type="submit"
+                variant="contained"
+                sx={{ backgroundColor: 'blue' }}
+              >
+                {action === 'add' ?
+                  'Send to Hr' :
+                  Number(applicationFormState.status) === ApplicationLifeCycleStates.REVERT_TO_DIVISION ||
+        Number(applicationFormState.status) === ApplicationLifeCycleStates.REVERT_TO_HR ?
+                    'Submit' :
+                    'Edit'}
+              </Button>
+            </form>
+          </Grid>
+        </DialogActions>
+      </Dialog>
+      <Dialog open={form4} onClose={() => setForm4(false)} sx={{ width: '100%' }}>
+        <DialogTitle>Application Form</DialogTitle>
+        <DialogContent>
+          <Box sx={{ p: 4 }}>
+            <Paper sx={{ p: 4 }}>
+
+              <Paper sx={{ p: 3, mb: 3, textAlign: 'center', bgcolor: '#1976d2', color: '#fff' }}>
+                <Typography variant="h5">Welfare Ministry</Typography>
+                <Typography>Financial Assistance for medical treatment</Typography>
+              </Paper>
+              <Grid container spacing={2}>
+
+                {/* Division */}
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Division" name="division" onChange={handleChange} />
+                </Grid>
+
+                {/* Ailment */}
+                <Grid item xs={3}>
+                  <TextField fullWidth label="Ailment No" name="ailmentNo" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={3}>
+                  <TextField select fullWidth label="For" name="ailmentType" onChange={handleChange}>
+                    <MenuItem value="self">Self</MenuItem>
+                    <MenuItem value="spouse">Spouse</MenuItem>
+                    <MenuItem value="children">Children</MenuItem>
+                  </TextField>
+                </Grid>
+
+                {/* PERSONAL DETAILS */}
+                <Grid item xs={12}>
+                  <Typography variant="h6">Personal Details</Typography>
+                </Grid>
+
+                <Grid item xs={12}>
+                  <TextField fullWidth label="Name of Applicant" name="name" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Worker Code" name="workerCode" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Welfare Scheme ID" name="schemeId" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField type="date" fullWidth label="Joining Date" InputLabelProps={{ shrink: true }} name="joiningDate" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Name of Spouse" name="spouse" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Number of Children" name="children" onChange={handleChange} />
+                </Grid>
+
+                {/* MINISTRY */}
+                <Grid item xs={12}>
+                  <Typography variant="h6">Ministry Details</Typography>
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Present Ministry" name="ministry" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Place of Ministry" name="place" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Mobile Number" name="mobile" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Email ID" name="email" onChange={handleChange} />
+                </Grid>
+
+                {/* MEDICAL */}
+                <Grid item xs={12}>
+                  <Typography variant="h6">Medical Details</Typography>
+                </Grid>
+
+                <Grid item xs={12}>
+                  <TextField fullWidth multiline rows={2} label="Details of Sickness" name="sickness" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField type="date" fullWidth label="Date Treatment Started" InputLabelProps={{ shrink: true }} name="treatmentDate" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Hospital Name" name="hospital" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Doctor Name" name="doctor" onChange={handleChange} />
+                </Grid>
+
+                {/* FINANCIAL */}
+                <Grid item xs={12}>
+                  <Typography variant="h6">Financial Details</Typography>
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Bills Attached" name="bills" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Doctor Fee (Rs)" name="doctorFee" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Hospital Charges (Rs)" name="hospitalCharges" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Investigations (Rs)" name="investigation" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Medicines (Rs)" name="medicines" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Other Expenses (Rs)" name="other" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Total Expenses (Rs)" name="total" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Requested Amount (Rs)" name="requested" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={12}>
+                  <TextField fullWidth label="Funds Received" name="received" onChange={handleChange} />
+                </Grid>
+
+                {/* RECOMMENDATION */}
+                <Grid item xs={12}>
+                  <Typography variant="h6">Recommendations</Typography>
+                </Grid>
+
+                <Grid item xs={12}>
+                  <TextField fullWidth multiline rows={2} label="Supervisor Comments" name="supervisor" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Name & Signature" name="supervisorSign" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={12}>
+                  <TextField fullWidth multiline rows={2} label="Coordinator Comments" name="coordinator" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Recommendation Amount (Rs)" name="recommend" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={3}>
+                  <TextField fullWidth label="Signature" name="signature" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={3}>
+                  <TextField type="date" fullWidth label="Date" InputLabelProps={{ shrink: true }} name="date" onChange={handleChange} />
+                </Grid>
+
+                {/* OFFICE */}
+                <Grid item xs={12}>
+                  <Typography variant="h6">Office Use Only</Typography>
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField type="date" fullWidth label="Application Received On" InputLabelProps={{ shrink: true }} name="receivedDate" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Amount Sanctioned" name="sanctioned" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField type="date" fullWidth label="Fund Release Date" InputLabelProps={{ shrink: true }} name="releaseDate" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField type="date" fullWidth label="Applicant Informed Date" InputLabelProps={{ shrink: true }} name="informedDate" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Dealing Person Signature" name="dealingSign" onChange={handleChange} />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Authorized Person Signature" name="authSign" onChange={handleChange} />
+                </Grid>
+
+                {/* Submit */}
+
+
+              </Grid>
+            </Paper>
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Grid item md={6}>
+            {Number(applicationFormState.status) !== ApplicationLifeCycleStates.REVERT_TO_HR &&(
+
+              <Button variant="contained" sx={{ backgroundColor: 'orange' }} onClick={() => {
+                if (applicationFormState.name !=''&& applicationFormState.appliedFor!='') {
+                  if (Number(applicationFormState.status) == ApplicationLifeCycleStates.REVERT_TO_DIVISION) {
+                    ApplicationServices.active(editid as any)
+                       .then((res) => {
+                         // handleClose();
+                         window.location.reload();
+                         // closeSnackbar(snackbarId);
+                         setShowApplicationFormDialog(false);
+                         enqueueSnackbar({
+                           message: res.message,
+                           variant: 'success',
+                         });
+                       });
+                  } else {
+                    ApplicationServices.sentToPresident(applicationFormState)
+                         .then((res) => {
+                           // handleClose();
+                           window.location.reload();
+                           // closeSnackbar(snackbarId);
+                           setShowApplicationFormDialog(false);
+                           enqueueSnackbar({
+                             message: res.message,
+                             variant: 'success',
+                           });
+                         });
+                  }
+                } else {
+                  enqueueSnackbar({
+                    message: 'Enter Required Fields',
+                    variant: 'info',
+                  });
+                }
+              }}>
+                    Send to president
+              </Button>
+            )}
+          </Grid>
+          {/* <Button onClick={() => setShowApplicationFormDialog(false)}>Cancel</Button> */}
+          <Grid item md={6}>
+
+            <form
+              onSubmit={
+                action === 'add' ?
+                  AddApplication :
+                  Number(applicationFormState.status) === ApplicationLifeCycleStates.REVERT_TO_DIVISION ||
+        Number(applicationFormState.status) === ApplicationLifeCycleStates.REVERT_TO_HR ?
+                    ApproveApplication :
+                    EditApplication
+              }
+            >
+              <Button
+                type="submit"
+                variant="contained"
+                sx={{ backgroundColor: 'blue' }}
+              >
+                {action === 'add' ?
+                  'Send to Hr' :
+                  Number(applicationFormState.status) === ApplicationLifeCycleStates.REVERT_TO_DIVISION ||
+        Number(applicationFormState.status) === ApplicationLifeCycleStates.REVERT_TO_HR ?
+                    'Submit' :
+                    'Edit'}
+              </Button>
+            </form>
+          </Grid>
+        </DialogActions>
       </Dialog>
       <FileUploader
         title="Attachments"
@@ -1392,6 +2717,30 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                         }}
                       >
                       Add new
+                      </Button>
+                    )}
+                  />
+                  <PermissionChecks
+                    permissions={['WRITE_APPLICATION']}
+                    granted={(
+                      <Button
+                        style={{ display: props.action !== 'manage' ? 'none' : '' }}
+                        variant="contained"
+                        sx={{ float: 'right', m: 2 }}
+                        startIcon={<AddIcon />}
+                        onClick={() => {
+                          setShowApplicationFormDialog1(true);
+                          setAction('add');
+                          setApplicationFormState({
+                            applicationCode: '',
+                            name: '',
+                            reason: '',
+                            status: '',
+                            attachment: [],
+                          });
+                        }}
+                      >
+                      Add Specific
                       </Button>
                     )}
                   />

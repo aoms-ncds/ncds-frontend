@@ -2,9 +2,9 @@
 // import { NoteAlt as NoteAltIcon } from '@mui/icons-material/AccessAlarm';
 import APPDashboard from '..';
 import ApplicationsListingPage from '../ApplicationsListingPage';
-import ApplicationApprovalPage from '../ApplicationApprovalPage';
 import AddNewApplication from '../AddNewApplication';
 import { NoteAlt as NoteAltIcon } from '@mui/icons-material';
+import ApplicationApprovalPage from '../ApplicationApprovalPage';
 
 const applicationRoutes: ModuleRoute = {
   base: '/application',

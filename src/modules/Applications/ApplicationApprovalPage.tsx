@@ -35,11 +35,43 @@ const ApplicationApprovalPage = () => {
   const [applications, setApplications] = useState<Application >();
   const [applicationsNames, setApplicationsNames] = useState<any >(null);
   const [open, setOpen] = useState(false);
+  const [view, setView] = useState(false);
   const [data, setData] = useState<Application| null>();
   const [openPrintFr, setOpenPrintFr] = useState(false);
   const [resasonForRevert, setResonForRevert] = useState('');
   const [showFileUploader, setShowFileUploader] = useState<boolean>(false);
+  const [editOpen, setEditOpen] = useState(false);
+  const [editData, setEditData] = useState<any>({});
+  const handleEdit = () => {
+    setEditData(applications?.formData); // clone if needed
+    setEditOpen(true);
+  };
+  const handleEditChange = (key: string, value: any, parent?: string) => {
+    if (parent) {
+      setEditData((prev: any) => ({
+        ...prev,
+        [parent]: {
+          ...prev[parent],
+          [key]: value,
+        },
+      }));
+    } else {
+      setEditData((prev: any) => ({
+        ...prev,
+        [key]: value,
+      }));
+    }
+  };
+  const handleUpdate = async () => {
+    await ApplicationServices.formEdit(applicationID as string, editData);
 
+    setEditOpen(false);
+  };
+  const formatLabel = (key: string) => {
+    return key
+    .replace(/([A-Z])/g, ' $1')
+    .replace(/^./, (str) => str.toUpperCase());
+  };
   useEffect(() => {
     if (!applicationID) {
       navigate('/applications');
@@ -191,6 +223,15 @@ const ApplicationApprovalPage = () => {
               <Button component="span" variant="outlined" onClick={()=>setOpen(true)}>
 
                   View File
+              </Button>
+              &nbsp;
+              <Button component="span" variant="outlined" onClick={()=>setView(true)}>
+
+                  View Form
+              </Button>
+              &nbsp;
+              <Button variant="outlined" onClick={handleEdit}>
+  Edit Form
               </Button>
               &nbsp;
               {Number(applications?.status) == ApplicationLifeCycleStates.REVERT_TO_DIVISION|| Number(applications?.status) == ApplicationLifeCycleStates.REVERT_TO_HR &&(
@@ -635,7 +676,150 @@ const ApplicationApprovalPage = () => {
         <DialogActions>
           <Button
             onClick={() => {
-              setData(null);
+              setView(false);
+            }}
+            variant="text"
+          >
+                  Cancel
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog open={editOpen} onClose={() => setEditOpen(false)} maxWidth="lg" fullWidth>
+        <DialogTitle>Edit Form</DialogTitle>
+
+        <DialogContent dividers>
+          <Grid container spacing={2}>
+            {Object.entries(editData).map(([key, value]) => {
+              if (typeof value === 'object' && value !== null) {
+                return (
+                  <Grid item xs={12} key={key}>
+                    <Typography fontWeight="bold" sx={{ mb: 1 }}>
+                      {formatLabel(key)}
+                    </Typography>
+
+                    <Grid container spacing={2}>
+                      {Object.entries(value).map(([subKey, subValue]) => (
+                        <React.Fragment key={subKey}>
+
+                          <Grid item xs={2} sx={{ display: 'flex', alignItems: 'center' }}>
+                            <Typography>{formatLabel(subKey)}</Typography>
+                          </Grid>
+
+                          <Grid item xs={2}>
+                            <TextField
+                              fullWidth
+                              size="small"
+                              value={subValue as any || ''}
+                              onChange={(e) =>
+                                handleEditChange(subKey, e.target.value, key)
+                              }
+                            />
+                          </Grid>
+
+                        </React.Fragment>
+                      ))}
+                    </Grid>
+                  </Grid>
+                );
+              }
+
+              return (
+                <React.Fragment key={key}>
+
+                  <Grid item xs={2} sx={{ display: 'flex', alignItems: 'center' }}>
+                    <Typography>{formatLabel(key)}</Typography>
+                  </Grid>
+
+                  <Grid item xs={2}>
+                    <TextField
+                      fullWidth
+                      size="small"
+                      value={value as any || ''}
+                      onChange={(e) => handleEditChange(key, e.target.value)}
+                    />
+                  </Grid>
+
+                </React.Fragment>
+              );
+            })}
+          </Grid>
+        </DialogContent>
+
+        <DialogActions>
+          <Button onClick={() => setEditOpen(false)}>Cancel</Button>
+          <Button variant="contained" onClick={handleUpdate}>
+      Save
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog open={view} onClose={() => setView(false)} maxWidth="lg" fullWidth>
+        <DialogTitle> Form Data - <b>{applications?.name} </b> </DialogTitle>
+        <DialogContent>
+          <Container>
+            <br />
+            <Grid container spacing={2}>
+              {(applications as any)?.formData ? (
+                Object.entries((applications as any)?.formData).map(([key, value]) => {
+                  // Nested object (section)
+                  if (typeof value === 'object' && value !== null) {
+                    return (
+                      <Grid item xs={12} key={key}>
+                        <Typography fontWeight="700" sx={{ mb: 1 }}>
+                          {formatLabel(key)}
+                        </Typography>
+
+                        <Grid container spacing={2}>
+                          {Object.entries(value).map(([subKey, subValue]) => (
+                            <>
+                              <Grid item xs={2} key={subKey + 'label'}>
+                                <Typography>{formatLabel(subKey)}</Typography>
+                              </Grid>
+
+                              <Grid item xs={2} key={subKey + 'value'}>
+                                <TextField
+                                  fullWidth
+                                  size="small"
+                                  value={subValue as any || ''}
+                                  InputProps={{ readOnly: true }}
+                                />
+                              </Grid>
+                            </>
+                          ))}
+                        </Grid>
+                      </Grid>
+                    );
+                  }
+
+                  // Normal fields
+                  return (
+                    <>
+                      <Grid item xs={2} key={key + 'label'}>
+                        <Typography>{formatLabel(key)}</Typography>
+                      </Grid>
+
+                      <Grid item xs={2} key={key + 'value'}>
+                        <TextField
+                          fullWidth
+                          size="small"
+                          value={value as any || ''}
+                          InputProps={{ readOnly: true }}
+                        />
+                      </Grid>
+                    </>
+                  );
+                })
+              ) : (
+                <Typography>No data</Typography>
+              )}
+            </Grid>
+
+          </Container>
+
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              setView(false);
             }}
             variant="text"
           >
