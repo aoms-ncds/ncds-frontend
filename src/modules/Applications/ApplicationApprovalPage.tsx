@@ -43,7 +43,7 @@ const ApplicationApprovalPage = () => {
   const [editOpen, setEditOpen] = useState(false);
   const [editData, setEditData] = useState<any>({});
   const handleEdit = () => {
-    setEditData(applications?.formData); // clone if needed
+    setEditData((applications as any)?.formData); // clone if needed
     setEditOpen(true);
   };
   const handleEditChange = (key: string, value: any, parent?: string) => {
