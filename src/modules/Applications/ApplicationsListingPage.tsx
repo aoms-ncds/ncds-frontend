@@ -44,6 +44,11 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
   const [form2, setForm2] = useState(false);
   const [form3, setForm3] = useState(false);
   const [form4, setForm4] = useState(false);
+  const [form1Signature, setForm1Signature] = useState(false);
+  const [form1Signature0, setForm1Signature0] = useState(false);
+  const [form1Signature2, setForm1Signature2] = useState(false);
+  const [form1Signature3, setForm1Signature3] = useState(false);
+  const [form1Signature4, setForm1Signature4] = useState(false);
   const [remarkDialog, setRemarkDialog] = useState(false);
   const [editid, setEditId] = useState<string>();
   // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
@@ -1506,7 +1511,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
           </DialogActions>
         </form>
       </Dialog>
-      <Dialog open={form} onClose={() => setForm(false)} sx={{ width: '100%' }}>
+      <Dialog open={form} onClose={() => setForm(false)} maxWidth="lg">
         <DialogTitle>Application Form</DialogTitle>
         <DialogContent>
           <Box sx={{ background: '#f5f7fa', minHeight: '100vh', py: 5 }}>
@@ -1654,6 +1659,11 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                 <Grid item xs={6}>
                   <TextField fullWidth label="Signature with Date" name="signDate" onChange={handleChange} />
                 </Grid>
+                <Grid item md={6}>
+                  <Button variant="contained" onClick={() => setForm1Signature(true)} startIcon={<AttachmentIcon />}>
+                    Signature
+                  </Button>
+                </Grid>
               </Section>
 
               {/* Bank */}
@@ -1685,16 +1695,21 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
         I hereby declare that the information provided is true and correct.
                 </Typography>
 
-                <Grid item xs={4}>
-                  <TextField fullWidth label="Signature" name="signature" onChange={handleChange} />
-                </Grid>
+                {/* <Grid item xs={4}>
+                  <TextField fullWidth label="Declaration" name="Declaration" onChange={handleChange} />
+                </Grid> */}
 
-                <Grid item xs={4}>
+                <Grid item xs={6}>
                   <TextField fullWidth label="Name" name="declName" onChange={handleChange} />
                 </Grid>
 
-                <Grid item xs={4}>
+                <Grid item xs={6}>
                   <TextField type="date" fullWidth label="Date" InputLabelProps={{ shrink: true }} name="declDate" onChange={handleChange} />
+                </Grid>
+                <Grid item md={6}>
+                  <Button variant="contained" onClick={() => setForm1Signature2(true)} startIcon={<AttachmentIcon />}>
+                    Signature Of Student
+                  </Button>
                 </Grid>
               </Section>
 
@@ -1716,12 +1731,14 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                   <TextField type="date" fullWidth label="Date Applicant Informed" InputLabelProps={{ shrink: true }} name="informedDate" onChange={handleChange} />
                 </Grid>
 
-                <Grid item xs={6}>
-                  <TextField fullWidth label="Dealing Person Signature" name="dealingSign" onChange={handleChange} />
-                </Grid>
-
-                <Grid item xs={6}>
-                  <TextField fullWidth label="Authorized Person Signature" name="authSign" onChange={handleChange} />
+                <Grid item md={6}>
+                  <Button variant="contained" onClick={() => setForm1Signature3(true)} startIcon={<AttachmentIcon />}>
+                    Dealing Person Signature
+                  </Button>
+                </Grid> <Grid item md={6}>
+                  <Button variant="contained" onClick={() => setForm1Signature4(true)} startIcon={<AttachmentIcon />}>
+                    Authorized Person Signature
+                  </Button>
                 </Grid>
               </Section>
 
@@ -1799,7 +1816,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
           </Grid>
         </DialogActions>
       </Dialog>
-      <Dialog open={form2} onClose={() => setForm2(false)} sx={{ width: '100%' }}>
+      <Dialog open={form2} onClose={() => setForm2(false)} maxWidth="lg">
         <DialogTitle>Application Form</DialogTitle>
         <DialogContent>
           <Box sx={{ background: '#f5f7fa', minHeight: '100vh', py: 5 }}>
@@ -1947,6 +1964,11 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                 <Grid item xs={6}>
                   <TextField fullWidth label="Signature with Date" name="signDate" onChange={handleChange2} />
                 </Grid>
+                <Grid item md={6}>
+                  <Button variant="contained" onClick={() => setForm1Signature(true)} startIcon={<AttachmentIcon />}>
+                    Signature
+                  </Button>
+                </Grid>
               </Section>
 
               {/* Office */}
@@ -1967,13 +1989,17 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                   <TextField type="date" fullWidth label="Applicant Informed Date" InputLabelProps={{ shrink: true }} name="informedDate" onChange={handleChange2} />
                 </Grid>
 
-                <Grid item xs={6}>
-                  <TextField fullWidth label="Dealing Person Signature" name="dealingSign" onChange={handleChange2} />
+
+                <Grid item md={6}>
+                  <Button variant="contained" onClick={() => setForm1Signature3(true)} startIcon={<AttachmentIcon />}>
+                    Dealing Person Signature
+                  </Button>
+                </Grid> <Grid item md={6}>
+                  <Button variant="contained" onClick={() => setForm1Signature4(true)} startIcon={<AttachmentIcon />}>
+                    Authorized Person Signature
+                  </Button>
                 </Grid>
 
-                <Grid item xs={6}>
-                  <TextField fullWidth label="Authorized Person Signature" name="authSign" onChange={handleChange2} />
-                </Grid>
               </Section>
 
               {/* <Button variant="contained" fullWidth size="large">
@@ -2054,7 +2080,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
           </Grid>
         </DialogActions>
       </Dialog>
-      <Dialog open={form3} onClose={() => setForm3(false)} sx={{ width: '100%' }}>
+      <Dialog open={form3} onClose={() => setForm3(false)} maxWidth="lg">
         <DialogTitle>Application Form</DialogTitle>
         <DialogContent>
           <Box sx={{ background: '#f5f7fa', minHeight: '100vh', py: 5 }}>
@@ -2185,6 +2211,11 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                 <Grid item xs={6}>
                   <TextField fullWidth label="Signature with Date" name="signDate" onChange={handleChange} />
                 </Grid>
+                <Grid item md={6}>
+                  <Button variant="contained" onClick={() => setForm1Signature(true)} startIcon={<AttachmentIcon />}>
+                   Supervisor Signature
+                  </Button>
+                </Grid>
               </Section>
 
               {/* Declaration */}
@@ -2193,16 +2224,21 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
             I hereby declare that the information provided is true and correct.
                 </Typography>
 
-                <Grid item xs={4}>
+                {/* <Grid item xs={4}>
                   <TextField fullWidth label="Signature" name="signature" onChange={handleChange} />
-                </Grid>
+                </Grid> */}
 
-                <Grid item xs={4}>
+                <Grid item xs={6}>
                   <TextField fullWidth label="Name" name="declName" onChange={handleChange} />
                 </Grid>
 
-                <Grid item xs={4}>
+                <Grid item xs={6}>
                   <TextField type="date" fullWidth label="Date" InputLabelProps={{ shrink: true }} name="declDate" onChange={handleChange} />
+                </Grid>
+                <Grid item md={6}>
+                  <Button variant="contained" onClick={() => setForm1Signature0(true)} startIcon={<AttachmentIcon />}>
+                    Signature
+                  </Button>
                 </Grid>
               </Section>
 
@@ -2223,13 +2259,14 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                 <Grid item xs={6}>
                   <TextField type="date" fullWidth label="Applicant Informed Date" InputLabelProps={{ shrink: true }} name="informedDate" onChange={handleChange} />
                 </Grid>
-
-                <Grid item xs={6}>
-                  <TextField fullWidth label="Dealing Person Signature" name="dealingSign" onChange={handleChange} />
-                </Grid>
-
-                <Grid item xs={6}>
-                  <TextField fullWidth label="Authorized Person Signature" name="authSign" onChange={handleChange} />
+                <Grid item md={6}>
+                  <Button variant="contained" onClick={() => setForm1Signature3(true)} startIcon={<AttachmentIcon />}>
+                    Dealing Person Signature
+                  </Button>
+                </Grid> <Grid item md={6}>
+                  <Button variant="contained" onClick={() => setForm1Signature4(true)} startIcon={<AttachmentIcon />}>
+                    Authorized Person Signature
+                  </Button>
                 </Grid>
               </Section>
 
@@ -2308,7 +2345,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
           </Grid>
         </DialogActions>
       </Dialog>
-      <Dialog open={form4} onClose={() => setForm4(false)} sx={{ width: '100%' }}>
+      <Dialog open={form4} onClose={() => setForm4(false)} maxWidth="lg">
         <DialogTitle>Application Form</DialogTitle>
         <DialogContent>
           <Box sx={{ p: 4 }}>
@@ -2471,14 +2508,18 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                   <TextField fullWidth label="Recommendation Amount (Rs)" name="recommend" onChange={handleChange} />
                 </Grid>
 
-                <Grid item xs={3}>
+                {/* <Grid item xs={3}>
                   <TextField fullWidth label="Signature" name="signature" onChange={handleChange} />
-                </Grid>
+                </Grid> */}
 
                 <Grid item xs={3}>
                   <TextField type="date" fullWidth label="Date" InputLabelProps={{ shrink: true }} name="date" onChange={handleChange} />
                 </Grid>
-
+ <Grid item md={6}>
+                  <Button variant="contained" onClick={() => setForm1Signature(true)} startIcon={<AttachmentIcon />}>
+                    Signature
+                  </Button>
+                </Grid>
                 {/* OFFICE */}
                 <Grid item xs={12}>
                   <Typography variant="h6">Office Use Only</Typography>
@@ -2500,12 +2541,14 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                   <TextField type="date" fullWidth label="Applicant Informed Date" InputLabelProps={{ shrink: true }} name="informedDate" onChange={handleChange} />
                 </Grid>
 
-                <Grid item xs={6}>
-                  <TextField fullWidth label="Dealing Person Signature" name="dealingSign" onChange={handleChange} />
-                </Grid>
-
-                <Grid item xs={6}>
-                  <TextField fullWidth label="Authorized Person Signature" name="authSign" onChange={handleChange} />
+                <Grid item md={6}>
+                  <Button variant="contained" onClick={() => setForm1Signature3(true)} startIcon={<AttachmentIcon />}>
+                    Dealing Person Signature
+                  </Button>
+                </Grid> <Grid item md={6}>
+                  <Button variant="contained" onClick={() => setForm1Signature4(true)} startIcon={<AttachmentIcon />}>
+                    Authorized Person Signature
+                  </Button>
                 </Grid>
 
                 {/* Submit */}
@@ -2631,6 +2674,256 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
           setApplicationFormState(() => ({
             ...applicationFormState,
             attachment: applicationFormState.attachment.filter((file) => file._id !== fileId),
+          }));
+          return FileUploaderServices.deleteFile(fileId);
+        }}
+      />
+      <FileUploader
+        title="Signature"
+        action="add"
+        types={[
+          'application/pdf',
+          'image/png',
+          'image/jpeg',
+          'image/jpg',
+        ]}
+        limits={{
+          maxItemSize: 1 * MB,
+          maxItemCount: 3,
+          maxTotalSize: 3 * MB,
+        }}
+        open={form1Signature}
+        onClose={() => setForm1Signature(false)}
+
+        getFiles={forms?.SupervisorSignature || []}
+
+        uploadFile={(file, onProgress) =>
+          FileUploaderServices.uploadFile(file, onProgress, 'Applications', file.name)
+      .then((res) => {
+        setForms((prev: any) => ({
+          ...prev,
+          SupervisorSignature: [...(prev.SupervisorSignature || []), res.data],
+        }));
+        return res;
+      })
+        }
+
+        // renameFile={(fileId, newName) => {
+        //   setFormData((prev: any) => ({
+        //     ...prev,
+        //     signature: (prev.signature || []).map((file: any) =>
+        //       file._id === fileId ? { ...file, filename: newName } : file
+        //     ),
+        //   });
+        //   return FileUploaderServices.renameFile(fileId, newName);
+        // }}
+
+        deleteFile={(fileId) => {
+          setForms((prev: any) => ({
+            ...prev,
+            signature: (prev.signature || []).filter(
+              (file: any) => file._id !== fileId,
+            ),
+          }));
+          return FileUploaderServices.deleteFile(fileId);
+        }}
+      />
+      <FileUploader
+        title="Signature"
+        action="add"
+        types={[
+          'application/pdf',
+          'image/png',
+          'image/jpeg',
+          'image/jpg',
+        ]}
+        limits={{
+          maxItemSize: 1 * MB,
+          maxItemCount: 3,
+          maxTotalSize: 3 * MB,
+        }}
+        open={form1Signature0}
+        onClose={() => setForm1Signature0(false)}
+
+        getFiles={forms?.Signature || []}
+
+        uploadFile={(file, onProgress) =>
+          FileUploaderServices.uploadFile(file, onProgress, 'Applications', file.name)
+      .then((res) => {
+        setForms((prev: any) => ({
+          ...prev,
+          Signature: [...(prev.Signature || []), res.data],
+        }));
+        return res;
+      })
+        }
+
+        // renameFile={(fileId, newName) => {
+        //   setFormData((prev: any) => ({
+        //     ...prev,
+        //     signature: (prev.signature || []).map((file: any) =>
+        //       file._id === fileId ? { ...file, filename: newName } : file
+        //     ),
+        //   });
+        //   return FileUploaderServices.renameFile(fileId, newName);
+        // }}
+
+        deleteFile={(fileId) => {
+          setForms((prev: any) => ({
+            ...prev,
+            signature: (prev.signature || []).filter(
+              (file: any) => file._id !== fileId,
+            ),
+          }));
+          return FileUploaderServices.deleteFile(fileId);
+        }}
+      />
+      <FileUploader
+        title="Signature"
+        action="add"
+        types={[
+          'application/pdf',
+          'image/png',
+          'image/jpeg',
+          'image/jpg',
+        ]}
+        limits={{
+          maxItemSize: 1 * MB,
+          maxItemCount: 3,
+          maxTotalSize: 3 * MB,
+        }}
+        open={form1Signature2}
+        onClose={() => setForm1Signature2(false)}
+
+        getFiles={forms?.signatureOfStudent || []}
+
+        uploadFile={(file, onProgress) =>
+          FileUploaderServices.uploadFile(file, onProgress, 'Applications', file.name)
+      .then((res) => {
+        setForms((prev: any) => ({
+          ...prev,
+          signatureOfStudent: [...(prev.signatureOfStudent || []), res.data],
+        }));
+        return res;
+      })
+        }
+
+        // renameFile={(fileId, newName) => {
+        //   setFormData((prev: any) => ({
+        //     ...prev,
+        //     signature: (prev.signature || []).map((file: any) =>
+        //       file._id === fileId ? { ...file, filename: newName } : file
+        //     ),
+        //   });
+        //   return FileUploaderServices.renameFile(fileId, newName);
+        // }}
+
+        deleteFile={(fileId) => {
+          setForms((prev: any) => ({
+            ...prev,
+            signature: (prev.signature || []).filter(
+              (file: any) => file._id !== fileId,
+            ),
+          }));
+          return FileUploaderServices.deleteFile(fileId);
+        }}
+      />
+      <FileUploader
+        title="Signature"
+        action="add"
+        types={[
+          'application/pdf',
+          'image/png',
+          'image/jpeg',
+          'image/jpg',
+        ]}
+        limits={{
+          maxItemSize: 1 * MB,
+          maxItemCount: 3,
+          maxTotalSize: 3 * MB,
+        }}
+        open={form1Signature3}
+        onClose={() => setForm1Signature3(false)}
+
+        getFiles={forms?.DealingPersonSignature || []}
+
+        uploadFile={(file, onProgress) =>
+          FileUploaderServices.uploadFile(file, onProgress, 'Applications', file.name)
+      .then((res) => {
+        setForms((prev: any) => ({
+          ...prev,
+          DealingPersonSignature: [...(prev.DealingPersonSignature || []), res.data],
+        }));
+        return res;
+      })
+        }
+
+        // renameFile={(fileId, newName) => {
+        //   setFormData((prev: any) => ({
+        //     ...prev,
+        //     signature: (prev.signature || []).map((file: any) =>
+        //       file._id === fileId ? { ...file, filename: newName } : file
+        //     ),
+        //   });
+        //   return FileUploaderServices.renameFile(fileId, newName);
+        // }}
+
+        deleteFile={(fileId) => {
+          setForms((prev: any) => ({
+            ...prev,
+            signature: (prev.signature || []).filter(
+              (file: any) => file._id !== fileId,
+            ),
+          }));
+          return FileUploaderServices.deleteFile(fileId);
+        }}
+      />
+      <FileUploader
+        title="Signature"
+        action="add"
+        types={[
+          'application/pdf',
+          'image/png',
+          'image/jpeg',
+          'image/jpg',
+        ]}
+        limits={{
+          maxItemSize: 1 * MB,
+          maxItemCount: 3,
+          maxTotalSize: 3 * MB,
+        }}
+        open={form1Signature4}
+        onClose={() => setForm1Signature4(false)}
+
+        getFiles={forms?.AuthorizedPersonSignature || []}
+
+        uploadFile={(file, onProgress) =>
+          FileUploaderServices.uploadFile(file, onProgress, 'Applications', file.name)
+      .then((res) => {
+        setForms((prev: any) => ({
+          ...prev,
+          AuthorizedPersonSignature: [...(prev.AuthorizedPersonSignature || []), res.data],
+        }));
+        return res;
+      })
+        }
+
+        // renameFile={(fileId, newName) => {
+        //   setFormData((prev: any) => ({
+        //     ...prev,
+        //     signature: (prev.signature || []).map((file: any) =>
+        //       file._id === fileId ? { ...file, filename: newName } : file
+        //     ),
+        //   });
+        //   return FileUploaderServices.renameFile(fileId, newName);
+        // }}
+
+        deleteFile={(fileId) => {
+          setForms((prev: any) => ({
+            ...prev,
+            signature: (prev.signature || []).filter(
+              (file: any) => file._id !== fileId,
+            ),
           }));
           return FileUploaderServices.deleteFile(fileId);
         }}

@@ -337,7 +337,7 @@ const Resubmitted = () => {
   useEffect(() => {
     FRServices.getAllOptimized({ dateRange: dateRange })
       .then((res) => {
-        setClosedFRs(res.data.filter((e:any)=>e.isReverted ==true));
+        setClosedFRs(res.data.filter((e:any)=>e.isReSubmitted ==true));
       })
       .catch((err) => {
         console.log({ err });
@@ -346,7 +346,7 @@ const Resubmitted = () => {
   useEffect(() => {
     FRServices.getAllOptimizedExSupprt({ dateRange: dateRange, support: statusFilter1 })
       .then((res) => {
-        setClosedFRs(res.data.filter((e:any)=>e.isReverted ==true));
+        setClosedFRs(res.data.filter((e:any)=>e.isReSubmitted ==true));
       })
       .catch((err) => {
         console.log({ err });

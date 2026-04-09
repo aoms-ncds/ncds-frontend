@@ -72,7 +72,7 @@ const ReleaseAmountAudit = (props: { action: 'manage' | 'release' }) => {
   const user = useAuth();
   const [searchText, setSearchText] = useState('');
   const [mngrName, setMngrName] = useState('');
-  const [statusFilter, setStatusFilter] = useState([]); // default WFA: Waiting for access or Reverted
+  const [statusFilter, setStatusFilter] = useState<any>([]); // default WFA: Waiting for access or Reverted
   const [exstatusFilter, setExStatusFilter] = useState<any>([]); // default WFA: Waiting for access or Reverted
   const [openLog, setOpenLog] = useState(false);
   const [divisions, setDivisions] = useState<string[]>([]);
@@ -1369,22 +1369,25 @@ const ReleaseAmountAudit = (props: { action: 'manage' | 'release' }) => {
                     <ToggleButtonGroup
                       exclusive
                       size="small"
-                      value={exstatusFilter.includes(69) ? 'NonBankTransfers' : 'All'}
+                      value={exstatusFilter.includes(69) ? 'NonBankTransfers' : exstatusFilter.includes(71) ? 'BankTransfers' : 'All'}
                       onChange={(_, value) => {
                         if (!value) return;
 
                         if (value === 'NonBankTransfers') {
                           setExStatusFilter([69]);
                         } else {
-                          setExStatusFilter([]);
-                          setStatusFilter([]);
+                          setExStatusFilter([71]);
+                          setStatusFilter([IROLifeCycleStates.AMOUNT_RELEASED]);
                         }
                       }}
                       sx={toggleSx}
                     >
                       <ToggleButton value="All">ALL</ToggleButton>
                       <ToggleButton value="NonBankTransfers">
-        NON BANK TRANSFERS
+                        NON BANK TRANSFERS
+                      </ToggleButton>
+                      <ToggleButton value="BankTransfers">
+                         BANK TRANSFERS
                       </ToggleButton>
                     </ToggleButtonGroup>
                   </Grid>

@@ -94,7 +94,7 @@ const frDashboard = () => {
       .catch((error) => {
         console.log(error);
       });
-    FRServices.getCustomCount({ isReSubmitted: true, status: FRLifeCycleStates.WAITING_FOR_ACCOUNTS })
+    FRServices.getCustomCount({ isReSubmitted: true })
       .then((res) => setResubmittedFrCount(res.data))
       .catch((error) => {
         console.log(error);
@@ -133,7 +133,7 @@ const frDashboard = () => {
       .catch((error) => {
         console.log(error);
       });
-    FRServices.getCustomCount({ isReSubmitted: true, status: FRLifeCycleStates.WAITING_FOR_ACCOUNTS, year: year })
+    FRServices.getCustomCount({ isReSubmitted: true, year: year })
       .then((res) => setResubmittedFrCount(res.data))
       .catch((error) => {
         console.log(error);

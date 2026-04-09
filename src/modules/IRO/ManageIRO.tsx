@@ -1961,14 +1961,14 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                                 <ToggleButtonGroup
                                   exclusive
                                   size="small"
-                                  value={exstatusFilter.includes(69) ? 'NonBankTransfers' : 'All'}
+                                  value={exstatusFilter.includes(69) ? 'NonBankTransfers' : exstatusFilter.includes(71) ? 'BANK TRANS.' : 'All'}
                                   onChange={(_, value) => {
                                     if (!value) return;
 
                                     if (value === 'NonBankTransfers') {
                                       setExStatusFilter([69]);
                                     } else {
-                                      setExStatusFilter([]);
+                                      setExStatusFilter([71]);
                                       setStatusFilter([IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE]);
                                     }
                                   }}

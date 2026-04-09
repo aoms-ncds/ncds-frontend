@@ -1069,7 +1069,7 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
                           if (value === 'NonBankTransfers') {
                             setExStatusFilter([69]);
                           } else if (value === 'BankTransfers') {
-                            setExStatusFilter([70]);
+                            setExStatusFilter([71]);
                           } else {
                             setExStatusFilter([]);
                             setStatusFilter([

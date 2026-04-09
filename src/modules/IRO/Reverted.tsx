@@ -810,22 +810,25 @@ const RevertedIRO = () => {
               <ToggleButtonGroup
                 exclusive
                 size="small"
-                value={exstatusFilter.includes(69) ? 'NonBankTransfers' : 'All'}
+                value={exstatusFilter.includes(69) ? 'NonBankTransfers' : exstatusFilter.includes(71) ? 'BankTransfers' : 'All'}
                 onChange={(_, value) => {
                   if (!value) return;
 
                   if (value === 'NonBankTransfers') {
                     setExStatusFilter([69]);
                   } else {
-                    setExStatusFilter([]);
-                    setStatusFilter([IROLifeCycleStates.REVERTED_TO_DIVISION]);
+                    setExStatusFilter([71]);
+                    setStatusFilter([IROLifeCycleStates.AMOUNT_RELEASED]);
                   }
                 }}
                 sx={toggleSx}
               >
                 <ToggleButton value="All">ALL</ToggleButton>
                 <ToggleButton value="NonBankTransfers">
-        NON BANK TRANSFERS
+                    NON BANK TRANSFERS
+                </ToggleButton>
+                <ToggleButton value="BankTransfers">
+                     BANK TRANSFERS
                 </ToggleButton>
               </ToggleButtonGroup>
             </Grid>

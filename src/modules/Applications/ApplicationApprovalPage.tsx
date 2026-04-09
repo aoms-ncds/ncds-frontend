@@ -42,6 +42,10 @@ const ApplicationApprovalPage = () => {
   const [showFileUploader, setShowFileUploader] = useState<boolean>(false);
   const [editOpen, setEditOpen] = useState(false);
   const [editData, setEditData] = useState<any>({});
+  const [openFiles, setOpenFiles] = useState(false);
+  const [fileKey, setFileKey] = useState('');
+  const [openFilesEdit, setOpenFilesEdit] = useState(false);
+  const [fileKeyEdit, setFileKeyEdit] = useState('');
   const handleEdit = () => {
     setEditData((applications as any)?.formData); // clone if needed
     setEditOpen(true);
@@ -690,7 +694,12 @@ const ApplicationApprovalPage = () => {
         <DialogContent dividers>
           <Grid container spacing={2}>
             {Object.entries(editData).map(([key, value]) => {
-              if (typeof value === 'object' && value !== null) {
+              const isFileArray =
+      Array.isArray(value) &&
+      value.length >= 0 &&
+      (value[0]?.downloadURL || value.length === 0);
+
+              if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
                 return (
                   <Grid item xs={12} key={key}>
                     <Typography fontWeight="bold" sx={{ mb: 1 }}>
@@ -698,26 +707,51 @@ const ApplicationApprovalPage = () => {
                     </Typography>
 
                     <Grid container spacing={2}>
-                      {Object.entries(value).map(([subKey, subValue]) => (
-                        <React.Fragment key={subKey}>
+                      {Object.entries(value).map(([subKey, subValue]) => {
+                        const isSubFileArray =
+                Array.isArray(subValue) &&
+                (subValue[0]?.downloadURL || subValue.length === 0);
 
-                          <Grid item xs={2} sx={{ display: 'flex', alignItems: 'center' }}>
-                            <Typography>{formatLabel(subKey)}</Typography>
-                          </Grid>
+                        return (
+                          <React.Fragment key={subKey}>
 
-                          <Grid item xs={2}>
-                            <TextField
-                              fullWidth
-                              size="small"
-                              value={subValue as any || ''}
-                              onChange={(e) =>
-                                handleEditChange(subKey, e.target.value, key)
-                              }
-                            />
-                          </Grid>
+                            {/* Label */}
+                            <Grid item xs={2} sx={{ display: 'flex', alignItems: 'center' }}>
+                              <Typography>{formatLabel(subKey)}</Typography>
+                            </Grid>
 
-                        </React.Fragment>
-                      ))}
+                            {/* Value */}
+                            <Grid item xs={2}>
+                              {isSubFileArray ? (
+                                <Box display="flex" flexDirection="column" gap={1}>
+
+                                  <Button
+                                    size="small"
+                                    variant="outlined"
+                                    onClick={() => {
+                                      setFileKeyEdit(subKey);
+                                      setOpenFilesEdit(true);
+                                    }}
+                                  >
+                          Manage Files ({subValue.length})
+                                  </Button>
+
+                                </Box>
+                              ) : (
+                                <TextField
+                                  fullWidth
+                                  size="small"
+                                  value={subValue as any || ''}
+                                  onChange={(e) =>
+                                    handleEditChange(subKey, e.target.value, key)
+                                  }
+                                />
+                              )}
+                            </Grid>
+
+                          </React.Fragment>
+                        );
+                      })}
                     </Grid>
                   </Grid>
                 );
@@ -726,17 +760,32 @@ const ApplicationApprovalPage = () => {
               return (
                 <React.Fragment key={key}>
 
+                  {/* Label */}
                   <Grid item xs={2} sx={{ display: 'flex', alignItems: 'center' }}>
                     <Typography>{formatLabel(key)}</Typography>
                   </Grid>
 
+                  {/* Value */}
                   <Grid item xs={2}>
-                    <TextField
-                      fullWidth
-                      size="small"
-                      value={value as any || ''}
-                      onChange={(e) => handleEditChange(key, e.target.value)}
-                    />
+                    {isFileArray ? (
+                      <Button
+                        size="small"
+                        variant="outlined"
+                        onClick={() => {
+                          setFileKeyEdit(key);
+                          setOpenFilesEdit(true);
+                        }}
+                      >
+              Manage Files ({value.length})
+                      </Button>
+                    ) : (
+                      <TextField
+                        fullWidth
+                        size="small"
+                        value={value as any || ''}
+                        onChange={(e) => handleEditChange(key, e.target.value)}
+                      />
+                    )}
                   </Grid>
 
                 </React.Fragment>
@@ -760,8 +809,13 @@ const ApplicationApprovalPage = () => {
             <Grid container spacing={2}>
               {(applications as any)?.formData ? (
                 Object.entries((applications as any)?.formData).map(([key, value]) => {
+                  const isFileArray =
+        Array.isArray(value) &&
+        value.length > 0 &&
+        value[0]?.downloadURL;
+
                   // Nested object (section)
-                  if (typeof value === 'object' && value !== null) {
+                  if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
                     return (
                       <Grid item xs={12} key={key}>
                         <Typography fontWeight="700" sx={{ mb: 1 }}>
@@ -769,22 +823,46 @@ const ApplicationApprovalPage = () => {
                         </Typography>
 
                         <Grid container spacing={2}>
-                          {Object.entries(value).map(([subKey, subValue]) => (
-                            <>
-                              <Grid item xs={2} key={subKey + 'label'}>
-                                <Typography>{formatLabel(subKey)}</Typography>
-                              </Grid>
+                          {Object.entries(value).map(([subKey, subValue]) => {
+                            const isSubFileArray =
+                  Array.isArray(subValue) &&
+                  subValue.length > 0 &&
+                  subValue[0]?.downloadURL;
 
-                              <Grid item xs={2} key={subKey + 'value'}>
-                                <TextField
-                                  fullWidth
-                                  size="small"
-                                  value={subValue as any || ''}
-                                  InputProps={{ readOnly: true }}
-                                />
-                              </Grid>
-                            </>
-                          ))}
+                            return (
+                              <React.Fragment key={subKey}>
+
+                                {/* Label */}
+                                <Grid item xs={2}>
+                                  <Typography>{formatLabel(subKey)}</Typography>
+                                </Grid>
+
+                                {/* Value */}
+                                <Grid item xs={2}>
+                                  {isSubFileArray ? (
+                                    <Button
+                                      variant="outlined"
+                                      size="small"
+                                      onClick={() => {
+                                        setFileKey(subKey);
+                                        setOpenFiles(true);
+                                      }}
+                                    >
+                          View Files ({subValue.length})
+                                    </Button>
+                                  ) : (
+                                    <TextField
+                                      fullWidth
+                                      size="small"
+                                      value={subValue as any || ''}
+                                      InputProps={{ readOnly: true }}
+                                    />
+                                  )}
+                                </Grid>
+
+                              </React.Fragment>
+                            );
+                          })}
                         </Grid>
                       </Grid>
                     );
@@ -792,27 +870,43 @@ const ApplicationApprovalPage = () => {
 
                   // Normal fields
                   return (
-                    <>
-                      <Grid item xs={2} key={key + 'label'}>
+                    <React.Fragment key={key}>
+
+                      {/* Label */}
+                      <Grid item xs={2}>
                         <Typography>{formatLabel(key)}</Typography>
                       </Grid>
 
-                      <Grid item xs={2} key={key + 'value'}>
-                        <TextField
-                          fullWidth
-                          size="small"
-                          value={value as any || ''}
-                          InputProps={{ readOnly: true }}
-                        />
+                      {/* Value */}
+                      <Grid item xs={2}>
+                        {isFileArray ? (
+                          <Button
+                            variant="outlined"
+                            size="small"
+                            onClick={() => {
+                              setFileKey(key);
+                              setOpenFiles(true);
+                            }}
+                          >
+                View Files ({value.length})
+                          </Button>
+                        ) : (
+                          <TextField
+                            fullWidth
+                            size="small"
+                            value={value as any || ''}
+                            InputProps={{ readOnly: true }}
+                          />
+                        )}
                       </Grid>
-                    </>
+
+                    </React.Fragment>
                   );
                 })
               ) : (
                 <Typography>No data</Typography>
               )}
             </Grid>
-
           </Container>
 
         </DialogContent>
@@ -827,6 +921,76 @@ const ApplicationApprovalPage = () => {
           </Button>
         </DialogActions>
       </Dialog>
+      <FileUploader
+        title="Attachmentss"
+        action="add"
+        open={openFilesEdit}
+        onClose={() => setOpenFilesEdit(false)}
+        types={[
+          'application/pdf',
+          'image/png',
+          'image/jpeg',
+          'image/jpg',
+        ]}
+        limits={{
+          maxItemSize: 1 * MB,
+          maxItemCount: 3,
+          maxTotalSize: 3 * MB,
+        }}
+
+        getFiles={editData?.[fileKeyEdit] || []}
+
+        uploadFile={(file, onProgress) =>
+          FileUploaderServices.uploadFile(file, onProgress, 'Applications', file.name)
+      .then((res) => {
+        setEditData((prev: any) => ({
+          ...prev,
+          [fileKeyEdit]: [...(prev[fileKeyEdit] || []), res.data],
+        }));
+        return res;
+      })
+        }
+
+        renameFile={(fileId, newName) => {
+          setEditData((prev: any) => ({
+            ...prev,
+            [fileKeyEdit]: (prev[fileKeyEdit] || []).map((file: any) =>
+              file._id === fileId ? { ...file, filename: newName } : file,
+            ),
+          }));
+
+          return FileUploaderServices.renameFile(fileId, newName);
+        }}
+
+        deleteFile={(fileId) => {
+          setEditData((prev: any) => ({
+            ...prev,
+            [fileKeyEdit]: (prev[fileKeyEdit] || []).filter(
+              (file: any) => file._id !== fileId,
+            ),
+          }));
+
+          return FileUploaderServices.deleteFile(fileId);
+        }}
+      />
+      <FileUploader
+        title="Attachments"
+        action="view"
+        open={openFiles}
+        onClose={() => setOpenFiles(false)}
+        types={[
+          'application/pdf',
+          'image/png',
+          'image/jpeg',
+          'image/jpg',
+        ]}
+        limits={{
+          maxItemSize: 1 * MB,
+          maxItemCount: 3,
+          maxTotalSize: 3 * MB,
+        }}
+        getFiles={(applications as any)?.formData?.[fileKey] || []}
+      />
     </CommonPageLayout>
   );
 };
