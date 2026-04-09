@@ -177,278 +177,178 @@ const HomePage = () => {
   }, []);
   return (
     <CommonPageLayout title="Home" >
+      <Grid item xs={12} md={6} lg={6} xl={6}>
+        <Card
+          sx={{
+            borderRadius: 4,
+            p: { xs: 2, sm: 3 },
+            background: '#fff',
+            boxShadow: '0 6px 16px rgba(0,0,0,0.08)',
+          }}
+        >
+          <Typography variant="h6" pb={1} fontWeight={600} color="text.primary">
+   Manage
+          </Typography>
+          <Grid container spacing={2}>
 
-      <Grid container spacing={3}>
-        {/* Sessions */}
-        <Grid item xs={12} md={12} lg={3} xl={3}>
-          <Card
-            sx={{
-              'borderRadius': 3,
-              'boxShadow': '0 6px 18px rgba(0,0,0,0.08)',
-              'transition': 'all 0.3s ease',
-              'height': 160,
-              '&:hover': {
-                transform: 'translateY(-5px)',
-                boxShadow: '0 10px 25px rgba(0,0,0,0.15)',
-              },
-            }}
-          >
-            <CardContent>
-              <Box display="flex" justifyContent="space-between" alignItems="center">
-
-                {/* Left Section */}
-                <Box>
-                  <Typography
-                    sx={{ fontSize: 14, color: 'text.secondary', fontWeight: 500 }}
-                  >
-            Divisions
-                  </Typography>
-
-                  <Typography
+            {/* Tile 1 */}
+            <Grid item xs={12} sm={3}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  p: 2,
+                  borderRadius: 3,
+                  background: '#f3f0ff',
+                }}
+              >
+                <Box display="flex" alignItems="center" gap={2}>
+                  <Box
                     sx={{
-                      fontSize: 32,
-                      fontWeight: 700,
-                      color: '#1a237e',
-                      mt: 0.5,
+                      width: 40,
+                      height: 40,
+                      borderRadius: 2,
+                      background: '#8b7cf6',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
                     }}
                   >
-                    {Number(divisionsCountit) === 0 ? '1' : divisionsCountit || '1'}
-                  </Typography>
+                    <img src="/mod_icons/fr.png" width="22" />
+                  </Box>
 
-                  <Box display="flex" alignItems="center" mt={1}>
-                    <ArrowUpwardIcon sx={{ fontSize: 18, color: 'green', mr: 0.5 }} />
-                    <Typography sx={{ color: 'green', fontWeight: 600, fontSize: 13 }}>
-              2.1%
+                  <Box>
+                    <Typography sx={{ color: '#6b6f82' }} fontWeight={700} fontSize={17}>Divisions
                     </Typography>
+                    <Typography sx={{ color: '#6b6f82' }} fontWeight={600}>{divisionsCountit}</Typography>
+                  </Box>
+                </Box>
 
-                    <Typography sx={{ fontSize: 13, color: 'text.secondary', ml: 0.5 }}>
-              vs last 7 days
+                <RampRight />
+              </Box>
+            </Grid>
+
+            {/* Tile 2 */}
+            <Grid item xs={12} sm={3}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  p: 2,
+                  borderRadius: 3,
+                  background: '#fff3d6',
+                }}
+              >
+                <Box display="flex" alignItems="center" gap={2}>
+                  <Box
+                    sx={{
+                      width: 40,
+                      height: 40,
+                      borderRadius: 2,
+                      background: '#f5c542',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <img src="/mod_icons/iro.png" width="22" />
+                  </Box>
+
+                  <Box>
+                    <Typography fontWeight={700} sx={{ color: '#6b6f82' }} fontSize={17}>Workers</Typography>
+                    <Typography fontWeight={600} sx={{ color: '#6b6f82' }}>
+                      {workersCount}
                     </Typography>
                   </Box>
                 </Box>
 
-                {/* Right Icon */}
-                <Box
-                  sx={{
-                    width: 60,
-                    height: 60,
-                    borderRadius: 2,
-                    background:
-              'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <img
-                    src="/mod_icons/division.png"
-                    alt="division"
-                    style={{ width: 32, height: 32 }}
-                  />
-                </Box>
-
+                <RampRight />
               </Box>
-            </CardContent>
-          </Card>
-        </Grid>
-        {/* Other card components similar to Sessions */}
-        <Grid item xs={12} md={12} lg={3} xl={3}>
-          <Card
-            sx={{
-              'borderRadius': 3,
-              'boxShadow': '0 6px 18px rgba(0,0,0,0.08)',
-              'transition': 'all 0.3s ease',
-              'height': 160,
-              '&:hover': {
-                transform: 'translateY(-5px)',
-                boxShadow: '0 10px 25px rgba(0,0,0,0.15)',
-              },
-            }}
-          >
-            <CardContent>
-              <Box display="flex" justifyContent="space-between" alignItems="center">
+            </Grid>
 
-                {/* Left Content */}
-                <Box>
-                  <Typography
-                    sx={{ fontSize: 14, color: 'text.secondary', fontWeight: 500 }}
-                  >
-            Workers
-                  </Typography>
-
-                  <Typography
+            {/* Tile 3 */}
+            <Grid item xs={12} sm={3}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  p: 2,
+                  borderRadius: 3,
+                  background: '#e6f6ec',
+                }}
+              >
+                <Box display="flex" alignItems="center" gap={2}>
+                  <Box
                     sx={{
-                      fontSize: 32,
-                      fontWeight: 700,
-                      color: '#2e7d32',
-                      mt: 0.5,
+                      width: 40,
+                      height: 40,
+                      borderRadius: 2,
+                      background: '#34c759',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
                     }}
                   >
-                    {workersCount}
-                  </Typography>
+                    <img src="/mod_icons/iro.png" width="22" />
+                  </Box>
 
-                  <Box display="flex" alignItems="center" mt={1}>
-                    <ArrowUpwardIcon sx={{ fontSize: 18, color: 'green', mr: 0.5 }} />
-
-                    <Typography sx={{ color: 'green', fontWeight: 600, fontSize: 13 }}>
-              5.2%
-                    </Typography>
-
-                    <Typography sx={{ fontSize: 13, color: 'text.secondary', ml: 0.5 }}>
-              vs last 7 days
+                  <Box>
+                    <Typography fontWeight={700} sx={{ color: '#6b6f82' }} fontSize={17}>IRO</Typography>
+                    <Typography fontWeight={600} sx={{ color: '#6b6f82' }}>
+                      {iroCount}
                     </Typography>
                   </Box>
                 </Box>
 
-                {/* Right Icon */}
-                <Box
-                  sx={{
-                    width: 60,
-                    height: 60,
-                    borderRadius: 2,
-                    background: 'linear-gradient(135deg,#43e97b 0%,#38f9d7 100%)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <img
-                    src="/mod_icons/division.png"
-                    alt="workers"
-                    style={{ width: 32, height: 32 }}
-                  />
-                </Box>
-
+                <RampRight />
               </Box>
-            </CardContent>
-          </Card>
-        </Grid>
-        {/* Other card components similar to Sessions */}
-        <Grid item xs={12} md={6} lg={3} xl={3}>
-          <Card
-            sx={{
-              'borderRadius': 3,
-              'boxShadow': '0 6px 18px rgba(0,0,0,0.08)',
-              'transition': 'all 0.3s ease',
-              'height': 160,
-              '&:hover': {
-                transform: 'translateY(-5px)',
-                boxShadow: '0 10px 25px rgba(0,0,0,0.15)',
-              },
-            }}
-          >
-            <CardContent>
-              <Box display="flex" justifyContent="space-between" alignItems="center">
+            </Grid>
 
-                <Box>
-                  <Typography sx={{ fontSize: 14, color: 'text.secondary', fontWeight: 500 }}>
-            IRO
-                  </Typography>
-
-                  <Typography
+            {/* Tile 4 */}
+            <Grid item xs={12} sm={3}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  p: 2,
+                  borderRadius: 3,
+                  background: '#e9f4ff',
+                }}
+              >
+                <Box display="flex" alignItems="center" gap={2}>
+                  <Box
                     sx={{
-                      fontSize: 32,
-                      fontWeight: 700,
-                      color: '#1565c0',
-                      mt: 0.5,
+                      width: 40,
+                      height: 40,
+                      borderRadius: 2,
+                      background: '#1da1f2',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
                     }}
                   >
-                    {iroCount}
-                  </Typography>
+                    <img src="/mod_icons/iro.png" width="22" />
+                  </Box>
 
-                  <Box display="flex" alignItems="center" mt={1}>
-                    <ArrowUpwardIcon sx={{ fontSize: 18, color: 'green', mr: 0.5 }} />
-                    <Typography sx={{ color: 'green', fontWeight: 600, fontSize: 13 }}>
-              7.0%
-                    </Typography>
-                    <Typography sx={{ fontSize: 13, color: 'text.secondary', ml: 0.5 }}>
-              vs last 7 days
+                  <Box>
+                    <Typography fontWeight={700} sx={{ color: '#6b6f82' }} fontSize={17}>FR</Typography>
+                    <Typography fontWeight={600} sx={{ color: '#6b6f82' }}>
+                      {frCount}
                     </Typography>
                   </Box>
                 </Box>
 
-                <Box
-                  sx={{
-                    width: 60,
-                    height: 60,
-                    borderRadius: 2,
-                    background: 'linear-gradient(135deg,#4facfe 0%,#00f2fe 100%)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <img src="/mod_icons/iro.png" alt="iro" style={{ width: 32, height: 32 }} />
-                </Box>
-
+                <RampRight />
               </Box>
-            </CardContent>
-          </Card>
-        </Grid>
-        {/* Other card components similar to Sessions */}
-        <Grid item xs={12} md={6} lg={3} xl={3}>
-          <Card
-            sx={{
-              'borderRadius': 3,
-              'boxShadow': '0 6px 18px rgba(0,0,0,0.08)',
-              'transition': 'all 0.3s ease',
-              'height': 160,
-              '&:hover': {
-                transform: 'translateY(-5px)',
-                boxShadow: '0 10px 25px rgba(0,0,0,0.15)',
-              },
-            }}
-          >
-            <CardContent>
-              <Box display="flex" justifyContent="space-between" alignItems="center">
-
-                <Box>
-                  <Typography sx={{ fontSize: 14, color: 'text.secondary', fontWeight: 500 }}>
-            FR
-                  </Typography>
-
-                  <Typography
-                    sx={{
-                      fontSize: 32,
-                      fontWeight: 700,
-                      color: '#6a1b9a',
-                      mt: 0.5,
-                    }}
-                  >
-                    {frCount}
-                  </Typography>
-
-                  <Box display="flex" alignItems="center" mt={1}>
-                    <ArrowUpwardIcon sx={{ fontSize: 18, color: 'green', mr: 0.5 }} />
-                    <Typography sx={{ color: 'green', fontWeight: 600, fontSize: 13 }}>
-              4.3%
-                    </Typography>
-                    <Typography sx={{ fontSize: 13, color: 'text.secondary', ml: 0.5 }}>
-              vs last 7 days
-                    </Typography>
-                  </Box>
-                </Box>
-
-                <Box
-                  sx={{
-                    width: 60,
-                    height: 60,
-                    borderRadius: 2,
-                    background: 'linear-gradient(135deg,#a18cd1 0%,#fbc2eb 100%)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <img src="/mod_icons/fr.png" alt="fr" style={{ width: 32, height: 32 }} />
-                </Box>
-
-              </Box>
-            </CardContent>
-          </Card>
-        </Grid>
-        {/* Other card components similar to Sessions */}
+            </Grid>
+          </Grid>
+        </Card>
       </Grid>
+
       <br />
       <Grid container spacing={3} >
         <Grid item xs={12} md={6} lg={8} xl={8}>
@@ -1069,7 +969,7 @@ Total Sub-Div                          </Typography>
           </Card>
         </Grid>
 
-        <Grid item xs={12} md={6} lg={6} xl={6}>
+        <Grid item xs={12} md={12} lg={12} xl={12}>
 
           <Card
             sx={{
@@ -1202,176 +1102,7 @@ Total Sub-Div                          </Typography>
           </Card>
         </Grid>
 
-        <Grid item xs={12} md={6} lg={6} xl={6}>
-          <Card
-            sx={{
-              borderRadius: 4,
-              p: { xs: 2, sm: 3 },
-              background: '#fff',
-              boxShadow: '0 6px 16px rgba(0,0,0,0.08)',
-            }}
-          >
-            <Typography variant="h6" pb={1} fontWeight={600} color="text.primary">
-   Pending Approval
-            </Typography>
-            <Grid container spacing={2}>
-
-              {/* Tile 1 */}
-              <Grid item xs={12} sm={6}>
-                <Box
-                  sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    p: 2,
-                    borderRadius: 3,
-                    background: '#f3f0ff',
-                  }}
-                >
-                  <Box display="flex" alignItems="center" gap={2}>
-                    <Box
-                      sx={{
-                        width: 40,
-                        height: 40,
-                        borderRadius: 2,
-                        background: '#8b7cf6',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                      }}
-                    >
-                      <img src="/mod_icons/fr.png" width="22" />
-                    </Box>
-
-                    <Box>
-                      <Typography fontSize={14}>FR Pending Approval</Typography>
-                      <Typography fontWeight={600}>14</Typography>
-                    </Box>
-                  </Box>
-
-                  <RampRight />
-                </Box>
-              </Grid>
-
-              {/* Tile 2 */}
-              <Grid item xs={12} sm={6}>
-                <Box
-                  sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    p: 2,
-                    borderRadius: 3,
-                    background: '#fff3d6',
-                  }}
-                >
-                  <Box display="flex" alignItems="center" gap={2}>
-                    <Box
-                      sx={{
-                        width: 40,
-                        height: 40,
-                        borderRadius: 2,
-                        background: '#f5c542',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                      }}
-                    >
-                      <img src="/mod_icons/iro.png" width="22" />
-                    </Box>
-
-                    <Box>
-                      <Typography fontSize={14}>IRO Waiting for Verify</Typography>
-                      <Typography fontWeight={600}>21</Typography>
-                    </Box>
-                  </Box>
-
-                  <RampRight />
-                </Box>
-              </Grid>
-
-              {/* Tile 3 */}
-              <Grid item xs={12} sm={6}>
-                <Box
-                  sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    p: 2,
-                    borderRadius: 3,
-                    background: '#e6f6ec',
-                  }}
-                >
-                  <Box display="flex" alignItems="center" gap={2}>
-                    <Box
-                      sx={{
-                        width: 40,
-                        height: 40,
-                        borderRadius: 2,
-                        background: '#34c759',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                      }}
-                    >
-                      <CircleNotifications sx={{ color: '#fff' }} />
-                    </Box>
-
-                    <Typography fontSize={14}>
-            Awaiting President Approval
-                    </Typography>
-                  </Box>
-
-                  <RampRight />
-                </Box>
-              </Grid>
-
-              {/* Tile 4 */}
-              <Grid item xs={12} sm={6}>
-                <Box
-                  sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    p: 2,
-                    borderRadius: 3,
-                    background: '#e9f4ff',
-                  }}
-                >
-                  <Box display="flex" alignItems="center" gap={2}>
-                    <Box
-                      sx={{
-                        width: 40,
-                        height: 40,
-                        borderRadius: 2,
-                        background: '#1da1f2',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                      }}
-                    >
-                      <img src="/mod_icons/division.png" width="22" />
-                    </Box>
-
-                    <Typography fontSize={14}>Management Panel</Typography>
-                  </Box>
-
-                  <Button
-                    variant="contained"
-                    size="small"
-                    sx={{
-                      borderRadius: 5,
-                      textTransform: 'none',
-                    }}
-                  >
-          Manage
-                  </Button>
-                </Box>
-              </Grid>
-
-            </Grid>
-          </Card>
-        </Grid>
+    
       </Grid>
 
       {/* </Container> */}

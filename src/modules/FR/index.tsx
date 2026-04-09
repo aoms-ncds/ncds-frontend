@@ -23,31 +23,40 @@ const frDashboard = () => {
   const actions = [
     {
       label: 'New FR',
-      color: 'linear-gradient(90deg, #a3fa51, #020957)',
+      bg: '#EEF6FF',
+      accent: '#2563EB',
+      border: '#BFDBFE',
       route: '/fr/apply',
     },
     {
       label: 'New Worker Support',
-      color: 'linear-gradient(90deg, #54fcd2, #041338)',
+      bg: '#F0FDF4',
+      accent: '#16A34A',
+      border: '#BBF7D0',
       route: '/fr/worker_support',
     },
     {
       label: 'New Child Support',
-      color: 'linear-gradient(90deg, #0284c7, #002231)',
+      bg: '#FFF7ED',
+      accent: '#EA580C',
+      border: '#FED7AA',
       route: '/fr/child_support',
     },
     {
       label: 'New Custom FR',
-      color: 'linear-gradient(90deg, #46ff7d, #013003)',
+      bg: '#FEFCE8',
+      accent: '#CA8A04',
+      border: '#FDE68A',
       route: '/fr/applyCustom',
     },
     {
       label: 'New Custom IRO',
-      color: 'linear-gradient(90deg, #bf50e0, #3b004d)',
+      bg: '#FDF4FF',
+      accent: '#9333EA',
+      border: '#E9D5FF',
       route: '/iro/applyCustom',
     },
-  ];
-  const getFinancialYear = (date = new Date()) => {
+  ]; const getFinancialYear = (date = new Date()) => {
     const year = date.getFullYear();
     const month = date.getMonth(); // Jan = 0
 
@@ -333,49 +342,99 @@ const frDashboard = () => {
                 {/* <Divider /> */}
               </Typography>
               <Stack
-                direction={{ xs: 'column', sm: 'row' }}
-                spacing={2}
+                direction="row"
+                spacing={1.5}
+                sx={{
+                  width: '100%',
+                  flexWrap: 'wrap',
+                  gap: 1.5,
+                }}
               >
                 {actions.map((item) => (
                   <Box
                     key={item.label}
                     onClick={() => navigate(item.route)}
                     sx={{
-                      'flex': 1,
+                      // Layout
+                      'flex': '1 1 160px',
                       'cursor': 'pointer',
-                      'background': item.color,
-                      'color': '#fff',
-                      'borderRadius': 3,
-                      'px': 2,
-                      'py': 1.5,
                       'display': 'flex',
                       'alignItems': 'center',
                       'justifyContent': 'space-between',
-                      'transition': 'transform 0.2s, box-shadow 0.2s',
+                      'gap': 1,
+
+                      // Appearance
+                      'backgroundColor': item.bg,
+                      'border': `1.5px solid ${item.border}`,
+                      'borderRadius': '14px',
+                      'px': 2,
+                      'py': 1.5,
+
+                      // Transitions
+                      'transition':
+              'transform 0.2s cubic-bezier(.34,1.56,.64,1), box-shadow 0.2s ease, border-color 0.2s ease',
+
                       '&:hover': {
                         transform: 'translateY(-2px)',
-                        boxShadow: '0 8px 16px rgba(0,0,0,0.15)',
+                        boxShadow: `0 8px 24px ${item.accent}22`,
+                        borderColor: item.accent,
+                      },
+                      '&:active': {
+                        transform: 'scale(0.98)',
                       },
                     }}
                   >
-                    <Stack direction="row" spacing={1.5} alignItems="center">
-                      <IconButton
-                        size="small"
+                    {/* Left: icon + label */}
+                    <Stack direction="row" spacing={1.5} alignItems="center" sx={{ minWidth: 0 }}>
+                      {/* Icon badge */}
+                      <Box
                         sx={{
-                          'bgcolor': 'rgba(255,255,255,0.2)',
-                          'color': '#fff',
-                          '&:hover': { bgcolor: 'rgba(255,255,255,0.3)' },
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          width: 32,
+                          height: 32,
+                          borderRadius: '9px',
+                          backgroundColor: `${item.accent}18`,
+                          color: item.accent,
+                          flexShrink: 0,
                         }}
                       >
-                        <AddIcon />
-                      </IconButton>
+                        <AddIcon sx={{ fontSize: 18 }} />
+                      </Box>
 
-                      <Typography fontWeight={600}>
+                      <Typography
+                        sx={{
+                          fontWeight: 600,
+                          fontSize: '0.82rem',
+                          color: '#1e293b',
+                          letterSpacing: '0.01em',
+                          lineHeight: 1.3,
+                          whiteSpace: 'nowrap',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                        }}
+                      >
                         {item.label}
                       </Typography>
                     </Stack>
 
-                    <ChevronRightIcon />
+                    {/* Chevron */}
+                    <Box
+                      sx={{
+                        'color': `${item.accent}88`,
+                        'display': 'flex',
+                        'alignItems': 'center',
+                        'flexShrink': 0,
+                        'transition': 'transform 0.2s ease, color 0.2s ease',
+                        '.MuiBox-root:hover &': {
+                          transform: 'translateX(3px)',
+                          color: item.accent,
+                        },
+                      }}
+                    >
+                      <ChevronRightIcon sx={{ fontSize: 18 }} />
+                    </Box>
                   </Box>
                 ))}
               </Stack>
