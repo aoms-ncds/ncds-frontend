@@ -273,9 +273,9 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
     setForms({ ...forms, [e.target.name]: e.target.value });
   };
 
-  const handleChange2 = (e: any) => {
-    setForm({ ...forms, [e.target.name]: e.target.value });
-  };
+  // const handleChange = (e: any) => {
+  //   setForm({ ...forms, [e.target.name]: e.target.value });
+  // };
 
   const handleCheckbox = (e: any) => {
     setForm({ ...forms, [e.target.name]: e.target.checked });
@@ -1520,7 +1520,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
               {/* Header */}
               <Paper sx={{ p: 3, mb: 3, textAlign: 'center', bgcolor: '#1976d2', color: '#fff' }}>
                 <Typography variant="h5">Welfare Ministry</Typography>
-                <Typography>Application for Educational Support</Typography>
+                <Typography variant="h6">Application for Educational Support</Typography>
               </Paper>
 
               {/* Basic */}
@@ -1831,30 +1831,30 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
               {/* Basic */}
               <Section title="Basic Information">
                 <Grid item xs={12}>
-                  <TextField fullWidth label="Division" name="division" onChange={handleChange2} />
+                  <TextField fullWidth label="Division" name="division" onChange={handleChange} />
                 </Grid>
               </Section>
 
               {/* Personal */}
               <Section title="Personal Details">
                 <Grid item xs={12}>
-                  <TextField fullWidth label="Applicant Name" name="name" onChange={handleChange2} />
+                  <TextField fullWidth label="Applicant Name" name="name" onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Worker Code" name="workerCode" onChange={handleChange2} />
+                  <TextField fullWidth label="Worker Code" name="workerCode" onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Welfare Scheme ID" name="schemeId" onChange={handleChange2} />
+                  <TextField fullWidth label="Welfare Scheme ID" name="schemeId" onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField type="date" fullWidth label="Joining Date" InputLabelProps={{ shrink: true }} name="joiningDate"onChange={handleChange2} />
+                  <TextField type="date" fullWidth label="Joining Date" InputLabelProps={{ shrink: true }} name="joiningDate"onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Spouse/Husband Name" name="spouse" onChange={handleChange2} />
+                  <TextField fullWidth label="Spouse/Husband Name" name="spouse" onChange={handleChange} />
                 </Grid>
               </Section>
 
@@ -1863,19 +1863,19 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                 {[0, 1, 2, 3].map((i) => (
                   <React.Fragment key={i}>
                     <Grid item xs={3}>
-                      <TextField fullWidth label="Name" name={`childName${i}`} onChange={handleChange2} />
+                      <TextField fullWidth label="Name" name={`childName${i}`} onChange={handleChange} />
                     </Grid>
                     <Grid item xs={2}>
-                      <TextField fullWidth label="Age" name={`childAge${i}`} onChange={handleChange2} />
+                      <TextField fullWidth label="Age" name={`childAge${i}`} onChange={handleChange} />
                     </Grid>
                     <Grid item xs={2}>
-                      <TextField fullWidth label="Studying" name={`childStudy${i}`} onChange={handleChange2} />
+                      <TextField fullWidth label="Studying" name={`childStudy${i}`} onChange={handleChange} />
                     </Grid>
                     <Grid item xs={2}>
-                      <TextField fullWidth label="Married" name={`childMarried${i}`} onChange={handleChange2} />
+                      <TextField fullWidth label="Married" name={`childMarried${i}`} onChange={handleChange} />
                     </Grid>
                     <Grid item xs={3}>
-                      <TextField fullWidth label="Working" name={`childWork${i}`} onChange={handleChange2} />
+                      <TextField fullWidth label="Working" name={`childWork${i}`} onChange={handleChange} />
                     </Grid>
                   </React.Fragment>
                 ))}
@@ -1884,42 +1884,42 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
               {/* Ministry */}
               <Section title="Ministry Details">
                 <Grid item xs={12}>
-                  <TextField fullWidth label="Ministry at time of death" name="ministry" onChange={handleChange2} />
+                  <TextField fullWidth label="Ministry at time of death" name="ministry" onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={12}>
-                  <TextField fullWidth label="Place of Ministry" name="place" onChange={handleChange2} />
+                  <TextField fullWidth label="Place of Ministry" name="place" onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={12}>
-                  <TextField fullWidth multiline rows={2} label="Reason for Death" name="reason" onChange={handleChange2} />
+                  <TextField fullWidth multiline rows={2} label="Reason for Death" name="reason" onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField type="date" fullWidth label="Date of Death" InputLabelProps={{ shrink: true }} name="deathDate" onChange={handleChange2} />
+                  <TextField type="date" fullWidth label="Date of Death" InputLabelProps={{ shrink: true }} name="deathDate" onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Place of Death (Hospital/Home)" name="deathPlace" onChange={handleChange2} />
+                  <TextField fullWidth label="Place of Death (Hospital/Home)" name="deathPlace" onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={12}>
-                  <TextField fullWidth label="Doctor Name" name="doctor" onChange={handleChange2} />
+                  <TextField fullWidth label="Doctor Name" name="doctor" onChange={handleChange} />
                 </Grid>
               </Section>
 
               {/* Family */}
               <Section title="Family Details">
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Spouse Qualification" name="qualification" onChange={handleChange2} />
+                  <TextField fullWidth label="Spouse Qualification" name="qualification" onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Income Details (Rs)" name="income" onChange={handleChange2} />
+                  <TextField fullWidth label="Income Details (Rs)" name="income" onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Requested Amount (Rs)" name="requested" onChange={handleChange2} />
+                  <TextField fullWidth label="Requested Amount (Rs)" name="requested" onChange={handleChange} />
                 </Grid>
 
                 {/* Living */}
@@ -1931,38 +1931,38 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                 </Grid>
 
                 <Grid item xs={12}>
-                  <TextField fullWidth label="Other (Specify)" name="otherLiving" onChange={handleChange2} />
+                  <TextField fullWidth label="Other (Specify)" name="otherLiving" onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Documents Attached" name="documents" onChange={handleChange2} />
+                  <TextField fullWidth label="Documents Attached" name="documents" onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Death Certificate" name="deathCertificate" onChange={handleChange2} />
+                  <TextField fullWidth label="Death Certificate" name="deathCertificate" onChange={handleChange} />
                 </Grid>
               </Section>
 
               {/* Recommendations */}
               <Section title="Recommendations">
                 <Grid item xs={12}>
-                  <TextField fullWidth multiline rows={2} label="Supervisor Comments" name="supervisor" onChange={handleChange2} />
+                  <TextField fullWidth multiline rows={2} label="Supervisor Comments" name="supervisor" onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Supervisor Name & Signature" name="supervisorSign" onChange={handleChange2} />
+                  <TextField fullWidth label="Supervisor Name & Signature" name="supervisorSign" onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={12}>
-                  <TextField fullWidth multiline rows={2} label="Coordinator Comments" name="coordinator" onChange={handleChange2} />
+                  <TextField fullWidth multiline rows={2} label="Coordinator Comments" name="coordinator" onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Recommended Amount" name="recommend" onChange={handleChange2} />
+                  <TextField fullWidth label="Recommended Amount" name="recommend" onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Signature with Date" name="signDate" onChange={handleChange2} />
+                  <TextField fullWidth label="Signature with Date" name="signDate" onChange={handleChange} />
                 </Grid>
                 <Grid item md={6}>
                   <Button variant="contained" onClick={() => setForm1Signature(true)} startIcon={<AttachmentIcon />}>
@@ -1974,19 +1974,19 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
               {/* Office */}
               <Section title="Office Use Only">
                 <Grid item xs={6}>
-                  <TextField type="date" fullWidth label="Application Received On" InputLabelProps={{ shrink: true }} name="receivedDate" onChange={handleChange2} />
+                  <TextField type="date" fullWidth label="Application Received On" InputLabelProps={{ shrink: true }} name="receivedDate" onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Amount Sanctioned" name="sanctioned" onChange={handleChange2} />
+                  <TextField fullWidth label="Amount Sanctioned" name="sanctioned" onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField type="date" fullWidth label="Fund Release Date" InputLabelProps={{ shrink: true }} name="releaseDate" onChange={handleChange2} />
+                  <TextField type="date" fullWidth label="Fund Release Date" InputLabelProps={{ shrink: true }} name="releaseDate" onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField type="date" fullWidth label="Applicant Informed Date" InputLabelProps={{ shrink: true }} name="informedDate" onChange={handleChange2} />
+                  <TextField type="date" fullWidth label="Applicant Informed Date" InputLabelProps={{ shrink: true }} name="informedDate" onChange={handleChange} />
                 </Grid>
 
 
