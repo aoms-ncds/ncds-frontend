@@ -666,7 +666,7 @@ const FRForm = (props: FormComponentProps<any>) => {
                           });
                         }
                       }}
-                      renderInput={(params) => <TextField {...params} label="Choose Worker" required />}
+                      renderInput={(params) => <TextField {...params} label="Choose Worker"/>}
                       fullWidth
                       disabled={props.disable}
                     />

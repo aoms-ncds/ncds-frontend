@@ -712,7 +712,7 @@ const EditIRO = () => {
                           setIRO({ ...IRO, division: newVal ?? undefined })
                         } renderInput={(params) => <TextField {...params} label="Choose Division" />}
                         fullWidth
-                        disabled={IROLifeCycleStates.REOPENED !==IRO.status&&!hasPermissions(['OFFICE_MNGR_ACCESS'])&& hasPermissions(['ACCOUNTS_MNGR_ACCESS']) && !hasPermissions(['ADMIN_ACCESS'])}/>
+                        disabled={IROLifeCycleStates.REOPENED !==IRO.status&& !hasPermissions(['ADMIN_ACCESS'])}/>
                     </Grid>
                   ) : null}
                   {IRO?.purpose === 'Subdivision' ? (
