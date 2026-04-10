@@ -9,9 +9,10 @@ import FRCountCard from '../FR/components/FRCountCard';
 import IROLifeCycleStates from './extras/IROLifeCycleStates';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/Authentication';
-import { ArrowBackIos } from '@mui/icons-material';
+import { ArrowBackIos, RampRight } from '@mui/icons-material';
 import FROperationalSummary from '../FR/components/FROperationalSummary';
 import formatAmount from '../Common/formatcode';
+import IROCountCard from './components/IROCountCard';
 
 const IRODashboard = () => {
   const navigate = useNavigate();
@@ -150,7 +151,7 @@ const IRODashboard = () => {
        setDivisionBasedCount(res.data as number);
      });
 
-    IROServices.getCount({ status: IROLifeCycleStates.IRO_CLOSED, year: year})
+    IROServices.getCount({ status: IROLifeCycleStates.IRO_CLOSED, year: year })
       .then((res) => setClosedIROCount(res.data))
       .catch((error) => {
         console.log(error);
@@ -179,7 +180,7 @@ const IRODashboard = () => {
       .catch((error) => {
         console.log(error);
       });
-    IROServices.getCount({ status: IROLifeCycleStates.WAITTING_FOR_RELEASE_AMOUNT, year: year })
+    IROServices.getCount({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE, year: year })
       .then((res) => setPendingReleases(res.data))
       .catch((error) => {
         console.log(error);
@@ -359,15 +360,8 @@ const IRODashboard = () => {
               </Box>
             </Grid>
 
-            <Grid item xs={12} md={3} xl={3}>
-              <FRCountCard
-                icon={
-                  <img
-                    src="/mod_icons/Approved IRO.png"
-                    alt="Logo"
-                    style={{ width: '50px', height: '50px' }}
-                  />
-                }
+            <Grid item xs={12} md={3} xl={4}>
+              <IROCountCard
                 count={waitingtoofficemanagerCount?.toString()}
                 // amount={'1000'}
                 onClick={() => navigate(`/iro/manage?id=${5}`)}
@@ -375,8 +369,8 @@ const IRODashboard = () => {
                 color="#0026ff"
               />
             </Grid>
-            <Grid item xs={12} md={3} xl={3}>
-              <FRCountCard
+            <Grid item xs={12} md={3} xl={4}>
+              <IROCountCard
                 icon={
                   <img
                     src="/mod_icons/Approved IRO.png"
@@ -390,8 +384,8 @@ const IRODashboard = () => {
                 color="#ffc400"
               />
             </Grid>
-            <Grid item xs={12} md={3} xl={3}>
-              <FRCountCard
+            <Grid item xs={12} md={3} xl={4}>
+              <IROCountCard
                 icon={
                   <img
                     src="/mod_icons/Approved IRO.png"
@@ -405,8 +399,8 @@ const IRODashboard = () => {
                 color="#ba00f3"
               />
             </Grid>
-            <Grid item xs={12} md={3} xl={3}>
-              <FRCountCard
+            <Grid item xs={12} md={3} xl={4}>
+              <IROCountCard
                 icon={
                   <img
                     src="/mod_icons/Approved IRO.png"
@@ -421,108 +415,381 @@ const IRODashboard = () => {
               />
             </Grid>
 
-            <Grid item xs={12} md={12} xl={12}>
-              <Typography variant="h6" fontWeight={600} color="#060f71">
-               Operational Summary (Amount-Based to FY filters)
-                {/* <Divider /> */}
-              </Typography>
-            </Grid>
-            <Grid item xs={12} md={3} xl={3}>
-              <FROperationalSummary
-                icon={
-                  <img
-                    src="/mod_icons/Approved IRO.png"
-                    alt="Logo"
-                    style={{ width: '50px', height: '50px' }}
-                  />
-                }
-                count={iroDivCOunt?.toString()}
-                onClick={() => navigate(`/iro/manage?id=${5}`)}
-                secondaryText="Awaiting Approv.
-"
-                color="#0004ff"
-              />
-            </Grid>
-            <Grid item xs={12} md={3} xl={3}>
-              <FROperationalSummary
-                icon={
-                  <img
-                    src="/mod_icons/Approved IRO.png"
-                    alt="Logo"
-                    style={{ width: '50px', height: '50px' }}
-                  />
-                }
-                count={pendingRelease?.toString()}
-                onClick={() => navigate(`/iro/manage?id=${5}`)}
-                secondaryText="Rele Amt. Pending"
-                color="#ff0000"
-              />
-            </Grid>
-            <Grid item xs={12} md={3} xl={3}>
-              <FROperationalSummary
-                icon={
-                  <img
-                    src="/mod_icons/Approved IRO.png"
-                    alt="Logo"
-                    style={{ width: '50px', height: '50px' }}
-                  />
-                }
-                count={revert?.toString()}
-                onClick={() => navigate(`/iro/manage?id=${5}`)}
-                secondaryText="Reverted"
-                color="#5eff00"
-              />
-            </Grid>
-            <Grid item xs={12} md={3} xl={3}>
-              <FROperationalSummary
-                icon={
-                  <img
-                    src="/mod_icons/Approved IRO.png"
-                    alt="Logo"
-                    style={{ width: '50px', height: '50px' }}
-                  />
-                }
-                count={disapprove?.toString()}
-                onClick={() => navigate(`/iro/manage?id=${5}`)}
-                secondaryText="Disapprov."
-                color="#46006e"
-              />
-            </Grid>
-            <Grid item xs={12} md={3} xl={3}>
-              <FROperationalSummary
-                icon={
-                  <img
-                    src="/mod_icons/Approved IRO.png"
-                    alt="Logo"
-                    style={{ width: '50px', height: '50px' }}
-                  />
-                }
-                count={reopen?.toString()}
-                onClick={() => navigate(`/iro/manage?id=${5}`)}
-                secondaryText="Re-Opened."
-                color="#46006e"
-              />
-            </Grid>
-            <Grid item xs={12} md={3} xl={3}>
-              <FROperationalSummary
-                icon={
-                  <img
-                    src="/mod_icons/Approved IRO.png"
-                    alt="Logo"
-                    style={{ width: '50px', height: '50px' }}
-                  />
-                }
-                count={iroDivCOunt?.toString()}
-                onClick={() => navigate(`/iro/manage?id=${5}`)}
-                secondaryText="Custom."
-                color="#46006e"
-              />
-            </Grid>
 
-            {/* <Grid item xs={12} md={12} xl={12}>
+          </Grid>
+        </CardContent>
+      </Card>
+      <br />
+
+      <Grid container spacing={3}>
+
+        <Grid item xs={12} md={8} xl={8}>
+          <Card
+            sx={{
+              borderRadius: 4,
+              p: { xs: 2, sm: 3 },
+              background: '#ffffff',
+            }}
+          >
+            <CardContent>
+              <Grid container spacing={3}>
+
+                <Grid item xs={12} md={12} xl={12}>
+                  <Typography variant="h6" fontWeight={600} color="#060f71">
+               Operational Summary (Amount-Based to FY filters)
+                    {/* <Divider /> */}
+                  </Typography>
+                </Grid>
+                <Grid item xs={12} md={4} xl={4}>
+                  <FROperationalSummary
+                    icon={
+                      <img
+                        src="/mod_icons/Approved IRO.png"
+                        alt="Logo"
+                        style={{ width: '50px', height: '50px' }}
+                      />
+                    }
+                    count={iroDivCOunt?.toString()}
+                    onClick={() => navigate(`/iro/manage?id=${5}`)}
+                    secondaryText="Awaiting Approv.
+"
+                    color="#0004ff"
+                  />
+                </Grid>
+                <Grid item xs={12} md={4} xl={4}>
+                  <FROperationalSummary
+                    icon={
+                      <img
+                        src="/mod_icons/Approved IRO.png"
+                        alt="Logo"
+                        style={{ width: '50px', height: '50px' }}
+                      />
+                    }
+                    count={pendingRelease?.toString()}
+                    onClick={() => navigate(`/iro/manage?id=${5}`)}
+                    secondaryText="Release Amt. Pending"
+                    color="#ff0000"
+                  />
+                </Grid>
+                <Grid item xs={12} md={4} xl={4}>
+                  <FROperationalSummary
+                    icon={
+                      <img
+                        src="/mod_icons/Approved IRO.png"
+                        alt="Logo"
+                        style={{ width: '50px', height: '50px' }}
+                      />
+                    }
+                    count={revert?.toString()}
+                    onClick={() => navigate(`/iro/manage?id=${5}`)}
+                    secondaryText="Reverted"
+                    color="#5eff00"
+                  />
+                </Grid>
+                <Grid item xs={12} md={4} xl={4}>
+                  <FROperationalSummary
+                    icon={
+                      <img
+                        src="/mod_icons/Approved IRO.png"
+                        alt="Logo"
+                        style={{ width: '50px', height: '50px' }}
+                      />
+                    }
+                    count={disapprove?.toString()}
+                    onClick={() => navigate(`/iro/manage?id=${5}`)}
+                    secondaryText="Disapprov."
+                    color="#46006e"
+                  />
+                </Grid>
+                <Grid item xs={12} md={3} xl={4}>
+                  <FROperationalSummary
+                    icon={
+                      <img
+                        src="/mod_icons/Approved IRO.png"
+                        alt="Logo"
+                        style={{ width: '50px', height: '50px' }}
+                      />
+                    }
+                    count={reopen?.toString()}
+                    onClick={() => navigate(`/iro/manage?id=${5}`)}
+                    secondaryText="Re-Opened."
+                    color="#46006e"
+                  />
+                </Grid>
+                <Grid item xs={12} md={3} xl={4}>
+                  <FROperationalSummary
+                    icon={
+                      <img
+                        src="/mod_icons/Approved IRO.png"
+                        alt="Logo"
+                        style={{ width: '50px', height: '50px' }}
+                      />
+                    }
+                    count={iroDivCOunt?.toString()}
+                    onClick={() => navigate(`/iro/manage?id=${5}`)}
+                    secondaryText="Custom."
+                    color="#46006e"
+                  />
+                </Grid>
+              </Grid>
+            </CardContent>
+          </Card>
+          {/* <br /> */}
+        </Grid>
+        <Grid item xs={12} md={6} lg={4} xl={4}>
+
+          <Card
+            sx={{
+              borderRadius: 4,
+              p: { xs: 1, sm: 2 },
+              background: '#fff',
+              boxShadow: '0 6px 16px rgba(0,0,0,0.08)',
+              maxHeight: '90%',
+            }}
+            // onClick={() => navigate('/divisions')}
+          >
+            <Typography variant="h6" fontWeight={600} color="text.primary">
+    Overdue & Compliance
+
+            </Typography>
+
+            <CardContent sx={{ p: 0, mt: 2 }}>
+
+              {/* Row 1 */}
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  py: 1.5,
+                  borderBottom: '1px solid #eee',
+                }}
+              >
+                <Box display="flex" alignItems="center" gap={2}>
+                  <Box
+                    sx={{
+                      width: 36,
+                      height: 36,
+                      borderRadius: 2,
+                      background: '#eef1ff',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <img src="/mod_icons/division.png" width="20" />
+                  </Box>
+
+                  <Typography fontSize={15}>Overdue Approval</Typography>
+                </Box>
+
+                <Box display="flex" alignItems="center" gap={1}>
+                  <Typography fontWeight={600} color="#5a5fcf">
+                    {dayCount1}
+                  </Typography>
+                  <RampRight fontSize="small" />
+                </Box>
+              </Box>
+
+              {/* Row 2 */}
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  py: 1.5,
+                  borderBottom: '1px solid #eee',
+                }}
+              >
+                <Box display="flex" alignItems="center" gap={2}>
+                  <Box
+                    sx={{
+                      width: 36,
+                      height: 36,
+                      borderRadius: 2,
+                      background: '#eef1ff',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <img src="/mod_icons/division.png" width="20" />
+                  </Box>
+
+                  <Typography fontSize={15}>Overdue Resubmit</Typography>
+                </Box>
+
+                <Box display="flex" alignItems="center" gap={1}>
+                  <Typography fontWeight={600} color="#5a5fcf">
+                    {dayCount2}
+                  </Typography>
+                  <RampRight fontSize="small" />
+                </Box>
+              </Box>
+
+              {/* Row 3 */}
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  py: 1.5,
+                  borderBottom: '1px solid #eee',
+                }}
+              >
+                <Box display="flex" alignItems="center" gap={2}>
+                  <Box
+                    sx={{
+                      width: 36,
+                      height: 36,
+                      borderRadius: 2,
+                      background: '#eef1ff',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <img src="/mod_icons/division.png" width="20" />
+                  </Box>
+
+                  <Typography fontSize={15}>Overdue Reconciliation</Typography>
+                </Box>
+
+                <Box display="flex" alignItems="center" gap={1}>
+                  <Typography fontWeight={600} color="#5a5fcf">
+                    {dayCount3}
+                  </Typography>
+                  <RampRight fontSize="small" />
+                </Box>
+              </Box>
+
+              {/* Row 4 */}
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  py: 1.5,
+                }}
+              >
+                <Box display="flex" alignItems="center" gap={2}>
+                  <Box
+                    sx={{
+                      width: 36,
+                      height: 36,
+                      borderRadius: 2,
+                      background: '#eef1ff',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <img src="/mod_icons/division.png" width="20" />
+                  </Box>
+
+                  <Typography fontSize={15}>Overdue Closing</Typography>
+                </Box>
+
+                <Box display="flex" alignItems="center" gap={1}>
+                  <Typography fontWeight={600} color="#5a5fcf">
+                    {dayCount4}
+                  </Typography>
+                  <RampRight fontSize="small" />
+                </Box>
+              </Box>
+
+            </CardContent>
+          </Card>
+        </Grid>
+        {/* <Grid item xs={12} md={3} xl={4}>
+          <Card
+            sx={{
+              borderRadius: 4,
+              p: { xs: 2, sm: 3 },
+              background: '#ffffff',
+            }}
+          >
+            <CardContent>
+              <Grid container spacing={3}>
+                <Grid item xs={12} md={12} xl={12}>
+                  <Typography variant="h6" fontWeight={600} color="#060f71">
+               Overdue & Compliance
+                   
+                  </Typography>
+                </Grid>
+                <Grid item xs={12} md={3} xl={3}>
+                  <FROperationalSummary
+                    icon={
+                      <img
+                        src="/mod_icons/Approved IRO.png"
+                        alt="Logo"
+                        style={{ width: '50px', height: '50px' }}
+                      />
+                    }
+                 
+                    count={dayCount1?.toString()}
+                    onClick={() => navigate(`/iro/manage?id=${5}`)}
+                    secondaryText="Overdue Approval"
+                    color="#ff9100"
+                  />
+                </Grid>
+                <Grid item xs={12} md={3} xl={3}>
+                  <FROperationalSummary
+                    icon={
+                      <img
+                        src="/mod_icons/Approved IRO.png"
+                        alt="Logo"
+                        style={{ width: '50px', height: '50px' }}
+                      />
+                    }
+                    count={dayCount2?.toString()}
+                    onClick={() => navigate(`/iro/manage?id=${5}`)}
+                    secondaryText="Overdew Resubmit"
+                    color="#ff9100"
+                  />
+                </Grid>
+                <Grid item xs={12} md={3} xl={3}>
+                  <FROperationalSummary
+                    icon={
+                      <img
+                        src="/mod_icons/Approved IRO.png"
+                        alt="Logo"
+                        style={{ width: '50px', height: '50px' }}
+                      />
+                    }
+                    count={dayCount3?.toString()}
+                    onClick={() => navigate(`/iro/manage?id=${5}`)}
+                    secondaryText="Overdue Reconciliation"
+                    color="#ff9100"
+                  />
+                </Grid>
+                <Grid item xs={12} md={3} xl={3}>
+                  <FROperationalSummary
+                    icon={
+                      <img
+                        src="/mod_icons/Approved IRO.png"
+                        alt="Logo"
+                        style={{ width: '50px', height: '50px' }}
+                      />
+                    }
+                    count={dayCount4?.toString()}
+                    onClick={() => navigate(`/iro/manage?id=${5}`)}
+                    secondaryText="Overdue Closing "
+                    color="#ff9100"
+                  />
+                </Grid>
+
+              </Grid>
+            </CardContent>
+
+          </Card>
+        </Grid> */}
+      </Grid>
+
+      {/* <Grid item xs={12} md={12} xl={12}>
               <Typography variant="h6" fontWeight={600} color="#060f71">
                Financial Exposure
-               
+
               </Typography>
             </Grid>
             <Grid item xs={12} md={3} xl={4}>
@@ -571,74 +838,8 @@ const IRODashboard = () => {
                 color="#68006b"
               />
             </Grid> */}
-            <Grid item xs={12} md={12} xl={12}>
-              <Typography variant="h6" fontWeight={600} color="#060f71">
-               Overdue & Compliance
-                {/* <Divider /> */}
-              </Typography>
-            </Grid>
-            <Grid item xs={12} md={3} xl={3}>
-              <FROperationalSummary
-                icon={
-                  <img
-                    src="/mod_icons/Approved IRO.png"
-                    alt="Logo"
-                    style={{ width: '50px', height: '50px' }}
-                  />
-                }
-                // count={iroDivCOunt?.toString()}
-                count={dayCount1?.toString()}
-                onClick={() => navigate(`/iro/manage?id=${5}`)}
-                secondaryText="Overdue Approval"
-                color="#ff9100"
-              />
-            </Grid>
-            <Grid item xs={12} md={3} xl={3}>
-              <FROperationalSummary
-                icon={
-                  <img
-                    src="/mod_icons/Approved IRO.png"
-                    alt="Logo"
-                    style={{ width: '50px', height: '50px' }}
-                  />
-                }
-                count={dayCount2?.toString()}
-                onClick={() => navigate(`/iro/manage?id=${5}`)}
-                secondaryText="Overdew Resubmit"
-                color="#ff9100"
-              />
-            </Grid>
-            <Grid item xs={12} md={3} xl={3}>
-              <FROperationalSummary
-                icon={
-                  <img
-                    src="/mod_icons/Approved IRO.png"
-                    alt="Logo"
-                    style={{ width: '50px', height: '50px' }}
-                  />
-                }
-                count={dayCount3?.toString()}
-                onClick={() => navigate(`/iro/manage?id=${5}`)}
-                secondaryText="Overdew reconcilation"
-                color="#ff9100"
-              />
-            </Grid>
-            <Grid item xs={12} md={3} xl={3}>
-              <FROperationalSummary
-                icon={
-                  <img
-                    src="/mod_icons/Approved IRO.png"
-                    alt="Logo"
-                    style={{ width: '50px', height: '50px' }}
-                  />
-                }
-                count={dayCount4?.toString()}
-                onClick={() => navigate(`/iro/manage?id=${5}`)}
-                secondaryText="Over dew Closing "
-                color="#ff9100"
-              />
-            </Grid>
-            {/* <Grid item xs={12} md={3} xl={3}>
+
+      {/* <Grid item xs={12} md={3} xl={3}>
               <FROperationalSummary
                 icon={
                   <img
@@ -698,10 +899,6 @@ const IRODashboard = () => {
                 color="#ff9100"
               />
             </Grid> */}
-
-          </Grid>
-        </CardContent>
-      </Card>
       <br />
       {/* <Grid container spacing={3}>
 

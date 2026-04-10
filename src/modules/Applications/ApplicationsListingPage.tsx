@@ -2515,7 +2515,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                 <Grid item xs={3}>
                   <TextField type="date" fullWidth label="Date" InputLabelProps={{ shrink: true }} name="date" onChange={handleChange} />
                 </Grid>
- <Grid item md={6}>
+                <Grid item md={6}>
                   <Button variant="contained" onClick={() => setForm1Signature(true)} startIcon={<AttachmentIcon />}>
                     Signature
                   </Button>
@@ -3058,9 +3058,13 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                                   'a4' :
                                   statusFilter.includes(ApplicationLifeCycleStates.SENT_TO_PRESIDENT) ?
                                     'a5' :
-                                    statusFilter.includes(70) ?
-                                      'a6' :
-                                      'a1'
+                                    statusFilter.includes(ApplicationLifeCycleStates.REVERT_TO_HR) ?
+                                      'a7' :
+                                      statusFilter.includes(ApplicationLifeCycleStates.REVERT_TO_DIVISION) ?
+                                        'a8' :
+                                        statusFilter.includes(70) ?
+                                          'a6' :
+                                          'a1'
                           }
                           onChange={(_, val) => {
                             if (!val) return;
@@ -3075,7 +3079,11 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                                       [ApplicationLifeCycleStates.SENT_TO_PRESIDENT] :
                                       val === 'a6' ?
                                         [70] :
-                                        [],
+                                        val === 'a7' ?
+                                          [ApplicationLifeCycleStates.REVERT_TO_HR] :
+                                          val === 'a8' ?
+                                            [ApplicationLifeCycleStates.REVERT_TO_DIVISION] :
+                                            [],
                             );
                           }}
                           sx={{ whiteSpace: 'nowrap' }}
@@ -3086,6 +3094,8 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                           <ToggleButton value="a4">Waiting For Hr</ToggleButton>
                           <ToggleButton value="a5">Waiting For President</ToggleButton>
                           <ToggleButton value="a6">Sanctioned</ToggleButton>
+                          <ToggleButton value="a7">REVERTED TO HR</ToggleButton>
+                          <ToggleButton value="a8">REVERTED TO DIVISION</ToggleButton>
                         </ToggleButtonGroup>
                       </CardContent>
                     </Card>

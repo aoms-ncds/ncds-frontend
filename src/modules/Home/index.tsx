@@ -215,7 +215,7 @@ const HomePage = () => {
                       justifyContent: 'center',
                     }}
                   >
-                    <img src="/mod_icons/fr.png" width="22" />
+                    <img src="/mod_icons/division.png" width="22" />
                   </Box>
 
                   <Box>
@@ -253,7 +253,7 @@ const HomePage = () => {
                       justifyContent: 'center',
                     }}
                   >
-                    <img src="/mod_icons/iro.png" width="22" />
+                    <img src="/mod_icons/workers.png" width="22" />
                   </Box>
 
                   <Box>
@@ -331,7 +331,7 @@ const HomePage = () => {
                       justifyContent: 'center',
                     }}
                   >
-                    <img src="/mod_icons/iro.png" width="22" />
+                    <img src="/mod_icons/fr.png" width="22" />
                   </Box>
 
                   <Box>
@@ -435,6 +435,77 @@ const HomePage = () => {
                         }}
                       >
                         {divisionsCount}
+                      </Typography>
+
+                    </Box>
+                  </Card>
+                </Grid>
+                 <Grid item xs={12} md={6} xl={4}>
+                  <Card
+                    onClick={() => navigate('/divisions')}
+                    sx={{
+                      'borderRadius': 3,
+                      'p': 2,
+                      'background': 'linear-gradient(135deg,#f4f6fb,#eef1f8)',
+                      'boxShadow': '0 4px 12px rgba(0,0,0,0.08)',
+                      'transition': '0.3s',
+                      'cursor': 'pointer',
+                      '&:hover': {
+                        transform: 'translateY(-4px)',
+                        boxShadow: '0 10px 25px rgba(0,0,0,0.15)',
+                      },
+                    }}
+                  >
+                    <Box display="flex" alignItems="center" justifyContent="space-between">
+
+                      {/* Left Section */}
+                      <Box display="flex" alignItems="center" gap={2}>
+
+                        {/* Icon Circle */}
+                        <Box
+                          sx={{
+                            width: 50,
+                            height: 50,
+                            borderRadius: 2,
+                            background: '#e3e6f5',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                          }}
+                        >
+                          <img
+                            src="/mod_icons/division.png"
+                            alt="division"
+                            style={{ width: 26, height: 26 }}
+                          />
+                        </Box>
+
+                        {/* Text */}
+                        <Box>
+                          <Typography
+                            sx={{
+                              fontSize: 14,
+                              color: '#6b6f82',
+                              fontWeight: 500,
+                            }}
+                          >
+Total Sub-Div                          </Typography>
+
+                          <ArrowUpwardIcon
+                            sx={{ fontSize: 16, color: '#8a8fa6', mt: 0.5 }}
+                          />
+                        </Box>
+                      </Box>
+
+                      {/* Right Number */}
+                      <Typography
+                        sx={{
+                          fontSize: 22,
+                          fontWeight: 700,
+                          color: '#5a5fcf',
+                        }}
+                      >
+                        {subDivisionsCount}
                       </Typography>
 
                     </Box>
@@ -561,7 +632,7 @@ const HomePage = () => {
                               fontWeight: 500,
                             }}
                           >
-            Total Wrokers
+            Total Workers
                           </Typography>
 
                           <ArrowUpwardIcon
@@ -584,77 +655,7 @@ const HomePage = () => {
                     </Box>
                   </Card>
                 </Grid>
-                <Grid item xs={12} md={6} xl={4}>
-                  <Card
-                    onClick={() => navigate('/divisions')}
-                    sx={{
-                      'borderRadius': 3,
-                      'p': 2,
-                      'background': 'linear-gradient(135deg,#f4f6fb,#eef1f8)',
-                      'boxShadow': '0 4px 12px rgba(0,0,0,0.08)',
-                      'transition': '0.3s',
-                      'cursor': 'pointer',
-                      '&:hover': {
-                        transform: 'translateY(-4px)',
-                        boxShadow: '0 10px 25px rgba(0,0,0,0.15)',
-                      },
-                    }}
-                  >
-                    <Box display="flex" alignItems="center" justifyContent="space-between">
-
-                      {/* Left Section */}
-                      <Box display="flex" alignItems="center" gap={2}>
-
-                        {/* Icon Circle */}
-                        <Box
-                          sx={{
-                            width: 50,
-                            height: 50,
-                            borderRadius: 2,
-                            background: '#e3e6f5',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                          }}
-                        >
-                          <img
-                            src="/mod_icons/division.png"
-                            alt="division"
-                            style={{ width: 26, height: 26 }}
-                          />
-                        </Box>
-
-                        {/* Text */}
-                        <Box>
-                          <Typography
-                            sx={{
-                              fontSize: 14,
-                              color: '#6b6f82',
-                              fontWeight: 500,
-                            }}
-                          >
-Total Sub-Div                          </Typography>
-
-                          <ArrowUpwardIcon
-                            sx={{ fontSize: 16, color: '#8a8fa6', mt: 0.5 }}
-                          />
-                        </Box>
-                      </Box>
-
-                      {/* Right Number */}
-                      <Typography
-                        sx={{
-                          fontSize: 22,
-                          fontWeight: 700,
-                          color: '#5a5fcf',
-                        }}
-                      >
-                        {subDivisionsCount}
-                      </Typography>
-
-                    </Box>
-                  </Card>
-                </Grid>
+               
                 <Grid item xs={12} md={6} xl={4}>
                   <Card
                     onClick={() => navigate('/fr')}
@@ -847,7 +848,7 @@ Total Sub-Div                          </Typography>
                     <img src="/mod_icons/division.png" width="20" />
                   </Box>
 
-                  <Typography fontSize={15}>Divisions</Typography>
+                  <Typography fontSize={15}>IET Divisions</Typography>
                 </Box>
 
                 <Box display="flex" alignItems="center" gap={1}>
@@ -883,7 +884,7 @@ Total Sub-Div                          </Typography>
                     <img src="/mod_icons/division.png" width="20" />
                   </Box>
 
-                  <Typography fontSize={15}>Sub-Divisions</Typography>
+                  <Typography fontSize={15}>IET Sub-Divisions</Typography>
                 </Box>
 
                 <Box display="flex" alignItems="center" gap={1}>

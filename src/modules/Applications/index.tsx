@@ -181,22 +181,22 @@ const APPDashboard = () => {
         <Grid item xs={6} md={3} xl={3}>
           {(hasPermissions(['MANAGE_APPLICATION'])) ?(
             <FRCountCard icon={<img src="/mod_icons/Rejected.png" alt="Logo"
-              style={{ width: '50px', height: '50px' }} />} count={applicationsRevert?.toString()} secondaryText={'Reverted'} color={'#00ff88'} />
+              style={{ width: '50px', height: '50px' }} />} count={applicationsRevertHr?.toString()} secondaryText={'Reverted Div.'} color={'#00ff88'} />
 
           ):(
             <FRCountCard icon={<img src="/mod_icons/Rejected.png" alt="Logo"
-              style={{ width: '50px', height: '50px' }} />} count={applicationsRevertDiv?.toString()} secondaryText={'Reverted'} color={'#cf00f8'} />
+              style={{ width: '50px', height: '50px' }} />} count={setApplicationsRevertHrDiv?.toString()} secondaryText={'Reverted Div.'} color={'#cf00f8'} />
 
           )}
         </Grid>
         <Grid item xs={6} md={3} xl={3}>
           {(hasPermissions(['MANAGE_APPLICATION'])) ?(
             <FRCountCard icon={<img src="/mod_icons/Rejected.png" alt="Logo"
-              style={{ width: '50px', height: '50px' }} />} count={applicationsRevertHr?.toString()} secondaryText={'Reverted Div.'} color={'#00ff88'} />
+              style={{ width: '50px', height: '50px' }} />} count={applicationsRevert?.toString()} secondaryText={'Reverted HR'} color={'#00ff88'} />
 
           ):(
             <FRCountCard icon={<img src="/mod_icons/Rejected.png" alt="Logo"
-              style={{ width: '50px', height: '50px' }} />} count={setApplicationsRevertHrDiv?.toString()} secondaryText={'Reverted Div.'} color={'#cf00f8'} />
+              style={{ width: '50px', height: '50px' }} />} count={applicationsRevertDiv?.toString()} secondaryText={'Reverted HR'} color={'#cf00f8'} />
 
           )}
         </Grid>
