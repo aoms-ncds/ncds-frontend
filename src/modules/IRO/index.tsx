@@ -261,7 +261,7 @@ const IRODashboard = () => {
   ];
 
   return (
-    <CommonPageLayout>
+    <CommonPageLayout title="IRO Dashboard">
       <Card
         sx={{
           borderRadius: 4,

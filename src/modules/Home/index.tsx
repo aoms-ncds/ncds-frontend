@@ -221,7 +221,11 @@ const HomePage = () => {
                   <Box>
                     <Typography sx={{ color: '#6b6f82' }} fontWeight={700} fontSize={17}>Divisions
                     </Typography>
-                    <Typography sx={{ color: '#6b6f82' }} fontWeight={600}>{divisionsCountit}</Typography>
+                    <Typography sx={{
+                      fontSize: 22,
+                      fontWeight: 700,
+                      color: '#5a5fcf',
+                    }}>{divisionsCountit}</Typography>
                   </Box>
                 </Box>
 
@@ -258,7 +262,11 @@ const HomePage = () => {
 
                   <Box>
                     <Typography fontWeight={700} sx={{ color: '#6b6f82' }} fontSize={17}>Workers</Typography>
-                    <Typography fontWeight={600} sx={{ color: '#6b6f82' }}>
+                    <Typography sx={{
+                      fontSize: 22,
+                      fontWeight: 700,
+                      color: '#5a5fcf',
+                    }}>
                       {workersCount}
                     </Typography>
                   </Box>
@@ -297,7 +305,11 @@ const HomePage = () => {
 
                   <Box>
                     <Typography fontWeight={700} sx={{ color: '#6b6f82' }} fontSize={17}>IRO</Typography>
-                    <Typography fontWeight={600} sx={{ color: '#6b6f82' }}>
+                    <Typography sx={{
+                      fontSize: 22,
+                      fontWeight: 700,
+                      color: '#5a5fcf',
+                    }}>
                       {iroCount}
                     </Typography>
                   </Box>
@@ -336,7 +348,11 @@ const HomePage = () => {
 
                   <Box>
                     <Typography fontWeight={700} sx={{ color: '#6b6f82' }} fontSize={17}>FR</Typography>
-                    <Typography fontWeight={600} sx={{ color: '#6b6f82' }}>
+                    <Typography sx={{
+                      fontSize: 22,
+                      fontWeight: 700,
+                      color: '#5a5fcf',
+                    }}>
                       {frCount}
                     </Typography>
                   </Box>
@@ -440,7 +456,7 @@ const HomePage = () => {
                     </Box>
                   </Card>
                 </Grid>
-                 <Grid item xs={12} md={6} xl={4}>
+                <Grid item xs={12} md={6} xl={4}>
                   <Card
                     onClick={() => navigate('/divisions')}
                     sx={{
@@ -655,7 +671,7 @@ Total Sub-Div                          </Typography>
                     </Box>
                   </Card>
                 </Grid>
-               
+
                 <Grid item xs={12} md={6} xl={4}>
                   <Card
                     onClick={() => navigate('/fr')}
@@ -1103,7 +1119,7 @@ Total Sub-Div                          </Typography>
           </Card>
         </Grid>
 
-    
+
       </Grid>
 
       {/* </Container> */}

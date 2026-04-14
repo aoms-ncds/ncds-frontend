@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import DivisionsServices from '../Divisions/extras/DivisionsServices';
 import AddIcon from '@mui/icons-material/Add';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import FRNewCountCard from './components/FRNewCountCard';
 const frDashboard = () => {
   const [appliedFrCount, setAppliedFrCount] = useState<number | null>(null);
   const [approvedFrCount, setApprovedFrCount] = useState<number | null>(null);
@@ -151,176 +152,195 @@ const frDashboard = () => {
 
   return (
     <CommonPageLayout title="FR Dashboard">
-      <Box sx={{ display: 'flex', justifyContent: 'flex-end', pb: 2 }}>
 
-        <TextField
-          select
-          size="small"
-          value={year}
-          onClick={(e) => e.stopPropagation()}
-          onMouseDown={(e) => e.stopPropagation()}
-          onChange={(e) => {
-            e.stopPropagation();
-            setYear(e.target.value);
-          }}
-          sx={{
-            'minWidth': 120,
-
-            /* SELECT TEXT (important fix) */
-            '& .MuiSelect-select': {
-              display: 'flex',
-              justifyContent: 'flex-end',
-              textAlign: 'right',
-              paddingRight: '32px !important', // space for arrow
-              paddingLeft: '8px',
-            },
-
-            /* DROPDOWN ICON */
-            '& .MuiSelect-icon': {
-              color: '#3B32E6',
-              right: 6,
-            },
-
-            /* OUTER BOX */
-            '& .MuiOutlinedInput-root': {
-              'height': 32,
-              'fontSize': 12,
-              'fontWeight': 600,
-              'borderRadius': 8,
-              'color': '#3B32E6',
-              'background': 'linear-gradient(135deg, #F4F6FF, #FFFFFF)',
-              'boxShadow': '0 2px 6px rgba(59,50,230,0.15)',
-              'transition': 'all 0.2s ease',
-
-              '& fieldset': {
-                borderColor: '#3B32E6',
-              },
-
-              '&:hover': {
-                background: '#EEF1FF',
-                boxShadow: '0 4px 10px rgba(59,50,230,0.25)',
-              },
-
-              '&.Mui-focused': {
-                background: '#FFFFFF',
-                boxShadow: '0 0 0 2px rgba(59,50,230,0.25)',
-              },
-
-              '&.Mui-focused fieldset': {
-                borderColor: '#3B32E6',
-              },
-            },
-          }}
-        >
-
-          {years.map((yr) => (
-            <MenuItem
-              key={yr}
-              value={yr}
-              sx={{
-                // justifyContent: 'flex-end',
-                // textAlign: 'right',
-                fontSize: 12,
-                fontWeight: 600,
-              }}
-            >
-             Financial Year -  {yr}
-            </MenuItem>
-          ))}
-        </TextField>
-      </Box>
       <PermissionChecks
         permissions={['READ_FR']}
         granted={(
           <>
 
-            {/* <Card sx={{ borderRadius: 4 }}>
+            <Card
+              sx={{
+                borderRadius: 4,
+                p: { xs: 2, sm: 3 },
+                background: '#ffffff',
+              }}
+            >
+              <CardContent>
+                <Grid container spacing={3}>
+                  <Grid item xs={12} md={12} xl={12}>
 
-              <CardContent> */}
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        flexWrap: 'wrap',
+                      }}
+                    >
+                      <Typography variant="h6" fontWeight={600} color="#060f71">
+                     Count -Based to FY
+                      </Typography>
 
-            <Grid container spacing={1}>
+                      <TextField
+                        select
+                        size="small"
+                        value={year}
+                        onClick={(e) => e.stopPropagation()}
+                        onMouseDown={(e) => e.stopPropagation()}
+                        onChange={(e) => {
+                          e.stopPropagation();
+                          setYear(e.target.value);
+                        }}
+                        sx={{
+                          'minWidth': 120,
 
-              <Grid item xs={12} sm={6} md={3} xl={2}>
-                <FRCountCard icon={<img src="/mod_icons/APPLIED.png" alt="Logo" style={{ width: '50px', height: '50px' }} />}
-                  count={appliedFrCount?.toString()} secondaryText="Total Applied" color="#0feb21"
-                  onClick={()=>{
-                    if (isCoordinator) {
-                      navigate('/fr/manageForDivision/');
-                    } else {
-                      navigate('/fr/manage/');
-                    }
-                  }}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6} md={3} xl={2}>
-                <FRCountCard icon={<img src="/mod_icons/VERIFIED.png" alt="Logo" style={{ width: '50px', height: '50px' }} />}
-                  onClick={()=>{
-                    if (isCoordinator) {
-                      navigate(`/fr/manageForDivision/?id=${1}`); // Pass numbers as query string
-                    } else {
-                      navigate(`/fr/manage/?id=${1}`); // Pass numbers as query string
-                    }
-                  }} count={approvedFrCount?.toString()} secondaryText={'Total Verified'} color={'#269811'} />
-              </Grid>
-              <Grid item xs={12} sm={6} md={3} xl={2}>
-                <FRCountCard icon={<img src="/mod_icons/Waiting for President Sanction.png" alt="Logo" style={{ width: '50px', height: '50px' }} />}
-                  count={waitingForPresidentFrCount?.toString()}
-                  secondaryText={'Awaiting Approv.'}
-                  onClick={()=>{
-                    if (isCoordinator) {
-                      navigate(`/fr/manageForDivision/?id=${2}`); // Pass numbers as query string
-                    } else {
-                      navigate(`/fr/manage/?id=${2}`); // Pass numbers as query string
-                    }
-                  }}
-                  color={'#0b57d0'} />
-              </Grid>
-              <Grid item xs={12} sm={6} md={3} xl={2}>
-                <FRCountCard icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '50px', height: '50px' }} />}
-                  count={waitingForAccountFrCount?.toString()} secondaryText={'Pending Verif.'} color={'#889bfe'}
-                  onClick={()=>{
-                    if (isCoordinator) {
-                      navigate(`/fr/manageForDivision/?id=${3}`); // Pass numbers as query string
-                    } else {
-                      navigate(`/fr/manage/?id=${3}`); // Pass numbers as query string
-                    }
-                  }}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6} md={3} xl={2}>
-                <FRCountCard
-                  icon={
-                    <img
-                      src="/mod_icons/Waiting for Verification.png"
-                      alt="Logo"
-                      style={{ width: '50px', height: '50px' }}
+                          /* SELECT TEXT (important fix) */
+                          '& .MuiSelect-select': {
+                            display: 'flex',
+                            justifyContent: 'flex-end',
+                            textAlign: 'right',
+                            paddingRight: '32px !important', // space for arrow
+                            paddingLeft: '8px',
+                          },
+
+                          /* DROPDOWN ICON */
+                          '& .MuiSelect-icon': {
+                            color: '#3B32E6',
+                            right: 6,
+                          },
+
+                          /* OUTER BOX */
+                          '& .MuiOutlinedInput-root': {
+                            'height': 32,
+                            'fontSize': 12,
+                            'fontWeight': 600,
+                            'borderRadius': 8,
+                            'color': '#3B32E6',
+                            'background': 'linear-gradient(135deg, #F4F6FF, #FFFFFF)',
+                            'boxShadow': '0 2px 6px rgba(59,50,230,0.15)',
+                            'transition': 'all 0.2s ease',
+
+                            '& fieldset': {
+                              borderColor: '#3B32E6',
+                            },
+
+                            '&:hover': {
+                              background: '#EEF1FF',
+                              boxShadow: '0 4px 10px rgba(59,50,230,0.25)',
+                            },
+
+                            '&.Mui-focused': {
+                              background: '#FFFFFF',
+                              boxShadow: '0 0 0 2px rgba(59,50,230,0.25)',
+                            },
+
+                            '&.Mui-focused fieldset': {
+                              borderColor: '#3B32E6',
+                            },
+                          },
+                        }}
+                      >
+
+                        {years.map((yr) => (
+                          <MenuItem
+                            key={yr}
+                            value={yr}
+                            sx={{
+                              // justifyContent: 'flex-end',
+                              // textAlign: 'right',
+                              fontSize: 12,
+                              fontWeight: 600,
+                            }}
+                          >
+             Financial Year -  {yr}
+                          </MenuItem>
+                        ))}
+                      </TextField>
+                    </Box>
+                  </Grid>
+             
+
+                  <Grid item xs={12} sm={6} md={3} xl={3}>
+                    <FRNewCountCard icon={<img src="/mod_icons/APPLIED.png" alt="Logo" style={{ width: '50px', height: '50px' }} />}
+                      count={appliedFrCount?.toString()} secondaryText="Total Applied" color="#0feb21"
+                      onClick={()=>{
+                        if (isCoordinator) {
+                          navigate('/fr/manageForDivision/');
+                        } else {
+                          navigate('/fr/manage/');
+                        }
+                      }}
                     />
-                  }
-                  count={reverted?.toString()}
-                  secondaryText="Reverted"
-                  color="#fca017"
-                  onClick={() => navigate('/fr/sentBack')}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6} md={3} xl={2}>
-
-                <FRCountCard
-                  icon={
-                    <img
-                      src="/mod_icons/Waiting for Verification.png"
-                      alt="Logo"
-                      style={{ width: '50px', height: '50px' }}
+                  </Grid>
+                  <Grid item xs={12} sm={6} md={3} xl={3}>
+                    <FRNewCountCard icon={<img src="/mod_icons/VERIFIED.png" alt="Logo" style={{ width: '50px', height: '50px' }} />}
+                      onClick={()=>{
+                        if (isCoordinator) {
+                          navigate(`/fr/manageForDivision/?id=${1}`); // Pass numbers as query string
+                        } else {
+                          navigate(`/fr/manage/?id=${1}`); // Pass numbers as query string
+                        }
+                      }} count={approvedFrCount?.toString()} secondaryText={'Total Verified'} color={'#269811'} />
+                  </Grid>
+                  <Grid item xs={12} sm={6} md={3} xl={3}>
+                    <FRNewCountCard icon={<img src="/mod_icons/Waiting for President Sanction.png" alt="Logo" style={{ width: '50px', height: '50px' }} />}
+                      count={waitingForPresidentFrCount?.toString()}
+                      secondaryText={'Awaiting Approv.'}
+                      onClick={()=>{
+                        if (isCoordinator) {
+                          navigate(`/fr/manageForDivision/?id=${2}`); // Pass numbers as query string
+                        } else {
+                          navigate(`/fr/manage/?id=${2}`); // Pass numbers as query string
+                        }
+                      }}
+                      color={'#0b57d0'} />
+                  </Grid>
+                  <Grid item xs={12} sm={6} md={3} xl={3}>
+                    <FRNewCountCard icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '50px', height: '50px' }} />}
+                      count={waitingForAccountFrCount?.toString()} secondaryText={'Pending Verif.'} color={'#889bfe'}
+                      onClick={()=>{
+                        if (isCoordinator) {
+                          navigate(`/fr/manageForDivision/?id=${3}`); // Pass numbers as query string
+                        } else {
+                          navigate(`/fr/manage/?id=${3}`); // Pass numbers as query string
+                        }
+                      }}
                     />
-                  }
-                  count={resubmittedFrCount?.toString()}
-                  secondaryText="Re-Submitted"
-                  color="#4DB6AC"
-                  onClick={() => navigate('/fr/resubmitted')}
-                />
-              </Grid>
-            </Grid>
-            {/* </CardContent>
-            </Card> */}
+                  </Grid>
+                  <Grid item xs={12} sm={6} md={3} xl={3}>
+                    <FRNewCountCard
+                      icon={
+                        <img
+                          src="/mod_icons/Waiting for Verification.png"
+                          alt="Logo"
+                          style={{ width: '50px', height: '50px' }}
+                        />
+                      }
+                      count={reverted?.toString()}
+                      secondaryText="Reverted"
+                      color="#fca017"
+                      onClick={() => navigate('/fr/sentBack')}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6} md={3} xl={3}>
+
+                    <FRNewCountCard
+                      icon={
+                        <img
+                          src="/mod_icons/Waiting for Verification.png"
+                          alt="Logo"
+                          style={{ width: '50px', height: '50px' }}
+                        />
+                      }
+                      count={resubmittedFrCount?.toString()}
+                      secondaryText="Re-Submitted"
+                      color="#4DB6AC"
+                      onClick={() => navigate('/fr/resubmitted')}
+                    />
+                  </Grid>
+                </Grid>
+              </CardContent>
+            </Card>
             <br />
             <br />
             {/* <Card sx={{ borderRadius: 4 }}>

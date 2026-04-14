@@ -7,7 +7,7 @@ const StyledLink = styled(Link)`
   text-decoration: none;
 `;
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const IROCountCard = (props: {
+const FRNewCountCard = (props: {
   genderFilter?: any;
   onFilter?: (value: any) => unknown;
   count?: string| number|null;
@@ -30,7 +30,7 @@ const IROCountCard = (props: {
           justifyContent: 'space-between',
           p: 2,
           borderRadius: 3,
-          background: '#e6f6ec',
+          background: '#e9f4ff',
         }}
       >
         <Box display="flex" alignItems="center" gap={2}>
@@ -68,4 +68,4 @@ const IROCountCard = (props: {
   return countCard;
 };
 
-export default IROCountCard;
+export default FRNewCountCard;
