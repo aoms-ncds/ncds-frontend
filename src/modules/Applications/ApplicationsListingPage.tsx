@@ -1481,12 +1481,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                     // required
                   />
                 </Grid>
-                <Grid item md={6}>
-                  <Button variant="contained" onClick={() => setShowFileUploader(true)} startIcon={<AttachmentIcon />}>
-                    Attachments
-                  </Button>
-                </Grid>
-                <Grid item md={4}>
+                  <Grid item md={4}>
                   <Button variant="contained" onClick={() => {
                     if (applicationFormState.name =='Education Support') {
                       setForm(true);
@@ -1502,6 +1497,12 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                     Fill Form
                   </Button>
                 </Grid>
+                <Grid item md={6}>
+                  <Button variant="contained" onClick={() => setShowFileUploader(true)} startIcon={<AttachmentIcon />}>
+                    Attachments
+                  </Button>
+                </Grid>
+              
                 {/* <WelfareForm/> */}
 
               </Grid>
@@ -1746,47 +1747,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
           </Box>
         </DialogContent>
         <DialogActions>
-          <Grid item md={6}>
-            {Number(applicationFormState.status) !== ApplicationLifeCycleStates.REVERT_TO_HR &&(
-
-              <Button variant="contained" sx={{ backgroundColor: 'orange' }} onClick={() => {
-                if (applicationFormState.name !=''&& applicationFormState.appliedFor!='') {
-                  if (Number(applicationFormState.status) == ApplicationLifeCycleStates.REVERT_TO_DIVISION) {
-                    ApplicationServices.active(editid as any)
-                       .then((res) => {
-                         // handleClose();
-                         window.location.reload();
-                         // closeSnackbar(snackbarId);
-                         setShowApplicationFormDialog(false);
-                         enqueueSnackbar({
-                           message: res.message,
-                           variant: 'success',
-                         });
-                       });
-                  } else {
-                    ApplicationServices.sentToPresident(applicationFormState)
-                         .then((res) => {
-                           // handleClose();
-                           window.location.reload();
-                           // closeSnackbar(snackbarId);
-                           setShowApplicationFormDialog(false);
-                           enqueueSnackbar({
-                             message: res.message,
-                             variant: 'success',
-                           });
-                         });
-                  }
-                } else {
-                  enqueueSnackbar({
-                    message: 'Enter Required Fields',
-                    variant: 'info',
-                  });
-                }
-              }}>
-                    Send to president
-              </Button>
-            )}
-          </Grid>
+         
           {/* <Button onClick={() => setShowApplicationFormDialog(false)}>Cancel</Button> */}
           <Grid item md={6}>
 
@@ -2010,47 +1971,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
           </Box>
         </DialogContent>
         <DialogActions>
-          <Grid item md={6}>
-            {Number(applicationFormState.status) !== ApplicationLifeCycleStates.REVERT_TO_HR &&(
-
-              <Button variant="contained" sx={{ backgroundColor: 'orange' }} onClick={() => {
-                if (applicationFormState.name !=''&& applicationFormState.appliedFor!='') {
-                  if (Number(applicationFormState.status) == ApplicationLifeCycleStates.REVERT_TO_DIVISION) {
-                    ApplicationServices.active(editid as any)
-                       .then((res) => {
-                         // handleClose();
-                         window.location.reload();
-                         // closeSnackbar(snackbarId);
-                         setShowApplicationFormDialog(false);
-                         enqueueSnackbar({
-                           message: res.message,
-                           variant: 'success',
-                         });
-                       });
-                  } else {
-                    ApplicationServices.sentToPresident(applicationFormState)
-                         .then((res) => {
-                           // handleClose();
-                           window.location.reload();
-                           // closeSnackbar(snackbarId);
-                           setShowApplicationFormDialog(false);
-                           enqueueSnackbar({
-                             message: res.message,
-                             variant: 'success',
-                           });
-                         });
-                  }
-                } else {
-                  enqueueSnackbar({
-                    message: 'Enter Required Fields',
-                    variant: 'info',
-                  });
-                }
-              }}>
-                    Send to president
-              </Button>
-            )}
-          </Grid>
+          
           {/* <Button onClick={() => setShowApplicationFormDialog(false)}>Cancel</Button> */}
           <Grid item md={6}>
 
@@ -2275,47 +2196,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
           </Box>
         </DialogContent>
         <DialogActions>
-          <Grid item md={6}>
-            {Number(applicationFormState.status) !== ApplicationLifeCycleStates.REVERT_TO_HR &&(
-
-              <Button variant="contained" sx={{ backgroundColor: 'orange' }} onClick={() => {
-                if (applicationFormState.name !=''&& applicationFormState.appliedFor!='') {
-                  if (Number(applicationFormState.status) == ApplicationLifeCycleStates.REVERT_TO_DIVISION) {
-                    ApplicationServices.active(editid as any)
-                       .then((res) => {
-                         // handleClose();
-                         window.location.reload();
-                         // closeSnackbar(snackbarId);
-                         setShowApplicationFormDialog(false);
-                         enqueueSnackbar({
-                           message: res.message,
-                           variant: 'success',
-                         });
-                       });
-                  } else {
-                    ApplicationServices.sentToPresident(applicationFormState)
-                         .then((res) => {
-                           // handleClose();
-                           window.location.reload();
-                           // closeSnackbar(snackbarId);
-                           setShowApplicationFormDialog(false);
-                           enqueueSnackbar({
-                             message: res.message,
-                             variant: 'success',
-                           });
-                         });
-                  }
-                } else {
-                  enqueueSnackbar({
-                    message: 'Enter Required Fields',
-                    variant: 'info',
-                  });
-                }
-              }}>
-                    Send to president
-              </Button>
-            )}
-          </Grid>
+         
           {/* <Button onClick={() => setShowApplicationFormDialog(false)}>Cancel</Button> */}
           <Grid item md={6}>
 
@@ -2559,47 +2440,6 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
           </Box>
         </DialogContent>
         <DialogActions>
-          <Grid item md={6}>
-            {Number(applicationFormState.status) !== ApplicationLifeCycleStates.REVERT_TO_HR &&(
-
-              <Button variant="contained" sx={{ backgroundColor: 'orange' }} onClick={() => {
-                if (applicationFormState.name !=''&& applicationFormState.appliedFor!='') {
-                  if (Number(applicationFormState.status) == ApplicationLifeCycleStates.REVERT_TO_DIVISION) {
-                    ApplicationServices.active(editid as any)
-                       .then((res) => {
-                         // handleClose();
-                         window.location.reload();
-                         // closeSnackbar(snackbarId);
-                         setShowApplicationFormDialog(false);
-                         enqueueSnackbar({
-                           message: res.message,
-                           variant: 'success',
-                         });
-                       });
-                  } else {
-                    ApplicationServices.sentToPresident(applicationFormState)
-                         .then((res) => {
-                           // handleClose();
-                           window.location.reload();
-                           // closeSnackbar(snackbarId);
-                           setShowApplicationFormDialog(false);
-                           enqueueSnackbar({
-                             message: res.message,
-                             variant: 'success',
-                           });
-                         });
-                  }
-                } else {
-                  enqueueSnackbar({
-                    message: 'Enter Required Fields',
-                    variant: 'info',
-                  });
-                }
-              }}>
-                    Send to president
-              </Button>
-            )}
-          </Grid>
           {/* <Button onClick={() => setShowApplicationFormDialog(false)}>Cancel</Button> */}
           <Grid item md={6}>
 
