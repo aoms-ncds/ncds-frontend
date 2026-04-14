@@ -501,7 +501,7 @@ const IRODashboard = () => {
                     color="#46006e"
                   />
                 </Grid>
-                <Grid item xs={12} md={3} xl={4}>
+                <Grid item xs={12} md={4} xl={4}>
                   <FROperationalSummary
                     icon={
                       <img
@@ -516,7 +516,7 @@ const IRODashboard = () => {
                     color="#46006e"
                   />
                 </Grid>
-                <Grid item xs={12} md={3} xl={4}>
+                <Grid item xs={12} md={4} xl={4}>
                   <FROperationalSummary
                     icon={
                       <img
