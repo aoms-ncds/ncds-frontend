@@ -360,7 +360,7 @@ const IRODashboard = () => {
               </Box>
             </Grid>
 
-            <Grid item xs={12} md={4} xl={4}>
+            <Grid item xs={12} md={3} xl={4}>
               <IROCountCard
                 count={waitingtoofficemanagerCount?.toString()}
                 // amount={'1000'}
@@ -369,7 +369,7 @@ const IRODashboard = () => {
                 color="#0026ff"
               />
             </Grid>
-            <Grid item xs={12} md={4} xl={4}>
+            <Grid item xs={12} md={3} xl={4}>
               <IROCountCard
                 icon={
                   <img
@@ -384,7 +384,7 @@ const IRODashboard = () => {
                 color="#ffc400"
               />
             </Grid>
-            <Grid item xs={12} md={4} xl={4}>
+            <Grid item xs={12} md={3} xl={4}>
               <IROCountCard
                 icon={
                   <img
@@ -395,11 +395,11 @@ const IRODashboard = () => {
                 }
                 count={amountReleasedCount?.toString()}
                 onClick={() => navigate(`/iro/manage?id=${5}`)}
-                secondaryText="Total Reconcilation"
+                secondaryText="Pending Recon."
                 color="#ba00f3"
               />
             </Grid>
-            <Grid item xs={12} md={4} xl={4}>
+            <Grid item xs={12} md={3} xl={4}>
               <IROCountCard
                 icon={
                   <img
