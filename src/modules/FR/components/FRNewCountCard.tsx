@@ -25,13 +25,21 @@ const FRNewCountCard = (props: {
     <Grid item xs={12} sm={12}>
       <Box
         sx={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          p: 2,
-          borderRadius: 3,
-          background: '#e9f4ff',
+          'display': 'flex',
+          'alignItems': 'center',
+          'justifyContent': 'space-between',
+          'p': 2,
+          'borderRadius': 3,
+          'background': '#e9f4ff',
+          'cursor': 'pointer',
+          'transition': 'all 0.2s ease',
+          '&:hover': {
+            background: '#d0e8ff',
+            boxShadow: '0 4px 12px rgba(0, 120, 255, 0.15)',
+            transform: 'translateY(-1px)',
+          },
         }}
+        onClick={props.onClick}
       >
         <Box display="flex" alignItems="center" gap={2}>
           <Box

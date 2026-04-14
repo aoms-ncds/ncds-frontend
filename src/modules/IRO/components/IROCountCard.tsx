@@ -25,13 +25,21 @@ const IROCountCard = (props: {
     <Grid item xs={12} sm={12}>
       <Box
         sx={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          p: 2,
-          borderRadius: 3,
-          background: '#e6f6ec',
+          'display': 'flex',
+          'alignItems': 'center',
+          'justifyContent': 'space-between',
+          'p': 2,
+          'borderRadius': 3,
+          'background': 'rgb(243, 240, 255)',
+          'cursor': 'pointer',
+          'transition': 'all 0.2s ease',
+          '&:hover': {
+            background: 'rgb(230, 225, 255)',
+            boxShadow: '0 4px 12px rgba(100, 60, 255, 0.15)',
+            transform: 'translateY(-1px)',
+          },
         }}
+         onClick={props.onClick}
       >
         <Box display="flex" alignItems="center" gap={2}>
           <Box

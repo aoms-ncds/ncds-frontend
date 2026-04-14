@@ -174,7 +174,7 @@ const IRODashboard = () => {
       .catch((error) => {
         console.log(error);
       });
-    IROServices.countDay({ status: IROLifeCycleStates.APPROVED, day: '200', year: year })
+    IROServices.countDay({ status: IROLifeCycleStates.AMOUNT_RELEASED, day: '45', year: year })
       .then((res) => setDayCount4(res.data),
       )
       .catch((error) => {
@@ -580,7 +580,7 @@ const IRODashboard = () => {
                     <img src="/mod_icons/division.png" width="20" />
                   </Box>
 
-                  <Typography fontSize={15}>Overdue Approval</Typography>
+                  <Typography fontSize={15}>Overdue Approval-(30 Days)</Typography>
                 </Box>
 
                 <Box display="flex" alignItems="center" gap={1}>
@@ -616,7 +616,7 @@ const IRODashboard = () => {
                     <img src="/mod_icons/division.png" width="20" />
                   </Box>
 
-                  <Typography fontSize={15}>Overdue Resubmit</Typography>
+                  <Typography fontSize={15}>Overdue Resubmit-(3 Days)</Typography>
                 </Box>
 
                 <Box display="flex" alignItems="center" gap={1}>
@@ -652,7 +652,7 @@ const IRODashboard = () => {
                     <img src="/mod_icons/division.png" width="20" />
                   </Box>
 
-                  <Typography fontSize={15}>Overdue Reconciliation</Typography>
+                  <Typography fontSize={15}>Overdue Reconciliation-(45 Days)</Typography>
                 </Box>
 
                 <Box display="flex" alignItems="center" gap={1}>
@@ -687,7 +687,7 @@ const IRODashboard = () => {
                     <img src="/mod_icons/division.png" width="20" />
                   </Box>
 
-                  <Typography fontSize={15}>Overdue Closing</Typography>
+                  <Typography fontSize={15}>Overdue Closing-(45 Days)</Typography>
                 </Box>
 
                 <Box display="flex" alignItems="center" gap={1}>
