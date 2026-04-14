@@ -2873,7 +2873,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                           });
                         }}
                       >
-                      Add Specific
+                      Apply Welfare
                       </Button>
                     )}
                   />
