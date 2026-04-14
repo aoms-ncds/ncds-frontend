@@ -200,7 +200,7 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string;
                           {
                             color: isDark ? 'white' : 'black',
                             textDecoration: 'none',
-                            backgroundColor: 'rgb(224, 224, 224)',
+                            backgroundColor: 'rgb(182, 202, 255)',
                           }
                       }
                     >
