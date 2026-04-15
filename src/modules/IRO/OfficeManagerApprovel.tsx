@@ -35,6 +35,7 @@ import * as XLSX from 'xlsx';
 import clsx from 'clsx';
 import TransactionLogDialog from '../FR/components/TransactionLogDialog';
 import DivisionsServices from '../Divisions/extras/DivisionsServices';
+import formatAmount from '../Common/formatcode';
 
 const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
   const [openRemarks, toggleOpenRemarks] = useState(false);
@@ -889,7 +890,7 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
       valueGetter(params) {
         const IRORequest = params.row as IROrder;
         const particularAmount = IRORequest.particulars?.reduce((total, particular) => total + Number(particular.requestedAmount), 0);
-        return particularAmount.toFixed(2);
+        return formatAmount(particularAmount.toFixed(2));
       },
     },
     // {
@@ -908,7 +909,8 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
           return params.row.sanctionedAmount;
         }
         if (Array.isArray(params.row.particulars)) {
-          return params.row.particulars.reduce((sum, item) => sum + (item.sanctionedAmount || 0), 0).toFixed(2);
+          const total = params.row.particulars.reduce((sum, item) => sum + (Number(item.sanctionedAmount) || 0), 0);
+          return formatAmount(total.toFixed(2));
         }
         return 0; // or return a suitable default value
       }, renderHeader: () => <b>Sanctioned Amount</b>, align: 'center', headerAlign: 'center' },

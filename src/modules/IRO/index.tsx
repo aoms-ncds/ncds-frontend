@@ -360,7 +360,7 @@ const IRODashboard = () => {
               </Box>
             </Grid>
 
-            <Grid item xs={12} md={3} xl={4}>
+            <Grid item xs={12} md={3} xl={3}>
               <IROCountCard
                 count={waitingtoofficemanagerCount?.toString()}
                 // amount={'1000'}
@@ -369,7 +369,7 @@ const IRODashboard = () => {
                 color="#0026ff"
               />
             </Grid>
-            <Grid item xs={12} md={3} xl={4}>
+            <Grid item xs={12} md={3} xl={3}>
               <IROCountCard
                 icon={
                   <img
@@ -384,7 +384,7 @@ const IRODashboard = () => {
                 color="#ffc400"
               />
             </Grid>
-            <Grid item xs={12} md={3} xl={4}>
+            <Grid item xs={12} md={3} xl={3}>
               <IROCountCard
                 icon={
                   <img
@@ -399,7 +399,7 @@ const IRODashboard = () => {
                 color="#ba00f3"
               />
             </Grid>
-            <Grid item xs={12} md={3} xl={4}>
+            <Grid item xs={12} md={3} xl={3}>
               <IROCountCard
                 icon={
                   <img

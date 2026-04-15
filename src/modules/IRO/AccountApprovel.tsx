@@ -33,6 +33,7 @@ import PermissionChecks, { hasPermissions } from '../User/components/PermissionC
 import ReleaseAmount from './components/ReleaseAmountDialog';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import * as XLSX from 'xlsx';
+import formatAmount from '../Common/formatcode';
 
 const AccountApprove = (props: { action: 'manage' | 'release' }) => {
   const [openRemarks, toggleOpenRemarks] = useState(false);
@@ -719,7 +720,7 @@ const AccountApprove = (props: { action: 'manage' | 'release' }) => {
       valueGetter(params) {
         const IRORequest = params.row as IROrder;
         const particularAmount = IRORequest.particulars?.reduce((total, particular) => total + Number(particular.requestedAmount), 0);
-        return particularAmount.toFixed(2);
+        return formatAmount((particularAmount || 0).toFixed(2));
       },
     },
     // {

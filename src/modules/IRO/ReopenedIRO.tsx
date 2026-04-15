@@ -877,7 +877,7 @@ const ReopenedIRO = () => {
           (total, particular) => total + Number(particular.requestedAmount || 0), // Ensure we handle potential undefined values
           0,
         );
-        return particularAmount.toFixed(2) || 0; // Return 0 if the total is undefined
+        return formatAmount((particularAmount || 0).toFixed(2)); // Return 0 if the total is undefined
       },
       renderCell: (params: GridCellParams) => {
         const frRequest = params.row as FR;

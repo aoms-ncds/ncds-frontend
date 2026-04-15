@@ -28,6 +28,7 @@ import PermissionChecks, { hasPermissions } from '../User/components/PermissionC
 import { Link } from 'react-router-dom';
 import IROTemplateCustom from './components/IROTemplateCustom';
 import TransactionLogDialog from '../FR/components/TransactionLogDialog';
+import formatAmount from '../Common/formatcode';
 
 const CustomIRO = () => {
   const [reconciliationIRO, setReconcilationIRO] = useState<IROrder[]>();
@@ -575,7 +576,7 @@ const CustomIRO = () => {
       valueGetter(params) {
         const IRORequest = params.row as IROrder;
         const particularAmount = IRORequest.particulars?.reduce((total, particular) => total + Number(particular.requestedAmount), 0);
-        return particularAmount.toFixed(2);
+        return formatAmount((particularAmount || 0).toFixed(2));
       },
     },
     // {

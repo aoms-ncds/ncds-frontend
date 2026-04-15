@@ -827,7 +827,7 @@ Total Sub-Div                          </Typography>
             </CardContent>
           </Card>
         </Grid>
-        {hasPermissions(['ADMIN_ACCESS'])&& (
+        {hasPermissions(['ADMIN_ACCESS', 'READ_STAFFS'])&& (
 
           <Grid item xs={12} md={6} lg={4} xl={4}>
 

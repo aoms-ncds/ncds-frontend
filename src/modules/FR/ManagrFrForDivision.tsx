@@ -333,7 +333,7 @@ const ManageFrForDivision = () => {
               },
               icon: EditNoteIcon,
             },
-               ...(props.row.reasonForReject || props.row.reasonForSentBack ?
+            ...(props.row.reasonForReject || props.row.reasonForSentBack ?
               [
                 {
                   id: 'resaons',
@@ -509,19 +509,21 @@ const ManageFrForDivision = () => {
 
         switch (statusName) {
         case 'REVERTED':
-          return clsx('status-cell', 'red-light');
+          return clsx('status-cell2');
         case 'PENDING VERIF.':
           return clsx('status-cell', 'VERIF');
         case 'IRO CLOSED':
         case 'FR VERIFIED':
         case 'FR CLOSED':
-          return clsx('status-cell', 'green');
+          return clsx('status-cell1');
         case ' FR_REJECTED':
           return clsx('status-cell', 'red');
-        case 'PENDING APPR.':
+        case 'AWAITING APPROV.':
           return clsx('status-cell', 'Appr');
         case 'RE-SUBMITTED':
           return clsx('status-cell', 're-sum');
+        case 'CUSTOM FR':
+          return clsx('status-cell3');
         case 'IRO DISAPPROVED':
           return clsx('status-cell', 'red-dark');
         case 'FR DISAPPROVED':
@@ -535,8 +537,8 @@ const ManageFrForDivision = () => {
       headerAlign: 'center',
       valueGetter: (params) => {
         let statusName =
-          IROLifeCycleStates.getStatusNameByCodeTransaction(params.value);
-
+        IROLifeCycleStates.getStatusNameByCodeTransaction(params.value);
+        const iscustom = (params.row as any)?.isCustom;
         switch (statusName) {
         case 'SEND_BACK':
           statusName = 'REVERTED';
@@ -547,12 +549,14 @@ const ManageFrForDivision = () => {
         case 'WAITING_FOR_ACCOUNTS':
           if ((params.row as any)?.isReverted === true) {
             statusName = 'RE-SUBMITTED';
+          } else if (iscustom === true) {
+            statusName = 'CUSTOM FR';
           } else {
             statusName = 'PENDING VERIF.';
           }
           break;
         case 'WAITING_FOR_PRESIDENT':
-          statusName = 'PENDING APPR.';
+          statusName = 'AWAITING APPROV.';
           break;
         case 'FR_REJECTED':
           statusName = 'FR DISAPPROVED';
