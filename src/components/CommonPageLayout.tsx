@@ -221,18 +221,6 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string;
           .flat()}
 
       </List>
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
 
       <br />
       <Divider />
