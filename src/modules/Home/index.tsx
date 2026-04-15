@@ -453,7 +453,7 @@ const HomePage = () => {
                           color: '#5a5fcf',
                         }}
                       >
-                        {divisionsCount}
+                        {divisionsCount =='0' ? '1' : divisionsCount}
                       </Typography>
 
                     </Box>

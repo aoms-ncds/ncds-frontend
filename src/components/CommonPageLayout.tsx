@@ -29,6 +29,8 @@ import { Moment } from 'moment';
 import { enqueueSnackbar } from 'notistack';
 import React, { useEffect, useState } from 'react';
 import { Link, NavLink, useParams } from 'react-router-dom';
+import Links from '@mui/material/Link'; // ✅ use this
+
 import CommonConstants from '../extras/CommonConfig';
 import { allModuleRoutes } from '../extras/CommonRouter';
 import { unsubscribe } from '../extras/Firebase/messaging';
@@ -217,8 +219,85 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string;
             ),
           )
           .flat()}
+
       </List>
-      {/* <Divider /> */}
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+
+      <br />
+      <Divider />
+      {/* <br /> */}
+
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          py: 2,
+          alignSelf: 'flex-end', // ✅ align to bottom end
+        }}
+      >
+        <Box
+          sx={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 1,
+            px: 2,
+            py: 0.75,
+            borderRadius: '999px',
+            background: '#f0f4ff',
+            border: '1px solid #dce4ff',
+            boxShadow: '0 1px 4px rgba(99, 120, 255, 0.08)',
+          }}
+        >
+          <Typography
+            variant="caption"
+            sx={{
+              fontWeight: 600,
+              color: '#4a5568',
+              fontSize: '0.75rem',
+              letterSpacing: 0.3,
+            }}
+          >
+      Version 2.3.1
+          </Typography>
+
+          <Box
+            sx={{
+              width: '1px',
+              height: '12px',
+              background: '#c8d0e8',
+            }}
+          />
+
+          <Links
+            href='/'
+            underline="none"
+            sx={{
+              'fontSize': '0.75rem',
+              'fontWeight': 600,
+              'color': '#5b6ef5',
+              'cursor': 'pointer',
+              'transition': 'color 0.2s ease',
+              '&:hover': {
+                color: '#3a4fd4',
+              },
+            }}
+          >
+      What s New?
+          </Links>
+        </Box>
+      </Box>
     </div>
   );
 
