@@ -53,7 +53,7 @@ const FRNewCountCard = (props: {
               justifyContent: 'center',
             }}
           >
-            <img src="/mod_icons/iro.png" width="22" />
+            <img src="/mod_icons/fr.png" width="22" />
           </Box>
 
           <Box>

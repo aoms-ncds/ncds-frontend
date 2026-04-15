@@ -579,14 +579,14 @@ const ReconciliationIRO = () => {
               {/* ================= EDIT / UPDATE ================= */}
               <Section title="EDIT / UPDATE" />
 
-              {(hasPermissions(['ADMIN_ACCESS']) ||
+              {/* {(hasPermissions(['ADMIN_ACCESS']) ||
             hasPermissions(['FCRA_ACCOUNTS_ACCESS']) ||
             hasPermissions(['LOCAL_ACCOUNT_ACCESS'])) && (
                 <MenuItem onClick={() => [setOpenReleaseEdit(true), setReleaseAmountIROs([props.row])]}>
                   <ListItemIcon><EditIcon fontSize="small" /></ListItemIcon>
                   <ListItemText primary="Edit Release Amount" />
                 </MenuItem>
-              )}
+              )} */}
 
               <MenuItem onClick={() => {
                 toggleOpenRemarks(true);

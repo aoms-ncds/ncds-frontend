@@ -919,7 +919,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                   <ListItemText primary="Edit Release Amount" />
                 </MenuItem>
               )}
-              {(props.action !== 'manage' &&
+              {(props.action !== 'manage' || hasPermissions(['ADMIN_ACCESS']) &&
         (hasPermissions(['ACCOUNTS_MNGR_ACCESS']) ||
         hasPermissions(['FCRA_ACCOUNTS_ACCESS']) ||
         hasPermissions(['LOCAL_ACCOUNT_ACCESS']) ||
@@ -2028,7 +2028,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                           backgroundColor: '#fff',
                         },
                         '& .orange-light': {
-                          backgroundColor: '#7EC82F',
+                          backgroundColor: '#269811',
                           // backgroundColor: '#3949AB',
                           color: '#fff',
                           fontWeight: '600',

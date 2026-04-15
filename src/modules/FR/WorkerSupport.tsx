@@ -1191,18 +1191,7 @@ const WorkerSupportPage = () => {
         mt: 2,
       }}>
 
-        {frAction&&(
-          <CardContent>
-
-            <FRForm
-              value={frAction == 'view' ? requisition2 as CreatableFR : requisition}
-              onChange={(newReq) => setRequisition(newReq)}
-              action={frAction ?? 'view'}
-              onSubmit={addFR} // Pass the addFR function to the onSubmit prop
-              disable= {true}
-            />
-          </CardContent>
-        )}
+        
       </Card>
       <Card
         sx={{
@@ -1718,7 +1707,20 @@ const WorkerSupportPage = () => {
             </CardContent>
           </form>
         )}
+        {frAction&&(
+          <CardContent>
+
+            <FRForm
+              value={frAction == 'view' ? requisition2 as CreatableFR : requisition}
+              onChange={(newReq) => setRequisition(newReq)}
+              action={frAction ?? 'view'}
+              onSubmit={addFR} // Pass the addFR function to the onSubmit prop
+              disable= {true}
+            />
+          </CardContent>
+        )}
       </Card>
+      
       <br />
       <Card>
         <Grid container spacing={2}>

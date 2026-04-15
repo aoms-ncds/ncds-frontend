@@ -225,7 +225,7 @@ const HomePage = () => {
                       fontSize: 22,
                       fontWeight: 700,
                       color: '#5a5fcf',
-                    }}>{divisionsCountit}</Typography>
+                    }}>{divisionsCountit ==0 ? '1' : divisionsCountit}</Typography>
                   </Box>
                 </Box>
 

@@ -53,7 +53,7 @@ const IROCountCard = (props: {
               justifyContent: 'center',
             }}
           >
-            <img src="/mod_icons/iro.png" width="22" />
+            <img src="/mod_icons/IRO.png" width="22" />
           </Box>
 
           <Box>

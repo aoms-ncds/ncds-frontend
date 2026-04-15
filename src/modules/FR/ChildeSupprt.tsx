@@ -23,6 +23,7 @@ import { AnyARecord } from 'dns';
 import { useNavigate } from 'react-router-dom';
 import ChildeSupportSignSheet from './components/ChildeSupportSignSheet';
 import IROReconciliationPdf from '../IRO/components/IROReconciliationPdf';
+import { monthNames } from './extras/FRConfig';
 
 interface TotalSupportStructure {
   basic?: number;
@@ -694,16 +695,7 @@ const ChildeSupportPage = () => {
           mt: 2,
         }}
       >
-        {toggleRaiseFR &&(
-          <FRForm
-            value={requisition}
-            onChange={(newReq) => setRequisition(newReq)}
-            action={'add'}
-            onSubmit={addFR}
-            disable= {true}
-            // Pass the addFR function to the onSubmit prop
-          />
-        )}
+
         {confirmAttach?(
 
           <Card >
@@ -1091,6 +1083,24 @@ const ChildeSupportPage = () => {
                     fullWidth
                   />
                 </Grid>
+                <Grid item xs={12} md={2}>
+                  <Autocomplete
+                    // disabled={props.disable==true}
+                    value={(requisition as any).month}
+                    options={monthNames ?? []}
+                    getOptionLabel={(monthName) => monthName}
+                    onChange={(e, selectedMonth) => {
+                      if (selectedMonth) {
+                        setRequisition((particularDetails) => ({
+                          ...particularDetails,
+                          month: selectedMonth,
+                        }));
+                      }
+                    }}
+                    renderInput={(params) => <TextField {...params} label="For the Month" required variant='standard' />}
+                    fullWidth
+                  />
+                </Grid>
 
                 {/* <Grid item xs={12} md={6} lg={4}>
                 <TextField
@@ -1239,6 +1249,16 @@ const ChildeSupportPage = () => {
             </CardContent>
           </form>
         )}
+      {toggleRaiseFR &&(
+        <FRForm
+          value={requisition}
+          onChange={(newReq) => setRequisition(newReq)}
+          action={'add'}
+          onSubmit={addFR}
+          disable= {true}
+          // Pass the addFR function to the onSubmit prop
+        />
+      )}
       </Card>
       <br />
       <Card>

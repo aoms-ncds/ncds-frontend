@@ -713,6 +713,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
           });
           }}
         />,
+        hasPermissions(['ADMIN_ACCESS']) &&
         <GridLinkAction
           key={5}
           label="Delete"

@@ -19,6 +19,7 @@ const APPDashboard = () => {
   const [applications, setApplications] = useState<number|null >(null);
   const [applicationsWelfare, setApplicationsWelfare] = useState<number|null >(null);
   const [applicationsTotal, setApplicationsTotal] = useState<number|null >(null);
+  const [applicationsTotalDiv, setApplicationsTotalDiv] = useState<number|null >(null);
   const [applicationsPresident, setApplicationsPresident] = useState<number|null >(null);
   const [applicationsApprove, setApplicationsApprove] = useState<number|null >(null);
   const [applicationsReject, setApplicationsReject] = useState<number|null >(null);
@@ -56,6 +57,11 @@ const APPDashboard = () => {
       });
     ApplicationServices.getCountByDiv({ status: ApplicationLifeCycleStates.REVERT_TO_DIVISION })
       .then((res) =>setApplicationsRevertDiv(res.data))
+      .catch((error) => {
+        console.log(error);
+      });
+    ApplicationServices.getCountByDiv()
+      .then((res) =>setApplicationsTotalDiv(res.data))
       .catch((error) => {
         console.log(error);
       });
@@ -112,10 +118,15 @@ const APPDashboard = () => {
       <Grid container spacing={3}>
 
         <Grid item xs={6} md={3} xl={3}>
-
-          <FRCountCard icon={<img src="/mod_icons/Applied Application.png" alt="Logo"
-            style={{ width: '50px', height: '50px' }} />} count={applicationsTotal?.toString()}
-          secondaryText={'Total Applications'} color="#ff0000" />
+          {(hasPermissions(['MANAGE_APPLICATION'])) ?(
+            <FRCountCard icon={<img src="/mod_icons/Applied Application.png" alt="Logo"
+              style={{ width: '50px', height: '50px' }} />} count={applicationsTotal?.toString()}
+            secondaryText={'Total Applications'} color="#ff0000" />
+          ):(
+            <FRCountCard icon={<img src="/mod_icons/Applied Application.png" alt="Logo"
+              style={{ width: '50px', height: '50px' }} />} count={applicationsTotalDiv?.toString()}
+            secondaryText={'Total Applications'} color="#ff0000" />
+          )}
 
 
         </Grid>
@@ -185,7 +196,7 @@ const APPDashboard = () => {
 
           ):(
             <FRCountCard icon={<img src="/mod_icons/Rejected.png" alt="Logo"
-              style={{ width: '50px', height: '50px' }} />} count={setApplicationsRevertHrDiv?.toString()} secondaryText={'Reverted Div.'} color={'#cf00f8'} />
+              style={{ width: '50px', height: '50px' }} />} count={applicationsRevertHrDiv?.toString()} secondaryText={'Reverted Div.'} color={'#cf00f8'} />
 
           )}
         </Grid>

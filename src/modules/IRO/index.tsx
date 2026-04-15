@@ -436,7 +436,7 @@ const IRODashboard = () => {
 
                 <Grid item xs={12} md={12} xl={12}>
                   <Typography variant="h6" fontWeight={600} color="#060f71">
-               Operational Summary (Amount-Based to FY filters)
+               Operational Summary (Count-Based to FY filters)
                     {/* <Divider /> */}
                   </Typography>
                 </Grid>
