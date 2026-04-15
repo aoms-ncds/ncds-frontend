@@ -6,7 +6,7 @@ import {
 import BookmarkAddIcon from '@mui/icons-material/BookmarkAdd';
 import { Alert, Box, Button, Card, CardContent, Grid, Typography } from '@mui/material';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import PermissionChecks from '../User/components/PermissionChecks';
+import PermissionChecks, { hasPermissions } from '../User/components/PermissionChecks';
 import MinimalModuleDataAnalytics from './components/MinimalModuleDataAnalytics';
 import CHART1 from './components/chart1';
 import CHART2 from './components/chart2';
@@ -203,7 +203,7 @@ const HomePage = () => {
                   background: '#f3f0ff',
                 }}
               >
-                <Box display="flex" alignItems="center" gap={2}>
+                <Box onClick={() =>divisionsCountit ==0 ? navigate(`/divisions/details/${(user.user as User).division}`) : navigate('/divisions')} display="flex" alignItems="center" gap={2}>
                   <Box
                     sx={{
                       width: 40,
@@ -244,6 +244,7 @@ const HomePage = () => {
                   borderRadius: 3,
                   background: '#fff3d6',
                 }}
+                onClick={() => navigate('/workers')}
               >
                 <Box display="flex" alignItems="center" gap={2}>
                   <Box
@@ -287,6 +288,7 @@ const HomePage = () => {
                   borderRadius: 3,
                   background: '#e6f6ec',
                 }}
+                onClick={() => navigate('/iro')}
               >
                 <Box display="flex" alignItems="center" gap={2}>
                   <Box
@@ -330,6 +332,7 @@ const HomePage = () => {
                   borderRadius: 3,
                   background: '#e9f4ff',
                 }}
+                onClick={() => navigate('/fr')}
               >
                 <Box display="flex" alignItems="center" gap={2}>
                   <Box
@@ -367,7 +370,7 @@ const HomePage = () => {
 
       <br />
       <Grid container spacing={3} >
-        <Grid item xs={12} md={6} lg={8} xl={8}>
+   <Grid item xs={12} md={hasPermissions(['ADMIN_ACCESS']) ? 6 : 12} lg={hasPermissions(['ADMIN_ACCESS']) ? 8 : 12} xl={hasPermissions(['ADMIN_ACCESS']) ? 8 : 12}>
 
           <Card
             sx={{
@@ -527,78 +530,82 @@ Total Sub-Div                          </Typography>
                     </Box>
                   </Card>
                 </Grid>
-                <Grid item xs={12} md={6} xl={4}>
-                  <Card
-                    onClick={() => navigate('/hr/manage')}
-                    sx={{
-                      'borderRadius': 3,
-                      'p': 2,
-                      'background': 'linear-gradient(135deg,#f4f6fb,#eef1f8)',
-                      'boxShadow': '0 4px 12px rgba(0,0,0,0.08)',
-                      'transition': '0.3s',
-                      'cursor': 'pointer',
-                      '&:hover': {
-                        transform: 'translateY(-4px)',
-                        boxShadow: '0 10px 25px rgba(0,0,0,0.15)',
-                      },
-                    }}
-                  >
-                    <Box display="flex" alignItems="center" justifyContent="space-between">
+                {hasPermissions(['ADMIN_ACCESS'])&& (
 
-                      {/* Left Section */}
-                      <Box display="flex" alignItems="center" gap={2}>
+                  <Grid item xs={12} md={6} xl={4}>
+                    <Card
+                      onClick={() => navigate('/hr/manage')}
+                      sx={{
+                        'borderRadius': 3,
+                        'p': 2,
+                        'background': 'linear-gradient(135deg,#f4f6fb,#eef1f8)',
+                        'boxShadow': '0 4px 12px rgba(0,0,0,0.08)',
+                        'transition': '0.3s',
+                        'cursor': 'pointer',
+                        '&:hover': {
+                          transform: 'translateY(-4px)',
+                          boxShadow: '0 10px 25px rgba(0,0,0,0.15)',
+                        },
+                      }}
+                    >
+                      <Box display="flex" alignItems="center" justifyContent="space-between">
 
-                        {/* Icon Circle */}
-                        <Box
-                          sx={{
-                            width: 50,
-                            height: 50,
-                            borderRadius: 2,
-                            background: '#e3e6f5',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                          }}
-                        >
-                          <img
-                            src="/mod_icons/division.png"
-                            alt="division"
-                            style={{ width: 26, height: 26 }}
-                          />
-                        </Box>
+                        {/* Left Section */}
+                        <Box display="flex" alignItems="center" gap={2}>
 
-                        {/* Text */}
-                        <Box>
-                          <Typography
+                          {/* Icon Circle */}
+                          <Box
                             sx={{
-                              fontSize: 14,
-                              color: '#6b6f82',
-                              fontWeight: 500,
+                              width: 50,
+                              height: 50,
+                              borderRadius: 2,
+                              background: '#e3e6f5',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
                             }}
                           >
+                            <img
+                              src="/mod_icons/division.png"
+                              alt="division"
+                              style={{ width: 26, height: 26 }}
+                            />
+                          </Box>
+
+                          {/* Text */}
+
+                          <Box>
+                            <Typography
+                              sx={{
+                                fontSize: 14,
+                                color: '#6b6f82',
+                                fontWeight: 500,
+                              }}
+                            >
             Total Staff
-                          </Typography>
+                            </Typography>
 
-                          <ArrowUpwardIcon
-                            sx={{ fontSize: 16, color: '#8a8fa6', mt: 0.5 }}
-                          />
+                            <ArrowUpwardIcon
+                              sx={{ fontSize: 16, color: '#8a8fa6', mt: 0.5 }}
+                            />
+                          </Box>
                         </Box>
+
+                        {/* Right Number */}
+                        <Typography
+                          sx={{
+                            fontSize: 22,
+                            fontWeight: 700,
+                            color: '#5a5fcf',
+                          }}
+                        >
+                          {staffsCount}
+                        </Typography>
+
                       </Box>
-
-                      {/* Right Number */}
-                      <Typography
-                        sx={{
-                          fontSize: 22,
-                          fontWeight: 700,
-                          color: '#5a5fcf',
-                        }}
-                      >
-                        {staffsCount}
-                      </Typography>
-
-                    </Box>
-                  </Card>
-                </Grid>
+                    </Card>
+                  </Grid>
+                )}
                 <Grid item xs={12} md={6} xl={4}>
                   <Card
                     onClick={() => navigate('/workers/manage')}
@@ -820,171 +827,173 @@ Total Sub-Div                          </Typography>
             </CardContent>
           </Card>
         </Grid>
+        {hasPermissions(['ADMIN_ACCESS'])&& (
 
-        <Grid item xs={12} md={6} lg={4} xl={4}>
+          <Grid item xs={12} md={6} lg={4} xl={4}>
 
-          <Card
-            sx={{
-              borderRadius: 4,
-              p: { xs: 1, sm: 2 },
-              background: '#fff',
-              boxShadow: '0 6px 16px rgba(0,0,0,0.08)',
-              maxHeight: '90%',
-            }}
-            onClick={() => navigate('/divisions')}
-          >
-            <Typography variant="h6" fontWeight={600} color="text.primary">
+            <Card
+              sx={{
+                borderRadius: 4,
+                p: { xs: 1, sm: 2 },
+                background: '#fff',
+                boxShadow: '0 6px 16px rgba(0,0,0,0.08)',
+                maxHeight: '90%',
+              }}
+              onClick={() => navigate('/divisions')}
+            >
+              <Typography variant="h6" fontWeight={600} color="text.primary">
     Breakdowns
-            </Typography>
+              </Typography>
 
-            <CardContent sx={{ p: 0, mt: 2 }}>
+              <CardContent sx={{ p: 0, mt: 2 }}>
 
-              {/* Row 1 */}
-              <Box
-                sx={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  py: 1.5,
-                  borderBottom: '1px solid #eee',
-                }}
-              >
-                <Box display="flex" alignItems="center" gap={2}>
-                  <Box
-                    sx={{
-                      width: 36,
-                      height: 36,
-                      borderRadius: 2,
-                      background: '#eef1ff',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}
-                  >
-                    <img src="/mod_icons/division.png" width="20" />
+                {/* Row 1 */}
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    py: 1.5,
+                    borderBottom: '1px solid #eee',
+                  }}
+                >
+                  <Box display="flex" alignItems="center" gap={2}>
+                    <Box
+                      sx={{
+                        width: 36,
+                        height: 36,
+                        borderRadius: 2,
+                        background: '#eef1ff',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <img src="/mod_icons/division.png" width="20" />
+                    </Box>
+
+                    <Typography fontSize={15}>IET Divisions</Typography>
                   </Box>
 
-                  <Typography fontSize={15}>IET Divisions</Typography>
+                  <Box display="flex" alignItems="center" gap={1}>
+                    <Typography fontWeight={600} color="#5a5fcf">
+                      {divisionsCountit}
+                    </Typography>
+                    <RampRight fontSize="small" />
+                  </Box>
                 </Box>
 
-                <Box display="flex" alignItems="center" gap={1}>
-                  <Typography fontWeight={600} color="#5a5fcf">
-                    {divisionsCountit}
-                  </Typography>
-                  <RampRight fontSize="small" />
-                </Box>
-              </Box>
+                {/* Row 2 */}
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    py: 1.5,
+                    borderBottom: '1px solid #eee',
+                  }}
+                >
+                  <Box display="flex" alignItems="center" gap={2}>
+                    <Box
+                      sx={{
+                        width: 36,
+                        height: 36,
+                        borderRadius: 2,
+                        background: '#eef1ff',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <img src="/mod_icons/division.png" width="20" />
+                    </Box>
 
-              {/* Row 2 */}
-              <Box
-                sx={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  py: 1.5,
-                  borderBottom: '1px solid #eee',
-                }}
-              >
-                <Box display="flex" alignItems="center" gap={2}>
-                  <Box
-                    sx={{
-                      width: 36,
-                      height: 36,
-                      borderRadius: 2,
-                      background: '#eef1ff',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}
-                  >
-                    <img src="/mod_icons/division.png" width="20" />
+                    <Typography fontSize={15}>IET Sub-Divisions</Typography>
                   </Box>
 
-                  <Typography fontSize={15}>IET Sub-Divisions</Typography>
+                  <Box display="flex" alignItems="center" gap={1}>
+                    <Typography fontWeight={600} color="#5a5fcf">
+                      {subDivisionsCount}
+                    </Typography>
+                    <RampRight fontSize="small" />
+                  </Box>
                 </Box>
 
-                <Box display="flex" alignItems="center" gap={1}>
-                  <Typography fontWeight={600} color="#5a5fcf">
-                    {subDivisionsCount}
-                  </Typography>
-                  <RampRight fontSize="small" />
-                </Box>
-              </Box>
+                {/* Row 3 */}
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    py: 1.5,
+                    borderBottom: '1px solid #eee',
+                  }}
+                >
+                  <Box display="flex" alignItems="center" gap={2}>
+                    <Box
+                      sx={{
+                        width: 36,
+                        height: 36,
+                        borderRadius: 2,
+                        background: '#eef1ff',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <img src="/mod_icons/division.png" width="20" />
+                    </Box>
 
-              {/* Row 3 */}
-              <Box
-                sx={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  py: 1.5,
-                  borderBottom: '1px solid #eee',
-                }}
-              >
-                <Box display="flex" alignItems="center" gap={2}>
-                  <Box
-                    sx={{
-                      width: 36,
-                      height: 36,
-                      borderRadius: 2,
-                      background: '#eef1ff',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}
-                  >
-                    <img src="/mod_icons/division.png" width="20" />
+                    <Typography fontSize={15}>Other Divisions</Typography>
                   </Box>
 
-                  <Typography fontSize={15}>Other Divisions</Typography>
+                  <Box display="flex" alignItems="center" gap={1}>
+                    <Typography fontWeight={600} color="#5a5fcf">
+                      {(Number(divisionsCount) || 0) - (Number(divisionsCountit) || 0)}
+                    </Typography>
+                    <RampRight fontSize="small" />
+                  </Box>
                 </Box>
 
-                <Box display="flex" alignItems="center" gap={1}>
-                  <Typography fontWeight={600} color="#5a5fcf">
-                    {(Number(divisionsCount) || 0) - (Number(divisionsCountit) || 0)}
-                  </Typography>
-                  <RampRight fontSize="small" />
-                </Box>
-              </Box>
+                {/* Row 4 */}
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    py: 1.5,
+                  }}
+                >
+                  <Box display="flex" alignItems="center" gap={2}>
+                    <Box
+                      sx={{
+                        width: 36,
+                        height: 36,
+                        borderRadius: 2,
+                        background: '#eef1ff',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <img src="/mod_icons/division.png" width="20" />
+                    </Box>
 
-              {/* Row 4 */}
-              <Box
-                sx={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  py: 1.5,
-                }}
-              >
-                <Box display="flex" alignItems="center" gap={2}>
-                  <Box
-                    sx={{
-                      width: 36,
-                      height: 36,
-                      borderRadius: 2,
-                      background: '#eef1ff',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}
-                  >
-                    <img src="/mod_icons/division.png" width="20" />
+                    <Typography fontSize={15}>Other Sub-Divisions</Typography>
                   </Box>
 
-                  <Typography fontSize={15}>Other Sub-Divisions</Typography>
+                  <Box display="flex" alignItems="center" gap={1}>
+                    <Typography fontWeight={600} color="#5a5fcf">
+                      {subDivisionsCountit}
+                    </Typography>
+                    <RampRight fontSize="small" />
+                  </Box>
                 </Box>
 
-                <Box display="flex" alignItems="center" gap={1}>
-                  <Typography fontWeight={600} color="#5a5fcf">
-                    {subDivisionsCountit}
-                  </Typography>
-                  <RampRight fontSize="small" />
-                </Box>
-              </Box>
-
-            </CardContent>
-          </Card>
-        </Grid>
+              </CardContent>
+            </Card>
+          </Grid>
+        )}
 
         <Grid item xs={12} md={12} lg={12} xl={12}>
 

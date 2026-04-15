@@ -500,158 +500,304 @@ const ReconciliationIRO = () => {
       align: 'center',
       headerAlign: 'center',
 
-      renderCell: (props) => {
-        const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-        const open = Boolean(anchorEl);
-
-        const Section = ({ title }: { title: string }) => (
-          <Typography
-            sx={{
-              px: 2,
-              pt: 1.5,
-              pb: 0.5,
-              fontSize: 12,
-              fontWeight: 700,
-              color: 'text.secondary',
-            }}
-          >
-            {title}
-          </Typography>
-        );
-
-        return (
-          <>
-            {/* ACTION ICON */}
-            <IconButton size="small" onClick={(e) => setAnchorEl(e.currentTarget)}>
-              <MoreVertIcon />
-            </IconButton>
-
-            {/* MENU */}
-            <Menu
-              anchorEl={anchorEl}
-              open={open}
-              onClose={() => setAnchorEl(null)}
-              PaperProps={{
-                sx: {
-                  width: 280,
-                  borderRadius: 2,
-                  boxShadow: '0 8px 24px rgba(0,0,0,0.12)',
+     renderCell: (props) => (
+        <DropdownButton
+          useIconButton={true}
+          id="Reconciliation action"
+          primaryText="Actions"
+          key={'Reconciliation action'}
+          items={[
+            // {
+            //   id: 'View',
+            //   text: 'Release Amount',
+            //   component: Link,
+            //   to: '/iro/release_amount/' + props.row._id,
+            //   icon: PreviewIcon,
+            // },
+            // {
+            //   id: 'remarks',
+            //   text: 'Remarks',
+            //   icon: EditIcon,
+            // },
+            ...(props.row.status == IROLifeCycleStates.AMOUNT_RELEASED ? [
+              {
+                id: 'Reconciliation',
+                text: 'Reconciliation',
+                icon: EditIcon,
+                onClick: () => {
+                  setAttachment(true);
+                  setSelectedIRO(props.row);
                 },
-              }}
-            >
-              {/* ================= VIEW ================= */}
-              <Section title="VIEW" />
+              }] : []),
+            {
+              id: 'View',
+              text: 'View Details ',
+              // component: Link,
+              // to: `/iro/${params.row._id}`,
+              icon: PreviewIcon,
+              onClick: () => {
+                window.open( `/iro/${props.row._id}`, '_blank');
+              },
+            },
+            {
+              id: 'print',
+              text: 'Print IRO',
+              icon: PrintIcon,
+              onClick: () => {
+                IROServices.getByIdOptimized(props.row._id).then((res)=>{
+                  console.log(res.data[0], '090');
 
-              <MenuItem onClick={() => {
-                setAttachment(true);
-                setSelectedIRO(props.row);
-              }}>
-                <ListItemIcon><PreviewIcon fontSize="small" /></ListItemIcon>
-                <ListItemText primary="Reconciliation" />
-              </MenuItem>
-              <MenuItem onClick={() => window.open(`/iro/${props.row._id}`, '_blank')}>
-                <ListItemIcon><PreviewIcon fontSize="small" /></ListItemIcon>
-                <ListItemText primary="View IRO" />
-              </MenuItem>
+                  setData(res.data[0]);
+                });
+                // setData(props.row);
+                setOpenPrintFr(true);
+                setTimeout(() => {
+                  setOpenPrintFr(false);
+                }, 2000);
+              },
+            },
+            {
+              id: 'print',
+              text: 'Print FR',
+              icon: PrintIcon,
+              onClick: () => {
+                if (!props.row.FR) {
+                  enqueueSnackbar({
+                    message: 'FR not found',
+                    variant: 'warning',
+                  });
+                } else {
+                  IROServices.getByIdOptimized(props.row._id).then((res)=>{
+                    console.log(res.data, 'res98');
+                    setData2(res.data[0].FR);
+                    // console.log(props.row.fr, 'res98');
+                  });
+                  setOpenPrintFr(true);
+                  setTimeout(() => {
+                    setOpenPrintFr(false);
+                  }, 2000);
+                }
+              },
+            },
+            ...(hasPermissions(['DELHI_DIVISION_ACCESS']) ?
+              [
+                {
+                  id: 'print',
+                  text: 'Print FR HQ DELHI',
+                  icon: PrintIcon,
+                onClick: async () => {
+  try {
+    const [rowRes, delhiRes] = await Promise.all([
+      IROServices.getByIdOptimized(props.row._id),
+      DivisionsServices.getDivisionById('658270549efadc163550a28c'),
+    ]);
 
-              <MenuItem onClick={() => window.open(`/fr/${props.row.FR}/view`, '_blank')}>
-                <ListItemIcon><PreviewIcon fontSize="small" /></ListItemIcon>
-                <ListItemText primary="View FR" />
-              </MenuItem>
+    const rowData = rowRes.data?.[0];       // expecting array
+    const delhiHQ = delhiRes.data;
 
-              {props.row.status >= IROLifeCycleStates.AMOUNT_RELEASED && (
-                <MenuItem onClick={() => [setOpenRelease(true), setReleaseAmountIROs([props.row])]}>
-                  <ListItemIcon><PreviewIcon fontSize="small" /></ListItemIcon>
-                  <ListItemText primary="View Release Amount" />
-                </MenuItem>
-              )}
+    if (rowData?.division?.details as any) {
+      setData5({
+           ...props.row,
+        division: {
+           ...rowData?.division as any,
+          details: {
+             ...rowData?.division?.details,
+            seniorLeader: delhiHQ?.details?.seniorLeader,
+            juniorLeader: delhiHQ?.details?.juniorLeader,
+          },
+        },
+      });
+    }
 
-              <MenuItem onClick={() => {
-                setSelectedIROId(props.row._id);
-                setOpenLog(true);
-              }}>
-                <ListItemIcon><PreviewIcon fontSize="small" /></ListItemIcon>
-                <ListItemText primary="IRO Log" />
-              </MenuItem>
+    setOpenPrintFr(true);
 
-              <Divider />
+    const timer = setTimeout(() => {
+      setOpenPrintFr(false);
+    }, 2000);
 
-              {/* ================= EDIT / UPDATE ================= */}
-              <Section title="EDIT / UPDATE" />
+    return undefined;
 
-              {/* {(hasPermissions(['ADMIN_ACCESS']) ||
-            hasPermissions(['FCRA_ACCOUNTS_ACCESS']) ||
-            hasPermissions(['LOCAL_ACCOUNT_ACCESS'])) && (
-                <MenuItem onClick={() => [setOpenReleaseEdit(true), setReleaseAmountIROs([props.row])]}>
-                  <ListItemIcon><EditIcon fontSize="small" /></ListItemIcon>
-                  <ListItemText primary="Edit Release Amount" />
-                </MenuItem>
-              )} */}
+  } catch (error) {
+    console.error('Failed to load IRO / Division data', error);
+    return undefined;
+  }
+}
 
-              <MenuItem onClick={() => {
+                },
+              ] :
+              []),
+            {
+              id: 'Attach IRO receipt',
+              text: 'Prev Regenerate IRO',
+              icon: AttachFileIcon,
+              onClick: () => {
+                setOpenAttachReceipt1(true);
+                setIroData(props.row);
+                if (props?.row.FR) {
+                  FRServices.getById(props.row.FR).then((res) => {
+                    setFrData(res.data);
+                    console.log(res.data, 'fr');
+                  });
+                }
+                setPrintIroLoading(true);
+                setTimeout(() => {
+                  setPrintIroLoading(false);
+                }, 2000);
+              } },
+            {
+              id: 'View',
+              text: 'View Fr ',
+              icon: PreviewIcon,
+              // component: Link,
+              // to: `/fr/${(props.row as any).FR}/view`,
+              onClick: () => {
+                window.open( `/fr/${(props.row as any).FR}/view`, '_blank');
+              },
+
+            },
+            ...(props.row.status >= IROLifeCycleStates.AMOUNT_RELEASED ?
+              [
+                {
+                  id: 'Release',
+                  text: 'View Release Amount',
+                  onClick: () => [setOpenRelease(true), setReleaseAmountIROs([props.row])],
+                  icon: PreviewIcon,
+                },
+              ] :
+              []),
+            ...(hasPermissions(['ADMIN_ACCESS']) || hasPermissions(['FCRA_ACCOUNTS_ACCESS']) || hasPermissions(['LOCAL_ACCOUNT_ACCESS']) ?
+              [
+                {
+                  id: 'Release',
+                  text: 'Edit Release Amount',
+                  onClick: () => [setOpenReleaseEdit(true), setReleaseAmountIROs([props.row])],
+                  icon: PreviewIcon,
+                },
+              ] :
+              []),
+
+            // ...(props.row.status == IROLifeCycleStates.AMOUNT_RELEASED ? [
+            //   {
+            //     id: 'Reconciliation',
+            //     text: 'Reconciliation',
+            //     icon: EditIcon,
+            //     onClick: () => {
+            //       setAttachment(true);
+            //       setSelectedIRO(props.row);
+            //     },
+            //   }] : []),
+
+            {
+              id: 'remarks',
+              text: 'Remark',
+              icon: EditNoteIcon,
+
+              onClick: () => {
                 toggleOpenRemarks(true);
                 setSelectedIROId(props.row._id);
-              }}>
-                <ListItemIcon><EditNoteIcon fontSize="small" /></ListItemIcon>
-                <ListItemText primary="Add Remark" />
-              </MenuItem>
-
-              <MenuItem onClick={() => {
+                IROServices.getAllRemarksById(props.row._id)
+                  .then((res) => setRemarks(res.data ?? []))
+                  .catch((error) => {
+                    enqueueSnackbar({
+                      variant: 'error',
+                      message: error.message,
+                    });
+                  });
+              },
+            },
+            // {
+            //   id: 'View',
+            //   text: 'View Details ',
+            //   component: Link,
+            //   to: `/fr/${props.row._id}/view`,
+            //   icon: PreviewIcon,
+            // },
+            // {
+            //   id: 'Reconciliation',
+            //   text: 'Reconciliation',
+            //   icon: EditIcon,
+            // },
+            // {
+            //   id: 'Close IRO',
+            //   text: 'Close IRO',
+            //   icon: PreviewIcon,
+            // },
+            {
+              id: 'Attachments',
+              text: 'Attachments',
+              icon: PrintIcon,
+              onClick: () => {
+                // console.log(props.row.particulars );
+                // props.row.particulars.map((item)=>{
                 setAttachments(props.row.billAttachment);
+                // });
+                console.log(attachments, 'setAttachments(item.attachment);');
+
                 setViewFileUploader(true);
-              }}>
-                <ListItemIcon><AttachFileIcon fontSize="small" /></ListItemIcon>
-                <ListItemText primary="Attachments" />
-              </MenuItem>
+              },
+            },
+            {
+              id: 'Close IRO',
+              text: 'Close IRO',
+              icon: PreviewIcon,
+              onClick: () => {
+                setIroData(props.row);
+                setConform1(true);
+                if (props?.row.FR) {
+                  FRServices.getById((props.row as any).FR).then((res) => {
+                    setFrData(res.data);
+                    console.log(res.data, 'fr');
+                  });
+                }
+                setPrintIroLoading(true);
+                setTimeout(() => {
+                  setPrintIroLoading(false);
+                }, 2000);
+                //   IROServices.close(props.row._id)
+                //     .then((res) => {
+                //       if (reconciliationIRO) {
+                //         // eslint-disable-next-line @typescript-eslint/naming-convention
+                //         const filterIRO = reconciliationIRO?.filter((reconciliationIROs) => {
+                //           return reconciliationIROs._id !== props.row._id;
+                //         });
+                //         setReconcilationIRO(filterIRO);
+                //       }
 
-              <Divider />
+                //       enqueueSnackbar({
+                //         message: res.message,
+                //         variant: 'success',
+                //       });
+                //     })
 
-              {/* ================= PRINT ================= */}
-              <Section title="PRINT" />
-
-              <MenuItem onClick={() => handlePrintIRO(props.row)}>
-                <ListItemIcon><PrintIcon fontSize="small" /></ListItemIcon>
-                <ListItemText primary="Print IRO" />
-              </MenuItem>
-
-              <MenuItem onClick={() => handlePrintFR(props.row)}>
-                <ListItemIcon><PrintIcon fontSize="small" /></ListItemIcon>
-                <ListItemText primary="Print FR" />
-              </MenuItem>
-
-              {hasPermissions(['DELHI_DIVISION_ACCESS']) && (
-                <MenuItem onClick={() => handlePrintDelhi(props.row)}>
-                  <ListItemIcon><PrintIcon fontSize="small" /></ListItemIcon>
-                  <ListItemText primary="Print FR – HQ Delhi" />
-                </MenuItem>
-              )}
-
-              <Divider />
-
-              {/* ================= SYSTEM ================= */}
-              <Section title="SYSTEM" />
-
-              <MenuItem
-                sx={{ color: 'error.main' }}
-                onClick={() => handleCloseIRO(props.row)}
-              >
-                <ListItemIcon sx={{ color: 'error.main' }}>
-                  <CloseIcon fontSize="small" />
-                </ListItemIcon>
-                <ListItemText primary="Close IRO" />
-              </MenuItem>
-
-              <MenuItem onClick={() => {
+              //     .catch((err) => {
+              //       enqueueSnackbar({
+              //         message: err.message,
+              //         variant: 'error',
+              //       });
+              //     });
+              },
+            },
+            {
+              id: 'notification',
+              text: 'Send notification',
+              onClick: () => {
                 setSelectedIROId(props.row._id);
                 toggleSendNotification(true);
-              }}>
-                <ListItemIcon><MessageIcon fontSize="small" /></ListItemIcon>
-                <ListItemText primary="Send Notification" />
-              </MenuItem>
-            </Menu>
-          </>
-        );
-      },
+              },
+              icon: MessageIcon,
+            },
+            {
+              id: 'log',
+              text: 'IRO Log',
+              icon: PreviewIcon,
+              onClick: () => {
+                setSelectedIROId(props.row._id);
+                setOpenLog(true);
+              },
+            },
+          ]}
+        />
+      ),
     },
     // {
     //   field: 'status',
