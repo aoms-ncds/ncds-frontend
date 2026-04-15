@@ -38,7 +38,7 @@ const HomePage = () => {
   const [staffsCount, setStaffsCount] = useState<string | null>(null);
   const [recentActivity, setRecentActivity] = useState<any | null>(null);
   const user = useAuth();
-  console.log(divisionsCount, '00909');
+  console.log(user, '00909');
   const navigate = useNavigate();
   useEffect(() => {
     DivisionsServices.getDivisionById(((user.user as User).division as unknown as string))
@@ -827,7 +827,7 @@ Total Sub-Div                          </Typography>
             </CardContent>
           </Card>
         </Grid>
-        {hasPermissions(['ADMIN_ACCESS', 'READ_STAFFS'])&& (
+        {hasPermissions(['ADMIN_ACCESS']) || (user as any)?.user.kind=='staff' ? (
 
           <Grid item xs={12} md={6} lg={4} xl={4}>
 
@@ -993,7 +993,7 @@ Total Sub-Div                          </Typography>
               </CardContent>
             </Card>
           </Grid>
-        )}
+        ):[]}
 
         <Grid item xs={12} md={12} lg={12} xl={12}>
 
