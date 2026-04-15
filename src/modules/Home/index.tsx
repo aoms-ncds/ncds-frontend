@@ -370,7 +370,7 @@ const HomePage = () => {
 
       <br />
       <Grid container spacing={3} >
-   <Grid item xs={12} md={hasPermissions(['ADMIN_ACCESS']) ? 6 : 12} lg={hasPermissions(['ADMIN_ACCESS']) ? 8 : 12} xl={hasPermissions(['ADMIN_ACCESS']) ? 8 : 12}>
+   <Grid item xs={12} md={hasPermissions(['ADMIN_ACCESS']) ? 6 : 12} lg={hasPermissions(['ADMIN_ACCESS']) ? 8 : 12} xl={hasPermissions(['ADMIN_ACCESS']) || (user as any)?.user.kind=='staff' ? 8 : 12}>
 
           <Card
             sx={{
