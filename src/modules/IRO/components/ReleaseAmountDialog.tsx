@@ -514,17 +514,21 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
                 <TextField
                   label="Total Amount Transferred"
                   type="number"
-                  value={releaseAmount?.transferredAmount ==0 ? 0: releaseAmount?.transferredAmount ??0 }
+                  value={
+                    (releaseAmount as any)?.hasTransferred ?
+                      releaseAmount?.transferredAmount : // ✅ show 0 if total is 0
+                      (releaseAmount?.releaseAmount ?? 0) // ✅ default before any transfer
+                  }
                   onChange={(e) =>
-                    // Number(e.target.value) <= (releaseAmount.releaseAmount ?? 0) &&
                     setReleaseAmount(() => ({
                       ...releaseAmount,
                       transferredAmount: Number(e.target.value),
+                      hasTransferred: true, // ✅ allow manual typing
+
                     }))
                   }
                   fullWidth
                   inputProps={{
-                    // max: releaseAmount.releaseAmount ?? 0, min: 0, step: 0.01,
                     onWheel: (event: React.WheelEvent<HTMLInputElement>) => {
                       event.preventDefault();
                       event.currentTarget.blur();
@@ -532,23 +536,19 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
                   }}
                   variant="outlined"
                   disabled={props.action !== 'add'}
-
-
                   sx={{
                     '& .MuiInputBase-input.Mui-disabled': {
-                      WebkitTextFillColor: '#000', // text color
+                      WebkitTextFillColor: '#000',
                       color: '#000',
                       opacity: 1,
                     },
                     '& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline': {
-                      borderColor: '#c4c4c4', // normal border color
+                      borderColor: '#c4c4c4',
                     },
                     '& .MuiInputLabel-root.Mui-disabled': {
                       color: 'rgba(0,0,0,0.6)',
                     },
                   }}
-
-
                   required
                 />
               </Grid>
@@ -1130,16 +1130,14 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
 
                 // calculate total
                 const total = Object.values(updatedAmounts)
-      .reduce((sum:any, val:any) => sum + Number(val || 0), 0);
+    .reduce((sum: any, val: any) => sum + Number(val || 0), 0);
 
-                // update release form
-                setReleaseAmount((prev:any) => ({
+                // update release form in ONE call
+                setReleaseAmount((prev: any) => ({
                   ...prev,
                   transferredAmount: total,
-                }));
-                setReleaseAmount((prev:any) => ({
-                  ...prev,
-                  transferredAmountEach: transferredAmounts,
+                  transferredAmountEach: updatedAmounts,
+                  hasTransferred: true, // ✅ flag
                 }));
 
                 setOpenTransferDialog(false);
