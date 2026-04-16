@@ -1982,7 +1982,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                                   <ToggleButton value="AMT">AMT RELEASED</ToggleButton>
                                   <ToggleButton value="RTD">REVERTED</ToggleButton>
                                   <ToggleButton value="CLS">CLOSED</ToggleButton>
-                                  <ToggleButton value="DIS">DISPROVED</ToggleButton>
+                                  <ToggleButton value="DIS">DISAPPROVED</ToggleButton>
                                   <ToggleButton value="REOPN">REOPENED</ToggleButton>
                                   <ToggleButton value="Custom">CUSTOM</ToggleButton>
                                   <ToggleButton value="NonBankTransfers">NON BANK TRANSFERS</ToggleButton>
