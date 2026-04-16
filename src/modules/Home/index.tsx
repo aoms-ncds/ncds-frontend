@@ -1075,7 +1075,7 @@ Total Sub-Div                          </Typography>
                   </Box>
 
                   <Typography fontSize={15}>
-                    <b>{(recentActivity)?.IRO}</b> IRO Crated
+                    <b>{(recentActivity)?.IRO}</b> IRO Created
                   </Typography>
                 </Box>
 
