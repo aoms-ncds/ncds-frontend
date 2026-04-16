@@ -835,142 +835,142 @@ const ApplicationApprovalPage = () => {
               {/* Basic */}
               <Section title="Basic Information">
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Division" value={(applications as any)?.formData.division} name="division" />
+                  <TextField fullWidth label="Division" value={(applications as any)?.formData?.division} name="division" />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Scholarship Help No" value={(applications as any)?.formData.scholarshipNo} name="scholarshipNo" />
+                  <TextField fullWidth label="Scholarship Help No" value={(applications as any)?.formData?.scholarshipNo} name="scholarshipNo" />
                 </Grid>
               </Section>
 
               {/* Personal */}
               <Section title="Personal Details">
                 <Grid item xs={12}>
-                  <TextField fullWidth label="Name of Applicant" value={(applications as any)?.formData.name} name="name" />
+                  <TextField fullWidth label="Name of Applicant" value={(applications as any)?.formData?.name} name="name" />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Worker Code" value={(applications as any)?.formData.workerCode} name="workerCode" />
+                  <TextField fullWidth label="Worker Code" value={(applications as any)?.formData?.workerCode} name="workerCode" />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Welfare Scheme ID" value={(applications as any)?.formData.schemeId} name="schemeId" />
+                  <TextField fullWidth label="Welfare Scheme ID" value={(applications as any)?.formData?.schemeId} name="schemeId" />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Father’s Name" value={(applications as any)?.formData.fatherName} name="fatherName" />
+                  <TextField fullWidth label="Father’s Name" value={(applications as any)?.formData?.fatherName} name="fatherName" />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField type="date" fullWidth label="Joining Date" InputLabelProps={{ shrink: true }} value={(applications as any)?.formData.joiningDate} name="joiningDate" />
+                  <TextField type="date" fullWidth label="Joining Date" InputLabelProps={{ shrink: true }} value={(applications as any)?.formData?.joiningDate} name="joiningDate" />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Help Requesting For" value={(applications as any)?.formData.helpFor} name="helpFor" />
+                  <TextField fullWidth label="Help Requesting For" value={(applications as any)?.formData?.helpFor} name="helpFor" />
                 </Grid>
               </Section>
 
               {/* Ministry */}
               <Section title="Ministry Details">
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Present Ministry" value={(applications as any)?.formData.ministry} name="ministry" />
+                  <TextField fullWidth label="Present Ministry" value={(applications as any)?.formData?.ministry} name="ministry" />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Place of Ministry" value={(applications as any)?.formData.place} name="place" />
+                  <TextField fullWidth label="Place of Ministry" value={(applications as any)?.formData?.place} name="place" />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Mobile No" value={(applications as any)?.formData.mobile} name="mobile" />
+                  <TextField fullWidth label="Mobile No" value={(applications as any)?.formData?.mobile} name="mobile" />
                 </Grid>
               </Section>
 
               {/* Course */}
               <Section title="Course Details">
                 <Grid item xs={12}>
-                  <TextField fullWidth label="College/University Name" value={(applications as any)?.formData.college} name="college" />
+                  <TextField fullWidth label="College/University Name" value={(applications as any)?.formData?.college} name="college" />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Course Name" value={(applications as any)?.formData.course} name="course" />
+                  <TextField fullWidth label="Course Name" value={(applications as any)?.formData?.course} name="course" />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Course Duration" value={(applications as any)?.formData.duration} name="duration" />
+                  <TextField fullWidth label="Course Duration" value={(applications as any)?.formData?.duration} name="duration" />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Course Type (Full/Part/Distance)" value={(applications as any)?.formData.courseType} name="courseType" />
+                  <TextField fullWidth label="Course Type (Full/Part/Distance)" value={(applications as any)?.formData?.courseType} name="courseType" />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField type="date" fullWidth label="Class Start Date" InputLabelProps={{ shrink: true }} value={(applications as any)?.formData.startDate} name="startDate" />
+                  <TextField type="date" fullWidth label="Class Start Date" InputLabelProps={{ shrink: true }} value={(applications as any)?.formData?.startDate} name="startDate" />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Place" value={(applications as any)?.formData.collegePlace} name="collegePlace" />
+                  <TextField fullWidth label="Place" value={(applications as any)?.formData?.collegePlace} name="collegePlace" />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="College Email ID" value={(applications as any)?.formData.collegeEmail} name="collegeEmail" />
+                  <TextField fullWidth label="College Email ID" value={(applications as any)?.formData?.collegeEmail} name="collegeEmail" />
                 </Grid>
               </Section>
 
               {/* Financial */}
               <Section title="Financial Details">
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Bills Attached" value={(applications as any)?.formData.bills} name="bills" />
+                  <TextField fullWidth label="Bills Attached" value={(applications as any)?.formData?.bills} name="bills" />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Total Fee (Rs)" value={(applications as any)?.formData.totalFee} name="totalFee" />
+                  <TextField fullWidth label="Total Fee (Rs)" value={(applications as any)?.formData?.totalFee} name="totalFee" />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Yearly Fee (Rs)" value={(applications as any)?.formData.yearlyFee} name="yearlyFee" />
+                  <TextField fullWidth label="Yearly Fee (Rs)" value={(applications as any)?.formData?.yearlyFee} name="yearlyFee" />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Hostel Fee (Rs)" value={(applications as any)?.formData.hostelFee} name="hostelFee" />
+                  <TextField fullWidth label="Hostel Fee (Rs)" value={(applications as any)?.formData?.hostelFee} name="hostelFee" />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Other Expenses (Rs)" value={(applications as any)?.formData.other} name="other" />
+                  <TextField fullWidth label="Other Expenses (Rs)" value={(applications as any)?.formData?.other} name="other" />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Total Expenses (Rs)" value={(applications as any)?.formData.total} name="total" />
+                  <TextField fullWidth label="Total Expenses (Rs)" value={(applications as any)?.formData?.total} name="total" />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Requested Amount (Rs)" value={(applications as any)?.formData.requested} name="requested" />
+                  <TextField fullWidth label="Requested Amount (Rs)" value={(applications as any)?.formData?.requested} name="requested" />
                 </Grid>
 
                 <Grid item xs={12}>
-                  <TextField fullWidth label="Funds Received" value={(applications as any)?.formData.received} name="received" />
+                  <TextField fullWidth label="Funds Received" value={(applications as any)?.formData?.received} name="received" />
                 </Grid>
               </Section>
 
               {/* Recommendations */}
               <Section title="Recommendations">
                 <Grid item xs={12}>
-                  <TextField fullWidth multiline rows={2} label="Area Supervisor Comments" value={(applications as any)?.formData.supervisor} name="supervisor" />
+                  <TextField fullWidth multiline rows={2} label="Area Supervisor Comments" value={(applications as any)?.formData?.supervisor} name="supervisor" />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Name & Signature" value={(applications as any)?.formData.supervisorSign} name="supervisorSign" />
+                  <TextField fullWidth label="Name & Signature" value={(applications as any)?.formData?.supervisorSign} name="supervisorSign" />
                 </Grid>
 
                 <Grid item xs={12}>
-                  <TextField fullWidth multiline rows={2} label="Coordinator Comments" value={(applications as any)?.formData.coordinator} name="coordinator" />
+                  <TextField fullWidth multiline rows={2} label="Coordinator Comments" value={(applications as any)?.formData?.coordinator} name="coordinator" />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Signature with Date" value={(applications as any)?.formData.signDate} name="signDate" />
+                  <TextField fullWidth label="Signature with Date" value={(applications as any)?.formData?.signDate} name="signDate" />
                 </Grid>
                 <Grid item md={6}>
                   <Button variant="contained" onClick={() => {
-                    setForm1Signature(true), setFile((applications as any).formData.SupervisorSignature);
+                    setForm1Signature(true), setFile((applications as any).formData?.SupervisorSignature);
                   }} startIcon={<AttachmentOutlined />}>
                     Signature
                   </Button>
@@ -980,23 +980,23 @@ const ApplicationApprovalPage = () => {
               {/* Bank */}
               <Section title="Bank Details">
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Bank Name" value={(applications as any)?.formData.bankName} name="bankName" />
+                  <TextField fullWidth label="Bank Name" value={(applications as any)?.formData?.bankName} name="bankName" />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Account Holder Name" value={(applications as any)?.formData.accountName} name="accountName" />
+                  <TextField fullWidth label="Account Holder Name" value={(applications as any)?.formData?.accountName} name="accountName" />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Account Number" value={(applications as any)?.formData.accountNumber} name="accountNumber" />
+                  <TextField fullWidth label="Account Number" value={(applications as any)?.formData?.accountNumber} name="accountNumber" />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Branch Name & Code" value={(applications as any)?.formData.branch} name="branch" />
+                  <TextField fullWidth label="Branch Name & Code" value={(applications as any)?.formData?.branch} name="branch" />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="IFS Code" value={(applications as any)?.formData.ifsc} name="ifsc" />
+                  <TextField fullWidth label="IFS Code" value={(applications as any)?.formData?.ifsc} name="ifsc" />
                 </Grid>
               </Section>
 
@@ -1011,16 +1011,17 @@ const ApplicationApprovalPage = () => {
                 </Grid> */}
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Name" value={(applications as any)?.formData.declName} name="declName" />
+                  <TextField fullWidth label="Name" value={(applications as any)?.formData?.declName} name="declName" />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField type="date" fullWidth label="Date" InputLabelProps={{ shrink: true }} value={(applications as any)?.formData.declDate} name="declDate" />
+                  <TextField type="date" fullWidth label="Date" InputLabelProps={{ shrink: true }} value={(applications as any)?.formData?.declDate} name="declDate" />
                 </Grid>
                 <Grid item md={6}>
                   <Button variant="contained" onClick={() => {
-                    setForm1Signature(true), setFile((applications as any).formData.StudentSignature);
-                  }} startIcon={<AttachmentOutlined />}>
+                    setForm1Signature(true), setFile((applications as any).formData?.StudentSignature);
+                  }}
+                  startIcon={<AttachmentOutlined />}>
                     Signature Of Student
                   </Button>
                 </Grid>
@@ -1029,30 +1030,30 @@ const ApplicationApprovalPage = () => {
               {/* Office */}
               <Section title="Office Use Only">
                 <Grid item xs={6}>
-                  <TextField type="date" fullWidth label="Application Received On" InputLabelProps={{ shrink: true }} value={(applications as any)?.formData.receivedDate} name="receivedDate" />
+                  <TextField type="date" fullWidth label="Application Received On" InputLabelProps={{ shrink: true }} value={(applications as any)?.formData?.receivedDate} name="receivedDate" />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Amount Sanctioned" value={(applications as any)?.formData.sanctioned} name="sanctioned" />
+                  <TextField fullWidth label="Amount Sanctioned" value={(applications as any)?.formData?.sanctioned} name="sanctioned" />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField type="date" fullWidth label="Date of Fund Release" InputLabelProps={{ shrink: true }} value={(applications as any)?.formData.releaseDate} name="releaseDate" />
+                  <TextField type="date" fullWidth label="Date of Fund Release" InputLabelProps={{ shrink: true }} value={(applications as any)?.formData?.releaseDate} name="releaseDate" />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField type="date" fullWidth label="Date Applicant Informed" InputLabelProps={{ shrink: true }} value={(applications as any)?.formData.informedDate} name="informedDate" />
+                  <TextField type="date" fullWidth label="Date Applicant Informed" InputLabelProps={{ shrink: true }} value={(applications as any)?.formData?.informedDate} name="informedDate" />
                 </Grid>
 
                 <Grid item md={6}>
                   <Button variant="contained" onClick={() => {
-                    setForm1Signature(true), setFile((applications as any).formData.DealingPersonSignature);
+                    setForm1Signature(true), setFile((applications as any).formData?.DealingPersonSignature);
                   }} startIcon={<AttachmentOutlined />}>
                     Dealing Person Signature
                   </Button>
                 </Grid> <Grid item md={6}>
                   <Button variant="contained" onClick={() => {
-                    setForm1Signature(true), setFile((applications as any).formData.AuthorizedPersonSignature);
+                    setForm1Signature(true), setFile((applications as any).formData?.AuthorizedPersonSignature);
                   }} startIcon={<AttachmentOutlined />}>
                     Authorized Person Signature
                   </Button>
@@ -1088,30 +1089,30 @@ const ApplicationApprovalPage = () => {
               {/* Basic */}
               <Section title="Basic Information">
                 <Grid item xs={12}>
-                  <TextField fullWidth label="Division" value={(applications as any)?.formData.division} name="division" />
+                  <TextField fullWidth label="Division" value={(applications as any)?.formData?.division} name="division" />
                 </Grid>
               </Section>
 
               {/* Personal */}
               <Section title="Personal Details">
                 <Grid item xs={12}>
-                  <TextField fullWidth label="Applicant Name" value={(applications as any)?.formData.name} name="name" />
+                  <TextField fullWidth label="Applicant Name" value={(applications as any)?.formData?.name} name="name" />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Worker Code" value={(applications as any)?.formData.workerCode} name="workerCode" />
+                  <TextField fullWidth label="Worker Code" value={(applications as any)?.formData?.workerCode} name="workerCode" />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Welfare Scheme ID" value={(applications as any)?.formData.schemeId} name="schemeId" />
+                  <TextField fullWidth label="Welfare Scheme ID" value={(applications as any)?.formData?.schemeId} name="schemeId" />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField type="date" fullWidth label="Joining Date" InputLabelProps={{ shrink: true }} value={(applications as any)?.formData.joiningDate} name="joiningDate" />
+                  <TextField type="date" fullWidth label="Joining Date" InputLabelProps={{ shrink: true }} value={(applications as any)?.formData?.joiningDate} name="joiningDate" />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Spouse/Husband Name" value={(applications as any)?.formData.spouse} name="spouse" />
+                  <TextField fullWidth label="Spouse/Husband Name" value={(applications as any)?.formData?.spouse} name="spouse" />
                 </Grid>
               </Section>
 
@@ -1120,19 +1121,19 @@ const ApplicationApprovalPage = () => {
                 {[0, 1, 2, 3].map((i) => (
                   <React.Fragment key={i}>
                     <Grid item xs={3}>
-                      <TextField fullWidth label="Name" value={(applications as any)?.formData[`childName${i}`]} name={`childName${i}`} />
+                      <TextField fullWidth label="Name" value={(applications as any)?.formData?.[`childName${i}`]} name={`childName${i}`} />
                     </Grid>
                     <Grid item xs={2}>
-                      <TextField fullWidth label="Age" value={(applications as any)?.formData[`childAge${i}`]} name={`childAge${i}`} />
+                      <TextField fullWidth label="Age" value={(applications as any)?.formData?.[`childAge${i}`]} name={`childAge${i}`} />
                     </Grid>
                     <Grid item xs={2}>
-                      <TextField fullWidth label="Studying" value={(applications as any)?.formData[`childStudy${i}`]} name={`childStudy${i}`} />
+                      <TextField fullWidth label="Studying" value={(applications as any)?.formData?.[`childStudy${i}`]} name={`childStudy${i}`} />
                     </Grid>
                     <Grid item xs={2}>
-                      <TextField fullWidth label="Married" value={(applications as any)?.formData[`childMarried${i}`]} name={`childMarried${i}`} />
+                      <TextField fullWidth label="Married" value={(applications as any)?.formData?.[`childMarried${i}`]} name={`childMarried${i}`} />
                     </Grid>
                     <Grid item xs={3}>
-                      <TextField fullWidth label="Working" value={(applications as any)?.formData[`childWork${i}`]} name={`childWork${i}`} />
+                      <TextField fullWidth label="Working" value={(applications as any)?.formData?.[`childWork${i}`]} name={`childWork${i}`} />
                     </Grid>
                   </React.Fragment>
                 ))}
@@ -1141,42 +1142,42 @@ const ApplicationApprovalPage = () => {
               {/* Ministry */}
               <Section title="Ministry Details">
                 <Grid item xs={12}>
-                  <TextField fullWidth label="Ministry at time of death" value={(applications as any)?.formData.ministry} name="ministry" />
+                  <TextField fullWidth label="Ministry at time of death" value={(applications as any)?.formData?.ministry} name="ministry" />
                 </Grid>
 
                 <Grid item xs={12}>
-                  <TextField fullWidth label="Place of Ministry" value={(applications as any)?.formData.place} name="place" />
+                  <TextField fullWidth label="Place of Ministry" value={(applications as any)?.formData?.place} name="place" />
                 </Grid>
 
                 <Grid item xs={12}>
-                  <TextField fullWidth multiline rows={2} label="Reason for Death" value={(applications as any)?.formData.reason} name="reason" />
+                  <TextField fullWidth multiline rows={2} label="Reason for Death" value={(applications as any)?.formData?.reason} name="reason" />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField type="date" fullWidth label="Date of Death" InputLabelProps={{ shrink: true }} value={(applications as any)?.formData.deathDate} name="deathDate" />
+                  <TextField type="date" fullWidth label="Date of Death" InputLabelProps={{ shrink: true }} value={(applications as any)?.formData?.deathDate} name="deathDate" />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Place of Death (Hospital/Home)" value={(applications as any)?.formData.deathPlace} name="deathPlace" />
+                  <TextField fullWidth label="Place of Death (Hospital/Home)" value={(applications as any)?.formData?.deathPlace} name="deathPlace" />
                 </Grid>
 
                 <Grid item xs={12}>
-                  <TextField fullWidth label="Doctor Name" value={(applications as any)?.formData.doctor} name="doctor" />
+                  <TextField fullWidth label="Doctor Name" value={(applications as any)?.formData?.doctor} name="doctor" />
                 </Grid>
               </Section>
 
               {/* Family */}
               <Section title="Family Details">
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Spouse Qualification" value={(applications as any)?.formData.qualification} name="qualification" />
+                  <TextField fullWidth label="Spouse Qualification" value={(applications as any)?.formData?.qualification} name="qualification" />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Income Details (Rs)" value={(applications as any)?.formData.income} name="income" />
+                  <TextField fullWidth label="Income Details (Rs)" value={(applications as any)?.formData?.income} name="income" />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Requested Amount (Rs)" value={(applications as any)?.formData.requested} name="requested" />
+                  <TextField fullWidth label="Requested Amount (Rs)" value={(applications as any)?.formData?.requested} name="requested" />
                 </Grid>
 
                 {/* Living */}
@@ -1188,41 +1189,41 @@ const ApplicationApprovalPage = () => {
                 </Grid>
 
                 <Grid item xs={12}>
-                  <TextField fullWidth label="Other (Specify)" value={(applications as any)?.formData.otherLiving} name="otherLiving" />
+                  <TextField fullWidth label="Other (Specify)" value={(applications as any)?.formData?.otherLiving} name="otherLiving" />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Documents Attached" value={(applications as any)?.formData.documents} name="documents" />
+                  <TextField fullWidth label="Documents Attached" value={(applications as any)?.formData?.documents} name="documents" />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Death Certificate" value={(applications as any)?.formData.deathCertificate} name="deathCertificate" />
+                  <TextField fullWidth label="Death Certificate" value={(applications as any)?.formData?.deathCertificate} name="deathCertificate" />
                 </Grid>
               </Section>
 
               {/* Recommendations */}
               <Section title="Recommendations">
                 <Grid item xs={12}>
-                  <TextField fullWidth multiline rows={2} label="Supervisor Comments" value={(applications as any)?.formData.supervisor} name="supervisor" />
+                  <TextField fullWidth multiline rows={2} label="Supervisor Comments" value={(applications as any)?.formData?.supervisor} name="supervisor" />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Supervisor Name & Signature" value={(applications as any)?.formData.supervisorSign} name="supervisorSign" />
+                  <TextField fullWidth label="Supervisor Name & Signature" value={(applications as any)?.formData?.supervisorSign} name="supervisorSign" />
                 </Grid>
 
                 <Grid item xs={12}>
-                  <TextField fullWidth multiline rows={2} label="Coordinator Comments" value={(applications as any)?.formData.coordinator} name="coordinator" />
+                  <TextField fullWidth multiline rows={2} label="Coordinator Comments" value={(applications as any)?.formData?.coordinator} name="coordinator" />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Recommended Amount" value={(applications as any)?.formData.recommend} name="recommend" />
+                  <TextField fullWidth label="Recommended Amount" value={(applications as any)?.formData?.recommend} name="recommend" />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Signature with Date" value={(applications as any)?.formData.signDate} name="signDate" />
+                  <TextField fullWidth label="Signature with Date" value={(applications as any)?.formData?.signDate} name="signDate" />
                 </Grid>
                 <Grid item md={6}>
-                  <Button variant="contained" onClick={() => (setForm1Signature(true), setFile((applications as any)?.formData.SupervisorSignature))} startIcon={<AttachmentOutlined />}>
+                  <Button variant="contained" onClick={() => (setForm1Signature(true), setFile((applications as any)?.formData?.SupervisorSignature))} startIcon={<AttachmentOutlined />}>
                          Signature
                   </Button>
                 </Grid>
@@ -1231,31 +1232,31 @@ const ApplicationApprovalPage = () => {
               {/* Office */}
               <Section title="Office Use Only">
                 <Grid item xs={6}>
-                  <TextField type="date" fullWidth label="Application Received On" InputLabelProps={{ shrink: true }} value={(applications as any)?.formData.receivedDate} name="receivedDate" />
+                  <TextField type="date" fullWidth label="Application Received On" InputLabelProps={{ shrink: true }} value={(applications as any)?.formData?.receivedDate} name="receivedDate" />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Amount Sanctioned" value={(applications as any)?.formData.sanctioned} name="sanctioned" />
+                  <TextField fullWidth label="Amount Sanctioned" value={(applications as any)?.formData?.sanctioned} name="sanctioned" />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField type="date" fullWidth label="Fund Release Date" InputLabelProps={{ shrink: true }} value={(applications as any)?.formData.releaseDate} name="releaseDate" />
+                  <TextField type="date" fullWidth label="Fund Release Date" InputLabelProps={{ shrink: true }} value={(applications as any)?.formData?.releaseDate} name="releaseDate" />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField type="date" fullWidth label="Applicant Informed Date" InputLabelProps={{ shrink: true }} value={(applications as any)?.formData.informedDate} name="informedDate" />
+                  <TextField type="date" fullWidth label="Applicant Informed Date" InputLabelProps={{ shrink: true }} value={(applications as any)?.formData?.informedDate} name="informedDate" />
                 </Grid>
 
 
                 <Grid item md={6}>
                   <Button variant="contained" onClick={() => {
-                    setForm1Signature(true), setFile((applications as any)?.formData.DealingPersonSignature);
+                    setForm1Signature(true), setFile((applications as any)?.formData?.DealingPersonSignature);
                   }} startIcon={<AttachmentOutlined />}>
                          Dealing Person Signature
                   </Button>
                 </Grid> <Grid item md={6}>
                   <Button variant="contained" onClick={() => {
-                    setForm1Signature(true), setFile((applications as any)?.formData.AuthorizedPersonSignature);
+                    setForm1Signature(true), setFile((applications as any)?.formData?.AuthorizedPersonSignature);
                   }} startIcon={<AttachmentOutlined />}>
                          Authorized Person Signature
                   </Button>
@@ -1296,15 +1297,15 @@ const ApplicationApprovalPage = () => {
               {/* Basic */}
               <Section title="Basic Information">
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Division" name="division" value={(applications as any)?.formData.division} />
+                  <TextField fullWidth label="Division" name="division" value={(applications as any)?.formData?.division} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Marriage Aid No" name="aidNo" value={(applications as any)?.formData.aidNo} />
+                  <TextField fullWidth label="Marriage Aid No" name="aidNo" value={(applications as any)?.formData?.aidNo} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField select fullWidth label="For" name="forWhom" value={(applications as any)?.formData.forWhom}>
+                  <TextField select fullWidth label="For" name="forWhom" value={(applications as any)?.formData?.forWhom}>
                     <MenuItem value="self">Self</MenuItem>
                     <MenuItem value="son">Son</MenuItem>
                     <MenuItem value="daughter">Daughter</MenuItem>
@@ -1315,105 +1316,105 @@ const ApplicationApprovalPage = () => {
               {/* Personal */}
               <Section title="Personal Details">
                 <Grid item xs={12}>
-                  <TextField fullWidth label="Applicant Name" name="name" value={(applications as any)?.formData.name} />
+                  <TextField fullWidth label="Applicant Name" name="name" value={(applications as any)?.formData?.name} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Worker Code" name="workerCode" value={(applications as any)?.formData.workerCode} />
+                  <TextField fullWidth label="Worker Code" name="workerCode" value={(applications as any)?.formData?.workerCode} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Welfare Scheme ID" name="schemeId" value={(applications as any)?.formData.schemeId} />
+                  <TextField fullWidth label="Welfare Scheme ID" name="schemeId" value={(applications as any)?.formData?.schemeId} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField type="date" fullWidth label="Joining Date" InputLabelProps={{ shrink: true }} name="joiningDate" value={(applications as any)?.formData.joiningDate} />
+                  <TextField type="date" fullWidth label="Joining Date" InputLabelProps={{ shrink: true }} name="joiningDate" value={(applications as any)?.formData?.joiningDate} />
                 </Grid>
               </Section>
 
               {/* Ministry */}
               <Section title="Ministry Details">
                 <Grid item xs={12}>
-                  <TextField fullWidth label="Ministry Details" name="ministryDetails" value={(applications as any)?.formData.ministryDetails} />
+                  <TextField fullWidth label="Ministry Details" name="ministryDetails" value={(applications as any)?.formData?.ministryDetails} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Present Ministry" name="ministry" value={(applications as any)?.formData.ministry} />
+                  <TextField fullWidth label="Present Ministry" name="ministry" value={(applications as any)?.formData?.ministry} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Place of Ministry" name="place" value={(applications as any)?.formData.place} />
+                  <TextField fullWidth label="Place of Ministry" name="place" value={(applications as any)?.formData?.place} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Mobile Number" name="mobile" value={(applications as any)?.formData.mobile} />
+                  <TextField fullWidth label="Mobile Number" name="mobile" value={(applications as any)?.formData?.mobile} />
                 </Grid>
               </Section>
 
               {/* Marriage */}
               <Section title="Marriage Details">
                 <Grid item xs={6}>
-                  <TextField type="date" fullWidth label="Marriage Date" InputLabelProps={{ shrink: true }} name="marriageDate" value={(applications as any)?.formData.marriageDate} />
+                  <TextField type="date" fullWidth label="Marriage Date" InputLabelProps={{ shrink: true }} name="marriageDate" value={(applications as any)?.formData?.marriageDate} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Marriage Solemnised By" name="solemnisedBy" value={(applications as any)?.formData.solemnisedBy} />
+                  <TextField fullWidth label="Marriage Solemnised By" name="solemnisedBy" value={(applications as any)?.formData?.solemnisedBy} />
                 </Grid>
 
                 <Grid item xs={12}>
-                  <TextField fullWidth label="Place & Church" name="church" value={(applications as any)?.formData.church} />
+                  <TextField fullWidth label="Place & Church" name="church" value={(applications as any)?.formData?.church} />
                 </Grid>
               </Section>
 
               {/* Documents */}
               <Section title="Documents Attached">
                 <Grid item xs={4}>
-                  <TextField fullWidth label="Invitation Card" name="invitation" value={(applications as any)?.formData.invitation} />
+                  <TextField fullWidth label="Invitation Card" name="invitation" value={(applications as any)?.formData?.invitation} />
                 </Grid>
 
                 <Grid item xs={4}>
-                  <TextField fullWidth label="Marriage Photo" name="photo" value={(applications as any)?.formData.photo} />
+                  <TextField fullWidth label="Marriage Photo" name="photo" value={(applications as any)?.formData?.photo} />
                 </Grid>
 
                 <Grid item xs={4}>
-                  <TextField fullWidth label="Marriage Certificate" name="certificate" value={(applications as any)?.formData.certificate} />
+                  <TextField fullWidth label="Marriage Certificate" name="certificate" value={(applications as any)?.formData?.certificate} />
                 </Grid>
               </Section>
 
               {/* Financial */}
               <Section title="Financial Details">
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Total Expenses (Rs)" name="total" value={(applications as any)?.formData.total} />
+                  <TextField fullWidth label="Total Expenses (Rs)" name="total" value={(applications as any)?.formData?.total} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Requested Amount (Rs)" name="requested" value={(applications as any)?.formData.requested} />
+                  <TextField fullWidth label="Requested Amount (Rs)" name="requested" value={(applications as any)?.formData?.requested} />
                 </Grid>
 
                 <Grid item xs={12}>
-                  <TextField fullWidth label="Funds Received (Church/Family/Loan)" name="received" value={(applications as any)?.formData.received} />
+                  <TextField fullWidth label="Funds Received (Church/Family/Loan)" name="received" value={(applications as any)?.formData?.received} />
                 </Grid>
               </Section>
 
               {/* Recommendations */}
               <Section title="Recommendations">
                 <Grid item xs={12}>
-                  <TextField fullWidth multiline rows={2} label="Supervisor Comments" name="supervisor" value={(applications as any)?.formData.supervisor} />
+                  <TextField fullWidth multiline rows={2} label="Supervisor Comments" name="supervisor" value={(applications as any)?.formData?.supervisor} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Supervisor Name & Signature" name="supervisorSign" value={(applications as any)?.formData.supervisorSign} />
+                  <TextField fullWidth label="Supervisor Name & Signature" name="supervisorSign" value={(applications as any)?.formData?.supervisorSign} />
                 </Grid>
 
                 <Grid item xs={12}>
-                  <TextField fullWidth multiline rows={2} label="Coordinator Comments" name="coordinator" value={(applications as any)?.formData.coordinator} />
+                  <TextField fullWidth multiline rows={2} label="Coordinator Comments" name="coordinator" value={(applications as any)?.formData?.coordinator} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Signature with Date" name="signDate" value={(applications as any)?.formData.signDate} />
+                  <TextField fullWidth label="Signature with Date" name="signDate" value={(applications as any)?.formData?.signDate} />
                 </Grid>
                 <Grid item md={6}>
-                  <Button variant="contained" onClick={() => (setForm1Signature(true), setFile((applications as any)?.formData.SupervisorSignature))} startIcon={<AttachmentOutlined />}>
+                  <Button variant="contained" onClick={() => (setForm1Signature(true), setFile((applications as any)?.formData?.SupervisorSignature))} startIcon={<AttachmentOutlined />}>
                            Supervisor Signature
                   </Button>
                 </Grid>
@@ -1430,14 +1431,14 @@ const ApplicationApprovalPage = () => {
                         </Grid> */}
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Name" name="declName" value={(applications as any)?.formData.declName} />
+                  <TextField fullWidth label="Name" name="declName" value={(applications as any)?.formData?.declName} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField type="date" fullWidth label="Date" InputLabelProps={{ shrink: true }} name="declDate" value={(applications as any)?.formData.declDate} />
+                  <TextField type="date" fullWidth label="Date" InputLabelProps={{ shrink: true }} name="declDate" value={(applications as any)?.formData?.declDate} />
                 </Grid>
                 <Grid item md={6}>
-                  <Button variant="contained" onClick={() => (setForm1Signature(true), setFile((applications as any)?.formData.signature))} startIcon={<AttachmentOutlined />}>
+                  <Button variant="contained" onClick={() => (setForm1Signature(true), setFile((applications as any)?.formData?.signature))} startIcon={<AttachmentOutlined />}>
                             Signature
                   </Button>
                 </Grid>
@@ -1446,26 +1447,26 @@ const ApplicationApprovalPage = () => {
               {/* Office */}
               <Section title="Office Use Only">
                 <Grid item xs={6}>
-                  <TextField type="date" fullWidth label="Application Received On" InputLabelProps={{ shrink: true }} name="receivedDate" value={(applications as any)?.formData.receivedDate} />
+                  <TextField type="date" fullWidth label="Application Received On" InputLabelProps={{ shrink: true }} name="receivedDate" value={(applications as any)?.formData?.receivedDate} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Amount Sanctioned" name="sanctioned" value={(applications as any)?.formData.sanctioned} />
+                  <TextField fullWidth label="Amount Sanctioned" name="sanctioned" value={(applications as any)?.formData?.sanctioned} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField type="date" fullWidth label="Fund Release Date" InputLabelProps={{ shrink: true }} name="releaseDate" value={(applications as any)?.formData.releaseDate} />
+                  <TextField type="date" fullWidth label="Fund Release Date" InputLabelProps={{ shrink: true }} name="releaseDate" value={(applications as any)?.formData?.releaseDate} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField type="date" fullWidth label="Applicant Informed Date" InputLabelProps={{ shrink: true }} name="informedDate" value={(applications as any)?.formData.informedDate} />
+                  <TextField type="date" fullWidth label="Applicant Informed Date" InputLabelProps={{ shrink: true }} name="informedDate" value={(applications as any)?.formData?.informedDate} />
                 </Grid>
                 <Grid item md={6}>
-                  <Button variant="contained" onClick={() => (setForm1Signature(true), setFile((applications as any)?.formData.DealingPersonSignature))} startIcon={<AttachmentOutlined />}>
+                  <Button variant="contained" onClick={() => (setForm1Signature(true), setFile((applications as any)?.formData?.DealingPersonSignature))} startIcon={<AttachmentOutlined />}>
                             Dealing Person Signature
                   </Button>
                 </Grid> <Grid item md={6}>
-                  <Button variant="contained" onClick={() => (setForm1Signature(true), setFile((applications as any)?.formData.AuthorizedPersonSignature))} startIcon={<AttachmentOutlined />}>
+                  <Button variant="contained" onClick={() => (setForm1Signature(true), setFile((applications as any)?.formData?.AuthorizedPersonSignature))} startIcon={<AttachmentOutlined />}>
                             Authorized Person Signature
                   </Button>
                 </Grid>
@@ -1500,16 +1501,16 @@ const ApplicationApprovalPage = () => {
 
                 {/* Division */}
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Division" name="division" value={(applications as any)?.formData.division} />
+                  <TextField fullWidth label="Division" name="division" value={(applications as any)?.formData?.division} />
                 </Grid>
 
                 {/* Ailment */}
                 <Grid item xs={3}>
-                  <TextField fullWidth label="Ailment No" name="ailmentNo" value={(applications as any)?.formData.ailmentNo} />
+                  <TextField fullWidth label="Ailment No" name="ailmentNo" value={(applications as any)?.formData?.ailmentNo} />
                 </Grid>
 
                 <Grid item xs={3}>
-                  <TextField select fullWidth label="For" name="ailmentType" value={(applications as any)?.formData.ailmentType}>
+                  <TextField select fullWidth label="For" name="ailmentType" value={(applications as any)?.formData?.ailmentType}>
                     <MenuItem value="self">Self</MenuItem>
                     <MenuItem value="spouse">Spouse</MenuItem>
                     <MenuItem value="children">Children</MenuItem>
@@ -1522,27 +1523,27 @@ const ApplicationApprovalPage = () => {
                 </Grid>
 
                 <Grid item xs={12}>
-                  <TextField fullWidth label="Name of Applicant" name="name" value={(applications as any)?.formData.name} />
+                  <TextField fullWidth label="Name of Applicant" name="name" value={(applications as any)?.formData?.name} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Worker Code" name="workerCode" value={(applications as any)?.formData.workerCode} />
+                  <TextField fullWidth label="Worker Code" name="workerCode" value={(applications as any)?.formData?.workerCode} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Welfare Scheme ID" name="schemeId" value={(applications as any)?.formData.schemeId} />
+                  <TextField fullWidth label="Welfare Scheme ID" name="schemeId" value={(applications as any)?.formData?.schemeId} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField type="date" fullWidth label="Joining Date" InputLabelProps={{ shrink: true }} name="joiningDate" value={(applications as any)?.formData.joiningDate} />
+                  <TextField type="date" fullWidth label="Joining Date" InputLabelProps={{ shrink: true }} name="joiningDate" value={(applications as any)?.formData?.joiningDate} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Name of Spouse" name="spouse" value={(applications as any)?.formData.spouse} />
+                  <TextField fullWidth label="Name of Spouse" name="spouse" value={(applications as any)?.formData?.spouse} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Number of Children" name="children" value={(applications as any)?.formData.children} />
+                  <TextField fullWidth label="Number of Children" name="children" value={(applications as any)?.formData?.children} />
                 </Grid>
 
                 {/* MINISTRY */}
@@ -1551,19 +1552,19 @@ const ApplicationApprovalPage = () => {
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Present Ministry" name="ministry" value={(applications as any)?.formData.ministry} />
+                  <TextField fullWidth label="Present Ministry" name="ministry" value={(applications as any)?.formData?.ministry} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Place of Ministry" name="place" value={(applications as any)?.formData.place} />
+                  <TextField fullWidth label="Place of Ministry" name="place" value={(applications as any)?.formData?.place} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Mobile Number" name="mobile" value={(applications as any)?.formData.mobile} />
+                  <TextField fullWidth label="Mobile Number" name="mobile" value={(applications as any)?.formData?.mobile} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Email ID" name="email" value={(applications as any)?.formData.email} />
+                  <TextField fullWidth label="Email ID" name="email" value={(applications as any)?.formData?.email} />
                 </Grid>
 
                 {/* MEDICAL */}
@@ -1572,19 +1573,19 @@ const ApplicationApprovalPage = () => {
                 </Grid>
 
                 <Grid item xs={12}>
-                  <TextField fullWidth multiline rows={2} label="Details of Sickness" name="sickness" value={(applications as any)?.formData.sickness} />
+                  <TextField fullWidth multiline rows={2} label="Details of Sickness" name="sickness" value={(applications as any)?.formData?.sickness} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField type="date" fullWidth label="Date Treatment Started" InputLabelProps={{ shrink: true }} name="treatmentDate" value={(applications as any)?.formData.treatmentDate} />
+                  <TextField type="date" fullWidth label="Date Treatment Started" InputLabelProps={{ shrink: true }} name="treatmentDate" value={(applications as any)?.formData?.treatmentDate} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Hospital Name" name="hospital" value={(applications as any)?.formData.hospital} />
+                  <TextField fullWidth label="Hospital Name" name="hospital" value={(applications as any)?.formData?.hospital} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Doctor Name" name="doctor" value={(applications as any)?.formData.doctor} />
+                  <TextField fullWidth label="Doctor Name" name="doctor" value={(applications as any)?.formData?.doctor} />
                 </Grid>
 
                 {/* FINANCIAL */}
@@ -1593,39 +1594,39 @@ const ApplicationApprovalPage = () => {
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Bills Attached" name="bills" value={(applications as any)?.formData.bills} />
+                  <TextField fullWidth label="Bills Attached" name="bills" value={(applications as any)?.formData?.bills} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Doctor Fee (Rs)" name="doctorFee" value={(applications as any)?.formData.doctorFee} />
+                  <TextField fullWidth label="Doctor Fee (Rs)" name="doctorFee" value={(applications as any)?.formData?.doctorFee} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Hospital Charges (Rs)" name="hospitalCharges" value={(applications as any)?.formData.hospitalCharges} />
+                  <TextField fullWidth label="Hospital Charges (Rs)" name="hospitalCharges" value={(applications as any)?.formData?.hospitalCharges} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Investigations (Rs)" name="investigation" value={(applications as any)?.formData.investigation} />
+                  <TextField fullWidth label="Investigations (Rs)" name="investigation" value={(applications as any)?.formData?.investigation} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Medicines (Rs)" name="medicines" value={(applications as any)?.formData.medicines} />
+                  <TextField fullWidth label="Medicines (Rs)" name="medicines" value={(applications as any)?.formData?.medicines} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Other Expenses (Rs)" name="other" value={(applications as any)?.formData.other} />
+                  <TextField fullWidth label="Other Expenses (Rs)" name="other" value={(applications as any)?.formData?.other} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Total Expenses (Rs)" name="total" value={(applications as any)?.formData.total} />
+                  <TextField fullWidth label="Total Expenses (Rs)" name="total" value={(applications as any)?.formData?.total} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Requested Amount (Rs)" name="requested" value={(applications as any)?.formData.requested} />
+                  <TextField fullWidth label="Requested Amount (Rs)" name="requested" value={(applications as any)?.formData?.requested} />
                 </Grid>
 
                 <Grid item xs={12}>
-                  <TextField fullWidth label="Funds Received" name="received" value={(applications as any)?.formData.received} />
+                  <TextField fullWidth label="Funds Received" name="received" value={(applications as any)?.formData?.received} />
                 </Grid>
 
                 {/* RECOMMENDATION */}
@@ -1634,19 +1635,19 @@ const ApplicationApprovalPage = () => {
                 </Grid>
 
                 <Grid item xs={12}>
-                  <TextField fullWidth multiline rows={2} label="Supervisor Comments" name="supervisor" value={(applications as any)?.formData.supervisor} />
+                  <TextField fullWidth multiline rows={2} label="Supervisor Comments" name="supervisor" value={(applications as any)?.formData?.supervisor} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Name & Signature" name="supervisorSign" value={(applications as any)?.formData.supervisorSign} />
+                  <TextField fullWidth label="Name & Signature" name="supervisorSign" value={(applications as any)?.formData?.supervisorSign} />
                 </Grid>
 
                 <Grid item xs={12}>
-                  <TextField fullWidth multiline rows={2} label="Coordinator Comments" name="coordinator" value={(applications as any)?.formData.coordinator} />
+                  <TextField fullWidth multiline rows={2} label="Coordinator Comments" name="coordinator" value={(applications as any)?.formData?.coordinator} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Recommendation Amount (Rs)" name="recommend" value={(applications as any)?.formData.recommend} />
+                  <TextField fullWidth label="Recommendation Amount (Rs)" name="recommend" value={(applications as any)?.formData?.recommend} />
                 </Grid>
 
                 {/* <Grid item xs={3}>
@@ -1654,10 +1655,10 @@ const ApplicationApprovalPage = () => {
                        </Grid> */}
 
                 <Grid item xs={3}>
-                  <TextField type="date" fullWidth label="Date" InputLabelProps={{ shrink: true }} name="date" value={(applications as any)?.formData.date} />
+                  <TextField type="date" fullWidth label="Date" InputLabelProps={{ shrink: true }} name="date" value={(applications as any)?.formData?.date} />
                 </Grid>
                 <Grid item md={6}>
-                  <Button variant="contained" onClick={() => (setForm1Signature(true), setFile((applications as any)?.formData.signature))} startIcon={<AttachmentOutlined />}>
+                  <Button variant="contained" onClick={() => (setForm1Signature(true), setFile((applications as any)?.formData?.signature))} startIcon={<AttachmentOutlined />}>
                             Signature
                   </Button>
                 </Grid>
@@ -1667,27 +1668,27 @@ const ApplicationApprovalPage = () => {
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField type="date" fullWidth label="Application Received On" InputLabelProps={{ shrink: true }} name="receivedDate" value={(applications as any)?.formData.receivedDate} />
+                  <TextField type="date" fullWidth label="Application Received On" InputLabelProps={{ shrink: true }} name="receivedDate" value={(applications as any)?.formData?.receivedDate} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Amount Sanctioned" name="sanctioned" value={(applications as any)?.formData.sanctioned} />
+                  <TextField fullWidth label="Amount Sanctioned" name="sanctioned" value={(applications as any)?.formData?.sanctioned} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField type="date" fullWidth label="Fund Release Date" InputLabelProps={{ shrink: true }} name="releaseDate" value={(applications as any)?.formData.releaseDate} />
+                  <TextField type="date" fullWidth label="Fund Release Date" InputLabelProps={{ shrink: true }} name="releaseDate" value={(applications as any)?.formData?.releaseDate} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField type="date" fullWidth label="Applicant Informed Date" InputLabelProps={{ shrink: true }} name="informedDate" value={(applications as any)?.formData.informedDate} />
+                  <TextField type="date" fullWidth label="Applicant Informed Date" InputLabelProps={{ shrink: true }} name="informedDate" value={(applications as any)?.formData?.informedDate} />
                 </Grid>
 
                 <Grid item md={6}>
-                  <Button variant="contained" onClick={() => (setForm1Signature(true), setFile((applications as any)?.formData.DealingPersonSignature))} startIcon={<AttachmentOutlined />}>
+                  <Button variant="contained" onClick={() => (setForm1Signature(true), setFile((applications as any)?.formData?.DealingPersonSignature))} startIcon={<AttachmentOutlined />}>
                             Dealing Person Signature
                   </Button>
                 </Grid> <Grid item md={6}>
-                  <Button variant="contained" onClick={() => (setForm1Signature(true), setFile((applications as any)?.formData.AuthorizedPersonSignature))} startIcon={<AttachmentOutlined />}>
+                  <Button variant="contained" onClick={() => (setForm1Signature(true), setFile((applications as any)?.formData?.AuthorizedPersonSignature))} startIcon={<AttachmentOutlined />}>
                             Authorized Person Signature
                   </Button>
                 </Grid>

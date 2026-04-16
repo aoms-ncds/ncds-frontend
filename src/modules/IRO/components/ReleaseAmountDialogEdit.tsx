@@ -463,11 +463,11 @@ const ReleaseAmountDialogEdit = (props: ReleaseDialogProps) => {
 
               <Grid item xs={12} md={6}>
                 <TextField
-                  label="Amount Transferred"
+                  label="Total Amount Transferred"
                   type="number"
-                  value={releaseAmount?.transferredAmount != 0 ? releaseAmount?.transferredAmount : ''}
+                  value={releaseAmount?.transferredAmount ==0 ? 0: releaseAmount?.transferredAmount ??0 }
                   onChange={(e) =>
-                    Number(e.target.value) <= (releaseAmount.releaseAmount ?? 0) &&
+                  // Number(e.target.value) <= (releaseAmount.releaseAmount ?? 0) &&
                     setReleaseAmount(() => ({
                       ...releaseAmount,
                       transferredAmount: Number(e.target.value),
@@ -475,13 +475,30 @@ const ReleaseAmountDialogEdit = (props: ReleaseDialogProps) => {
                   }
                   fullWidth
                   inputProps={{
-                    max: releaseAmount.releaseAmount ?? 0, min: 0, step: 0.01,
+                    // max: releaseAmount.releaseAmount ?? 0, min: 0, step: 0.01,
                     onWheel: (event: React.WheelEvent<HTMLInputElement>) => {
                       event.preventDefault();
                       event.currentTarget.blur();
                     },
                   }}
                   variant="outlined"
+                  disabled={props.action !== 'add'}
+
+
+                  sx={{
+                    '& .MuiInputBase-input.Mui-disabled': {
+                      WebkitTextFillColor: '#000', // text color
+                      color: '#000',
+                      opacity: 1,
+                    },
+                    '& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline': {
+                      borderColor: '#c4c4c4', // normal border color
+                    },
+                    '& .MuiInputLabel-root.Mui-disabled': {
+                      color: 'rgba(0,0,0,0.6)',
+                    },
+                  }}
+
 
                   required
                 />

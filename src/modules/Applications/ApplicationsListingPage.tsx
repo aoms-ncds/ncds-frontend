@@ -349,7 +349,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
     } else if (props.action == 'welfare') {
       ApplicationServices.getAll({ dateRange: dateRange, status: ApplicationLifeCycleStates.CREATED })
         .then((res) => {
-          setApplications(res.data.filter((res)=>res.name =='For Welfare Help'));
+          setApplications(res.data.filter((res:any)=>res.welfare ==true));
         })
         .catch((error) => {
           enqueueSnackbar({
@@ -1482,7 +1482,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                     // required
                   />
                 </Grid>
-                  <Grid item md={4}>
+                <Grid item md={4}>
                   <Button variant="contained" onClick={() => {
                     if (applicationFormState.name =='Education Support') {
                       setForm(true);
@@ -1503,7 +1503,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                     Attachments
                   </Button>
                 </Grid>
-              
+
                 {/* <WelfareForm/> */}
 
               </Grid>
@@ -1558,8 +1558,16 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                   <TextField type="date" fullWidth label="Joining Date" InputLabelProps={{ shrink: true }} name="joiningDate" onChange={handleChange} />
                 </Grid>
 
-                <Grid item xs={6}>
+                {/* <Grid item xs={6}>
                   <TextField fullWidth label="Help Requesting For" name="helpFor" onChange={handleChange} />
+                </Grid> */}
+                <Grid item xs={6}>
+                  <TextField select fullWidth label="Help Requesting For" name="helpFor" onChange={handleChange}>
+                    <MenuItem value="self">Self</MenuItem>
+                    <MenuItem value="son">Spouse</MenuItem>
+                    <MenuItem value="daughter">Son</MenuItem>
+                    <MenuItem value="daughter">Daughter</MenuItem>
+                  </TextField>
                 </Grid>
               </Section>
 
@@ -1639,8 +1647,14 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                   <TextField fullWidth label="Requested Amount (Rs)" name="requested" onChange={handleChange} />
                 </Grid>
 
-                <Grid item xs={12}>
-                  <TextField fullWidth label="Funds Received" name="received" onChange={handleChange} />
+                <Grid item xs={6}>
+                  <TextField select fullWidth label="Funds Received From" name="received" onChange={handleChange}>
+                    <MenuItem value="self">Church</MenuItem>
+                    <MenuItem value="son">Family</MenuItem>
+                    <MenuItem value="daughter">Friends</MenuItem>
+                    <MenuItem value="daughter">Ngo</MenuItem>
+                    <MenuItem value="daughter">Gvt</MenuItem>
+                  </TextField>
                 </Grid>
               </Section>
 
@@ -1748,7 +1762,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
           </Box>
         </DialogContent>
         <DialogActions>
-         
+
           {/* <Button onClick={() => setShowApplicationFormDialog(false)}>Cancel</Button> */}
           <Grid item md={6}>
 
@@ -1972,7 +1986,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
           </Box>
         </DialogContent>
         <DialogActions>
-          
+
           {/* <Button onClick={() => setShowApplicationFormDialog(false)}>Cancel</Button> */}
           <Grid item md={6}>
 
@@ -2197,7 +2211,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
           </Box>
         </DialogContent>
         <DialogActions>
-         
+
           {/* <Button onClick={() => setShowApplicationFormDialog(false)}>Cancel</Button> */}
           <Grid item md={6}>
 
@@ -2345,8 +2359,15 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                   <TextField fullWidth label="Hospital Charges (Rs)" name="hospitalCharges" onChange={handleChange} />
                 </Grid>
 
+
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Investigations (Rs)" name="investigation" onChange={handleChange} />
+                  <TextField select fullWidth label="Investigations (Rs)" name="investigation" onChange={handleChange}>
+                    <MenuItem value="self">Lab</MenuItem>
+                    <MenuItem value="son">Blood</MenuItem>
+                    <MenuItem value="daughter">X-ray</MenuItem>
+                    <MenuItem value="daughter">MRI</MenuItem>
+                    <MenuItem value="daughter">Others</MenuItem>
+                  </TextField>
                 </Grid>
 
                 <Grid item xs={6}>
@@ -2365,8 +2386,15 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                   <TextField fullWidth label="Requested Amount (Rs)" name="requested" onChange={handleChange} />
                 </Grid>
 
-                <Grid item xs={12}>
-                  <TextField fullWidth label="Funds Received" name="received" onChange={handleChange} />
+
+                <Grid item xs={6}>
+                  <TextField select fullWidth label="Funds Received From" name="received" onChange={handleChange}>
+                    <MenuItem value="self">Church</MenuItem>
+                    <MenuItem value="son">Family</MenuItem>
+                    <MenuItem value="daughter">Friends</MenuItem>
+                    <MenuItem value="daughter">NGO</MenuItem>
+                    <MenuItem value="daughter">Gvt</MenuItem>
+                  </TextField>
                 </Grid>
 
                 {/* RECOMMENDATION */}
