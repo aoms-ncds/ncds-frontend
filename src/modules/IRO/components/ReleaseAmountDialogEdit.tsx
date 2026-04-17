@@ -304,9 +304,16 @@ const ReleaseAmountDialogEdit = (props: ReleaseDialogProps) => {
 
       renderCell: (params) => {
         let value = 0;
+        console.log(params.row, 'opo');
+        const transferredAmountEach= releaseAmount.transferredAmountEach;
+        // ✅ params.row._id is the key in parent's transferredAmountEach
+        const amountFromMap = (transferredAmountEach as any)?.[params.row._id];
 
-        // check edited value for this row
-        if (transferredAmounts?.[params.row._id] !== undefined) {
+        if (amountFromMap !== undefined) {
+          value = amountFromMap;
+        }
+        // check locally edited value for this row
+        else if (transferredAmounts?.[params.row._id] !== undefined) {
           value = transferredAmounts[params.row._id];
         }
         // otherwise show sanctioned amount
@@ -466,20 +473,20 @@ const ReleaseAmountDialogEdit = (props: ReleaseDialogProps) => {
                   label="Total Amount Transferred"
                   type="number"
                   value={
-                    (releaseAmount as any)?.hasTransferred ?
-                      releaseAmount?.transferredAmount : // ✅ show 0 if total is 0
-                      (releaseAmount?.releaseAmount ?? 0) // ✅ default before any transfer
+                    props.action !== 'add' ?
+                      (releaseAmount?.transferredAmount != 0 ? releaseAmount?.transferredAmount?.toFixed(2) : 0) :
+                      (releaseAmount?.transferredAmount != 0 ? releaseAmount?.transferredAmount : 0)
                   }
                   onChange={(e) =>
                     setReleaseAmount(() => ({
                       ...releaseAmount,
                       transferredAmount: Number(e.target.value),
-                      hasTransferred: true, // ✅ allow manual typing
-
+                      hasTransferred: true,
                     }))
                   }
                   fullWidth
                   inputProps={{
+                    max: releaseAmount.releaseAmount ?? 0, min: 0, step: 0.01,
                     onWheel: (event: React.WheelEvent<HTMLInputElement>) => {
                       event.preventDefault();
                       event.currentTarget.blur();
@@ -870,8 +877,21 @@ const ReleaseAmountDialogEdit = (props: ReleaseDialogProps) => {
               onClick={() => {
                 const amount = Number(transferInput);
 
+                // ✅ Pre-fill ALL rows with their current displayed value before updating
+                const allRowAmounts = releaseAmount?.IRO?.reduce((acc: any, row: any) => {
+                  if (acc[row._id] === undefined) {
+                    acc[row._id] =
+        transferredAmounts?.[row._id] ??
+        row?.sanctionedAmount ??
+        row?.particulars?.reduce(
+          (sum: any, item: any) => sum + (item.sanctionedAmount || 0), 0,
+        ) ?? 0;
+                  }
+                  return acc;
+                }, { ...transferredAmounts });
+
                 const updatedAmounts = {
-                  ...transferredAmounts,
+                  ...allRowAmounts,
                   [selectedRow._id]: amount,
                 };
 

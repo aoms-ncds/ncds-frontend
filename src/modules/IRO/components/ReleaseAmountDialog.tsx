@@ -340,9 +340,16 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
 
       renderCell: (params) => {
         let value = 0;
+        console.log(params.row, 'opo');
+        const transferredAmountEach= releaseAmount.transferredAmountEach;
+        // ✅ params.row._id is the key in parent's transferredAmountEach
+        const amountFromMap = (transferredAmountEach as any)?.[params.row._id];
 
-        // check edited value for this row
-        if (transferredAmounts?.[params.row._id] !== undefined) {
+        if (amountFromMap !== undefined) {
+          value = amountFromMap;
+        }
+        // check locally edited value for this row
+        else if (transferredAmounts?.[params.row._id] !== undefined) {
           value = transferredAmounts[params.row._id];
         }
         // otherwise show sanctioned amount
@@ -515,20 +522,26 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
                   label="Total Amount Transferred"
                   type="number"
                   value={
-                    (releaseAmount as any)?.hasTransferred ?
-                      releaseAmount?.transferredAmount : // ✅ show 0 if total is 0
-                      (releaseAmount?.releaseAmount ?? 0) // ✅ default before any transfer
+                    props.action !== 'add' ?
+                    // Disabled/read-only: show formatted value
+                      (releaseAmount?.transferredAmount != 0 ?
+                        releaseAmount?.transferredAmount?.toFixed(2) :
+                        releaseAmount.releaseAmount) :
+                    // Editing: use raw number so typing works freely
+                      (releaseAmount?.transferredAmount != 0 ?
+                        releaseAmount?.transferredAmount :
+                        releaseAmount.releaseAmount)
                   }
                   onChange={(e) =>
                     setReleaseAmount(() => ({
                       ...releaseAmount,
                       transferredAmount: Number(e.target.value),
-                      hasTransferred: true, // ✅ allow manual typing
-
+                      hasTransferred: true,
                     }))
                   }
                   fullWidth
                   inputProps={{
+                    max: releaseAmount.releaseAmount ?? 0, min: 0, step: 0.01,
                     onWheel: (event: React.WheelEvent<HTMLInputElement>) => {
                       event.preventDefault();
                       event.currentTarget.blur();
