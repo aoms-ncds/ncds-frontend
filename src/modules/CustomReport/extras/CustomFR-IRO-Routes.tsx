@@ -4,6 +4,8 @@ import HomePage from '../../Home';
 import CustomReport from '../CustomReport';
 import IROReportFilter from '../CustomReportIROFilterPage';
 import CustomReportFRFilterPage from '../CustomReportFRFilterPage';
+import ProfileReports from '../ProfileReports';
+import UserFilterReportMUI from '../ProfileReports/WorkerDetailsReport';
 
 const customFrIroRoute: ModuleRoute = {
   base: '/custom-report',
@@ -32,6 +34,26 @@ const customFrIroRoute: ModuleRoute = {
       title: 'Custom Filter',
       path: '/custom-filter-fr',
       element: <CustomReportFRFilterPage />,
+      private: true,
+      requiredAccessRights: ['READ_ACCESS'],
+      // showInDrawer: true,
+      // icon: <HomeIcon />,
+      // icon: <img src="/mod_icons/Applications.png" alt="Logo" style={{ width: '30px', height: '30px' }} />,
+    },
+    {
+      title: 'Profile Reporters',
+      path: '/profile-reporters',
+      element: <ProfileReports />,
+      private: true,
+      requiredAccessRights: ['READ_ACCESS'],
+      // showInDrawer: true,
+      // icon: <HomeIcon />,
+      // icon: <img src="/mod_icons/Applications.png" alt="Logo" style={{ width: '30px', height: '30px' }} />,
+    },
+    {
+      title: 'Profile Reporters',
+      path: '/worker-details-report',
+      element: <UserFilterReportMUI />,
       private: true,
       requiredAccessRights: ['READ_ACCESS'],
       // showInDrawer: true,
