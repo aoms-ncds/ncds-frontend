@@ -34,7 +34,7 @@ import WelfareForm from './WelfareForm';
 import Section from './Section';
 
 
-const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' |'welfare'| 'revertHr' | 'revertDivision'| 'allRevert'}) => {
+const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' |'welfare'| 'welfarePresident' | 'revertHr' | 'revertDivision'| 'allRevert'}) => {
   const [applications, setApplications] = useState<Application[] | null>(null);
   const [action, setAction] = useState<'add' | 'edit'>('add');
   const [showApplicationFormDialog, setShowApplicationFormDialog] = useState<boolean>(false);
@@ -383,6 +383,18 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
       ApplicationServices.getAll({ dateRange: dateRange, status: [ApplicationLifeCycleStates.REVERT_TO_DIVISION]})
         .then((res) => {
           setApplications(res.data);
+        })
+        .catch((error) => {
+          enqueueSnackbar({
+            message: error.message,
+            variant: 'error',
+          });
+        });
+    } else if (props.action == 'welfarePresident') {
+      ApplicationServices.getAll({ dateRange: dateRange, status: ApplicationLifeCycleStates.SENT_TO_PRESIDENT })
+
+        .then((res) => {
+          setApplications(res.data.filter((res:any)=>res.welfare ==true));
         })
         .catch((error) => {
           enqueueSnackbar({

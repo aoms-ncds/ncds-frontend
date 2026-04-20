@@ -250,6 +250,12 @@ const APPDashboard = () => {
                   <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '50px', height: '50px' }} />} primaryText="New Welfare Application" color='#fff' secondaryText="" targetRoute="/application/Welfare" />
                 </Grid>)} />
             <PermissionChecks
+              permissions={['PRESIDENT_ACCESS']}
+              granted={(
+                <Grid item xs={12} md={4} xl={3}>
+                  <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '50px', height: '50px' }} />} primaryText="New Welfare Application For President" color='#fff' secondaryText="" targetRoute="/application/WelfarePr" />
+                </Grid>)} />
+            <PermissionChecks
               permissions={[]}
               granted={(
                 <Grid item xs={12} md={4} xl={3}>
