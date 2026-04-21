@@ -44,6 +44,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
   const [form2, setForm2] = useState(false);
   const [form3, setForm3] = useState(false);
   const [form4, setForm4] = useState(false);
+  const [err, setErr] = useState(false);
   const [form1Signature, setForm1Signature] = useState(false);
   const [form1Signature0, setForm1Signature0] = useState(false);
   const [form1Signature2, setForm1Signature2] = useState(false);
@@ -595,8 +596,11 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
 
               ApplicationServices.getById(params.row._id)
         .then((res) => setApplicationFormState(res.data));
-
-              setShowApplicationFormDialog(true);
+              if (params.row.welfare==true) {
+                setShowApplicationFormDialog1(true);
+              } else {
+                setShowApplicationFormDialog(true);
+              }
             }}
           />,
         Number(params.row.status) === ApplicationLifeCycleStates.REVERT_TO_HR &&
@@ -612,7 +616,11 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
               ApplicationServices.getById(params.row._id)
         .then((res) => setApplicationFormState(res.data));
 
-              setShowApplicationFormDialog(true);
+              if (params.row.welfare==true) {
+                setShowApplicationFormDialog1(true);
+              } else {
+                setShowApplicationFormDialog(true);
+              }
             }}
           />,
 
@@ -626,7 +634,11 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
             setAction('edit');
             ApplicationServices.getById(params.row._id)
               .then((res) => setApplicationFormState(res.data));
-            setShowApplicationFormDialog(true);
+            if (params.row.welfare==true) {
+              setShowApplicationFormDialog1(true);
+            } else {
+              setShowApplicationFormDialog(true);
+            }
           }}
         />,
 
@@ -1320,7 +1332,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
         </Grid> */}
         <form onSubmit={action === 'add' ? AddApplication: Number(applicationFormState.status)==ApplicationLifeCycleStates.REVERT_TO_DIVISION ||
           Number(applicationFormState.status)==ApplicationLifeCycleStates.REVERT_TO_DIVISION ? ApproveApplication: EditApplication}>
-          <DialogTitle>{action === 'add' ? 'Create New Application' : 'Edit  Application:'}</DialogTitle>
+          <DialogTitle>{action === 'add' ? 'Create New Application' : 'Edit  Application Welfare:'}</DialogTitle>
           <DialogContent>
             <Container>
               <Grid container spacing={2}>
@@ -1546,6 +1558,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                 <Grid item xs={6}>
                   <TextField fullWidth label="Scholarship Help No" name="scholarshipNo" onChange={handleChange} />
                 </Grid>
+                {err && <Typography color="error">Please fill the required fields in the Basic Information section.</Typography>}
               </Section>
 
               {/* Personal */}
@@ -1777,9 +1790,9 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
 
           {/* <Button onClick={() => setShowApplicationFormDialog(false)}>Cancel</Button> */}
           <Grid item md={6}>
-
             <form
               onSubmit={
+                forms.division &&
                 action === 'add' ?
                   AddApplication :
                   Number(applicationFormState.status) === ApplicationLifeCycleStates.REVERT_TO_DIVISION ||
@@ -1792,7 +1805,13 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                 type="submit"
                 variant="contained"
                 sx={{ backgroundColor: 'blue' }}
+                onClick={() => {
+                  if (!forms.division) {
+                    setErr(true);
+                  }
+                }}
               >
+
                 {action === 'add' ?
                   'Send to Hr' :
                   Number(applicationFormState.status) === ApplicationLifeCycleStates.REVERT_TO_DIVISION ||
@@ -1822,7 +1841,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                   <TextField fullWidth label="Division" name="division" onChange={handleChange} />
                 </Grid>
               </Section>
-
+              {err && <Typography color="error">Please fill the required fields in the Basic Information section.</Typography>}
               {/* Personal */}
               <Section title="Personal Details">
                 <Grid item xs={12}>
@@ -2004,6 +2023,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
 
             <form
               onSubmit={
+                forms.division &&
                 action === 'add' ?
                   AddApplication :
                   Number(applicationFormState.status) === ApplicationLifeCycleStates.REVERT_TO_DIVISION ||
@@ -2016,6 +2036,11 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                 type="submit"
                 variant="contained"
                 sx={{ backgroundColor: 'blue' }}
+                onClick={() => {
+                  if (!forms.division) {
+                    setErr(true);
+                  }
+                }}
               >
                 {action === 'add' ?
                   'Send to Hr' :
@@ -2057,6 +2082,8 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                     <MenuItem value="daughter">Daughter</MenuItem>
                   </TextField>
                 </Grid>
+                {err && <Typography color="error">Please fill the required fields in the Basic Information section.</Typography>}
+
               </Section>
 
               {/* Personal */}
@@ -2229,6 +2256,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
 
             <form
               onSubmit={
+                forms.division &&
                 action === 'add' ?
                   AddApplication :
                   Number(applicationFormState.status) === ApplicationLifeCycleStates.REVERT_TO_DIVISION ||
@@ -2241,6 +2269,11 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                 type="submit"
                 variant="contained"
                 sx={{ backgroundColor: 'blue' }}
+                onClick={() => {
+                  if (!forms.division) {
+                    setErr(true);
+                  }
+                }}
               >
                 {action === 'add' ?
                   'Send to Hr' :
@@ -2486,6 +2519,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
 
             <form
               onSubmit={
+                forms.division &&
                 action === 'add' ?
                   AddApplication :
                   Number(applicationFormState.status) === ApplicationLifeCycleStates.REVERT_TO_DIVISION ||
@@ -2498,6 +2532,11 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                 type="submit"
                 variant="contained"
                 sx={{ backgroundColor: 'blue' }}
+                onClick={() => {
+                  if (!forms.division) {
+                    setErr(true);
+                  }
+                }}
               >
                 {action === 'add' ?
                   'Send to Hr' :

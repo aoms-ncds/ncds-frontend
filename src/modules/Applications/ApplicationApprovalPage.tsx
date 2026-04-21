@@ -835,7 +835,7 @@ const ApplicationApprovalPage = () => {
               {/* Basic */}
               <Section title="Basic Information">
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Division" value={(applications as any)?.formData?.division} name="division" />
+                  <TextField fullWidth label="Division" required value={(applications as any)?.formData?.division} name="division" />
                 </Grid>
 
                 <Grid item xs={6}>
@@ -1089,7 +1089,7 @@ const ApplicationApprovalPage = () => {
               {/* Basic */}
               <Section title="Basic Information">
                 <Grid item xs={12}>
-                  <TextField fullWidth label="Division" value={(applications as any)?.formData?.division} name="division" />
+                  <TextField fullWidth label="Division" required value={(applications as any)?.formData?.division} name="division" />
                 </Grid>
               </Section>
 
@@ -1297,7 +1297,7 @@ const ApplicationApprovalPage = () => {
               {/* Basic */}
               <Section title="Basic Information">
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Division" name="division" value={(applications as any)?.formData?.division} />
+                  <TextField fullWidth label="Division" name="division" required value={(applications as any)?.formData?.division} />
                 </Grid>
 
                 <Grid item xs={6}>
