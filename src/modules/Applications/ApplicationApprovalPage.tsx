@@ -1019,7 +1019,7 @@ const ApplicationApprovalPage = () => {
                 </Grid>
                 <Grid item md={6}>
                   <Button variant="contained" onClick={() => {
-                    setForm1Signature(true), setFile((applications as any).formData?.StudentSignature);
+                    setForm1Signature(true), setFile((applications as any).formData?.signatureOfStudent);
                   }}
                   startIcon={<AttachmentOutlined />}>
                     Signature Of Student

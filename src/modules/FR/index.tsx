@@ -512,7 +512,14 @@ const frDashboard = () => {
                           primaryText="Expense FR" secondaryText="FR" color="#fff" targetRoute="/fr/Non-support" />
                       </Grid></>
                     )} />
-
+                  <PermissionChecks
+                    permissions={['MANAGE_FR']}
+                    granted={(
+                      <Grid item xs={12} md={4} xl={3}>
+                        <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '50px', height: '50px' }} />}
+                          primaryText="Welfare FR" secondaryText="FR" color="#fff" targetRoute="/fr/welfareFR" />
+                      </Grid>
+                    )} />
                   {/* <PermissionChecks
                 permissions={['WRITE_FR']}
                 granted={(

@@ -14,6 +14,7 @@ import ReopenedFr from '../ReopenedFr';
 import CustomFR from '../CustomFR';
 import NonSupport from '../Non-Support';
 import Resubmitted from '../Resubmitted';
+import WelfareFR from '../WelfareFR';
 
 
 const divisionsPageRoutes: ModuleRoute = {
@@ -187,6 +188,14 @@ const divisionsPageRoutes: ModuleRoute = {
       private: true,
       requiredAccessRights: ['HR_DPARTMENT_ACCESS'],
       icon: <RequestPageOutlinedIcon />,
+    },
+    {
+      title: 'Welfare FR',
+      path: '/welfareFR',
+      element: <WelfareFR/>,
+      private: true,
+      requiredAccessRights: ['MANAGE_FR'],
+      icon: <WelfareFR />,
     },
     {
       title: 'Custom FR',

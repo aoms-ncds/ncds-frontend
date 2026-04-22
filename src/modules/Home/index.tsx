@@ -23,6 +23,8 @@ import IROServices from '../IRO/extras/IROServices';
 import StaffServices from '../HR/extras/StaffServices';
 import { useAuth } from '../../hooks/Authentication';
 import { useNavigate } from 'react-router-dom';
+import CommonLifeCycleStates from '../../extras/CommonLifeCycleStates';
+import SpousesServices from '../Workers/extras/SpousesServices';
 
 
 const HomePage = () => {
@@ -37,6 +39,8 @@ const HomePage = () => {
   const [subDivisionsCountit, setSubDivisionsCountit] = useState<string | null>(null);
   const [staffsCount, setStaffsCount] = useState<string | null>(null);
   const [recentActivity, setRecentActivity] = useState<any | null>(null);
+  const [activeSpouse, setActiveSpouse] = useState<number | null>(0);
+
   const user = useAuth();
   console.log(user, '00909');
   const navigate = useNavigate();
@@ -57,6 +61,11 @@ const HomePage = () => {
           setErrors((errors) => [...errors, error.message]);
           setCurDivision('Unable to load!');
         });
+    SpousesServices.getCount({ status: CommonLifeCycleStates.ACTIVE })
+      .then((res) => setActiveSpouse(res.data))
+      .catch((error) => {
+        console.log(error);
+      });
 
     // Get divisions count
     DivisionsServices.getCount()
@@ -268,7 +277,7 @@ const HomePage = () => {
                       fontWeight: 700,
                       color: '#5a5fcf',
                     }}>
-                      {workersCount}
+                      {(Number(workersCount) ?? 0) + (Number(activeSpouse) ?? 0)}
                     </Typography>
                   </Box>
                 </Box>
@@ -370,7 +379,7 @@ const HomePage = () => {
 
       <br />
       <Grid container spacing={3} >
-   <Grid item xs={12} md={hasPermissions(['ADMIN_ACCESS']) ? 6 : 12} lg={hasPermissions(['ADMIN_ACCESS']) ? 8 : 12} xl={hasPermissions(['ADMIN_ACCESS']) || (user as any)?.user.kind=='staff' ? 8 : 12}>
+        <Grid item xs={12} md={hasPermissions(['ADMIN_ACCESS']) ? 6 : 12} lg={hasPermissions(['ADMIN_ACCESS']) ? 8 : 12} xl={hasPermissions(['ADMIN_ACCESS']) || (user as any)?.user.kind=='staff' ? 8 : 12}>
 
           <Card
             sx={{
@@ -453,7 +462,7 @@ const HomePage = () => {
                           color: '#5a5fcf',
                         }}
                       >
-                        {divisionsCount =='0' ? '1' : divisionsCount}
+                        {divisionsCount =='0' ? '1' : divisionsCountit}
                       </Typography>
 
                     </Box>
