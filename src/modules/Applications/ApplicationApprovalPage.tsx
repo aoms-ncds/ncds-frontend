@@ -272,7 +272,7 @@ const ApplicationApprovalPage = () => {
 
             <CardActions>
               <PermissionChecks
-                permissions={['MANAGE_APPLICATION', 'PRESIDENT_ACCESS']}
+                permissions={['MANAGE_APPLICATION']}
                 granted={(
                   <>
                     <Button
