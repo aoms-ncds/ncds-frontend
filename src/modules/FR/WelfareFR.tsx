@@ -473,57 +473,7 @@ const WelfareFR = () => {
         />
       ),
     },
-
-    // {
-    //   field: 'serialNumber',
-    //   renderHeader: () => (<b>SL No</b>),
-    //   width: 100,
-    //   align: 'center',
-    //   headerAlign: 'center',
-    // },
-    {
-      field: 'FRno',
-      headerClassName: 'super-app-theme--cell',
-      renderHeader: () => <b>FR No</b>,
-      width: 150,
-      align: 'center',
-
-      headerAlign: 'center',
-    },
-    // {
-    //   field: 'FRdate',
-    //   renderHeader: () => (<b>FR Date</b>),
-    //   renderCell: (props) => (<p> {props.row.FRdate.format('DD/MM/YYYY')}</p>
-    //   ), width: 80, align: 'center', headerAlign: 'center',
-    // },
-    {
-      field: 'FRdate',
-      headerName: 'FR Date',
-      headerClassName: 'super-app-theme--cell',
-      width: 130,
-      valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
-      renderHeader: (params) => <b style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</b>,
-      align: 'center',
-      headerAlign: 'center',
-    },
-    // {
-    //   field: 'divisionName',
-    //   renderHeader: () => (<b>Division Name</b>),
-    //   renderCell: (props) => (<p> {props.row.division?.details.name}</p>),
-    //   width: 130,
-    //   align: 'center',
-    //   headerAlign: 'center',
-    // },
-
-    {
-      field: 'divisionName',
-      headerClassName: 'super-app-theme--cell',
-      align: 'center',
-      headerAlign: 'center',
-      renderHeader: () => <b>{'Division'}</b>,
-      valueGetter: (params) => params.row.division?.details.name,
-    },
-    {
+     {
       field: 'status',
       headerClassName: 'status-header',
       renderHeader: () => <b>Status</b>,
@@ -596,6 +546,57 @@ const WelfareFR = () => {
         return statusName;
       },
     },
+
+    // {
+    //   field: 'serialNumber',
+    //   renderHeader: () => (<b>SL No</b>),
+    //   width: 100,
+    //   align: 'center',
+    //   headerAlign: 'center',
+    // },
+    {
+      field: 'FRno',
+      headerClassName: 'super-app-theme--cell',
+      renderHeader: () => <b>FR No</b>,
+      width: 150,
+      align: 'center',
+
+      headerAlign: 'center',
+    },
+    // {
+    //   field: 'FRdate',
+    //   renderHeader: () => (<b>FR Date</b>),
+    //   renderCell: (props) => (<p> {props.row.FRdate.format('DD/MM/YYYY')}</p>
+    //   ), width: 80, align: 'center', headerAlign: 'center',
+    // },
+    {
+      field: 'FRdate',
+      headerName: 'FR Date',
+      headerClassName: 'super-app-theme--cell',
+      width: 130,
+      valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
+      renderHeader: (params) => <b style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</b>,
+      align: 'center',
+      headerAlign: 'center',
+    },
+    // {
+    //   field: 'divisionName',
+    //   renderHeader: () => (<b>Division Name</b>),
+    //   renderCell: (props) => (<p> {props.row.division?.details.name}</p>),
+    //   width: 130,
+    //   align: 'center',
+    //   headerAlign: 'center',
+    // },
+
+    {
+      field: 'divisionName',
+      headerClassName: 'super-app-theme--cell',
+      align: 'center',
+      headerAlign: 'center',
+      renderHeader: () => <b>{'Division'}</b>,
+      valueGetter: (params) => params.row.division?.details.name,
+    },
+   
     // {
     //   field: 'subDivisionName',
     //   renderHeader: () => (<b>Sub Division Name</b>),
