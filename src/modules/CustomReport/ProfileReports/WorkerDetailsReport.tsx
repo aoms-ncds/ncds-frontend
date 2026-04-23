@@ -1,5 +1,5 @@
 /* eslint-disable react/no-multi-comp */
-import { JSXElementConstructor, Key, ReactElement, ReactNode, useState } from 'react';
+import { JSXElementConstructor, Key, ReactElement, ReactNode, useEffect, useState } from 'react';
 import {
   ThemeProvider, createTheme, CssBaseline,
   Box, AppBar, Toolbar, Typography, Button, IconButton,
@@ -11,6 +11,9 @@ import {
   InputAdornment, Avatar,
 } from '@mui/material';
 import CommonPageLayout from '../../../components/CommonPageLayout';
+import { useNavigate } from 'react-router-dom';
+import DivisionsServices from '../../Divisions/extras/DivisionsServices';
+import { useAuth } from '../../../hooks/Authentication';
 
 // ── Icons via Unicode/emoji since we can't import @mui/icons-material ──
 const Icon = ({ children, sx = {} }: { children: ReactNode; sx?: object }) => (
@@ -229,7 +232,7 @@ export default function UserFilterReportMUI() {
     supportEnabled: false,
     impactNo: '', nominee: '', relation: '',
   };
-
+  const navigate = useNavigate();
   const [filters, setFilters] = useState(init);
   const [expanded, setExpanded] = useState({ 'Basic Details': true, 'User Type & Lifecycle': true });
 
@@ -250,7 +253,7 @@ export default function UserFilterReportMUI() {
   const clearAll = () => setFilters(init);
 
   const removeChip = (key: string) => {
-    const def = init[key];
+    const def = init[key as keyof typeof init];
     setFilters((f) => ({ ...f, [key]: def }));
   };
 
@@ -264,6 +267,18 @@ export default function UserFilterReportMUI() {
       </Select>
     </FormControl>
   );
+
+  const [divisions, setDivisions] = useState<any[] | null>(null);
+  const user = useAuth();
+
+  useEffect(() => {
+    if ((user?.user as any).permissions.READ_ALL_DIVISIONS) {
+      DivisionsServices.getDivisions().then((res) => {
+        //   setDivision(res.data ?? null);
+        setDivisions(res.data);
+      });
+    }
+  }, []);
 
   return (
     <CommonPageLayout>
@@ -290,7 +305,9 @@ export default function UserFilterReportMUI() {
               Reset
               </Button>
             </Tooltip>
-            <Button variant="contained" size="small" startIcon={<Icon>🔍</Icon>}>
+            <Button onClick={() => {
+              navigate('/custom-report/reportView');
+            }} variant="contained" size="small" startIcon={<Icon>🔍</Icon>}>
             Run Report
             </Button>
           </Toolbar>
@@ -326,24 +343,38 @@ export default function UserFilterReportMUI() {
             </AccordionSummary>
             <AccordionDetails>
               <Grid container spacing={2}>
-                <Grid item xs={12} sm={6} md={3}>
+                {/* <Grid item xs={12} sm={6} md={3}>
                   <SelectField label="Kind" id="kind" options={KIND} value={filters.kind} onChange={set('kind')} />
+                </Grid> */}
+                <Grid item xs={12} sm={6} md={3}>
+                  <FormControl fullWidth>
+                    <InputLabel>Division</InputLabel>
+                    <Select
+                      label="Division"
+                      value={filters.division}
+                      onChange={(e) => set('division')(e.target.value)}
+                    >
+                      <MenuItem value="">All</MenuItem>
+                      {divisions?.map((d) => (
+                        <MenuItem key={d.id} value={d.details.name}>
+                          {d.details.name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
                 </Grid>
                 <Grid item xs={12} sm={6} md={3}>
-                  <SelectField label="Lifecycle Status" id="status" options={LIFECYCLE} value={filters.status} onChange={set('status')} />
+                  <TextField fullWidth label="Sub Division" value={filters.subDivision} onChange={set('subDivision')} placeholder="Sub Division" />
                 </Grid>
                 <Grid item xs={12} sm={6} md={3}>
-                  <TextField fullWidth label="Division ID" value={filters.division} onChange={set('division')} placeholder="Division ID..." />
+                  <SelectField label="Status" id="status" options={LIFECYCLE} value={filters.status} onChange={set('status')} />
                 </Grid>
                 <Grid item xs={12} sm={6} md={3}>
                   <TextField fullWidth label="Organization" value={filters.organization} onChange={set('organization')} />
                 </Grid>
-                <Grid item xs={12} sm={6} md={4}>
+                {/* <Grid item xs={12} sm={6} md={4}>
                   <TextField fullWidth label="Daughter Organization" value={filters.daughterOrganization} onChange={set('daughterOrganization')} />
-                </Grid>
-                <Grid item xs={12} sm={6} md={4}>
-                  <TextField fullWidth label="Reason for Reject" value={filters.reasonForReject} onChange={set('reasonForReject')} />
-                </Grid>
+                </Grid> */}
               </Grid>
             </AccordionDetails>
           </Accordion>
@@ -507,9 +538,6 @@ export default function UserFilterReportMUI() {
                 </Grid>
                 <Grid item xs={12} sm={6} md={3}>
                   <SelectField label="Official Status" id="offStatus" options={OFFICIAL_STATUS} value={filters.officialStatus} onChange={set('officialStatus')} />
-                </Grid>
-                <Grid item xs={12} sm={6} md={3}>
-                  <SelectField label="Reason for Deactivation" id="deact" options={DEACTIVATION} value={filters.reasonForDeactivation} onChange={set('reasonForDeactivation')} />
                 </Grid>
                 <Grid item xs={12} sm={6} md={3}>
                   <FormControlLabel control={<Switch checked={filters.selfSupport} onChange={setToggle('selfSupport')} color="primary" />} label="Self Support" />
