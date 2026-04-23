@@ -523,6 +523,79 @@ const WelfareFR = () => {
       renderHeader: () => <b>{'Division'}</b>,
       valueGetter: (params) => params.row.division?.details.name,
     },
+    {
+      field: 'status',
+      headerClassName: 'status-header',
+      renderHeader: () => <b>Status</b>,
+      cellClassName: (params) => {
+        const statusName = params.formattedValue;
+        if (params.value == null) return '';
+
+        switch (statusName) {
+        case 'REVERTED':
+          return clsx('status-cell2');
+        case 'PENDING VERIF.':
+          return clsx('status-cell', 'VERIF');
+        case 'IRO CLOSED':
+        case 'FR VERIFIED':
+        case 'FR CLOSED':
+          return clsx('status-cell1');
+        case ' FR_REJECTED':
+          return clsx('status-cell', 'red');
+        case 'AWAITING APPROV.':
+          return clsx('status-cell', 'Appr');
+        case 'RE-SUBMITTED':
+          return clsx('status-cell', 're-sum');
+        case 'CUSTOM FR':
+          return clsx('status-cell3');
+        case 'IRO DISAPPROVED':
+          return clsx('status-cell', 'red-dark');
+        case 'FR DISAPPROVED':
+          return clsx('status-cell', 'DIS');
+        default:
+          return 'status-cell';
+        }
+      },
+      width: 205,
+      align: 'center',
+      headerAlign: 'center',
+      valueGetter: (params) => {
+        let statusName =
+          IROLifeCycleStates.getStatusNameByCodeTransaction(params.value);
+        const iscustom = (params.row as any)?.isCustom;
+        switch (statusName) {
+        case 'SEND_BACK':
+          statusName = 'REVERTED';
+          break;
+        case 'FR_APPROVED':
+          statusName = 'FR VERIFIED';
+          break;
+        case 'WAITING_FOR_ACCOUNTS':
+          if ((params.row as any)?.isReverted === true) {
+            statusName = 'RE-SUBMITTED';
+          } else if (iscustom === true) {
+            statusName = 'CUSTOM FR';
+          } else {
+            statusName = 'PENDING VERIF.';
+          }
+          break;
+        case 'WAITING_FOR_PRESIDENT':
+          statusName = 'AWAITING APPROV.';
+          break;
+        case 'FR_REJECTED':
+          statusName = 'FR DISAPPROVED';
+          break;
+        case 'IRO_REJECTED':
+        case 'REOPEND':
+          statusName = 'IRO DISAPPROVED';
+          break;
+        default:
+          statusName = statusName.replaceAll('_', ' ');
+          break;
+        }
+        return statusName;
+      },
+    },
     // {
     //   field: 'subDivisionName',
     //   renderHeader: () => (<b>Sub Division Name</b>),
