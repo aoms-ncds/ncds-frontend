@@ -157,7 +157,10 @@ const WelfareFR = () => {
     FRServices.getAllOptimized({ dateRange: dateRange, status: statusFilter })
             .then((res) => {
               console.log(res, 'rr');
-              setFRRequests(res.data.filter((e)=>e.particulars.map((res)=>res.subCategory1).includes('Welfare Help')));
+              setFRRequests(res.data.filter((e) =>
+                e.particulars.map((res) => res.subCategory1).includes('Welfare Help') &&
+    e.status !== FRLifeCycleStates.FR_APPROVED,
+              ));
             })
             .catch((res) => {
               console.log(res);
@@ -174,7 +177,10 @@ const WelfareFR = () => {
     FRServices.getAllOptimized({ dateRange: dateRange, status: statusFilter })
             .then((res) => {
               if (res.data) {
-                setFRRequests(res.data.filter((e)=>e.particulars.map((res)=>res.subCategory1).includes('Welfare Help')));
+                setFRRequests(res.data.filter((e) =>
+                  e.particulars.map((res) => res.subCategory1).includes('Welfare Help') &&
+  e.status !== FRLifeCycleStates.FR_APPROVED,
+                ));
               }
             })
             .catch((res) => {
