@@ -2600,9 +2600,9 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
         ]}
         limits={{
           // types: [],
-          maxItemSize: 1 * MB,
-          maxItemCount: 3,
-          maxTotalSize: 3 * MB,
+          maxItemSize: 6 * MB,
+          maxItemCount: 10,
+          maxTotalSize: 30 * MB,
         }}
         // accept={['video/*']}
         open={showFileUploader}
@@ -2647,9 +2647,9 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
           'image/jpg',
         ]}
         limits={{
-          maxItemSize: 1 * MB,
-          maxItemCount: 3,
-          maxTotalSize: 3 * MB,
+        maxItemSize: 6 * MB,
+                  maxItemCount: 10,
+                  maxTotalSize: 30 * MB,
         }}
         open={form1Signature}
         onClose={() => setForm1Signature(false)}
@@ -2713,9 +2713,9 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
           'image/jpg',
         ]}
         limits={{
-          maxItemSize: 1 * MB,
-          maxItemCount: 3,
-          maxTotalSize: 3 * MB,
+          maxItemSize: 6 * MB,
+          maxItemCount: 10,
+          maxTotalSize: 30 * MB,
         }}
         open={form1Signature0 }
         onClose={() => setForm1Signature0(false)}
@@ -2763,9 +2763,9 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
           'image/jpg',
         ]}
         limits={{
-          maxItemSize: 1 * MB,
-          maxItemCount: 3,
-          maxTotalSize: 3 * MB,
+          maxItemSize: 6 * MB,
+          maxItemCount: 10,
+          maxTotalSize: 30 * MB,
         }}
         open={form1Signature2}
         onClose={() => setForm1Signature2(false)}
@@ -2824,9 +2824,9 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
           'image/jpg',
         ]}
         limits={{
-          maxItemSize: 1 * MB,
-          maxItemCount: 3,
-          maxTotalSize: 3 * MB,
+          maxItemSize: 6 * MB,
+          maxItemCount: 10,
+          maxTotalSize: 30 * MB,
         }}
         open={form1Signature3}
         onClose={() => setForm1Signature3(false)}
@@ -2885,9 +2885,9 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
           'image/jpg',
         ]}
         limits={{
-          maxItemSize: 1 * MB,
-          maxItemCount: 3,
-          maxTotalSize: 3 * MB,
+          maxItemSize: 6 * MB,
+          maxItemCount: 10,
+          maxTotalSize: 30 * MB,
         }}
         open={form1Signature4}
         onClose={() => setForm1Signature4(false)}
