@@ -393,8 +393,8 @@ export default function ReportView() {
             {/* Active filter chips */}
             {activeFilters.length > 0 && (
               <div style={{ padding: '10px 20px', display: 'flex', flexWrap: 'wrap', gap: 8, borderBottom: `1px solid ${theme.border}` }}>
-                {activeFilters.map((f) => (
-                  <Chip key={f.label} label={f.label} onDelete={f.clear} />
+                {activeFilters.map((f: any, idx) => (
+                  <Chip key={idx} label={f.label} onDelete={f.clear} />
                 ))}
               </div>
             )}
