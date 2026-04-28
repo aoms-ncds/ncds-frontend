@@ -586,7 +586,7 @@ const StudyHelp = () => {
         _id: '',
         mainCategory: 'Welfare of Children',
         subCategory1: 'Children Welfare',
-        subCategory2: 'Child Education Assistance',
+        subCategory2: 'Children Study Help',
         subCategory3: 'Select',
         month: moment().format('MMMM'),
         narration: 'Towards the Monthly Support of <DESIGNATION NAME> Mr/Ms/Mrs <NAME>for the month of <MONTH, YEAR>',
