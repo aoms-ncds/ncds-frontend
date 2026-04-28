@@ -18,7 +18,7 @@ import { BlobProvider, PDFDownloadLink } from '@react-pdf/renderer';
 import PDFTemplate from './components/PDFTemplate';
 import FileUploaderServices from '../../components/FileUploader/extras/FileUploaderServices';
 import ChildrenServices from '../Workers/extras/ChildrenServices';
-import ChildePDFTemplate from './components/ChildePDFTemplate';
+import ChildePDFTemplateStudyHelp from './components/ChildePDFTemplateStudyHelp';
 import { AnyARecord } from 'dns';
 import { useNavigate } from 'react-router-dom';
 import ChildeSupportSignSheet from './components/ChildeSupportSignSheet';
@@ -679,7 +679,7 @@ const StudyHelp = () => {
                 {pdfProps && (
                   <BlobProvider
                     document={
-                      <ChildePDFTemplate
+                      <ChildePDFTemplateStudyHelp
                         month={getMonth() ?? null}
                         total={total}
                         frNo={requisition2?.FRno ?? ''}
@@ -761,7 +761,7 @@ const StudyHelp = () => {
                       {({ blob: signBlob, loading: loading1 }) => (
                         <BlobProvider
                           document={
-                            <ChildePDFTemplate
+                            <ChildePDFTemplateStudyHelp
                               frNo={requisition2?.FRno ?? ''}
                               month={getMonth() ?? null}
                               total={total}
@@ -1107,7 +1107,7 @@ const StudyHelp = () => {
                   <div style={{ float: 'left' }}>
                     {(selectedWorker || division) && (
                       <PDFDownloadLink
-                        document={<ChildePDFTemplate month={getMonth() ?? null} total={total} frNo={requisition2?.FRno?? ''} divisionId={pdfProps.divisionId} data={childList} />}
+                        document={<ChildePDFTemplateStudyHelp month={getMonth() ?? null} total={total} frNo={requisition2?.FRno?? ''} divisionId={pdfProps.divisionId} data={childList} />}
                         fileName="ChildeSupport.pdf"
                         style={{ textDecoration: 'none', color: 'blue' }}
                       >

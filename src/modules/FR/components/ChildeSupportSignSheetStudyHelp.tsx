@@ -237,7 +237,7 @@ const ChildeSupportSignSheetStudyHelp = (props: { frNo: any; data: Child[] | nul
   useEffect(() => {
     let tot = 0;
     props.data?.map((i) => {
-      tot += i.childSupport?.amount;
+      tot += i?.studyHelp ?? 0;
       setTotal(tot);
     });
     // console.log(tot, 'tot');
@@ -249,12 +249,12 @@ const ChildeSupportSignSheetStudyHelp = (props: { frNo: any; data: Child[] | nul
         <div>
           <Image src="/3D Logo 3.png" style={styles.image} />
           <Text style={styles.title}>
-            {`Study help to workers children for the Academic  - 2025-26- ${div?.[0]}`}{props.data?.[0]?.childOf?.officialDetails?.divisionHistory?.at(-1)?.subDivision?.name ?
-              ' / ' + props.data?.[0].childOf?.officialDetails?.divisionHistory?.at(-1)?.subDivision.name  :
+            {`Study help to workers children for the Academic - ${div?.[0]}`}{props.data?.[0]?.childOf?.officialDetails?.divisionHistory?.at(-1)?.subDivision?.name ?
+              ' / ' + props.data?.[0].childOf?.officialDetails?.divisionHistory?.at(-1)?.subDivision.name :
               ''}
 
           </Text>
-          <Text style={styles.month}>{`For the Month of ${props?.month ?? ''}`}</Text>
+          <Text style={styles.month}>{'For the Academic Year of 2025-26 '}</Text>
           <Text style={styles.IRONo}>
             {'IRO' + (props as any)?.frNo?.slice(2)}
           </Text>         {/* <Text style={styles.IRONo}>{`IRO No: ${props.data.IRONo}`}</Text> */}

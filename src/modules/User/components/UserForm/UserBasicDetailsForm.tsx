@@ -114,13 +114,12 @@ const UserBasicDetailsForm = (
             onChange={(e) => props.onChange({ ...props.value, daughterOrganization: e.target.value })}
             variant={props.options?.textField?.variant}
             fullWidth
-            InputProps={{ required: true, autoFocus: true }}
+            InputProps={{ autoFocus: true }}
           // required
           />
 
         </Grid>
       )}
-      
       <Grid item xs={12} md={6} lg={3}>
         <Autocomplete
           value={props?.value?.title ?? null}
