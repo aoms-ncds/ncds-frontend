@@ -15,6 +15,7 @@ import CustomFR from '../CustomFR';
 import NonSupport from '../Non-Support';
 import Resubmitted from '../Resubmitted';
 import WelfareFR from '../WelfareFR';
+import StudyHelp from '../StudyHelp';
 
 
 const divisionsPageRoutes: ModuleRoute = {
@@ -169,6 +170,14 @@ const divisionsPageRoutes: ModuleRoute = {
       title: 'Support structure',
       path: '/child_support',
       element: <ChildeSupportPage/>,
+      private: true,
+      requiredAccessRights: ['WRITE_FR'],
+      icon: <RequestPageOutlinedIcon />,
+    },
+    {
+      title: 'Study Help',
+      path: '/studyHelp',
+      element: <StudyHelp/>,
       private: true,
       requiredAccessRights: ['WRITE_FR'],
       icon: <RequestPageOutlinedIcon />,

@@ -44,6 +44,13 @@ const frDashboard = () => {
       route: '/fr/child_support',
     },
     {
+      label: 'New Study help',
+      bg: '#FFF7ED',
+      accent: '#EA580C',
+      border: '#FED7AA',
+      route: '/fr/studyHelp',
+    },
+    {
       label: 'New Custom FR',
       bg: '#FEFCE8',
       accent: '#CA8A04',
@@ -365,7 +372,7 @@ const frDashboard = () => {
                 direction="row"
                 spacing={1.5}
                 sx={{
-                  width: '100%',
+                  // width: '100%',
                   flexWrap: 'wrap',
                   gap: 1.5,
                 }}
@@ -376,11 +383,12 @@ const frDashboard = () => {
                     onClick={() => navigate(item.route)}
                     sx={{
                       // Layout
-                      'flex': '1 1 160px',
+                      'flex': '1 1 100px',
                       'cursor': 'pointer',
                       'display': 'flex',
                       'alignItems': 'center',
                       'justifyContent': 'space-between',
+                      'flexDirection': 'column',
                       'gap': 1,
 
                       // Appearance
@@ -405,7 +413,7 @@ const frDashboard = () => {
                     }}
                   >
                     {/* Left: icon + label */}
-                    <Stack direction="row" spacing={1.5} alignItems="center" sx={{ minWidth: 0 }}>
+                    <Stack direction="row" spacing={1} alignItems="center" sx={{ minWidth: 0 }}>
                       {/* Icon badge */}
                       <Box
                         sx={{
@@ -453,7 +461,7 @@ const frDashboard = () => {
                         },
                       }}
                     >
-                      <ChevronRightIcon sx={{ fontSize: 18 }} />
+                      {/* <ChevronRightIcon sx={{ fontSize: 18 }} /> */}
                     </Box>
                   </Box>
                 ))}
