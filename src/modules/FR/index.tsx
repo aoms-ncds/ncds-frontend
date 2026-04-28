@@ -383,7 +383,7 @@ const frDashboard = () => {
                     onClick={() => navigate(item.route)}
                     sx={{
                       // Layout
-                      'flex': '1 1 100px',
+                      // 'flex': '1 1 100px',
                       'cursor': 'pointer',
                       'display': 'flex',
                       'alignItems': 'center',
