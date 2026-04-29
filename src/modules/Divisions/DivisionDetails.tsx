@@ -276,7 +276,7 @@ const DivisionDetailsPage = (props: DivisionFormPageProps) => {
     }
   }, []);
 
-   useEffect(() => {
+  useEffect(() => {
     if (action === 'edit' && divisionDetails) {
       let total = 0;
       for (let i = 2; i <= 20; i++) {
@@ -566,11 +566,11 @@ const DivisionDetailsPage = (props: DivisionFormPageProps) => {
                     Array.from({ length: otherBankDetailsCount }).map((_, index: number) => (
                       <BankDetailsForm
                         key={index}
-                        value={divisionDetails[`BeneficiaryBank${index + 2}` as keyof Division] as BankDetails | undefined}
+                        value={divisionDetails[`BeneficiaryBank${index + 3}` as keyof Division] as BankDetails | undefined}
                         onChange={(newBankDetails) => {
-                          setDivisionDetails((divisionDetails) => ({
-                            ...divisionDetails,
-                            [`BeneficiaryBank${index + 2}`]: newBankDetails as BankDetails,
+                          setDivisionDetails((prevDivisionDetails) => ({
+                            ...prevDivisionDetails,
+                            [`BeneficiaryBank${index + 3}` as keyof Division]: newBankDetails,
                           }));
                         }}
                         action={props.action}
