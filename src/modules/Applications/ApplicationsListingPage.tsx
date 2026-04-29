@@ -1607,8 +1607,8 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                 <Grid item xs={6}>
                   <TextField select fullWidth label="Help Requesting For" name="helpFor" value={(applicationFormState as any).formData?.helpFor} onChange={handleChange}>
                     <MenuItem value="self">Self</MenuItem>
-                    <MenuItem value="son">Spouse</MenuItem>
-                    <MenuItem value="daughter">Son</MenuItem>
+                    <MenuItem value="spouse">Spouse</MenuItem>
+                    <MenuItem value="son">Son</MenuItem>
                     <MenuItem value="daughter">Daughter</MenuItem>
                   </TextField>
                 </Grid>
@@ -1695,9 +1695,9 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                   <TextField select fullWidth label="Funds Received From" name="received" value={(applicationFormState as any).formData?.received} onChange={handleChange}>
                     <MenuItem value="self">Church</MenuItem>
                     <MenuItem value="son">Family</MenuItem>
-                    <MenuItem value="daughter">Friends</MenuItem>
-                    <MenuItem value="daughter">Ngo</MenuItem>
-                    <MenuItem value="daughter">Gvt</MenuItem>
+                    <MenuItem value="friends">Friends</MenuItem>
+                    <MenuItem value="ngo">Ngo</MenuItem>
+                    <MenuItem value="gvt">Gvt</MenuItem>
                   </TextField>
                 </Grid>
               </Section>
@@ -2443,11 +2443,11 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
 
                 <Grid item xs={6}>
                   <TextField select fullWidth label="Investigations (Rs)" name="investigation" value={(applicationFormState as any).formData?.investigation || ''} onChange={handleChange}>
-                    <MenuItem value="self">Lab</MenuItem>
-                    <MenuItem value="son">Blood</MenuItem>
-                    <MenuItem value="daughter">X-ray</MenuItem>
-                    <MenuItem value="daughter">MRI</MenuItem>
-                    <MenuItem value="daughter">Others</MenuItem>
+                    <MenuItem value="lab">Lab</MenuItem>
+                    <MenuItem value="blood">Blood</MenuItem>
+                    <MenuItem value="xray">X-ray</MenuItem>
+                    <MenuItem value="mri">MRI</MenuItem>
+                    <MenuItem value="others">Others</MenuItem>
                   </TextField>
                 </Grid>
 
@@ -2470,11 +2470,11 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
 
                 <Grid item xs={6}>
                   <TextField select fullWidth label="Funds Received From" name="received" value={(applicationFormState as any).formData?.received || ''} onChange={handleChange}>
-                    <MenuItem value="self" >Church</MenuItem>
-                    <MenuItem value="son">Family</MenuItem>
-                    <MenuItem value="daughter">Friends</MenuItem>
-                    <MenuItem value="daughter">NGO</MenuItem>
-                    <MenuItem value="daughter">Gvt</MenuItem>
+                    <MenuItem value="church" >Church</MenuItem>
+                    <MenuItem value="family">Family</MenuItem>
+                    <MenuItem value="friends">Friends</MenuItem>
+                    <MenuItem value="ngo">NGO</MenuItem>
+                    <MenuItem value="gvt">Gvt</MenuItem>
                   </TextField>
                 </Grid>
 
