@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
     fontSize: 11,
   },
 });
-const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?: any; officeMngrSign?: any; president?: EsignaturePresident }) => {
+const IROTemplate = (props: { rowData?: any; prev?: boolean; prev1?: boolean;fr?: FR; mngrName?: any; officeMngrSign?: any; president?: EsignaturePresident }) => {
   let totalAmount = 0;
   let totalReqAmount = 0;
   let NewTot: any = 0;
@@ -176,10 +176,10 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
 
   let coordinatorName = '';
 
-  if (prev) {
+  if (prev && !props.prev1) {
     coordinatorName = rowData?.division?.details?.prevCoordinator?.name ?? '';
   } else {
-    if (fr?.names?.coordinator !=null) {
+    if (fr?.names?.coordinator?.basicDetails?.firstName || props.prev1) {
       const first = fr?.names?.coordinator?.basicDetails?.firstName?.trim() ?? '';
       const middle = fr?.names?.coordinator?.basicDetails?.middleName?.trim() ?? '';
       const last = fr?.names?.coordinator?.basicDetails?.lastName ?? '';
@@ -191,6 +191,7 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
       coordinatorName = [first, middle, last].filter(Boolean).join(' ');
     }
   }
+
   return (
     <Document >
       <Page size="A4" style={styles.page} >

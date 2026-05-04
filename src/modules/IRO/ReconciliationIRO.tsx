@@ -1554,6 +1554,7 @@ const ReconciliationIRO = () => {
                 document={
                   <IROTemplate
                     prev={true}
+                    prev1={true}
                     rowData={iroData}
                     mngrName={mngrName}
                     officeMngrSign={selectedSignature}
@@ -1675,6 +1676,8 @@ const ReconciliationIRO = () => {
                   <IROTemplate
                     rowData={data as IROrder}
                     fr={data.FR}
+                    // prev={true}
+                    // prev1={true}
                     president={signaturePresident}
                     officeMngrSign={selectedSignature}
                   />
