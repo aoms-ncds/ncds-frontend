@@ -28,7 +28,7 @@ import EditNoteIcon from '@mui/icons-material/EditNote';
 import IROLifeCycleStates from './extras/IROLifeCycleStates';
 import { useAuth } from '../../hooks/Authentication';
 import * as XLSX from 'xlsx';
-import { BlobProvider, PDFDownloadLink } from '@react-pdf/renderer';
+import { BlobProvider, pdf, PDFDownloadLink } from '@react-pdf/renderer';
 import Lottie from 'react-lottie';
 import Animations from '../../Animations';
 import IROTemplate from './components/IROTemplate';
@@ -60,6 +60,7 @@ const ReconciliationIRO = () => {
   const [newTest, setNewTest] = useState<IROrder[]>([]);
   const [sendNotification, toggleSendNotification] = useState<boolean>(false);
   const [data, setData] = useState<any | null>(null);
+  const [dataPast, setDataPast] = useState<any | null>(null);
   const [openPrintFr, setOpenPrintFr] = useState(false);
   const [messages, setMessages] = useState<number | null>(0);
   const [statusFilter, setStatusFilter] = useState([IROLifeCycleStates.AMOUNT_RELEASED, IROLifeCycleStates.RECONCILIATION_DONE]); // default WFA: Waiting for access or Reverted
@@ -332,6 +333,71 @@ const ReconciliationIRO = () => {
       setLoading(false);
     }
   };
+
+  // const generateIROPdfBlob = async () => {
+  //   if (!iroData || !mngrName || !selectedSignature || !FrData) return null;
+
+  //   try {
+  //     const instance = pdf(
+  //       <IROTemplate
+  //         rowData={iroData}
+  //         mngrName={mngrName}
+  //         officeMngrSign={selectedSignature}
+  //         fr={FrData as FR}
+  //         president={signaturePresident}
+  //       />,
+  //     );
+
+  //     const blob = await instance.toBlob();
+  //     return blob;
+  //   } catch (error) {
+  //     console.error('PDF generation failed:', error);
+  //     return null;
+  //   }
+  // };
+  // const attachMain = async () => {
+  //   try {
+  //     if (!iroData) return;
+
+  //     setLoading(true);
+
+  //     const blob = await generateIROPdfBlob();
+  //     if (!blob) return;
+
+  //     const fileBlob = new File(
+  //       [blob],
+  //       `${iroData?.IROno}_Receipt.pdf`,
+  //       { type: 'application/pdf' },
+  //     );
+
+  //     const file = await FileUploaderServices.uploadFile(
+  //       fileBlob,
+  //       undefined,
+  //       'FR',
+  //       fileBlob.name,
+  //     );
+
+  //     if (file.success) {
+  //       const res = await IROServices.releaseAmount(releaseAmount.IRO?? [], releaseAmount);
+
+  //       const filterIRO = reconciliationIRO?.filter(
+  //         (item) => item._id !== res.data.iro._id,
+  //       );
+
+  //       setReconcilationIRO(filterIRO);
+  //       setIroData(null);
+  //       setConform1(false);
+
+  //       enqueueSnackbar({ message: 'File Attached', variant: 'success' });
+  //       enqueueSnackbar({ message: 'IRO updated', variant: 'success' });
+  //     }
+  //   } catch (error) {
+  //     console.error('Error attaching files:', error);
+  //     enqueueSnackbar({ message: 'Error attaching files', variant: 'error' });
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
   const handleSearchChange = (event: { target: { value: SetStateAction<string> } }) => {
     setSearchText(event.target.value);
   };
@@ -500,7 +566,7 @@ const ReconciliationIRO = () => {
       align: 'center',
       headerAlign: 'center',
 
-     renderCell: (props) => (
+      renderCell: (props) => (
         <DropdownButton
           useIconButton={true}
           id="Reconciliation action"
@@ -558,6 +624,23 @@ const ReconciliationIRO = () => {
             },
             {
               id: 'print',
+              text: 'Past- Print IRO',
+              icon: PrintIcon,
+              onClick: () => {
+                IROServices.getByIdOptimized(props.row._id).then((res)=>{
+                  console.log(res.data[0], '090');
+
+                  setDataPast(res.data[0]);
+                });
+                // setData(props.row);
+                setOpenPrintFr(true);
+                setTimeout(() => {
+                  setOpenPrintFr(false);
+                }, 2000);
+              },
+            },
+            {
+              id: 'print',
               text: 'Print FR',
               icon: PrintIcon,
               onClick: () => {
@@ -585,43 +668,42 @@ const ReconciliationIRO = () => {
                   id: 'print',
                   text: 'Print FR HQ DELHI',
                   icon: PrintIcon,
-                onClick: async () => {
-  try {
-    const [rowRes, delhiRes] = await Promise.all([
-      IROServices.getByIdOptimized(props.row._id),
-      DivisionsServices.getDivisionById('658270549efadc163550a28c'),
-    ]);
+                  onClick: async () => {
+                    try {
+                      const [rowRes, delhiRes] = await Promise.all([
+                        IROServices.getByIdOptimized(props.row._id),
+                        DivisionsServices.getDivisionById('658270549efadc163550a28c'),
+                      ]);
 
-    const rowData = rowRes.data?.[0];       // expecting array
-    const delhiHQ = delhiRes.data;
+                      const rowData = rowRes.data?.[0]; // expecting array
+                      const delhiHQ = delhiRes.data;
 
-    if (rowData?.division?.details as any) {
-      setData5({
-           ...props.row,
-        division: {
-           ...rowData?.division as any,
-          details: {
-             ...rowData?.division?.details,
-            seniorLeader: delhiHQ?.details?.seniorLeader,
-            juniorLeader: delhiHQ?.details?.juniorLeader,
-          },
-        },
-      });
-    }
+                      if (rowData?.division?.details as any) {
+                        setData5({
+                          ...props.row,
+                          division: {
+                            ...rowData?.division as any,
+                            details: {
+                              ...rowData?.division?.details,
+                              seniorLeader: delhiHQ?.details?.seniorLeader,
+                              juniorLeader: delhiHQ?.details?.juniorLeader,
+                            },
+                          },
+                        });
+                      }
 
-    setOpenPrintFr(true);
+                      setOpenPrintFr(true);
 
-    const timer = setTimeout(() => {
-      setOpenPrintFr(false);
-    }, 2000);
+                      const timer = setTimeout(() => {
+                        setOpenPrintFr(false);
+                      }, 2000);
 
-    return undefined;
-
-  } catch (error) {
-    console.error('Failed to load IRO / Division data', error);
-    return undefined;
-  }
-}
+                      return undefined;
+                    } catch (error) {
+                      console.error('Failed to load IRO / Division data', error);
+                      return undefined;
+                    }
+                  },
 
                 },
               ] :
@@ -1554,7 +1636,6 @@ const ReconciliationIRO = () => {
                 document={
                   <IROTemplate
                     prev={true}
-                    prev1={true}
                     rowData={iroData}
                     mngrName={mngrName}
                     officeMngrSign={selectedSignature}
@@ -1676,8 +1757,6 @@ const ReconciliationIRO = () => {
                   <IROTemplate
                     rowData={data as IROrder}
                     fr={data.FR}
-                    // prev={true}
-                    // prev1={true}
                     president={signaturePresident}
                     officeMngrSign={selectedSignature}
                   />
@@ -1704,6 +1783,55 @@ const ReconciliationIRO = () => {
           <Button
             onClick={() => {
               setData(null);
+            }}
+            variant="text"
+          >
+                  Cancel
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog open={Boolean(dataPast)} onClose={() => setDataPast(null)} maxWidth="xs" fullWidth>
+        <DialogTitle> Print IRO</DialogTitle>
+        <DialogContent>
+
+          <Container>
+  Downloading the IROReceipt for {dataPast?.IRONo}
+            <br />
+
+            {dataPast && (
+              <BlobProvider
+                document={
+                  <IROTemplate
+                    rowData={dataPast as IROrder}
+                    fr={dataPast.FR}
+                    prev={true}
+                    current={true}
+                    president={signaturePresident}
+                    officeMngrSign={selectedSignature}
+                  />
+                }
+              >
+                {({ loading, url }) =>
+                  loading || openPrintFr ? (
+                    <span style={{ color: 'blue' }}>....</span>
+                  ) : (
+                    <a
+                      href={url ?? ''}
+                      download="IROReceipt.pdf"
+                      style={{ color: 'blue' }}
+                    >
+            IROReceipt.pdf
+                    </a>
+                  )
+                }
+              </BlobProvider>
+            )}
+          </Container>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              setDataPast(null);
             }}
             variant="text"
           >

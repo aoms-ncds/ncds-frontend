@@ -113,6 +113,7 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
       closeSnackbar(approvalSnack);
     }, 500);
   };
+  
 
   const originalAdjustedAmount =
   (rowData as any)?.details.adjustedAmount || 0;
