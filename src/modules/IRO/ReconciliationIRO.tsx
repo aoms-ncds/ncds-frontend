@@ -9,9 +9,10 @@ import {
   Close as CloseIcon,
   Message as MessageIcon,
   Delete as DeleteIcon,
+  WarningOutlined,
 } from '@mui/icons-material';
 // eslint-disable-next-line max-len
-import { Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Grid, Box, Container, Typography, FormControl, FormControlLabel, Radio, RadioGroup, Divider, ListItemIcon, ListItemText, Menu, MenuItem, ToggleButton, ToggleButtonGroup, SelectChangeEvent, Checkbox, InputLabel, ListSubheader, Select } from '@mui/material';
+import { Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Grid, Box, Container, Typography, FormControl, FormControlLabel, Radio, RadioGroup, Divider, ListItemIcon, ListItemText, Menu, MenuItem, ToggleButton, ToggleButtonGroup, SelectChangeEvent, Checkbox, InputLabel, ListSubheader, Select, Alert, AlertTitle } from '@mui/material';
 // eslint-disable-next-line no-duplicate-imports
 import { Send as SendIcon, Edit as EditIcon, Preview as PreviewIcon, Print as PrintIcon, Download as DownloadIcon } from '@mui/icons-material';
 import { DataGrid, GridCellParams, GridColDef } from '@mui/x-data-grid';
@@ -1332,7 +1333,7 @@ const ReconciliationIRO = () => {
                 </Grid>
 
                 {/* ================= INFO BOX (UNCHANGED) ================= */}
-                <Grid item xs={12} md="auto">
+                <Grid item xs={4} md="auto">
                   <Box
                     sx={{
                       display: 'flex',
@@ -1377,6 +1378,34 @@ const ReconciliationIRO = () => {
         Reset
                     </Button>
                   </Box>
+
+                </Grid>
+                <Grid item xs={8} md="auto">
+                  <Box sx={{ maxWidth: 800, margin: '0 auto', padding: 3 }}>
+                    <Alert
+                      icon={<WarningOutlined />}
+                      severity="warning"
+                      sx={{
+                        'backgroundColor': '#fffbea',
+                        'color': '#663c00',
+                        'border': '1px solid #ffd666',
+                        'borderRadius': 1,
+                        '& .MuiAlert-icon': {
+                          color: '#faad14',
+                        },
+                      }}
+                    >
+                      <AlertTitle sx={{ fontWeight: 600, marginBottom: 1 }}>
+          Warning
+                      </AlertTitle>
+                      <Typography variant="body2" sx={{ lineHeight: 1 }}>
+          To obtain the latest details (such as Manager and Coordinator names) from the Reconciliation page,
+          users must take the printout on the same day of approval or before any designation changes occur.
+          Otherwise, the printout should be taken from the Closed IRO.
+                      </Typography>
+                    </Alert>
+                  </Box>
+
                 </Grid>
               </Grid>
             </Grid>
