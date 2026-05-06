@@ -79,6 +79,7 @@ const ReconciliationIRO = () => {
     transactionId: '',
   });
   const [conform, setConform] = useState<boolean>(false);
+  const [showWrng, setShowWrng] = useState<boolean>(true);
   const [conform1, setConform1] = useState<boolean>(false);
   const [attachment, setAttachment] = useState<boolean>(false);
   const [selectedIRO, setSelectedIRO] = useState<IROrder>({
@@ -167,6 +168,10 @@ const ReconciliationIRO = () => {
       setDivisions(names);
     });
   }, []);
+
+  setTimeout(()=>{
+    setShowWrng(false);
+  }, 5000);
   const filteredDivisions = divisions.filter((name) =>
     name
       .toLowerCase()
@@ -1141,6 +1146,36 @@ const ReconciliationIRO = () => {
       }
 
     } >
+      {showWrng && (
+
+        <Grid item xs={8} md="auto">
+          <Box sx={{ maxWidth: 800, margin: '0 auto', padding: 1 }}>
+            <Alert
+              icon={<WarningOutlined />}
+              severity="warning"
+              sx={{
+                'backgroundColor': '#fffbea',
+                'color': '#663c00',
+                'border': '1px solid #ffd666',
+                'borderRadius': 1,
+                '& .MuiAlert-icon': {
+                  color: '#faad14',
+                },
+              }}
+            >
+              <AlertTitle sx={{ fontWeight: 500, marginBottom: 1 }}>
+          Warning
+              </AlertTitle>
+              <Typography variant="body2" sx={{ lineHeight: 1 }}>
+          To obtain the latest details (such as Manager and Coordinator names) from the Reconciliation page,
+          users must take the printout on the same day of approval or before any designation changes occur.
+          Otherwise, the printout should be taken from the Closed IRO.
+              </Typography>
+            </Alert>
+          </Box>
+
+        </Grid>
+      )}
       <Card sx={{ maxWidth: '78vw', height: '100vh', alignItems: 'center' }}>
         <Grid container spacing={2} padding={2}>
           <Grid item xs={12}>
@@ -1380,33 +1415,7 @@ const ReconciliationIRO = () => {
                   </Box>
 
                 </Grid>
-                <Grid item xs={8} md="auto">
-                  <Box sx={{ maxWidth: 800, margin: '0 auto', padding: 3 }}>
-                    <Alert
-                      icon={<WarningOutlined />}
-                      severity="warning"
-                      sx={{
-                        'backgroundColor': '#fffbea',
-                        'color': '#663c00',
-                        'border': '1px solid #ffd666',
-                        'borderRadius': 1,
-                        '& .MuiAlert-icon': {
-                          color: '#faad14',
-                        },
-                      }}
-                    >
-                      <AlertTitle sx={{ fontWeight: 600, marginBottom: 1 }}>
-          Warning
-                      </AlertTitle>
-                      <Typography variant="body2" sx={{ lineHeight: 1 }}>
-          To obtain the latest details (such as Manager and Coordinator names) from the Reconciliation page,
-          users must take the printout on the same day of approval or before any designation changes occur.
-          Otherwise, the printout should be taken from the Closed IRO.
-                      </Typography>
-                    </Alert>
-                  </Box>
 
-                </Grid>
               </Grid>
             </Grid>
 

@@ -151,12 +151,12 @@ const FRReceiptTempForHelhiDevisionPrev = (props: { rowData: FR; label: any;pres
   // const [imageData, setImageData] = React.useState('');
   console.log(props, 'prop here');
   const coordinatorName =
-  props.rowData?.division?.details?.name === 'DELHI OFFICE'
-    ? `${props.rowData?.division?.details?.coordinator?.name?.basicDetails?.firstName || ''} 
-       ${props.rowData?.division?.details?.coordinator?.name?.basicDetails?.lastName || ''}`
-    : props.rowData?.division?.details?.prevCoordinator?.name;
+  props.rowData?.division?.details?.name === 'DELHI OFFICE' ?
+    `${props.rowData?.division?.details?.coordinator?.name?.basicDetails?.firstName || ''} 
+       ${props.rowData?.division?.details?.coordinator?.name?.basicDetails?.lastName || ''}` :
+    props.rowData?.division?.details?.prevCoordinator?.name;
 
-console.log('Coordinator Name:', coordinatorName);
+  console.log('Coordinator Name:', coordinatorName);
 
 
   let totalAmount=0;
@@ -301,9 +301,9 @@ console.log('Coordinator Name:', coordinatorName);
             }}
           >
 
-            {props?.rowData?.status as any !== `Prev Cord` ?
+            {props?.rowData?.status as any !== 'Prev Cord' ?
               `${props.rowData?.division?.details?.coordinator?.name?.basicDetails?.firstName || ''} ${props.rowData?.division?.details?.coordinator?.name?.basicDetails?.lastName || ''}`:
-              props.rowData?.division?.details?.prevCoordinator?.name 
+              props.rowData?.division?.details?.prevCoordinator?.name
             }
 
           </Text>
@@ -312,15 +312,15 @@ console.log('Coordinator Name:', coordinatorName);
             position: 'absolute',
             height: 20,
             width: 50 }}
-         src={(() => {
-  const signData = 
+          src={(() => {
+            const signData =
     props.rowData?.division?.details?.coordinator?.sign ||
     props.rowData?.division?.details?.prevCoordinator?.sign;
-  
-  return signData?.type && signData?.base64 
-    ? `data:${signData.type};base64,${signData.base64}`
-    : '';
-})()}
+
+            return signData?.type && signData?.base64 ?
+              `data:${signData.type};base64,${signData.base64}` :
+              '';
+          })()}
           />
 
           <Text style={{ left: 60, top: 40, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Designation: </Text>
@@ -339,10 +339,10 @@ console.log('Coordinator Name:', coordinatorName);
             }}
           >
             {
- 
-     props.rowData?.division?.details?.prevJuniorLeader1?.name || `${props.rowData?.division?.details?.juniorLeader?.name?.basicDetails?.firstName || ''}   ${props.rowData?.division?.details?.juniorLeader?.name?.basicDetails?.lastName || ''}`
-} 
-     
+
+              props.rowData?.division?.details?.prevJuniorLeader1?.name || `${props.rowData?.division?.details?.juniorLeader?.name?.basicDetails?.firstName || ''}   ${props.rowData?.division?.details?.juniorLeader?.name?.basicDetails?.lastName || ''}`
+            }
+
           </Text>
 
           {/* Modified seniorLeader with Delhi HQ's seniorLeader.'s details*/}
@@ -352,19 +352,19 @@ console.log('Coordinator Name:', coordinatorName);
             height: 20,
             width: 50 }}
           // src={
-          
+
           //     `data:${props.rowData?.division?.details?.prevJuniorLeader1?.sign?.type};base64,${props.rowData?.division?.details?.prevJuniorLeader1?.sign?.base64}` ||
           //     `data:${props.rowData?.division?.details?.juniorLeader?.sign?.base64};base64,${props.rowData?.division?.details?.juniorLeader?.sign?.type}`
           // }
           src={(() => {
-  const signData = 
+            const signData =
     props.rowData?.division?.details?.prevJuniorLeader1?.sign ||
     props.rowData?.division?.details?.juniorLeader?.sign;
-  
-  return signData?.type && signData?.base64 
-    ? `data:${signData.type};base64,${signData.base64}`
-    : '';
-})()}
+
+            return signData?.type && signData?.base64 ?
+              `data:${signData.type};base64,${signData.base64}` :
+              '';
+          })()}
           />
 
           <Text style={{ left: 60, top: 60, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Designation:</Text>
@@ -399,14 +399,14 @@ console.log('Coordinator Name:', coordinatorName);
           //     `data:${props.rowData?.division?.details?.seniorLeader?.sign?.type};base64,${props.rowData?.division?.details?.seniorLeader?.sign?.base64}`
           // }
           src={(() => {
-  const signData = 
+            const signData =
     props.rowData?.division?.details?.prevJuniorLeader2?.sign ||
     props.rowData?.division?.details?.seniorLeader?.sign;
-  
-  return signData?.type && signData?.base64 
-    ? `data:${signData.type};base64,${signData.base64}`
-    : '';
-})()}
+
+            return signData?.type && signData?.base64 ?
+              `data:${signData.type};base64,${signData.base64}` :
+              '';
+          })()}
           />
           {/* {props.label[3]?.name && (
             <><Text style={{ left: 60, top: 80, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Designation:</Text>

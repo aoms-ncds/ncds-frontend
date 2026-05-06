@@ -432,7 +432,7 @@ const ManageFrPage = () => {
                     console.log(delhiHQ, 'delhiHQ');
 
                     rowData.division?.details &&
-  setData4({
+  setData({
     ...props.row,
     division: {
       ...rowData.division,
