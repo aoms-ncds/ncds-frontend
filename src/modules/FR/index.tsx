@@ -265,7 +265,7 @@ const frDashboard = () => {
                       </TextField>
                     </Box>
                   </Grid>
-             
+
 
                   <Grid item xs={12} sm={6} md={3} xl={3}>
                     <FRNewCountCard icon={<img src="/mod_icons/APPLIED.png" alt="Logo" style={{ width: '50px', height: '50px' }} />}
@@ -364,107 +364,115 @@ const frDashboard = () => {
                 background: '#fff',
               }}
             >
-              <Typography variant="h6" fontWeight={600} color="text.primary" pb={2}>
+              <Typography variant="h6" fontWeight={600} color="text.primary" >
                 Quick Actions
                 {/* <Divider /> */}
               </Typography>
               <Stack
                 direction="row"
-                spacing={1.5}
-                sx={{
-                  // width: '100%',
-                  flexWrap: 'wrap',
-                  gap: 1.5,
-                }}
+                // spacing={1.5}
+
               >
-                {actions.map((item) => (
-                  <Box
-                    key={item.label}
-                    onClick={() => navigate(item.route)}
-                    sx={{
-                      // Layout
-                      // 'flex': '1 1 100px',
-                      'cursor': 'pointer',
-                      'display': 'flex',
-                      'alignItems': 'center',
-                      'justifyContent': 'space-between',
-                      'flexDirection': 'column',
-                      'gap': 1,
-
-                      // Appearance
-                      'backgroundColor': item.bg,
-                      'border': `1.5px solid ${item.border}`,
-                      'borderRadius': '14px',
-                      'px': 2,
-                      'py': 1.5,
-
-                      // Transitions
-                      'transition':
-              'transform 0.2s cubic-bezier(.34,1.56,.64,1), box-shadow 0.2s ease, border-color 0.2s ease',
-
-                      '&:hover': {
-                        transform: 'translateY(-2px)',
-                        boxShadow: `0 8px 24px ${item.accent}22`,
-                        borderColor: item.accent,
-                      },
-                      '&:active': {
-                        transform: 'scale(0.98)',
-                      },
-                    }}
-                  >
-                    {/* Left: icon + label */}
-                    <Stack direction="row" spacing={1} alignItems="center" sx={{ minWidth: 0 }}>
-                      {/* Icon badge */}
+                <Grid
+                  container
+                  spacing={{ xs: 1.5, sm: 2, md: 2.5, lg: 2 }}
+                  sx={{ py: { xs: 2, sm: 3, md: 4 } }}
+                >
+                  {actions.map((item) => (
+                    <Grid item xs={12} sm={6} md={4} lg={2} key={item.label}>
                       <Box
+                        onClick={() => navigate(item.route)}
                         sx={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          width: 32,
-                          height: 32,
-                          borderRadius: '9px',
-                          backgroundColor: `${item.accent}18`,
-                          color: item.accent,
-                          flexShrink: 0,
+                          // Layout
+                          'cursor': 'pointer',
+                          'display': 'flex',
+                          'alignItems': 'center',
+                          'justifyContent': 'space-between',
+                          'flexDirection': 'column',
+                          'gap': { xs: 0.75, sm: 1, md: 1 },
+                          'minHeight': { xs: '10px', sm: '12px', md: '14px' },
+                          // 'width': '100%',
+
+                          // Appearance
+                          'backgroundColor': item.bg,
+                          'border': `1.5px solid ${item.border}`,
+                          'borderRadius': { xs: '12px', sm: '13px', md: '14px' },
+                          'px': { xs: 1.5, sm: 2, md: 1 },
+                          'py': { xs: 1, sm: 1.25, md: 1 },
+
+                          // Transitions
+                          'transition':
+                'transform 0.2s cubic-bezier(.34,1.56,.64,1), box-shadow 0.2s ease, border-color 0.2s ease',
+
+                          '&:hover': {
+                            transform: { xs: 'translateY(-1px)', sm: 'translateY(-2px)' },
+                            boxShadow: `0 8px 24px ${item.accent}22`,
+                            borderColor: item.accent,
+                          },
+                          '&:active': {
+                            transform: 'scale(0.98)',
+                          },
                         }}
                       >
-                        <AddIcon sx={{ fontSize: 18 }} />
+                        {/* Left: icon + label */}
+                        <Stack
+                          direction="row"
+                          spacing={1}
+                          alignItems="center"
+                          sx={{ minWidth: 0, width: '100%', justifyContent: 'center' }}
+                        >
+                          {/* Icon badge */}
+                          <Box
+                            sx={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              width: { xs: 28, sm: 30, md: 32 },
+                              height: { xs: 28, sm: 30, md: 32 },
+                              borderRadius: { xs: '8px', sm: '8.5px', md: '9px' },
+                              backgroundColor: `${item.accent}18`,
+                              color: item.accent,
+                              flexShrink: 0,
+                            }}
+                          >
+                            <AddIcon sx={{ fontSize: { xs: 16, sm: 17, md: 18 } }} />
+                          </Box>
+
+                          <Typography
+                            sx={{
+                              fontWeight: 600,
+                              fontSize: { xs: '0.75rem', sm: '0.8rem', md: '0.82rem' },
+                              color: '#1e293b',
+                              letterSpacing: '0.01em',
+                              lineHeight: 1.3,
+                              textAlign: 'center',
+                              display: '-webkit-box',
+                              WebkitLineClamp: 2,
+                              WebkitBoxOrient: 'vertical',
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                            }}
+                          >
+                            {item.label}
+                          </Typography>
+                        </Stack>
+
+                        {/* Chevron */}
+                        <Box
+                          sx={{
+                            color: `${item.accent}88`,
+                            display: 'flex',
+                            alignItems: 'center',
+                            flexShrink: 0,
+                            transition: 'transform 0.2s ease, color 0.2s ease',
+                          }}
+                        >
+                          {/* <ChevronRightIcon sx={{ fontSize: 18 }} /> */}
+                        </Box>
                       </Box>
-
-                      <Typography
-                        sx={{
-                          fontWeight: 600,
-                          fontSize: '0.82rem',
-                          color: '#1e293b',
-                          letterSpacing: '0.01em',
-                          lineHeight: 1.3,
-                          whiteSpace: 'nowrap',
-                          overflow: 'hidden',
-                          textOverflow: 'ellipsis',
-                        }}
-                      >
-                        {item.label}
-                      </Typography>
-                    </Stack>
-
-                    {/* Chevron */}
-                    <Box
-                      sx={{
-                        'color': `${item.accent}88`,
-                        'display': 'flex',
-                        'alignItems': 'center',
-                        'flexShrink': 0,
-                        'transition': 'transform 0.2s ease, color 0.2s ease',
-                        '.MuiBox-root:hover &': {
-                          transform: 'translateX(3px)',
-                          color: item.accent,
-                        },
-                      }}
-                    >
-                      {/* <ChevronRightIcon sx={{ fontSize: 18 }} /> */}
-                    </Box>
-                  </Box>
-                ))}
+                    </Grid>
+                  ))}
+                </Grid>
               </Stack>
             </Card>
             <br />
