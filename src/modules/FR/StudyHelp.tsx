@@ -852,7 +852,7 @@ const StudyHelp = () => {
                 _id: '',
                 mainCategory: 'Welfare of Children',
                 subCategory1: 'Children Welfare',
-                subCategory2: 'Child Education Assistance',
+                subCategory2: 'Children Study Help',
                 subCategory3: 'Select',
                 month: moment().format('MMMM'),
                 narration: 'Towards the Monthly Support of <DESIGNATION NAME> Mr/Ms/Mrs <NAME>for the month of <MONTH, YEAR>',
@@ -1220,16 +1220,16 @@ const StudyHelp = () => {
             </CardContent>
           </form>
         )}
-      {toggleRaiseFR &&(
-        <FRForm
-          value={requisition}
-          onChange={(newReq) => setRequisition(newReq)}
-          action={'add'}
-          onSubmit={addFR}
-          disable= {true}
+        {toggleRaiseFR &&(
+          <FRForm
+            value={requisition}
+            onChange={(newReq) => setRequisition(newReq)}
+            action={'add'}
+            onSubmit={addFR}
+            disable= {true}
           // Pass the addFR function to the onSubmit prop
-        />
-      )}
+          />
+        )}
       </Card>
       <br />
       <Card>

@@ -162,7 +162,7 @@ const ChildePDFTemplateStudyHelp = (props:{frNo:string; divisionId:string|null;d
 
 
           </Text>
-          <Text style={styles.month}>{'For the Academic Year of 2025-26 '}</Text>
+          <Text style={styles.month}>{'For the Academic Year of 2026-27 '}</Text>
           <Text style={styles.FRNO}>
             {'IRO' + (props as any)?.frNo?.slice(4)}
           </Text>
