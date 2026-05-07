@@ -36,6 +36,7 @@ declare global {
     disabledFrom?:Moment;
     disabledTo?:Moment;
     remark?:string;
+    lastRenewalDate?:Moment;
 
 
   }

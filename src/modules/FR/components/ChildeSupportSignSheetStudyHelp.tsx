@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     marginTop: 65,
     fontSize: 14,
     position: 'absolute',
-    left: 220,
+    left: 300,
     color: 'darkblue',
     fontFamily: 'CourierPrime',
   },
