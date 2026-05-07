@@ -883,6 +883,29 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                     />
                   </FormControl>
                 </Grid>
+                <Grid item xs={12} md={6}>
+                  <FormControl variant={props.options?.textField.variant} fullWidth>
+                    <DatePicker
+                      label="Last Renewal Date"
+                      value={moment(newChild?.lastRenewalDate)}
+                      format="DD/MM/YYYY"
+                      onChange={(date: Moment | null) => {
+                        if (date) {
+                          setNewChild((newChild) => ({
+                            ...newChild,
+                            lastRenewalDate: date,
+                          }));
+                        }
+                      }}
+                      slotProps={{
+                        textField: {
+                          variant: props.options?.textField.variant,
+                          fullWidth: true,
+                        },
+                      }}
+                    />
+                  </FormControl>
+                </Grid>
 
                 <Grid item xs={12} md={6}>
                   <TextField

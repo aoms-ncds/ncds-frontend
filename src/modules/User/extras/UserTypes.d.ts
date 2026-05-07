@@ -170,6 +170,7 @@ declare global {
     totalNoOfYearsInMinistry?: number;
     typeOfFamily?: TypeOfFamily;
     withChurch?: boolean;
+    churchName?: string;
     department?: Department;
     selfSupport: boolean;
     percentageofSelfSupport: number;

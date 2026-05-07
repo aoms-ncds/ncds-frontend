@@ -415,6 +415,7 @@ const Profile = () => {
                     </Typography>
                     {((user as unknown as IWorker)?.spouse?.ProfileAddedOn && moment((user as unknown as IWorker)?.spouse?.ProfileAddedOn).isValid()) && moment((user as unknown as IWorker)?.spouse?.ProfileAddedOn).format('DD/MM/YYYY')}
                   </Grid>
+                  
 
 
                   <Grid item xs={12} lg={4}>
@@ -482,6 +483,14 @@ const Profile = () => {
                             </Typography>
                             {(child?.profileAddedOn && moment(child?.profileAddedOn).isValid()) && moment(child?.profileAddedOn).format('DD/MM/YYYY')}
                           </Grid>
+                          <Grid item xs={12} lg={4}>
+                            <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>
+                            Last Renewal Date
+:
+                            </Typography>
+                            {(child?.lastRenewalDate && moment(child?.lastRenewalDate).isValid()) && moment(child?.lastRenewalDate).format('DD/MM/YYYY')}
+                          </Grid>
+                          
                           <Grid key={child._id} item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Aadhaar NO : </Typography> {child.adharCardNo} </Grid>
                           <Grid key={child._id} item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Phone: </Typography> {child.phoneNumber} </Grid>
                           <Grid key={child._id} item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Email: </Typography> {child.emailId} </Grid>
@@ -502,6 +511,7 @@ const Profile = () => {
                   <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Total No of years in Ministry: </Typography> {user?.supportDetails?.totalNoOfYearsInMinistry} </Grid>
                   <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Type of family: </Typography> {user?.supportDetails?.typeOfFamily ?? 'Not specified'} </Grid>
                   <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>With Church: </Typography> {user?.supportDetails?.withChurch ? 'Yes' : (user?.supportDetails?.withChurch === false ? 'No' : 'Not specified')} </Grid>
+                  <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Church Name: </Typography> {user?.supportDetails?.churchName} </Grid>
                   <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Percentage of Self Support: </Typography> {user?.supportDetails?.percentageofSelfSupport ?? ''} </Grid>
 
                   <Grid item xs={12}><br /><Divider textAlign="left" sx={{ fontWeight: 600, fontSize: 20 }}>Support Structure</Divider></Grid>
