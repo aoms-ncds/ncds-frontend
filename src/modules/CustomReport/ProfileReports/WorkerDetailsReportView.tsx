@@ -4,6 +4,7 @@
 import { useState, useMemo } from 'react';
 import CommonPageLayout from '../../../components/CommonPageLayout';
 import { CssBaseline } from '@mui/material';
+import { useLocation } from 'react-router-dom';
 
 /* ─── Palette & Theme ─────────────────────────────────── */
 const theme = {
@@ -236,6 +237,9 @@ export default function ReportView() {
   const [sortField, setSortField] = useState('id');
   const [sortDir, setSortDir] = useState('asc');
   const [snack, setSnack] = useState(false);
+  const location = useLocation();
+  const { reportData, filters } = location.state || {};
+console.log(reportData, 'reportData');
 
   const filtered = useMemo(() => {
     const d = ALL_DATA.filter((row) => {

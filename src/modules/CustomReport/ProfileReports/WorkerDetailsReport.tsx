@@ -14,6 +14,9 @@ import CommonPageLayout from '../../../components/CommonPageLayout';
 import { useNavigate } from 'react-router-dom';
 import DivisionsServices from '../../Divisions/extras/DivisionsServices';
 import { useAuth } from '../../../hooks/Authentication';
+import { enqueueSnackbar } from 'notistack';
+import CustomReportServices from '../extras/CustomReportServices';
+import GenderService from '../../Settings/extras/GenderService';
 
 // ── Icons via Unicode/emoji since we can't import @mui/icons-material ──
 const Icon = ({ children, sx = {} }: { children: ReactNode; sx?: object }) => (
@@ -208,7 +211,7 @@ const DateRange = ({ label, from, to, onFrom, onTo }) => (
 // eslint-disable-next-line require-jsdoc
 export default function UserFilterReportMUI() {
   const init = {
-    kind: '', status: '', division: '', organization: '', daughterOrganization: '', reasonForReject: '',
+    kind: '', status: '', division: '', subDivisions: '', organization: '', daughterOrganization: '', reasonForReject: '',
     firstName: '', middleName: '', lastName: '', title: '',
     gender: '', maritalStatus: '', religion: '', field: '',
     dobFrom: '', dobTo: '',
@@ -234,14 +237,29 @@ export default function UserFilterReportMUI() {
   };
   const navigate = useNavigate();
   const [filters, setFilters] = useState(init);
+  const [genders, setGenders] = useState([]);
   const [expanded, setExpanded] = useState({ 'Basic Details': true, 'User Type & Lifecycle': true });
 
   const set = (key: string) => (e: { target: { value: any } }) => setFilters((f) => ({ ...f, [key]: e?.target ? e.target.value : e }));
-  const setSlider = (key: string) => (_: any, v: any) => setFilters((f) => ({ ...f, [key]: v }));
-  const setToggle = (key: string) => (e: { target: { checked: any } }) => setFilters((f) => ({ ...f, [key]: e.target.checked }));
+  const setSlider = (key) => (value) => {
+    setFilters((prev) => ({
+      ...prev,
+      [key]: value,
+    }));
+  }; const setToggle = (key: string) => (e: { target: { checked: any } }) => setFilters((f) => ({ ...f, [key]: e.target.checked }));
   const toggle = (panel: string) => setExpanded((e) => ({ ...e, [panel]: !e[panel] }));
   console.log(filters, 'filters');
-
+  useEffect(()=>{
+    GenderService.getAll()
+              .then((res2) => setGenders(res2.data))
+              // .then((res) => console.log(res.data, 'sec'))
+              .catch((error) =>
+                enqueueSnackbar({
+                  variant: 'error',
+                  message: error.message,
+                }),
+              );
+  }, []);
   // Active text filters for chip display
   const textFilters = Object.entries(filters).filter(([k, v]) => {
     if (Array.isArray(v)) return v.length > 0 && !v.every((x) => typeof x === 'number');
@@ -269,8 +287,21 @@ export default function UserFilterReportMUI() {
   );
 
   const [divisions, setDivisions] = useState<any[] | null>(null);
-  const user = useAuth();
+  const [subDivisions, setSubDivisions] = useState<any[] | null>(null);
 
+  const user = useAuth();
+  useEffect(()=>{
+    DivisionsServices.getSubDivisionsByDivisionId(filters.division?._id ?? '')
+              .then((res2) => setSubDivisions(res2.data))
+              // .then((res) => console.log(res.data, 'sec'))
+              .catch((error) =>
+                enqueueSnackbar({
+                  variant: 'error',
+                  message: error.message,
+                }),
+              );
+  }, [filters.division]);
+  console.log(filters, 'kkk');
   useEffect(() => {
     if ((user?.user as any).permissions.READ_ALL_DIVISIONS) {
       DivisionsServices.getDivisions().then((res) => {
@@ -306,7 +337,22 @@ export default function UserFilterReportMUI() {
               </Button>
             </Tooltip>
             <Button onClick={() => {
-              navigate('/custom-report/reportView');
+              // navigate('/custom-report/reportView');
+              // For demo, we just log the filters instead of actual report generation
+              CustomReportServices.workerDetails(filters).then((res) => {
+                console.log('Report Data:', res.data);
+                navigate('/custom-report/reportView', {
+                  state: {
+                    reportData: res.data,
+                    filters,
+                  }
+                });
+              }).catch((error) => {
+                enqueueSnackbar({
+                  variant: 'error',
+                  message: error.message,
+                });
+              });
             }} variant="contained" size="small" startIcon={<Icon>🔍</Icon>}>
             Run Report
             </Button>
@@ -356,7 +402,7 @@ export default function UserFilterReportMUI() {
                     >
                       <MenuItem value="">All</MenuItem>
                       {divisions?.map((d) => (
-                        <MenuItem key={d.id} value={d.details.name}>
+                        <MenuItem key={d.id} value={d}>
                           {d.details.name}
                         </MenuItem>
                       ))}
@@ -364,14 +410,59 @@ export default function UserFilterReportMUI() {
                   </FormControl>
                 </Grid>
                 <Grid item xs={12} sm={6} md={3}>
-                  <TextField fullWidth label="Sub Division" value={filters.subDivision} onChange={set('subDivision')} placeholder="Sub Division" />
+                  <FormControl fullWidth>
+                    <InputLabel>Sub Division</InputLabel>
+                    <Select
+                      label="Sub Division"
+                      value={filters.subDivision}
+                      onChange={(e) => set('subDivision')(e.target.value)}
+                    >
+                      <MenuItem value="">All</MenuItem>
+                      {subDivisions?.map((d) => (
+                        <MenuItem key={d.id} value={d}>
+                          {d.name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
                 </Grid>
+                {/* <Grid item xs={12} sm={6} md={3}>
+                  <TextField
+                    select
+                    fullWidth
+                    label="Status"
+                    name="status"
+                    value={filters.status}
+                    onChange={(e) => set('status')(e.target.value)}
+                    // onChange={handleInputChange}
+                  >
+                    <MenuItem value="-200">FR CLOSED</MenuItem>
+                    <MenuItem value="-201">REVERT</MenuItem>
+                    <MenuItem value="220">REOPENED</MenuItem>
+                    <MenuItem value="201">WAITING FOR PRESIDENT</MenuItem>
+                    <MenuItem value="202">WAITING FOR ACCOUNTS</MenuItem>
+                    <MenuItem value="203">FR APPROVED</MenuItem>
+                    <MenuItem value="-102">FR DISAPPROVED</MenuItem>
+                    <MenuItem value="217">IRO DISAPPROVED</MenuItem>
+                  </TextField>
+                </Grid> */}
                 <Grid item xs={12} sm={6} md={3}>
-                  <SelectField label="Status" id="status" options={LIFECYCLE} value={filters.status} onChange={set('status')} />
+                  <TextField
+                    select
+                    fullWidth
+                    label="Organization"
+                    name="organization"
+                    value={filters.organization}
+                    onChange={(e) => set('organization')(e.target.value)}
+                  >
+                    <MenuItem value="IET">IET</MenuItem>
+                    <MenuItem value="BCG">BCG</MenuItem>
+                    <MenuItem value="NCDS">NCDS</MenuItem>
+                  </TextField>
                 </Grid>
-                <Grid item xs={12} sm={6} md={3}>
+                {/* <Grid item xs={12} sm={6} md={3}>
                   <TextField fullWidth label="Organization" value={filters.organization} onChange={set('organization')} />
-                </Grid>
+                </Grid> */}
                 {/* <Grid item xs={12} sm={6} md={4}>
                   <TextField fullWidth label="Daughter Organization" value={filters.daughterOrganization} onChange={set('daughterOrganization')} />
                 </Grid> */}
@@ -386,8 +477,19 @@ export default function UserFilterReportMUI() {
             </AccordionSummary>
             <AccordionDetails>
               <Grid container spacing={2}>
-                <Grid item xs={12} sm={6} md={2}>
-                  <TextField fullWidth label="Title" value={filters.title} onChange={set('title')} placeholder="Rev, Dr..." />
+                <Grid item xs={12} sm={6} md={3}>
+                  <TextField
+                    select
+                    fullWidth
+                    label="Title"
+                    name="title"
+                    value={filters.title}
+                    onChange={(e) => set('title')(e.target.value)}
+                  >
+                    <MenuItem value="Mr">Mr</MenuItem>
+                    <MenuItem value="Mrs">Mrs</MenuItem>
+                    <MenuItem value="Miss">Miss</MenuItem>
+                  </TextField>
                 </Grid>
                 <Grid item xs={12} sm={6} md={3}>
                   <TextField fullWidth label="First Name" value={filters.firstName} onChange={set('firstName')} />
@@ -395,11 +497,25 @@ export default function UserFilterReportMUI() {
                 <Grid item xs={12} sm={6} md={3}>
                   <TextField fullWidth label="Middle Name" value={filters.middleName} onChange={set('middleName')} />
                 </Grid>
-                <Grid item xs={12} sm={6} md={4}>
+                <Grid item xs={12} sm={6} md={3}>
                   <TextField fullWidth label="Last Name" value={filters.lastName} onChange={set('lastName')} />
                 </Grid>
                 <Grid item xs={12} sm={6} md={3}>
-                  <SelectField label="Gender" id="gender" options={GENDER} value={filters.gender} onChange={set('gender')} />
+                  <FormControl fullWidth>
+                    <InputLabel>Gender</InputLabel>
+                    <Select
+                      label="Gender"
+                      value={filters.gender}
+                      onChange={(e) => set('gender')(e.target.value)}
+                    >
+                      <MenuItem value="">All</MenuItem>
+                      {genders?.map((d) => (
+                        <MenuItem key={d.id} value={d}>
+                          {d.gender}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
                 </Grid>
                 <Grid item xs={12} sm={6} md={3}>
                   <SelectField label="Marital Status" id="marital" options={MARITAL} value={filters.maritalStatus} onChange={set('maritalStatus')} />
@@ -544,7 +660,7 @@ export default function UserFilterReportMUI() {
                 </Grid>
                 <Grid item xs={12} md={6}>
                   <FieldLabel>No. of Churches</FieldLabel>
-                  <RangeSlider label="" value={filters.noOfChurches} onChange={setSlider('noOfChurches')} min={0} max={200} />
+                  <RangeSlider label="" value={filters.noOfChurches} onChange={setSlider('noOfChurches')} min={1} max={200} />
                 </Grid>
               </Grid>
             </AccordionDetails>
