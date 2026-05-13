@@ -356,7 +356,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
     } else if (props.action == 'president') {
       ApplicationServices.getAll({ dateRange: dateRange, status: ApplicationLifeCycleStates.SENT_TO_PRESIDENT })
         .then((res) => {
-          setApplications(res.data);
+          setApplications(res.data.filter((res:any)=>res.welfare !== true));
         })
         .catch((error) => {
           enqueueSnackbar({
