@@ -801,7 +801,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       align: 'center',
       headerAlign: 'center',
       type: 'string',
-     renderCell: (params) => (
+      renderCell: (params) => (
         <DropdownButton
           useIconButton={true}
           id="IRO action"
@@ -954,6 +954,20 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
               },
 
             },
+            ...(params.row.reasonForRejectIRO || (params.row as any).reasonForRevertToDivision ?
+              [
+                {
+                  id: 'resaons',
+                  text: 'View Reasons',
+                  component: Link,
+                  // to: '/fr/view_FR/' + props.row._id,
+                  onClick: () => {
+                    setOpenReason(true);
+                    setSelectedIROData(params.row);
+                  },
+                  icon: EditNoteIcon,
+                },
+              ]:[]),
             ...(params.row.closedIroPdf ?
               [
                 {
