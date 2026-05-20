@@ -1449,9 +1449,21 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
           width: 180,
           renderHeader: () => <b>Total Transferred Amount</b>,
           valueGetter: (params: any) => {
-            return formatAmount(
-              Number(params.row.releaseAmount?.transferredAmount) || 0,
-            );
+            if (params.row.releaseAmount?.transferredAmount !== 0) {
+              return formatAmount(params.row.releaseAmount?.transferredAmount as number);
+            } else {
+              if (params.row.sanctionedAmount !== undefined) {
+                return formatAmount(params.row.sanctionedAmount as number);
+              }
+              if (Array.isArray(params.row.particulars)) {
+                return formatAmount(
+                  params.row.particulars.reduce(
+                    (sum:any, item:any) => sum + (Number(item.sanctionedAmount) || 0),
+                    0,
+                  ).toFixed(2));
+              }
+              return 0; // or return a suitable default value
+            }
           },
           align: 'center' as const,
           headerAlign: 'center' as const,
