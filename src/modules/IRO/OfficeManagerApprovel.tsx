@@ -431,6 +431,8 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
 
     const searchMatch =
     (row.IROno && row.IROno.toLowerCase().includes(searchLower)) ||
+      (row.releaseAmount?.releaseAmount && row.releaseAmount?.releaseAmount.toString().toLowerCase().includes(searchLower)) ||
+    (row.releaseAmount?.transferredAmount && row.releaseAmount?.transferredAmount.toString().toLowerCase().includes(searchLower)) ||
     (row.IRODate && row.IRODate.format('DD/MM/YYYY').toLowerCase().includes(searchLower)) ||
     (row.division?.details.name && row.division?.details.name.toLowerCase().includes(searchLower)) ||
     (row.purposeSubdivision?.name && row.purposeSubdivision.name.toLowerCase().includes(searchLower)) ||
