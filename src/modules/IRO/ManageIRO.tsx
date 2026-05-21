@@ -1422,22 +1422,36 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
           width: 180,
           renderHeader: () => <b>Transferred Amount</b>,
 
-          valueGetter: (params: any) => {
-            if (params.row.sanctionedAmount !== undefined) {
-              return formatAmount(Number(params.row.sanctionedAmount));
-            }
+          renderCell: (params:any) => {
+            let value = 0;
+            console.log(params.row, 'opo');
+            const transferredAmountEach= params.row.releaseAmount?.transferredAmountEach;
+            // ✅ params.row._id is the key in parent's transferredAmountEach
+            const amountFromMap = (transferredAmountEach as any)?.[params.row._id];
 
-            if (Array.isArray(params.row.particulars)) {
-              const total = params.row.particulars.reduce(
-                (sum: number, item: any) =>
-                  sum + (Number(item.sanctionedAmount) || 0),
+            if (amountFromMap !== undefined) {
+              value = amountFromMap;
+            }
+            // check locally edited value for this row
+            // otherwise show sanctioned amount
+            else if (params.row?.sanctionedAmount) {
+              value = params.row.sanctionedAmount;
+            }
+            // otherwise calculate from particulars
+            else if (Array.isArray(params.row?.particulars)) {
+              value = params.row.particulars.reduce(
+                (sum:any, item:any) => sum + (item.sanctionedAmount || 0),
                 0,
               );
-
-              return formatAmount(total);
             }
 
-            return formatAmount(0);
+            return (
+              <span
+
+              >
+                {Number(value).toFixed(2)}
+              </span>
+            );
           },
           align: 'center' as const,
           headerAlign: 'center' as const,

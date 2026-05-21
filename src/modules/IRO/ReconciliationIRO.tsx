@@ -1066,30 +1066,44 @@ const ReconciliationIRO = () => {
         return 0; // or return a suitable default value
       }, renderHeader: () => (<b>Sanctioned Amount</b>), align: 'center', headerAlign: 'center' },
     {
-      field: 'Transferred',
+      field: 'tanfered',
       headerName: 'Transferred Amount',
       width: 180,
-      renderHeader: () => <b>Transferred Amount</b>,
 
-      valueGetter: (params: any) => {
-        if (params.row.sanctionedAmount !== undefined) {
-          return formatAmount(Number(params.row.sanctionedAmount));
+      renderCell: (params) => {
+        let value = 0;
+        console.log(params.row, 'opo');
+        const transferredAmountEach= params.row.releaseAmount?.transferredAmountEach;
+        // ✅ params.row._id is the key in parent's transferredAmountEach
+        const amountFromMap = (transferredAmountEach as any)?.[params.row._id];
+
+        if (amountFromMap !== undefined) {
+          value = amountFromMap;
         }
-
-        if (Array.isArray(params.row.particulars)) {
-          const total = params.row.particulars.reduce(
-            (sum: number, item: any) =>
-              sum + (Number(item.sanctionedAmount) || 0),
+        // check locally edited value for this row
+        // otherwise show sanctioned amount
+        else if (params.row?.sanctionedAmount) {
+          value = params.row.sanctionedAmount;
+        }
+        // otherwise calculate from particulars
+        else if (Array.isArray(params.row?.particulars)) {
+          value = params.row.particulars.reduce(
+            (sum, item) => sum + (item.sanctionedAmount || 0),
             0,
           );
-
-          return formatAmount(total);
         }
 
-        return formatAmount(0);
+        return (
+          <span
+            
+          >
+            {Number(value).toFixed(2)}
+          </span>
+        );
       },
-      align: 'center' as const,
-      headerAlign: 'center' as const,
+
+      align: 'center',
+      headerAlign: 'center',
     },
 
     {
