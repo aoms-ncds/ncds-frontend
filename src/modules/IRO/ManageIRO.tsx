@@ -1466,9 +1466,6 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
             if (params.row.releaseAmount?.transferredAmount !== 0) {
               return formatAmount(params.row.releaseAmount?.transferredAmount as number);
             } else {
-              if (params.row.sanctionedAmount !== undefined) {
-                return formatAmount(params.row.sanctionedAmount as number);
-              }
               if (Array.isArray(params.row.particulars)) {
                 return formatAmount(
                   params.row.particulars.reduce(
