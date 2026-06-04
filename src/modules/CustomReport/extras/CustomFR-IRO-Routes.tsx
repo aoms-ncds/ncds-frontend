@@ -7,6 +7,8 @@ import CustomReportFRFilterPage from '../CustomReportFRFilterPage';
 import ProfileReports from '../ProfileReports';
 import UserFilterReportMUI from '../ProfileReports/WorkerDetailsReport';
 import ReportView from '../ProfileReports/WorkerDetailsReportView';
+import SpouseFilterReportMUI from '../ProfileReports/SpouseDetailsReport';
+import ChildFilterReportMUI from '../ProfileReports/ChildDetailsReport';
 
 const customFrIroRoute: ModuleRoute = {
   base: '/custom-report',
@@ -55,6 +57,26 @@ const customFrIroRoute: ModuleRoute = {
       title: 'Profile Reporters',
       path: '/worker-details-report',
       element: <UserFilterReportMUI />,
+      private: true,
+      requiredAccessRights: ['READ_ACCESS'],
+      // showInDrawer: true,
+      // icon: <HomeIcon />,
+      // icon: <img src="/mod_icons/Applications.png" alt="Logo" style={{ width: '30px', height: '30px' }} />,
+    },
+    {
+      title: 'Profile Reporters',
+      path: '/spouse-details-report',
+      element: <SpouseFilterReportMUI />,
+      private: true,
+      requiredAccessRights: ['READ_ACCESS'],
+      // showInDrawer: true,
+      // icon: <HomeIcon />,
+      // icon: <img src="/mod_icons/Applications.png" alt="Logo" style={{ width: '30px', height: '30px' }} />,
+    },
+    {
+      title: 'Profile Reporters',
+      path: '/child-details-report',
+      element: <ChildFilterReportMUI />,
       private: true,
       requiredAccessRights: ['READ_ACCESS'],
       // showInDrawer: true,

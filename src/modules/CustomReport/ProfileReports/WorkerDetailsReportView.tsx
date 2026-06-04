@@ -322,18 +322,7 @@ console.log(reportData, 'reportData');
           </div>
 
           {/* Stat Cards */}
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 14, marginBottom: 22 }}>
-            {[
-              { icon: '📋', value: filtered.length, label: 'Total Records', color: theme.primary },
-              { icon: '💰', value: `₹${totalAmount.toLocaleString('en-IN', { maximumFractionDigits: 0 })}`, label: 'Total Amount', color: '#059669' },
-              { icon: '🏢', value: new Set(filtered.map((r) => r.division)).size, label: 'Divisions', color: '#d97706' },
-              { icon: '❓', value: filtered.filter((r) => !r.amount).length, label: 'Pending Amount', color: '#7c3aed' },
-            ].map((s, i) => (
-              <div key={s.label} className="stat-card-anim" style={{ animationDelay: `${i * 0.06}s`, flex: '1 1 140px' }}>
-                <StatCard {...s} />
-              </div>
-            ))}
-          </div>
+         
 
           {/* Main Paper */}
           <Paper>

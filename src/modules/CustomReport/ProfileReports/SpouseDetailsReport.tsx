@@ -37,8 +37,9 @@ import IROLifeCycleStates from '../../IRO/extras/IROLifeCycleStates';
 import { DownloadingOutlined } from '@mui/icons-material';
 import { log } from 'console';
 import { BlobProvider } from '@react-pdf/renderer';
-import PDFTemplateCustomChild from '../components/PDFTemplateCustomChild';
-import PDFTemplateCustomUsers from '../components/PDFTemplateCustomUsers';
+import PDFTemplateCustomFR from '../components/PDFTemplateCustomFR';
+import PDFTemplateCustomFRAll from '../components/PDFTemplateCustomFRAll';
+import PDFTemplateCustomSpouse from '../components/PDFTemplateCustomSpouse';
 
 // ── Icons via Unicode/emoji since we can't import @mui/icons-material ──
 const Icon = ({ children, sx = {} }: { children: ReactNode; sx?: object }) => (
@@ -231,12 +232,13 @@ const DateRange = ({ label, from, to, onFrom, onTo }) => (
 
 // ── Main Component ─────────────────────────────────────────────────────
 // eslint-disable-next-line require-jsdoc
-export default function UserFilterReportMUI() {
+export default function SpouseFilterReportMUI() {
   const init = {
     kind: '', status: '', division: '', subDivisions: '', organization: '', daughterOrganization: '', reasonForReject: '',
     firstName: '', middleName: '', lastName: '', title: '',
     gender: '', maritalStatus: '', religion: '', field: '',
     dobFrom: '', dobTo: '',
+    profileAddedOnFrom: '', profileAddedOnTo: '',
     highestQualification: '', motherTongue: '', communicationLanguage: '', knownLanguages: [],
     email: '', email2: '', phone: '', alternativePhone: '',
     PANNo: '', aadhaarNo: '', voterIdNo: '', licenseNumber: '',
@@ -246,15 +248,7 @@ export default function UserFilterReportMUI() {
     dateOfJoiningFrom: '', dateOfJoiningTo: '',
     dateOfLeavingFrom: '', dateOfLeavingTo: '',
     officialStatus: '', reasonForDeactivation: '',
-    selfSupport: false, selfSupportEnabled: false,
-    noOfChurches: [0, 100],
     designation: '', otherDesignation: '', department: '', typeOfFamily: '',
-    withChurch: false, percentSelfSupport: [0, 100],
-    totalAmount: [0, 100000], monthlyDeduction: [0, 20000],
-    yearsInMinistry: [0, 50],
-    basic: [0, 50000], HRA: [0, 20000],
-    telAllowance: [0, 5000], impactDeduction: [0, 5000], MUTDeduction: [0, 5000],
-    supportEnabled: false,
     impactNo: '', nominee: '', relation: '',
   };
   const navigate = useNavigate();
@@ -271,10 +265,11 @@ export default function UserFilterReportMUI() {
   const [searchText, setSearchText] = useState('');
   const [selectedData, setSelectedData] = useState<any[]>([
     'Sl No',
-    'Worker Code',
+    'Spouse Code',
     'Name',
     'Division',
-    'SubDivision',
+    'Date of Birth',
+    // 'Narration',
     // 'Sanction Amount',
     // 'Sanction as per',
 
@@ -313,7 +308,7 @@ export default function UserFilterReportMUI() {
     const search = searchText.toLowerCase();
 
     return (
-      row.basicDetails?.firstName.toLowerCase().includes(search)
+      row?.firstName.toLowerCase().includes(search)
     );
   });
 
@@ -383,7 +378,7 @@ export default function UserFilterReportMUI() {
             <Toolbar sx={{ gap: 2 }}>
               <Avatar sx={{ width: 36, height: 36, background: 'linear-gradient(135deg, #1d4ed8, #0891b2)', fontSize: 18 }}>⚙</Avatar>
               <Box sx={{ flex: 1 }}>
-                <Typography variant="h5" sx={{ fontSize: '1rem', lineHeight: 1.2 }}>Worker & Staff Filter</Typography>
+                <Typography variant="h5" sx={{ fontSize: '1rem', lineHeight: 1.2 }}>Spouse Filter</Typography>
                 <Typography variant="caption" color="text.secondary">Advanced personnel report builder</Typography>
               </Box>
               <Badge badgeContent={textFilters.length} color="primary" max={99}>
@@ -399,7 +394,7 @@ export default function UserFilterReportMUI() {
               <Button onClick={() => {
               // navigate('/custom-report/reportView');
               // For demo, we just log the filters instead of actual report generation
-                CustomReportServices.workerDetails(filters).then((res) => {
+                CustomReportServices.spouseDetails(filters).then((res) => {
                   console.log('Report Data:', res.data);
                   setData(res.data);
                   setViewData(true);
@@ -502,20 +497,6 @@ export default function UserFilterReportMUI() {
                     <MenuItem value="217">IRO DISAPPROVED</MenuItem>
                   </TextField>
                 </Grid> */}
-                  <Grid item xs={12} sm={6} md={3}>
-                    <TextField
-                      select
-                      fullWidth
-                      label="Organization"
-                      name="organization"
-                      value={filters.organization}
-                      onChange={(e) => set('organization')(e.target.value)}
-                    >
-                      <MenuItem value="IET">IET</MenuItem>
-                      <MenuItem value="BCG">BCG</MenuItem>
-                      <MenuItem value="NCDS">NCDS</MenuItem>
-                    </TextField>
-                  </Grid>
                   {/* <Grid item xs={12} sm={6} md={3}>
                   <TextField fullWidth label="Organization" value={filters.organization} onChange={set('organization')} />
                 </Grid> */}
@@ -608,6 +589,10 @@ export default function UserFilterReportMUI() {
                     <DateRange label="Date of Birth Range" from={filters.dobFrom} to={filters.dobTo}
                       onFrom={set('dobFrom')} onTo={set('dobTo')} />
                   </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <DateRange label="Profile Added On" from={filters.profileAddedOnFrom} to={filters.profileAddedOnTo}
+                      onFrom={set('profileAddedOnFrom')} onTo={set('profileAddedOnTo')} />
+                  </Grid>
                 </Grid>
               </AccordionDetails>
             </Accordion>
@@ -658,145 +643,15 @@ export default function UserFilterReportMUI() {
                     <Stack direction="row" flexWrap="wrap" gap={2}>
                       <FormControlLabel control={<Switch checked={!!filters.hasPAN} onChange={setToggle('hasPAN')} color="primary" />} label="Has PAN" />
                       <FormControlLabel control={<Switch checked={!!filters.hasAadhaar} onChange={setToggle('hasAadhaar')} color="primary" />} label="Has Aadhaar" />
-                      <FormControlLabel control={<Switch checked={!!filters.hasVoterId} onChange={setToggle('hasVoterId')} color="primary" />} label="Has Voter ID" />
-                      <FormControlLabel control={<Switch checked={!!filters.hasLicense} onChange={setToggle('hasLicense')} color="primary" />} label="Has License" />
+                      <FormControlLabel control={<Switch checked={!!filters.hasWidowCare} onChange={setToggle('hasWidowCare')} color="primary" />} label="Has Widow Care" />
+                      <FormControlLabel control={<Switch checked={!!filters.hasWorking} onChange={setToggle('hasWorking')} color="primary" />} label="Has Working" />
                     </Stack>
                   </Grid>
                 </Grid>
               </AccordionDetails>
             </Accordion>
 
-            {/* ════ SECTION 5: Address ════ */}
-            <Accordion expanded={!!expanded['Address Details']} onChange={() => toggle('Address Details')}>
-              <AccordionSummary expandIcon={<Icon>▾</Icon>}>
-                <SectionTitle title="Address Details" />
-              </AccordionSummary>
-              <AccordionDetails>
-                <Grid container spacing={3}>
-                  {[
-                    { prefix: 'permanent', label: 'Permanent Address' },
-                    { prefix: 'current', label: 'Current / Official Address' },
-                    { prefix: 'residing', label: 'Residing Address' },
-                  ].map(({ prefix, label }) => (
-                    <Grid item xs={12} md={4} key={prefix}>
-                      <Paper sx={{ p: 2, background: 'rgba(255,255,255,0.02)', borderColor: 'rgba(255,255,255,0.06)' }}>
-                        <Typography variant="subtitle2" sx={{ mb: 1.5 }}>{label}</Typography>
-                        <Stack spacing={1.5}>
-                          <TextField fullWidth label="City" value={filters[`${prefix}City`]} onChange={set(`${prefix}City`)} />
-                          <TextField fullWidth label="State" value={filters[`${prefix}State`]} onChange={set(`${prefix}State`)} />
-                          <TextField fullWidth label="Country" value={filters[`${prefix}Country`]} onChange={set(`${prefix}Country`)} />
-                        </Stack>
-                      </Paper>
-                    </Grid>
-                  ))}
-                </Grid>
-              </AccordionDetails>
-            </Accordion>
-
-            {/* ════ SECTION 6: Official ════ */}
-            <Accordion expanded={!!expanded['Official Details']} onChange={() => toggle('Official Details')}>
-              <AccordionSummary expandIcon={<Icon>▾</Icon>}>
-                <SectionTitle title="Official Details" />
-              </AccordionSummary>
-              <AccordionDetails>
-                <Grid container spacing={2}>
-                  <Grid item xs={12} sm={6}>
-                    <DateRange label="Date of Joining" from={filters.dateOfJoiningFrom} to={filters.dateOfJoiningTo}
-                      onFrom={set('dateOfJoiningFrom')} onTo={set('dateOfJoiningTo')} />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <DateRange label="Date of Leaving" from={filters.dateOfLeavingFrom} to={filters.dateOfLeavingTo}
-                      onFrom={set('dateOfLeavingFrom')} onTo={set('dateOfLeavingTo')} />
-                  </Grid>
-                  <Grid item xs={12} sm={6} md={3}>
-                    <SelectField label="Official Status" id="offStatus" options={OFFICIAL_STATUS} value={filters.officialStatus} onChange={set('officialStatus')} />
-                  </Grid>
-                  <Grid item xs={12} sm={6} md={3}>
-                    <FormControlLabel control={<Switch checked={filters.selfSupport} onChange={setToggle('selfSupport')} color="primary" />} label="Self Support" />
-                  </Grid>
-                  <Grid item xs={12} md={6}>
-                    <FieldLabel>No. of Churches</FieldLabel>
-                    <RangeSlider label="" value={filters.noOfChurches} onChange={setSlider('noOfChurches')} min={1} max={200} />
-                  </Grid>
-                </Grid>
-              </AccordionDetails>
-            </Accordion>
-
-            {/* ════ SECTION 7: Ministry ════ */}
-            <Accordion expanded={!!expanded['Support & Ministry']} onChange={() => toggle('Support & Ministry')}>
-              <AccordionSummary expandIcon={<Icon>▾</Icon>}>
-                <SectionTitle title="Support & Ministry" />
-              </AccordionSummary>
-              <AccordionDetails>
-                <Grid container spacing={2}>
-                  <Grid item xs={12} sm={6} md={3}>
-                    <SelectField label="Designation" id="desig" options={DESIGNATIONS} value={filters.designation} onChange={set('designation')} />
-                  </Grid>
-                  <Grid item xs={12} sm={6} md={3}>
-                    <TextField fullWidth label="Other Designation" value={filters.otherDesignation} onChange={set('otherDesignation')} />
-                  </Grid>
-                  <Grid item xs={12} sm={6} md={3}>
-                    <SelectField label="Department" id="dept" options={DEPARTMENTS} value={filters.department} onChange={set('department')} />
-                  </Grid>
-                  <Grid item xs={12} sm={6} md={3}>
-                    <SelectField label="Type of Family" id="family" options={FAMILY_TYPES} value={filters.typeOfFamily} onChange={set('typeOfFamily')} />
-                  </Grid>
-                  <Grid item xs={12} sm={6} md={3}>
-                    <FormControlLabel control={<Switch checked={filters.withChurch} onChange={setToggle('withChurch')} color="primary" />} label="With Church" />
-                  </Grid>
-                  <Grid item xs={12} md={4}>
-                    <FieldLabel>Years in Ministry</FieldLabel>
-                    <RangeSlider label="" value={filters.yearsInMinistry} onChange={setSlider('yearsInMinistry')} min={0} max={60} unit=" yrs" />
-                  </Grid>
-                  <Grid item xs={12} md={4}>
-                    <FieldLabel>% Self Support</FieldLabel>
-                    <RangeSlider label="" value={filters.percentSelfSupport} onChange={setSlider('percentSelfSupport')} min={0} max={100} unit="%" />
-                  </Grid>
-                  <Grid item xs={12} md={4}>
-                    <FieldLabel>Total Amount (₹)</FieldLabel>
-                    <RangeSlider label="" value={filters.totalAmount} onChange={setSlider('totalAmount')} min={0} max={200000} unit="₹" />
-                  </Grid>
-                  <Grid item xs={12} md={4}>
-                    <FieldLabel>Monthly Deduction (₹)</FieldLabel>
-                    <RangeSlider label="" value={filters.monthlyDeduction} onChange={setSlider('monthlyDeduction')} min={0} max={50000} unit="₹" />
-                  </Grid>
-                </Grid>
-              </AccordionDetails>
-            </Accordion>
-
-            {/* ════ SECTION 8: Support Structure ════ */}
-            <Accordion expanded={!!expanded['Support Structure']} onChange={() => toggle('Support Structure')}>
-              <AccordionSummary expandIcon={<Icon>▾</Icon>}>
-                <SectionTitle title="Support Structure" />
-              </AccordionSummary>
-              <AccordionDetails>
-                <Grid container spacing={2}>
-                  <Grid item xs={12}>
-                    <FormControlLabel control={<Switch checked={filters.supportEnabled} onChange={setToggle('supportEnabled')} color="primary" />} label="Support Enabled" />
-                  </Grid>
-                  <Grid item xs={12} md={4}>
-                    <FieldLabel>Basic Salary (₹)</FieldLabel>
-                    <RangeSlider label="" value={filters.basic} onChange={setSlider('basic')} min={0} max={100000} unit="₹" />
-                  </Grid>
-                  <Grid item xs={12} md={4}>
-                    <FieldLabel>HRA (₹)</FieldLabel>
-                    <RangeSlider label="" value={filters.HRA} onChange={setSlider('HRA')} min={0} max={50000} unit="₹" />
-                  </Grid>
-                  <Grid item xs={12} md={4}>
-                    <FieldLabel>Tel Allowance (₹)</FieldLabel>
-                    <RangeSlider label="" value={filters.telAllowance} onChange={setSlider('telAllowance')} min={0} max={10000} unit="₹" />
-                  </Grid>
-                  <Grid item xs={12} md={4}>
-                    <FieldLabel>Impact Deduction (₹)</FieldLabel>
-                    <RangeSlider label="" value={filters.impactDeduction} onChange={setSlider('impactDeduction')} min={0} max={10000} unit="₹" />
-                  </Grid>
-                  <Grid item xs={12} md={4}>
-                    <FieldLabel>MUT Deduction (₹)</FieldLabel>
-                    <RangeSlider label="" value={filters.MUTDeduction} onChange={setSlider('MUTDeduction')} min={0} max={10000} unit="₹" />
-                  </Grid>
-                </Grid>
-              </AccordionDetails>
-            </Accordion>
+          
 
             {/* ════ SECTION 9: Insurance ════ */}
             <Accordion expanded={!!expanded['Insurance']} onChange={() => toggle('Insurance')}>
@@ -981,10 +836,10 @@ export default function UserFilterReportMUI() {
                       data.map((iro: any, index) => {
                         const row = [
                           index +1,
-                          selectedData.includes('Worker Code') ? iro.workerCode ?? iro.staffCode : undefined,
-                          selectedData.includes('Name') && iro.basicDetails?.firstName + ' ' + iro.basicDetails?.lastName,
-                          selectedData.includes('Division') && iro.divisionData?.details?.name,
-                          selectedData.includes('SubDivision') && iro.officialDetails?.divisionHistory?.[0]?.subDivision?.name,
+                          selectedData.includes('Spouse Code') ? iro.spouseCode: '',
+                          selectedData.includes('Name') && iro?.firstName + ' ' + iro?.lastName,
+                          selectedData.includes('Division') && iro.division?.details?.name,
+                          selectedData.includes('Date of Birth') && moment(iro.dateOfBirth).format('DD/MM/YYYY'),
                           selectedData.includes('Narration') && iro.particularsData?.narration,
                           selectedData.includes('Sanction Amount') && formatAmount(iro.particularsData?.sanctionedAmount),
                           selectedData.includes('Sanction as per') && iro.particularsData?.sanctionedAsPer,
@@ -1055,13 +910,14 @@ export default function UserFilterReportMUI() {
                   <TableHead sx={{ height: 10, backgroundColor: '#f5f5f5' }}>
                     <TableRow>
                       <TableCell sx={{ fontWeight: 'bold' }}>Sl No</TableCell>
-                      {selectedData.includes('Worker Code') && <TableCell sx={{ fontWeight: 'bold' }}>Worker Code</TableCell>}
+                      {selectedData.includes('Spouse Code') && <TableCell sx={{ fontWeight: 'bold' }}>Spouse Code</TableCell>}
                       {selectedData.includes('IRO No') && <TableCell sx={{ fontWeight: 'bold' }}>IRO No</TableCell>}
                       {selectedData.includes('Name') && <TableCell sx={{ fontWeight: 'bold' }}>Name</TableCell>}
                       {selectedData.includes('Status') && <TableCell sx={{ fontWeight: 'bold' }}>Status</TableCell>}
                       {/* {selectedData.includes('IRO Status') && <TableCell sx={{ fontWeight: 'bold' }}>Status</TableCell>} */}
                       {selectedData.includes('Division') && <TableCell sx={{ fontWeight: 'bold' }}>Division Name</TableCell>}
-                      {selectedData.includes('SubDivision') &&<TableCell sx={{ fontWeight: 'bold', width: '150px' }}>Sub Division Name</TableCell>}
+                      {selectedData.includes('Date of Birth') && <TableCell sx={{ fontWeight: 'bold' }}>Date of Birth</TableCell>}
+                      {selectedData.includes('Sub-Division') &&<TableCell sx={{ fontWeight: 'bold', width: '150px' }}>Sub Division Name</TableCell>}
                       {selectedData.includes('Main Category') && <TableCell sx={{ fontWeight: 'bold' }}>Main Category</TableCell>}
                       {selectedData.includes('Sub Category 1') && <TableCell sx={{ fontWeight: 'bold' }}>Sub Category 1</TableCell>}
                       {selectedData.includes('Sub Category 2') && <TableCell sx={{ fontWeight: 'bold' }}>Sub Category 2</TableCell>}
@@ -1095,12 +951,12 @@ export default function UserFilterReportMUI() {
                         }}
                       >
                         <TableCell>{index +1}</TableCell>
-                        {selectedData.includes('Worker Code') && <TableCell>{row.workerCode??row.staffCode }</TableCell>}
-                        {selectedData.includes('IRO No') && <TableCell>{row.IROdata?.IROno}</TableCell>}
-                        {selectedData.includes('Name') && <TableCell>{row.basicDetails?.firstName + ' ' + row.basicDetails?.lastName}</TableCell>}
+                        {selectedData.includes('Spouse Code') && <TableCell>{row.spouseCode}</TableCell>}
+                        {selectedData.includes('Name') && <TableCell>{row?.firstName + ' ' + row?.lastName}</TableCell>}
                         {selectedData.includes('Status') && <TableCell>{IROLifeCycleStates.getStatusNameByCodeTransaction(row.status).replaceAll('_', ' ')}</TableCell>}
                         {selectedData.includes('Division') && <TableCell>{row.division?.details?.name}</TableCell>}
-                        {selectedData.includes('SubDivision') && <TableCell>{row.officialDetails?.divisionHistory?.[0]?.subDivision?.name}</TableCell>}
+                        {selectedData.includes('Date of Birth') && <TableCell>{moment(row.dateOfBirth).format('DD/MM/YYYY')}</TableCell>}
+                        {selectedData.includes('Sub-Division') && <TableCell>{row.subDivData?.name}</TableCell>}
                         {selectedData.includes('Main Category') && <TableCell>{row.particularsData?.mainCategory}</TableCell>}
                         {selectedData.includes('Sub Category 1') && <TableCell>{row.particularsData?.subCategory1}</TableCell>}
                         {selectedData.includes('Sub Category 2') && <TableCell>{row.particularsData?.subCategory2}</TableCell>}
@@ -1164,17 +1020,17 @@ export default function UserFilterReportMUI() {
 
           </Grid>
         </Card>
-<Dialog open={print} onClose={() => setPrint(false)} maxWidth="xs" fullWidth>
+  <Dialog open={print} onClose={() => setPrint(false)} maxWidth="xs" fullWidth>
           <DialogTitle> Print  Details </DialogTitle>
           <DialogContent>
             <Container>
-  Downloading Custom report Users
+  Downloading Custom report Spouse
               <br />
 
               {selectedData.length === 7 ? (
                 <BlobProvider
                   document={
-                    <PDFTemplateCustomUsers
+                    <PDFTemplateCustomSpouse
                       rowData={data as any}
                       headers={selectedData}
                     />
@@ -1197,7 +1053,7 @@ export default function UserFilterReportMUI() {
               ) : (
                 <BlobProvider
                   document={
-                    <PDFTemplateCustomUsers
+                    <PDFTemplateCustomSpouse
                       rowData={data as any}
                       headers={selectedData}
                     />

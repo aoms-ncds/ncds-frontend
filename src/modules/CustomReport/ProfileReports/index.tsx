@@ -35,11 +35,11 @@ const ProfileReports = () => {
         </Grid>
         <Grid item xs={12} md={4} xl={3}>
           <ButtonCard secondaryText="Spouse Details Report" color={'#fff'} icon={<img src="/mod_icons/manageWorker.jpeg" alt="Logo" style={{ width: '70px', height: '70px' }} />}
-            targetRoute="/custom-report/custom-filter-iro" />
+            targetRoute="/custom-report/spouse-details-report" />
         </Grid>
         <Grid item xs={12} md={4} xl={3}>
           <ButtonCard secondaryText="Child Details Reporter" color={'#fff'} icon={<img src="/mod_icons/manageWorker.jpeg" alt="Logo" style={{ width: '70px', height: '70px' }} />}
-            targetRoute="/custom-report/profile-reporters" />
+            targetRoute="/custom-report/child-details-report" />
         </Grid>
         {/* <Grid item xs={12} md={4} xl={3}>
           <ButtonCard secondaryText="Custom Report FR" icon={<img src="/mod_icons/manageWorker.jpeg" alt="Logo" style={{ width: '70px', height: '70px' }} />}

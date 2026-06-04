@@ -38,6 +38,28 @@ export default {
           // Transform any other date fields if needed
         })),
     ),
+  spouseDetails: (filter: any, dateRange?: any ) =>
+    getStandardResponse<any[]>(axios.post('/custom-report/spouseDetails/', { filter, dateRange }, { headers: { ...getAuthHeader() } }),
+      (data) =>
+        data.map((item: { createdAt: moment.MomentInput; updatedAt: moment.MomentInput; someDateField: moment.MomentInput }) => ({
+          ...item,
+          createdAt: moment(item.createdAt),
+          updatedAt: moment(item.updatedAt),
+          someDateField: item.someDateField ? moment(item.someDateField) : undefined,
+          // Transform any other date fields if needed
+        })),
+    ),
+  childDetails: (filter: any, dateRange?: any ) =>
+    getStandardResponse<any[]>(axios.post('/custom-report/childDetails/', { filter, dateRange }, { headers: { ...getAuthHeader() } }),
+      (data) =>
+        data.map((item: { createdAt: moment.MomentInput; updatedAt: moment.MomentInput; someDateField: moment.MomentInput }) => ({
+          ...item,
+          createdAt: moment(item.createdAt),
+          updatedAt: moment(item.updatedAt),
+          someDateField: item.someDateField ? moment(item.someDateField) : undefined,
+          // Transform any other date fields if needed
+        })),
+    ),
 
   // eslint-disable-next-line @typescript-eslint/naming-convention
 
