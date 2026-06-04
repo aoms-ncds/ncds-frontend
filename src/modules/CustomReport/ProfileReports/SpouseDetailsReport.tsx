@@ -179,23 +179,23 @@ const SECTION_ICONS = {
   'Support & Ministry': '⛪',
   'Support Structure': '💰',
   'Insurance': '🛡️',
-};
+} as any;
 
-const SectionTitle = ({ title }) => (
+const SectionTitle = ({ title }: { title: any }) => (
   <Stack direction="row" alignItems="center" spacing={1.5}>
     <Avatar sx={{ width: 30, height: 30, fontSize: 15, background: 'rgba(37,99,235,0.15)', border: '1px solid rgba(37,99,235,0.3)' }}>
-      {SECTION_ICONS[title] || '📁'}
+      {SECTION_ICONS[title as any] || '📁'}
     </Avatar>
     <Typography variant="h6" sx={{ color: 'text.primary', fontSize: '0.85rem' }}>{title}</Typography>
   </Stack>
 );
 
-const FieldLabel = ({ children }) => (
+const FieldLabel = ({ children }: { children: React.ReactNode }) => (
   <Typography variant="subtitle2" sx={{ mb: 0.8, display: 'block' }}>{children}</Typography>
 );
 
 // ── Range Slider with inputs ───────────────────────────────────────────
-const RangeSlider = ({ label, value, onChange, min = 0, max = 100, unit = '' }) => (
+const RangeSlider = ({ label, value, onChange, min = 0, max = 100, unit = '' }:any) => (
   <Box>
     <FieldLabel>{label}</FieldLabel>
     <Box sx={{ px: 1 }}>
@@ -217,7 +217,7 @@ const RangeSlider = ({ label, value, onChange, min = 0, max = 100, unit = '' }) 
 );
 
 // ── Date Range ─────────────────────────────────────────────────────────
-const DateRange = ({ label, from, to, onFrom, onTo }) => (
+const DateRange = ({ label, from, to, onFrom, onTo } :any ) => (
   <Box>
     <FieldLabel>{label}</FieldLabel>
     <Stack direction="row" spacing={1} alignItems="center">
@@ -252,10 +252,10 @@ export default function SpouseFilterReportMUI() {
     impactNo: '', nominee: '', relation: '',
   };
   const navigate = useNavigate();
-  const [filters, setFilters] = useState(init);
-  const [viewData, setViewData] = useState(false);
-  const [genders, setGenders] = useState([]);
-  const [expanded, setExpanded] = useState({ 'Basic Details': true, 'User Type & Lifecycle': true });
+  const [filters, setFilters] = useState<any>(init);
+  const [viewData, setViewData] = useState<any>(false);
+  const [genders, setGenders] = useState<any>([]);
+  const [expanded, setExpanded] = useState<Record<string, boolean>>({ 'Basic Details': true, 'User Type & Lifecycle': true });
   const [dateRange, setDateRange] = useState<DateRange>({
     startDate: moment().startOf('M'),
     endDate: moment().endOf('M'),
@@ -281,14 +281,14 @@ export default function SpouseFilterReportMUI() {
 
   const [print, setPrint] = useState<boolean>(false);
 
-  const set = (key: string) => (e: { target: { value: any } }) => setFilters((f) => ({ ...f, [key]: e?.target ? e.target.value : e }));
-  const setSlider = (key) => (value) => {
-    setFilters((prev) => ({
+  const set = (key: any) => (e: { target: { value: any } }) => setFilters((f:any) => ({ ...f, [key]: e?.target ? e.target.value : e }));
+  const setSlider = (key:any) => (value : any) => {
+    setFilters((prev:any) => ({
       ...prev,
       [key]: value,
     }));
-  }; const setToggle = (key: string) => (e: { target: { checked: any } }) => setFilters((f) => ({ ...f, [key]: e.target.checked }));
-  const toggle = (panel: string) => setExpanded((e) => ({ ...e, [panel]: !e[panel] }));
+  }; const setToggle = (key: string) => (e: { target: { checked: any } }) => setFilters((f:any) => ({ ...f, [key]: e.target.checked }));
+  const toggle = (panel: string) => setExpanded((e:any) => ({ ...e, [panel]: !e[panel] }));
   console.log(filters, 'filters');
   useEffect(()=>{
     GenderService.getAll()
@@ -325,16 +325,20 @@ export default function SpouseFilterReportMUI() {
 
   const removeChip = (key: string) => {
     const def = init[key as keyof typeof init];
-    setFilters((f) => ({ ...f, [key]: def }));
+    setFilters((f:any) => ({ ...f, [key]: def }));
   };
 
-  const SelectField = ({ label, id, options, value, onChange }) => (
+  const SelectField = ({ label, id, options, value, onChange }: any) => (
     <FormControl fullWidth size="small">
       <InputLabel id={id + '-label'}>{label}</InputLabel>
       <Select labelId={id + '-label'} id={id} value={value} label={label} onChange={onChange}
         sx={{ 'background': 'rgba(255,255,255,0.03)', '& .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255,255,255,0.1)' } }}>
         <MenuItem value=""><em>Any</em></MenuItem>
-        {options.map((o: boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | Key | null | undefined) => <MenuItem key={o} value={o}>{o}</MenuItem>)}
+        {options?.map((o: any, i: number) => (
+          <MenuItem key={i} value={o}>
+            {typeof o === 'boolean' || typeof o === 'number' ? String(o) : (o as React.ReactNode)}
+          </MenuItem>
+        ))}
       </Select>
     </FormControl>
   );
@@ -521,7 +525,7 @@ export default function SpouseFilterReportMUI() {
                       label="Title"
                       name="title"
                       value={filters.title}
-                      onChange={(e) => set('title')(e.target.value)}
+                      onChange={(e) => set('title')(e.target.value as string)}
                     >
                       <MenuItem value="Mr">Mr</MenuItem>
                       <MenuItem value="Mrs">Mrs</MenuItem>
@@ -546,7 +550,7 @@ export default function SpouseFilterReportMUI() {
                         onChange={(e) => set('gender')(e.target.value)}
                       >
                         <MenuItem value="">All</MenuItem>
-                        {genders?.map((d) => (
+                        {genders?.map((d:any) => (
                           <MenuItem key={d.id} value={d}>
                             {d.gender}
                           </MenuItem>
@@ -651,7 +655,6 @@ export default function SpouseFilterReportMUI() {
               </AccordionDetails>
             </Accordion>
 
-          
 
             {/* ════ SECTION 9: Insurance ════ */}
             <Accordion expanded={!!expanded['Insurance']} onChange={() => toggle('Insurance')}>
@@ -1020,7 +1023,7 @@ export default function SpouseFilterReportMUI() {
 
           </Grid>
         </Card>
-  <Dialog open={print} onClose={() => setPrint(false)} maxWidth="xs" fullWidth>
+        <Dialog open={print} onClose={() => setPrint(false)} maxWidth="xs" fullWidth>
           <DialogTitle> Print  Details </DialogTitle>
           <DialogContent>
             <Container>
