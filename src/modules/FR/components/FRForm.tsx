@@ -192,7 +192,7 @@ const FRForm = (props: FormComponentProps<any>) => {
     }
   }, [props.value.purpose]);
   useEffect(() => {
-    if (props.value.purpose === 'Worker') {
+    if ((props.value.purpose === 'Worker') || (props.value.purpose === 'Division') || (props.value.purpose === 'Subdivision')) {
       WorkersServices.getWorkersByDivision()
         .then((res) => {
           setWorkers(res.data);
@@ -207,7 +207,8 @@ const FRForm = (props: FormComponentProps<any>) => {
         .catch((res) => {
           console.log(res);
         });
-    } else if (props.value.purpose === 'Subdivision' && !isCoordinator) {
+    }
+    if (props.value.purpose === 'Subdivision' && !isCoordinator) {
       WorkersServices.getSubDivisionsByDivisionId()
         .then((res) => {
           setSubDivisions(res.data);
@@ -229,18 +230,17 @@ const FRForm = (props: FormComponentProps<any>) => {
         .catch((res) => {
           console.log(res);
         });
-    } else if (props.value.purpose === 'Division' && !isCoordinator) {
-      if (isCoordinator) {
-        DivisionsServices.getDivisions()
-          .then((res) => {
-            setAllDivisions(res.data);
-          })
-          .catch((res) => {
-            console.log(res);
-          });
-      }
     }
-  }, [props.value.purpose]);
+    if (props.value.purpose === 'Division' && isCoordinator) {
+      DivisionsServices.getDivisions()
+        .then((res) => {
+          setAllDivisions(res.data);
+        })
+        .catch((res) => {
+          console.log(res);
+        });
+    }
+  }, [props.value.purpose, isCoordinator]);
   useEffect(()=>{
     if (props.value.purpose === 'Coordinator') {
       DivisionsServices.isCoordinator()
@@ -1839,24 +1839,7 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
                 {/* )} */}
                 &nbsp;
                 <div style={{ float: 'right' }}>
-                  {props.action === 'edit' ?
-                    <Button
-                      variant="contained"
-                      color="info"
-                      onClick={() => {
-                        toggleOpenRemarks(true);
-                        FRServices.getAllRemarksById(props.value._id ?? '')
-                          .then((res) => setRemarks(res.data ?? []))
-                          .catch((error) => {
-                            enqueueSnackbar({
-                              variant: 'error',
-                              message: error.message,
-                            });
-                          });
-                      }}
-                    >
-                      Remark
-                    </Button> : null}
+
                   &nbsp;
                   {props.action === 'custom' &&hasPermissions(['ADMIN_ACCESS'])&&(
 
@@ -1865,7 +1848,7 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
                             Log
                     </Button>
                   )}
-                  &nbsp;
+
 
                   {(
                     props.action === 'add' ||
@@ -1903,6 +1886,24 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
                             </Button>
                           }
                         />
+                        {props.action === 'edit' ?
+                          <Button
+                            variant="contained"
+                            color="info"
+                            onClick={() => {
+                              toggleOpenRemarks(true);
+                              FRServices.getAllRemarksById(props.value._id ?? '')
+                          .then((res) => setRemarks(res.data ?? []))
+                          .catch((error) => {
+                            enqueueSnackbar({
+                              variant: 'error',
+                              message: error.message,
+                            });
+                          });
+                            }}
+                          >
+                      Remark
+                          </Button> : null}
 
                         {FRLifeCycleStates.REOPENED !== props.value.status &&
       props.action !== 'custom' &&

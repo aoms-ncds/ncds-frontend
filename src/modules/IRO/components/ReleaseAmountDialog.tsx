@@ -93,6 +93,44 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
   saveReleaseAmount = (e: { preventDefault: () => void }) => {// TODO: on release datagrid should updated
     e.preventDefault();
 
+    const amount = Number(transferInput);
+
+    // ✅ Pre-fill ALL rows with their current displayed value before updating
+    const allRowAmounts = releaseAmount?.IRO?.reduce((acc: any, row: any) => {
+      if (acc[row._id] === undefined) {
+        acc[row._id] =
+              transferredAmounts?.[row._id] ??
+              row?.sanctionedAmount ??
+              row?.particulars?.reduce(
+                (sum: any, item: any) => sum + (item.sanctionedAmount || 0), 0,
+              ) ?? 0;
+      }
+      return acc;
+    }, { ...transferredAmounts });
+
+    const updatedAmounts = {
+      ...allRowAmounts,
+      [selectedRow?._id]: amount,
+    };
+
+    // update row values
+    setTransferredAmounts(updatedAmounts);
+
+    // calculate total
+    const total = Object.values(updatedAmounts)
+          .reduce((sum: any, val: any) => sum + Number(val || 0), 0);
+
+    // update release form in ONE call
+    setReleaseAmount((prev: any) => ({
+      ...prev,
+      transferredAmount: total,
+      transferredAmountEach: updatedAmounts,
+      hasTransferred: true, // ✅ flag
+    }));
+
+    // setOpenTransferDialog(false);
+
+
     rowData&& DivisionsServices.editDivision(rowData?._id as any, rowData).then((res)=>{
       setOpenAdjustedAmt(false);
     });
@@ -113,6 +151,7 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
       closeSnackbar(approvalSnack);
     }, 500);
   };
+
 
   const originalAdjustedAmount =
   (rowData as any)?.details.adjustedAmount || 0;
@@ -479,7 +518,7 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  label="Release Amount"
+                  label="Total Amount Sanctioned"
                   type="tel"
                   value={
                     releaseAmount?.releaseAmount != null ?
@@ -1115,8 +1154,6 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
             <TextField
               fullWidth
               type="number"
-              disabled={props.action !== 'add'}
-
               value={transferInput}
               onChange={(e) => setTransferInput(e.target.value)}
             />
@@ -1125,7 +1162,7 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
           <DialogActions>
 
             <Button onClick={() => setOpenTransferDialog(false)}>
-      Cancel
+                    Cancel
             </Button>
 
             <Button
@@ -1133,8 +1170,21 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
               onClick={() => {
                 const amount = Number(transferInput);
 
+                // ✅ Pre-fill ALL rows with their current displayed value before updating
+                const allRowAmounts = releaseAmount?.IRO?.reduce((acc: any, row: any) => {
+                  if (acc[row._id] === undefined) {
+                    acc[row._id] =
+              transferredAmounts?.[row._id] ??
+              row?.sanctionedAmount ??
+              row?.particulars?.reduce(
+                (sum: any, item: any) => sum + (item.sanctionedAmount || 0), 0,
+              ) ?? 0;
+                  }
+                  return acc;
+                }, { ...transferredAmounts });
+
                 const updatedAmounts = {
-                  ...transferredAmounts,
+                  ...allRowAmounts,
                   [selectedRow._id]: amount,
                 };
 
@@ -1143,7 +1193,7 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
 
                 // calculate total
                 const total = Object.values(updatedAmounts)
-    .reduce((sum: any, val: any) => sum + Number(val || 0), 0);
+          .reduce((sum: any, val: any) => sum + Number(val || 0), 0);
 
                 // update release form in ONE call
                 setReleaseAmount((prev: any) => ({
@@ -1156,7 +1206,7 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
                 setOpenTransferDialog(false);
               }}
             >
-Save
+              Save
             </Button>
 
           </DialogActions>

@@ -9,9 +9,10 @@ import {
   Close as CloseIcon,
   Message as MessageIcon,
   Delete as DeleteIcon,
+  WarningOutlined,
 } from '@mui/icons-material';
 // eslint-disable-next-line max-len
-import { Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Grid, Box, Container, Typography, FormControl, FormControlLabel, Radio, RadioGroup, Divider, ListItemIcon, ListItemText, Menu, MenuItem, ToggleButton, ToggleButtonGroup, SelectChangeEvent, Checkbox, InputLabel, ListSubheader, Select } from '@mui/material';
+import { Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Grid, Box, Container, Typography, FormControl, FormControlLabel, Radio, RadioGroup, Divider, ListItemIcon, ListItemText, Menu, MenuItem, ToggleButton, ToggleButtonGroup, SelectChangeEvent, Checkbox, InputLabel, ListSubheader, Select, Alert, AlertTitle } from '@mui/material';
 // eslint-disable-next-line no-duplicate-imports
 import { Send as SendIcon, Edit as EditIcon, Preview as PreviewIcon, Print as PrintIcon, Download as DownloadIcon } from '@mui/icons-material';
 import { DataGrid, GridCellParams, GridColDef } from '@mui/x-data-grid';
@@ -28,7 +29,7 @@ import EditNoteIcon from '@mui/icons-material/EditNote';
 import IROLifeCycleStates from './extras/IROLifeCycleStates';
 import { useAuth } from '../../hooks/Authentication';
 import * as XLSX from 'xlsx';
-import { BlobProvider, PDFDownloadLink } from '@react-pdf/renderer';
+import { BlobProvider, pdf, PDFDownloadLink } from '@react-pdf/renderer';
 import Lottie from 'react-lottie';
 import Animations from '../../Animations';
 import IROTemplate from './components/IROTemplate';
@@ -60,6 +61,7 @@ const ReconciliationIRO = () => {
   const [newTest, setNewTest] = useState<IROrder[]>([]);
   const [sendNotification, toggleSendNotification] = useState<boolean>(false);
   const [data, setData] = useState<any | null>(null);
+  const [dataPast, setDataPast] = useState<any | null>(null);
   const [openPrintFr, setOpenPrintFr] = useState(false);
   const [messages, setMessages] = useState<number | null>(0);
   const [statusFilter, setStatusFilter] = useState([IROLifeCycleStates.AMOUNT_RELEASED, IROLifeCycleStates.RECONCILIATION_DONE]); // default WFA: Waiting for access or Reverted
@@ -77,6 +79,7 @@ const ReconciliationIRO = () => {
     transactionId: '',
   });
   const [conform, setConform] = useState<boolean>(false);
+  const [showWrng, setShowWrng] = useState<boolean>(true);
   const [conform1, setConform1] = useState<boolean>(false);
   const [attachment, setAttachment] = useState<boolean>(false);
   const [selectedIRO, setSelectedIRO] = useState<IROrder>({
@@ -165,6 +168,10 @@ const ReconciliationIRO = () => {
       setDivisions(names);
     });
   }, []);
+
+  setTimeout(()=>{
+    setShowWrng(false);
+  }, 5000);
   const filteredDivisions = divisions.filter((name) =>
     name
       .toLowerCase()
@@ -332,6 +339,71 @@ const ReconciliationIRO = () => {
       setLoading(false);
     }
   };
+
+  // const generateIROPdfBlob = async () => {
+  //   if (!iroData || !mngrName || !selectedSignature || !FrData) return null;
+
+  //   try {
+  //     const instance = pdf(
+  //       <IROTemplate
+  //         rowData={iroData}
+  //         mngrName={mngrName}
+  //         officeMngrSign={selectedSignature}
+  //         fr={FrData as FR}
+  //         president={signaturePresident}
+  //       />,
+  //     );
+
+  //     const blob = await instance.toBlob();
+  //     return blob;
+  //   } catch (error) {
+  //     console.error('PDF generation failed:', error);
+  //     return null;
+  //   }
+  // };
+  // const attachMain = async () => {
+  //   try {
+  //     if (!iroData) return;
+
+  //     setLoading(true);
+
+  //     const blob = await generateIROPdfBlob();
+  //     if (!blob) return;
+
+  //     const fileBlob = new File(
+  //       [blob],
+  //       `${iroData?.IROno}_Receipt.pdf`,
+  //       { type: 'application/pdf' },
+  //     );
+
+  //     const file = await FileUploaderServices.uploadFile(
+  //       fileBlob,
+  //       undefined,
+  //       'FR',
+  //       fileBlob.name,
+  //     );
+
+  //     if (file.success) {
+  //       const res = await IROServices.releaseAmount(releaseAmount.IRO?? [], releaseAmount);
+
+  //       const filterIRO = reconciliationIRO?.filter(
+  //         (item) => item._id !== res.data.iro._id,
+  //       );
+
+  //       setReconcilationIRO(filterIRO);
+  //       setIroData(null);
+  //       setConform1(false);
+
+  //       enqueueSnackbar({ message: 'File Attached', variant: 'success' });
+  //       enqueueSnackbar({ message: 'IRO updated', variant: 'success' });
+  //     }
+  //   } catch (error) {
+  //     console.error('Error attaching files:', error);
+  //     enqueueSnackbar({ message: 'Error attaching files', variant: 'error' });
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
   const handleSearchChange = (event: { target: { value: SetStateAction<string> } }) => {
     setSearchText(event.target.value);
   };
@@ -347,6 +419,8 @@ const ReconciliationIRO = () => {
     // Check all searchable fields
     const searchMatch =
     (row.IROno && row.IROno.toLowerCase().includes(searchLower)) ||
+    (row.releaseAmount?.releaseAmount && row.releaseAmount?.releaseAmount.toString().toLowerCase().includes(searchLower)) ||
+    (row.releaseAmount?.transferredAmount && row.releaseAmount?.transferredAmount.toString().toLowerCase().includes(searchLower)) ||
     (row.IRODate && row.IRODate.format('DD/MM/YYYY').toLowerCase().includes(searchLower)) ||
     (row.division?.details.name && row.division?.details.name.toLowerCase().includes(searchLower)) ||
     (row.purposeSubdivision?.name && row.purposeSubdivision.name.toLowerCase().includes(searchLower)) ||
@@ -500,7 +574,7 @@ const ReconciliationIRO = () => {
       align: 'center',
       headerAlign: 'center',
 
-     renderCell: (props) => (
+      renderCell: (props) => (
         <DropdownButton
           useIconButton={true}
           id="Reconciliation action"
@@ -558,6 +632,23 @@ const ReconciliationIRO = () => {
             },
             {
               id: 'print',
+              text: 'Past- Print IRO',
+              icon: PrintIcon,
+              onClick: () => {
+                IROServices.getByIdOptimized(props.row._id).then((res)=>{
+                  console.log(res.data[0], '090');
+
+                  setDataPast(res.data[0]);
+                });
+                // setData(props.row);
+                setOpenPrintFr(true);
+                setTimeout(() => {
+                  setOpenPrintFr(false);
+                }, 2000);
+              },
+            },
+            {
+              id: 'print',
               text: 'Print FR',
               icon: PrintIcon,
               onClick: () => {
@@ -585,43 +676,42 @@ const ReconciliationIRO = () => {
                   id: 'print',
                   text: 'Print FR HQ DELHI',
                   icon: PrintIcon,
-                onClick: async () => {
-  try {
-    const [rowRes, delhiRes] = await Promise.all([
-      IROServices.getByIdOptimized(props.row._id),
-      DivisionsServices.getDivisionById('658270549efadc163550a28c'),
-    ]);
+                  onClick: async () => {
+                    try {
+                      const [rowRes, delhiRes] = await Promise.all([
+                        IROServices.getByIdOptimized(props.row._id),
+                        DivisionsServices.getDivisionById('658270549efadc163550a28c'),
+                      ]);
 
-    const rowData = rowRes.data?.[0];       // expecting array
-    const delhiHQ = delhiRes.data;
+                      const rowData = rowRes.data?.[0]; // expecting array
+                      const delhiHQ = delhiRes.data;
 
-    if (rowData?.division?.details as any) {
-      setData5({
-           ...props.row,
-        division: {
-           ...rowData?.division as any,
-          details: {
-             ...rowData?.division?.details,
-            seniorLeader: delhiHQ?.details?.seniorLeader,
-            juniorLeader: delhiHQ?.details?.juniorLeader,
-          },
-        },
-      });
-    }
+                      if (rowData?.division?.details as any) {
+                        setData5({
+                          ...props.row,
+                          division: {
+                            ...rowData?.division as any,
+                            details: {
+                              ...rowData?.division?.details,
+                              seniorLeader: delhiHQ?.details?.seniorLeader,
+                              juniorLeader: delhiHQ?.details?.juniorLeader,
+                            },
+                          },
+                        });
+                      }
 
-    setOpenPrintFr(true);
+                      setOpenPrintFr(true);
 
-    const timer = setTimeout(() => {
-      setOpenPrintFr(false);
-    }, 2000);
+                      const timer = setTimeout(() => {
+                        setOpenPrintFr(false);
+                      }, 2000);
 
-    return undefined;
-
-  } catch (error) {
-    console.error('Failed to load IRO / Division data', error);
-    return undefined;
-  }
-}
+                      return undefined;
+                    } catch (error) {
+                      console.error('Failed to load IRO / Division data', error);
+                      return undefined;
+                    }
+                  },
 
                 },
               ] :
@@ -976,30 +1066,44 @@ const ReconciliationIRO = () => {
         return 0; // or return a suitable default value
       }, renderHeader: () => (<b>Sanctioned Amount</b>), align: 'center', headerAlign: 'center' },
     {
-      field: 'Transferred',
+      field: 'tanfered',
       headerName: 'Transferred Amount',
       width: 180,
-      renderHeader: () => <b>Transferred Amount</b>,
 
-      valueGetter: (params: any) => {
-        if (params.row.sanctionedAmount !== undefined) {
-          return formatAmount(Number(params.row.sanctionedAmount));
+      renderCell: (params) => {
+        let value = 0;
+        console.log(params.row, 'opo');
+        const transferredAmountEach= params.row.releaseAmount?.transferredAmountEach;
+        // ✅ params.row._id is the key in parent's transferredAmountEach
+        const amountFromMap = (transferredAmountEach as any)?.[params.row._id];
+
+        if (amountFromMap !== undefined) {
+          value = amountFromMap;
         }
-
-        if (Array.isArray(params.row.particulars)) {
-          const total = params.row.particulars.reduce(
-            (sum: number, item: any) =>
-              sum + (Number(item.sanctionedAmount) || 0),
+        // check locally edited value for this row
+        // otherwise show sanctioned amount
+        else if (params.row?.sanctionedAmount) {
+          value = params.row.sanctionedAmount;
+        }
+        // otherwise calculate from particulars
+        else if (Array.isArray(params.row?.particulars)) {
+          value = params.row.particulars.reduce(
+            (sum, item) => sum + (item.sanctionedAmount || 0),
             0,
           );
-
-          return formatAmount(total);
         }
 
-        return formatAmount(0);
+        return (
+          <span
+            
+          >
+            {Number(value).toFixed(2)}
+          </span>
+        );
       },
-      align: 'center' as const,
-      headerAlign: 'center' as const,
+
+      align: 'center',
+      headerAlign: 'center',
     },
 
     {
@@ -1008,9 +1112,18 @@ const ReconciliationIRO = () => {
       width: 180,
       renderHeader: () => <b>Total Transferred Amount</b>,
       valueGetter: (params: any) => {
-        return formatAmount(
-          Number(params.row.releaseAmount?.transferredAmount) || 0,
-        );
+        if (params.row.releaseAmount?.transferredAmount !== 0) {
+          return formatAmount(params.row.releaseAmount?.transferredAmount as number);
+        } else {
+          if (Array.isArray(params.row.particulars)) {
+            return formatAmount(
+              params.row.particulars.reduce(
+                (sum:any, item:any) => sum + (Number(item.sanctionedAmount) || 0),
+                0,
+              ).toFixed(2));
+          }
+          return 0; // or return a suitable default value
+        }
       },
       align: 'center' as const,
       headerAlign: 'center' as const,
@@ -1058,6 +1171,36 @@ const ReconciliationIRO = () => {
       }
 
     } >
+      {showWrng && (
+
+        <Grid item xs={8} md="auto">
+          <Box sx={{ maxWidth: 800, margin: '0 auto', padding: 1 }}>
+            <Alert
+              icon={<WarningOutlined />}
+              severity="warning"
+              sx={{
+                'backgroundColor': '#fffbea',
+                'color': '#663c00',
+                'border': '1px solid #ffd666',
+                'borderRadius': 1,
+                '& .MuiAlert-icon': {
+                  color: '#faad14',
+                },
+              }}
+            >
+              <AlertTitle sx={{ fontWeight: 500, marginBottom: 1 }}>
+          Warning
+              </AlertTitle>
+              <Typography variant="body2" sx={{ lineHeight: 1 }}>
+          To obtain the latest details (such as Manager and Coordinator names) from the Reconciliation page,
+          users must take the printout on the same day of approval or before any designation changes occur.
+          Otherwise, the printout should be taken from the Closed IRO.
+              </Typography>
+            </Alert>
+          </Box>
+
+        </Grid>
+      )}
       <Card sx={{ maxWidth: '78vw', height: '100vh', alignItems: 'center' }}>
         <Grid container spacing={2} padding={2}>
           <Grid item xs={12}>
@@ -1250,7 +1393,7 @@ const ReconciliationIRO = () => {
                 </Grid>
 
                 {/* ================= INFO BOX (UNCHANGED) ================= */}
-                <Grid item xs={12} md="auto">
+                <Grid item xs={4} md="auto">
                   <Box
                     sx={{
                       display: 'flex',
@@ -1295,7 +1438,9 @@ const ReconciliationIRO = () => {
         Reset
                     </Button>
                   </Box>
+
                 </Grid>
+
               </Grid>
             </Grid>
 
@@ -1701,6 +1846,55 @@ const ReconciliationIRO = () => {
           <Button
             onClick={() => {
               setData(null);
+            }}
+            variant="text"
+          >
+                  Cancel
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog open={Boolean(dataPast)} onClose={() => setDataPast(null)} maxWidth="xs" fullWidth>
+        <DialogTitle> Print IRO</DialogTitle>
+        <DialogContent>
+
+          <Container>
+  Downloading the IROReceipt for {dataPast?.IRONo}
+            <br />
+
+            {dataPast && (
+              <BlobProvider
+                document={
+                  <IROTemplate
+                    rowData={dataPast as IROrder}
+                    fr={dataPast.FR}
+                    prev={true}
+                    current={true}
+                    president={signaturePresident}
+                    officeMngrSign={selectedSignature}
+                  />
+                }
+              >
+                {({ loading, url }) =>
+                  loading || openPrintFr ? (
+                    <span style={{ color: 'blue' }}>....</span>
+                  ) : (
+                    <a
+                      href={url ?? ''}
+                      download="IROReceipt.pdf"
+                      style={{ color: 'blue' }}
+                    >
+            IROReceipt.pdf
+                    </a>
+                  )
+                }
+              </BlobProvider>
+            )}
+          </Container>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              setDataPast(null);
             }}
             variant="text"
           >

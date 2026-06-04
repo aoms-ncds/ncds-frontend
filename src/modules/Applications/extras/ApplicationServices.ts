@@ -15,6 +15,7 @@ export default {
   //   ),
   getCount: (conditions?: { status?: number|number[] }) => getStandardResponse<number>(axios.get('/application/count', { params: conditions, headers: { ...getAuthHeader() } })),
   countWelfare: (conditions?: { status?: number|number[] }) => getStandardResponse<number>(axios.get('/application/countWelfare', { params: conditions, headers: { ...getAuthHeader() } })),
+  countWelfareDiv: (conditions?: { status?: number|number[] }) => getStandardResponse<number>(axios.get('/application/countWelfareDiv', { params: conditions, headers: { ...getAuthHeader() } })),
   getCountByDiv: (conditions?: { status?: number|number[] }) => getStandardResponse<number>(axios.get('/application/countBydiv', { params: conditions, headers: { ...getAuthHeader() } })),
   getAll: (conditions?: {dateRange?:any; status?: number| number[]; statusFilter?: number[]}) => getStandardResponse<Application[]>(axios.get('/application',
     { params: conditions, headers: { ...getAuthHeader() } })),

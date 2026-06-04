@@ -18,6 +18,7 @@ const APPDashboard = () => {
   const [ApplicationRejectedCount, setApplicationRejectedCount] = useState<number | null>(null);
   const [applications, setApplications] = useState<number|null >(null);
   const [applicationsWelfare, setApplicationsWelfare] = useState<number|null >(null);
+  const [applicationsWelfareDiv, setApplicationsWelfareDiv] = useState<number|null >(null);
   const [applicationsTotal, setApplicationsTotal] = useState<number|null >(null);
   const [applicationsTotalDiv, setApplicationsTotalDiv] = useState<number|null >(null);
   const [applicationsPresident, setApplicationsPresident] = useState<number|null >(null);
@@ -112,6 +113,10 @@ const APPDashboard = () => {
       .then((res) => {
         setApplicationsWelfare(res.data);
       });
+    ApplicationServices.countWelfareDiv()
+      .then((res) => {
+        setApplicationsWelfareDiv(res.data);
+      });
   }, []);
   return (
     <CommonPageLayout title="Application Dashboard">
@@ -131,11 +136,15 @@ const APPDashboard = () => {
 
         </Grid>
         <Grid item xs={6} md={3} xl={3}>
-
-          <FRCountCard icon={<img src="/mod_icons/Applied Application.png" alt="Logo"
-            style={{ width: '50px', height: '50px' }} />} count={applicationsWelfare?.toString()}
-          secondaryText={'New Welfare Appli.'} color="#ff0000" />
-
+          {(hasPermissions(['MANAGE_APPLICATION'])) ?(
+            <FRCountCard icon={<img src="/mod_icons/Applied Application.png" alt="Logo"
+              style={{ width: '50px', height: '50px' }} />} count={applicationsWelfare?.toString()?? 0}
+            secondaryText={'New Welfare Appli.'} color="#ff0000" />
+          ):(
+            <FRCountCard icon={<img src="/mod_icons/Applied Application.png" alt="Logo"
+              style={{ width: '50px', height: '50px' }} />} count={applicationsWelfareDiv?.toString() ?? 0}
+            secondaryText={'New Welfare Appli.'} color="#ff0000" />
+          )}
 
         </Grid>
         <Grid item xs={6} md={3} xl={3}>
@@ -192,22 +201,22 @@ const APPDashboard = () => {
         <Grid item xs={6} md={3} xl={3}>
           {(hasPermissions(['MANAGE_APPLICATION'])) ?(
             <FRCountCard icon={<img src="/mod_icons/Rejected.png" alt="Logo"
-              style={{ width: '50px', height: '50px' }} />} count={applicationsRevertHr?.toString()} secondaryText={'Reverted Div.'} color={'#00ff88'} />
+              style={{ width: '50px', height: '50px' }} />} count={applicationsRevert?.toString()} secondaryText={'Reverted Div.'} color={'#00ff88'} />
 
           ):(
             <FRCountCard icon={<img src="/mod_icons/Rejected.png" alt="Logo"
-              style={{ width: '50px', height: '50px' }} />} count={applicationsRevertHrDiv?.toString()} secondaryText={'Reverted Div.'} color={'#cf00f8'} />
+              style={{ width: '50px', height: '50px' }} />} count={applicationsRevertDiv?.toString()} secondaryText={'Reverted Div.'} color={'#cf00f8'} />
 
           )}
         </Grid>
         <Grid item xs={6} md={3} xl={3}>
           {(hasPermissions(['MANAGE_APPLICATION'])) ?(
             <FRCountCard icon={<img src="/mod_icons/Rejected.png" alt="Logo"
-              style={{ width: '50px', height: '50px' }} />} count={applicationsRevert?.toString()} secondaryText={'Reverted HR'} color={'#00ff88'} />
+              style={{ width: '50px', height: '50px' }} />} count={applicationsRevertHr?.toString()} secondaryText={'Reverted HR'} color={'#00ff88'} />
 
           ):(
             <FRCountCard icon={<img src="/mod_icons/Rejected.png" alt="Logo"
-              style={{ width: '50px', height: '50px' }} />} count={applicationsRevertDiv?.toString()} secondaryText={'Reverted HR'} color={'#cf00f8'} />
+              style={{ width: '50px', height: '50px' }} />} count={applicationsRevertHrDiv?.toString()} secondaryText={'Reverted HR'} color={'#cf00f8'} />
 
           )}
         </Grid>
@@ -248,6 +257,12 @@ const APPDashboard = () => {
               granted={(
                 <Grid item xs={12} md={4} xl={3}>
                   <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '50px', height: '50px' }} />} primaryText="New Welfare Application" color='#fff' secondaryText="" targetRoute="/application/Welfare" />
+                </Grid>)} />
+            <PermissionChecks
+              permissions={['PRESIDENT_ACCESS']}
+              granted={(
+                <Grid item xs={12} md={4} xl={3}>
+                  <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '50px', height: '50px' }} />} primaryText="New Welfare Application For President" color='#fff' secondaryText="" targetRoute="/application/WelfarePr" />
                 </Grid>)} />
             <PermissionChecks
               permissions={[]}

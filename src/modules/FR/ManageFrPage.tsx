@@ -170,7 +170,7 @@ const ManageFrPage = () => {
     }
   }, [finder]); // Runs only when finder changes
 
-  console.log(selectedFR, 'statusFilter');
+  console.log(selectedFRData, 'statusFilter');
 
   const deleteFR = (id: string) => {
     console.log(id, 'log');
@@ -432,7 +432,7 @@ const ManageFrPage = () => {
                     console.log(delhiHQ, 'delhiHQ');
 
                     rowData.division?.details &&
-  setData4({
+  setData({
     ...props.row,
     division: {
       ...rowData.division,
@@ -1712,7 +1712,7 @@ const ManageFrPage = () => {
                           color: '#1976D2',
                         }}
                       >
-                        {(selectedFRData as any)?.revertedBy || 'Admin'}
+                        {`${(selectedFRData as any)?.revertedBy?.basicDetails?.firstName ?? ''} ${(selectedFRData as any)?.revertedBy?.basicDetails?.lastName ?? ''}`}
                       </Typography>
                     </Box>
 

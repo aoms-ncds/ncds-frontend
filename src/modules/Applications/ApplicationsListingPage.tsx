@@ -32,9 +32,10 @@ import formatAmount from '../Common/formatcode';
 import WorkersServices from '../Workers/extras/WorkersServices';
 import WelfareForm from './WelfareForm';
 import Section from './Section';
+import { set } from 'mongoose';
 
 
-const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' |'welfare'| 'revertHr' | 'revertDivision'| 'allRevert'}) => {
+const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' |'welfare'| 'welfarePresident' | 'revertHr' | 'revertDivision'| 'allRevert'}) => {
   const [applications, setApplications] = useState<Application[] | null>(null);
   const [action, setAction] = useState<'add' | 'edit'>('add');
   const [showApplicationFormDialog, setShowApplicationFormDialog] = useState<boolean>(false);
@@ -44,6 +45,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
   const [form2, setForm2] = useState(false);
   const [form3, setForm3] = useState(false);
   const [form4, setForm4] = useState(false);
+  const [err, setErr] = useState(false);
   const [form1Signature, setForm1Signature] = useState(false);
   const [form1Signature0, setForm1Signature0] = useState(false);
   const [form1Signature2, setForm1Signature2] = useState(false);
@@ -270,7 +272,23 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
   console.log(forms, ' forms ');
 
   const handleChange = (e: any) => {
-    setForms({ ...forms, [e.target.name]: e.target.value });
+  // e.target.name  = the input's name attribute (e.g., "email", "username")
+  // e.target.value = what the user typed
+
+    // 1. Update local `forms` state
+    setForms({
+      ...forms, // keep all existing fields
+      [e.target.name]: e.target.value, // override just the changed field
+    });
+
+    // 2. Update nested `formData` inside `applicationFormState`
+    setApplicationFormState({
+      ...applicationFormState as any, // keep all top-level fields
+      formData: {
+        ...(applicationFormState as any).formData, // keep all existing formData fields
+        [e.target.name]: e.target.value, // override just the changed field
+      },
+    });
   };
 
   // const handleChange = (e: any) => {
@@ -338,7 +356,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
     } else if (props.action == 'president') {
       ApplicationServices.getAll({ dateRange: dateRange, status: ApplicationLifeCycleStates.SENT_TO_PRESIDENT })
         .then((res) => {
-          setApplications(res.data);
+          setApplications(res.data.filter((res:any)=>res.welfare !== true));
         })
         .catch((error) => {
           enqueueSnackbar({
@@ -383,6 +401,18 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
       ApplicationServices.getAll({ dateRange: dateRange, status: [ApplicationLifeCycleStates.REVERT_TO_DIVISION]})
         .then((res) => {
           setApplications(res.data);
+        })
+        .catch((error) => {
+          enqueueSnackbar({
+            message: error.message,
+            variant: 'error',
+          });
+        });
+    } else if (props.action == 'welfarePresident') {
+      ApplicationServices.getAll({ dateRange: dateRange, status: ApplicationLifeCycleStates.SENT_TO_PRESIDENT })
+
+        .then((res) => {
+          setApplications(res.data.filter((res:any)=>res.welfare ==true));
         })
         .catch((error) => {
           enqueueSnackbar({
@@ -583,8 +613,11 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
 
               ApplicationServices.getById(params.row._id)
         .then((res) => setApplicationFormState(res.data));
-
-              setShowApplicationFormDialog(true);
+              if (params.row.welfare==true) {
+                setShowApplicationFormDialog1(true);
+              } else {
+                setShowApplicationFormDialog(true);
+              }
             }}
           />,
         Number(params.row.status) === ApplicationLifeCycleStates.REVERT_TO_HR &&
@@ -600,7 +633,11 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
               ApplicationServices.getById(params.row._id)
         .then((res) => setApplicationFormState(res.data));
 
-              setShowApplicationFormDialog(true);
+              if (params.row.welfare==true) {
+                setShowApplicationFormDialog1(true);
+              } else {
+                setShowApplicationFormDialog(true);
+              }
             }}
           />,
 
@@ -614,7 +651,11 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
             setAction('edit');
             ApplicationServices.getById(params.row._id)
               .then((res) => setApplicationFormState(res.data));
-            setShowApplicationFormDialog(true);
+            if (params.row.welfare==true) {
+              setShowApplicationFormDialog1(true);
+            } else {
+              setShowApplicationFormDialog(true);
+            }
           }}
         />,
 
@@ -1308,7 +1349,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
         </Grid> */}
         <form onSubmit={action === 'add' ? AddApplication: Number(applicationFormState.status)==ApplicationLifeCycleStates.REVERT_TO_DIVISION ||
           Number(applicationFormState.status)==ApplicationLifeCycleStates.REVERT_TO_DIVISION ? ApproveApplication: EditApplication}>
-          <DialogTitle>{action === 'add' ? 'Create New Application' : 'Edit  Application:'}</DialogTitle>
+          <DialogTitle>{action === 'add' ? 'Create New Application' : 'Edit  Application Welfare:'}</DialogTitle>
           <DialogContent>
             <Container>
               <Grid container spacing={2}>
@@ -1495,7 +1536,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                     }
                   }}
                   >
-                    Fill Form
+                    {action == 'edit' ? 'Edit' : 'Fill'} Form
                   </Button>
                 </Grid>
                 <Grid item md={6}>
@@ -1528,44 +1569,46 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
               {/* Basic */}
               <Section title="Basic Information">
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Division" name="division" onChange={handleChange} />
+                  <TextField fullWidth label="Division" name="division" value={(applicationFormState as any).formData?.division} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Scholarship Help No" name="scholarshipNo" onChange={handleChange} />
+                  <TextField fullWidth label="Scholarship Help No" name="scholarshipNo" value={(applicationFormState as any).formData?.scholarshipNo} onChange={handleChange} />
                 </Grid>
+                {err && <Typography color="error">Please fill the required fields in the Basic Information section.</Typography>}
               </Section>
 
               {/* Personal */}
               <Section title="Personal Details">
                 <Grid item xs={12}>
-                  <TextField fullWidth label="Name of Applicant" name="name" onChange={handleChange} />
+                  <TextField fullWidth label="Name of Applicant" name="name" value={(applicationFormState as any).formData?.name} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Worker Code" name="workerCode" onChange={handleChange} />
+                  <TextField fullWidth label="Worker Code" name="workerCode" value={(applicationFormState as any).formData?.workerCode} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Welfare Scheme ID" name="schemeId" onChange={handleChange} />
+                  <TextField fullWidth label="Welfare Scheme ID" name="schemeId" value={(applicationFormState as any).formData?.schemeId} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Father’s Name" name="fatherName" onChange={handleChange} />
+                  <TextField fullWidth label="Father’s Name" name="fatherName" value={(applicationFormState as any).formData?.fatherName} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField type="date" fullWidth label="Joining Date" InputLabelProps={{ shrink: true }} name="joiningDate" onChange={handleChange} />
+                  <TextField type="date" fullWidth label="Joining Date"
+                    InputLabelProps={{ shrink: true }} name="joiningDate" value={(applicationFormState as any).formData?.joiningDate} onChange={handleChange} />
                 </Grid>
 
                 {/* <Grid item xs={6}>
                   <TextField fullWidth label="Help Requesting For" name="helpFor" onChange={handleChange} />
                 </Grid> */}
                 <Grid item xs={6}>
-                  <TextField select fullWidth label="Help Requesting For" name="helpFor" onChange={handleChange}>
+                  <TextField select fullWidth label="Help Requesting For" name="helpFor" value={(applicationFormState as any).formData?.helpFor} onChange={handleChange}>
                     <MenuItem value="self">Self</MenuItem>
-                    <MenuItem value="son">Spouse</MenuItem>
-                    <MenuItem value="daughter">Son</MenuItem>
+                    <MenuItem value="spouse">Spouse</MenuItem>
+                    <MenuItem value="son">Son</MenuItem>
                     <MenuItem value="daughter">Daughter</MenuItem>
                   </TextField>
                 </Grid>
@@ -1574,86 +1617,87 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
               {/* Ministry */}
               <Section title="Ministry Details">
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Present Ministry" name="ministry" onChange={handleChange} />
+                  <TextField fullWidth label="Present Ministry" name="ministry" value={(applicationFormState as any).formData?.ministry} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Place of Ministry" name="place" onChange={handleChange} />
+                  <TextField fullWidth label="Place of Ministry" name="place" value={(applicationFormState as any).formData?.place} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Mobile No" name="mobile" onChange={handleChange} />
+                  <TextField fullWidth label="Mobile No" name="mobile" value={(applicationFormState as any).formData?.mobile} onChange={handleChange} />
                 </Grid>
               </Section>
 
               {/* Course */}
               <Section title="Course Details">
                 <Grid item xs={12}>
-                  <TextField fullWidth label="College/University Name" name="college" onChange={handleChange} />
+                  <TextField fullWidth label="College/University Name" name="college" value={(applicationFormState as any).formData?.college} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Course Name" name="course" onChange={handleChange} />
+                  <TextField fullWidth label="Course Name" name="course" value={(applicationFormState as any).formData?.course} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Course Duration" name="duration" onChange={handleChange} />
+                  <TextField fullWidth label="Course Duration" name="duration" value={(applicationFormState as any).formData?.duration} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Course Type (Full/Part/Distance)" name="courseType" onChange={handleChange} />
+                  <TextField fullWidth label="Course Type (Full/Part/Distance)" name="courseType" value={(applicationFormState as any).formData?.courseType} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField type="date" fullWidth label="Class Start Date" InputLabelProps={{ shrink: true }} name="startDate" onChange={handleChange} />
+                  <TextField type="date" fullWidth label="Class Start Date"
+                    InputLabelProps={{ shrink: true }} name="startDate" value={(applicationFormState as any).formData?.startDate} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Place" name="collegePlace" onChange={handleChange} />
+                  <TextField fullWidth label="Place" name="collegePlace" value={(applicationFormState as any).formData?.collegePlace} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="College Email ID" name="collegeEmail" onChange={handleChange} />
+                  <TextField fullWidth label="College Email ID" name="collegeEmail" value={(applicationFormState as any).formData?.collegeEmail} onChange={handleChange} />
                 </Grid>
               </Section>
 
               {/* Financial */}
               <Section title="Financial Details">
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Bills Attached" name="bills" onChange={handleChange} />
+                  <TextField fullWidth label="Bills Attached" name="bills" value={(applicationFormState as any).formData?.bills} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Total Fee (Rs)" name="totalFee" onChange={handleChange} />
+                  <TextField fullWidth label="Total Fee (Rs)" name="totalFee" value={(applicationFormState as any).formData?.totalFee} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Yearly Fee (Rs)" name="yearlyFee" onChange={handleChange} />
+                  <TextField fullWidth label="Yearly Fee (Rs)" name="yearlyFee" value={(applicationFormState as any).formData?.yearlyFee} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Hostel Fee (Rs)" name="hostelFee" onChange={handleChange} />
+                  <TextField fullWidth label="Hostel Fee (Rs)" name="hostelFee" value={(applicationFormState as any).formData?.hostelFee} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Other Expenses (Rs)" name="other" onChange={handleChange} />
+                  <TextField fullWidth label="Other Expenses (Rs)" name="other" value={(applicationFormState as any).formData?.other} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Total Expenses (Rs)" name="total" onChange={handleChange} />
+                  <TextField fullWidth label="Total Expenses (Rs)" name="total" value={(applicationFormState as any).formData?.total} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Requested Amount (Rs)" name="requested" onChange={handleChange} />
+                  <TextField fullWidth label="Requested Amount (Rs)" name="requested" value={(applicationFormState as any).formData?.requested} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField select fullWidth label="Funds Received From" name="received" onChange={handleChange}>
+                  <TextField select fullWidth label="Funds Received From" name="received" value={(applicationFormState as any).formData?.received} onChange={handleChange}>
                     <MenuItem value="self">Church</MenuItem>
                     <MenuItem value="son">Family</MenuItem>
-                    <MenuItem value="daughter">Friends</MenuItem>
-                    <MenuItem value="daughter">Ngo</MenuItem>
-                    <MenuItem value="daughter">Gvt</MenuItem>
+                    <MenuItem value="friends">Friends</MenuItem>
+                    <MenuItem value="ngo">Ngo</MenuItem>
+                    <MenuItem value="gvt">Gvt</MenuItem>
                   </TextField>
                 </Grid>
               </Section>
@@ -1661,19 +1705,19 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
               {/* Recommendations */}
               <Section title="Recommendations">
                 <Grid item xs={12}>
-                  <TextField fullWidth multiline rows={2} label="Area Supervisor Comments" name="supervisor" onChange={handleChange} />
+                  <TextField fullWidth multiline rows={2} label="Area Supervisor Comments" name="supervisor" value={(applicationFormState as any).formData?.supervisor} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Name & Signature" name="supervisorSign" onChange={handleChange} />
+                  <TextField fullWidth label="Name & Signature" name="supervisorSign" value={(applicationFormState as any).formData?.supervisorSign} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={12}>
-                  <TextField fullWidth multiline rows={2} label="Coordinator Comments" name="coordinator" onChange={handleChange} />
+                  <TextField fullWidth multiline rows={2} label="Coordinator Comments" name="coordinator" value={(applicationFormState as any).formData?.coordinator} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Signature with Date" name="signDate" onChange={handleChange} />
+                  <TextField fullWidth label="Signature with Date" name="signDate" value={(applicationFormState as any).formData?.signDate} onChange={handleChange} />
                 </Grid>
                 <Grid item md={6}>
                   <Button variant="contained" onClick={() => setForm1Signature(true)} startIcon={<AttachmentIcon />}>
@@ -1685,23 +1729,23 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
               {/* Bank */}
               <Section title="Bank Details">
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Bank Name" name="bankName" onChange={handleChange} />
+                  <TextField fullWidth label="Bank Name" name="bankName" value={(applicationFormState as any).formData?.bankName} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Account Holder Name" name="accountName" onChange={handleChange} />
+                  <TextField fullWidth label="Account Holder Name" name="accountName" value={(applicationFormState as any).formData?.accountName} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Account Number" name="accountNumber" onChange={handleChange} />
+                  <TextField fullWidth label="Account Number" name="accountNumber" value={(applicationFormState as any).formData?.accountNumber} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Branch Name & Code" name="branch" onChange={handleChange} />
+                  <TextField fullWidth label="Branch Name & Code" name="branch" value={(applicationFormState as any).formData?.branch} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="IFS Code" name="ifsc" onChange={handleChange} />
+                  <TextField fullWidth label="IFS Code" name="ifsc" value={(applicationFormState as any).formData?.ifsc} onChange={handleChange} />
                 </Grid>
               </Section>
 
@@ -1716,11 +1760,11 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                 </Grid> */}
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Name" name="declName" onChange={handleChange} />
+                  <TextField fullWidth label="Name" name="declName" value={(applicationFormState as any).formData?.declName} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField type="date" fullWidth label="Date" InputLabelProps={{ shrink: true }} name="declDate" onChange={handleChange} />
+                  <TextField type="date" fullWidth label="Date" InputLabelProps={{ shrink: true }} name="declDate" value={(applicationFormState as any).formData?.declDate} onChange={handleChange} />
                 </Grid>
                 <Grid item md={6}>
                   <Button variant="contained" onClick={() => setForm1Signature2(true)} startIcon={<AttachmentIcon />}>
@@ -1732,19 +1776,22 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
               {/* Office */}
               <Section title="Office Use Only">
                 <Grid item xs={6}>
-                  <TextField type="date" fullWidth label="Application Received On" InputLabelProps={{ shrink: true }} name="receivedDate" onChange={handleChange} />
+                  <TextField type="date" fullWidth label="Application Received On"
+                    InputLabelProps={{ shrink: true }} name="receivedDate" value={(applicationFormState as any).formData?.receivedDate} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Amount Sanctioned" name="sanctioned" onChange={handleChange} />
+                  <TextField fullWidth label="Amount Sanctioned" name="sanctioned" value={(applicationFormState as any).formData?.sanctioned} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField type="date" fullWidth label="Date of Fund Release" InputLabelProps={{ shrink: true }} name="releaseDate" onChange={handleChange} />
+                  <TextField type="date" fullWidth label="Date of Fund Release"
+                    InputLabelProps={{ shrink: true }} name="releaseDate" value={(applicationFormState as any).formData?.releaseDate} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField type="date" fullWidth label="Date Applicant Informed" InputLabelProps={{ shrink: true }} name="informedDate" onChange={handleChange} />
+                  <TextField type="date" fullWidth label="Date Applicant
+                   Informed" InputLabelProps={{ shrink: true }} name="informedDate" value={(applicationFormState as any).formData?.informedDate} onChange={handleChange} />
                 </Grid>
 
                 <Grid item md={6}>
@@ -1765,9 +1812,9 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
 
           {/* <Button onClick={() => setShowApplicationFormDialog(false)}>Cancel</Button> */}
           <Grid item md={6}>
-
             <form
               onSubmit={
+                forms.division &&
                 action === 'add' ?
                   AddApplication :
                   Number(applicationFormState.status) === ApplicationLifeCycleStates.REVERT_TO_DIVISION ||
@@ -1780,7 +1827,13 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                 type="submit"
                 variant="contained"
                 sx={{ backgroundColor: 'blue' }}
+                onClick={() => {
+                  if (!forms.division) {
+                    setErr(true);
+                  }
+                }}
               >
+
                 {action === 'add' ?
                   'Send to Hr' :
                   Number(applicationFormState.status) === ApplicationLifeCycleStates.REVERT_TO_DIVISION ||
@@ -1807,30 +1860,31 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
               {/* Basic */}
               <Section title="Basic Information">
                 <Grid item xs={12}>
-                  <TextField fullWidth label="Division" name="division" onChange={handleChange} />
+                  <TextField fullWidth label="Division" name="division" value={(applicationFormState as any).formData?.division || ''} onChange={handleChange} />
                 </Grid>
               </Section>
-
+              {err && <Typography color="error">Please fill the required fields in the Basic Information section.</Typography>}
               {/* Personal */}
               <Section title="Personal Details">
                 <Grid item xs={12}>
-                  <TextField fullWidth label="Applicant Name" name="name" onChange={handleChange} />
+                  <TextField fullWidth label="Applicant Name" name="name" value={(applicationFormState as any).formData?.name || ''} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Worker Code" name="workerCode" onChange={handleChange} />
+                  <TextField fullWidth label="Worker Code" name="workerCode" value={(applicationFormState as any).formData?.workerCode || ''} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Welfare Scheme ID" name="schemeId" onChange={handleChange} />
+                  <TextField fullWidth label="Welfare Scheme ID" name="schemeId" value={(applicationFormState as any).formData?.schemeId || ''} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField type="date" fullWidth label="Joining Date" InputLabelProps={{ shrink: true }} name="joiningDate"onChange={handleChange} />
+                  <TextField type="date" fullWidth label="Joining Date"
+                    InputLabelProps={{ shrink: true }} name="joiningDate" value={(applicationFormState as any).formData?.joiningDate || ''} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Spouse/Husband Name" name="spouse" onChange={handleChange} />
+                  <TextField fullWidth label="Spouse/Husband Name" name="spouse" value={(applicationFormState as any).formData?.spouse || ''} onChange={handleChange} />
                 </Grid>
               </Section>
 
@@ -1839,19 +1893,19 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                 {[0, 1, 2, 3].map((i) => (
                   <React.Fragment key={i}>
                     <Grid item xs={3}>
-                      <TextField fullWidth label="Name" name={`childName${i}`} onChange={handleChange} />
+                      <TextField fullWidth label="Name" name={`childName${i}`} value={(applicationFormState as any).formData?.[`childName${i}`] || ''} onChange={handleChange} />
                     </Grid>
                     <Grid item xs={2}>
-                      <TextField fullWidth label="Age" name={`childAge${i}`} onChange={handleChange} />
+                      <TextField fullWidth label="Age" name={`childAge${i}`} value={(applicationFormState as any).formData?.[`childAge${i}`] || ''} onChange={handleChange} />
                     </Grid>
                     <Grid item xs={2}>
-                      <TextField fullWidth label="Studying" name={`childStudy${i}`} onChange={handleChange} />
+                      <TextField fullWidth label="Studying" name={`childStudy${i}`} value={(applicationFormState as any).formData?.[`childStudy${i}`] || ''} onChange={handleChange} />
                     </Grid>
                     <Grid item xs={2}>
-                      <TextField fullWidth label="Married" name={`childMarried${i}`} onChange={handleChange} />
+                      <TextField fullWidth label="Married" name={`childMarried${i}`} value={(applicationFormState as any).formData?.[`childMarried${i}`] || ''} onChange={handleChange} />
                     </Grid>
                     <Grid item xs={3}>
-                      <TextField fullWidth label="Working" name={`childWork${i}`} onChange={handleChange} />
+                      <TextField fullWidth label="Working" name={`childWork${i}`} value={(applicationFormState as any).formData?.[`childWork${i}`] || ''} onChange={handleChange} />
                     </Grid>
                   </React.Fragment>
                 ))}
@@ -1860,85 +1914,87 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
               {/* Ministry */}
               <Section title="Ministry Details">
                 <Grid item xs={12}>
-                  <TextField fullWidth label="Ministry at time of death" name="ministry" onChange={handleChange} />
+                  <TextField fullWidth label="Ministry at time of death" name="ministry" value={(applicationFormState as any).formData?.ministry || ''} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={12}>
-                  <TextField fullWidth label="Place of Ministry" name="place" onChange={handleChange} />
+                  <TextField fullWidth label="Place of Ministry" name="place" value={(applicationFormState as any).formData?.place || ''} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={12}>
-                  <TextField fullWidth multiline rows={2} label="Reason for Death" name="reason" onChange={handleChange} />
+                  <TextField fullWidth multiline rows={2} label="Reason for Death" name="reason" value={(applicationFormState as any).formData?.reason || ''} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField type="date" fullWidth label="Date of Death" InputLabelProps={{ shrink: true }} name="deathDate" onChange={handleChange} />
+                  <TextField type="date" fullWidth label="Date of Death"
+                    InputLabelProps={{ shrink: true }} name="deathDate" value={(applicationFormState as any).formData?.deathDate || ''} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Place of Death (Hospital/Home)" name="deathPlace" onChange={handleChange} />
+                  <TextField fullWidth label="Place of Death (Hospital/Home)" name="deathPlace" value={(applicationFormState as any).formData?.deathPlace || ''} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={12}>
-                  <TextField fullWidth label="Doctor Name" name="doctor" onChange={handleChange} />
+                  <TextField fullWidth label="Doctor Name" name="doctor" value={(applicationFormState as any).formData?.doctor || ''} onChange={handleChange} />
                 </Grid>
               </Section>
 
               {/* Family */}
               <Section title="Family Details">
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Spouse Qualification" name="qualification" onChange={handleChange} />
+                  <TextField fullWidth label="Spouse Qualification" name="qualification" value={(applicationFormState as any).formData?.qualification || ''} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Income Details (Rs)" name="income" onChange={handleChange} />
+                  <TextField fullWidth label="Income Details (Rs)" name="income" value={(applicationFormState as any).formData?.income || ''} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Requested Amount (Rs)" name="requested" onChange={handleChange} />
+                  <TextField fullWidth label="Requested Amount (Rs)" name="requested" value={(applicationFormState as any).formData?.requested || ''} onChange={handleChange} />
                 </Grid>
 
                 {/* Living */}
                 <Grid item xs={12}>
                   <Typography>Living Arrangement</Typography>
-                  <FormControlLabel control={<Checkbox onChange={handleCheckbox} name="rented" />} label="Rented House" />
-                  <FormControlLabel control={<Checkbox onChange={handleCheckbox} name="own" />} label="Own House" />
-                  <FormControlLabel control={<Checkbox onChange={handleCheckbox} name="withChildren" />} label="With Children" />
+                  <FormControlLabel control={<Checkbox onChange={handleCheckbox} name="rented" checked={(applicationFormState as any).formData?.rented || false} />} label="Rented House" />
+                  <FormControlLabel control={<Checkbox onChange={handleCheckbox} name="own" checked={(applicationFormState as any).formData?.own || false} />} label="Own House" />
+                  <FormControlLabel control={<Checkbox onChange={handleCheckbox}
+                    name="withChildren" checked={(applicationFormState as any).formData?.withChildren || false} />} label="With Children" />
                 </Grid>
 
                 <Grid item xs={12}>
-                  <TextField fullWidth label="Other (Specify)" name="otherLiving" onChange={handleChange} />
+                  <TextField fullWidth label="Other (Specify)" name="otherLiving" value={(applicationFormState as any).formData?.otherLiving || ''} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Documents Attached" name="documents" onChange={handleChange} />
+                  <TextField fullWidth label="Documents Attached" name="documents" value={(applicationFormState as any).formData?.documents || ''} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Death Certificate" name="deathCertificate" onChange={handleChange} />
+                  <TextField fullWidth label="Death Certificate" name="deathCertificate" value={(applicationFormState as any).formData?.deathCertificate || ''} onChange={handleChange} />
                 </Grid>
               </Section>
 
               {/* Recommendations */}
               <Section title="Recommendations">
                 <Grid item xs={12}>
-                  <TextField fullWidth multiline rows={2} label="Supervisor Comments" name="supervisor" onChange={handleChange} />
+                  <TextField fullWidth multiline rows={2} label="Supervisor Comments" name="supervisor" value={(applicationFormState as any).formData?.supervisor || ''} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Supervisor Name & Signature" name="supervisorSign" onChange={handleChange} />
+                  <TextField fullWidth label="Supervisor Name & Signature" name="supervisorSign" value={(applicationFormState as any).formData?.supervisorSign || ''} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={12}>
-                  <TextField fullWidth multiline rows={2} label="Coordinator Comments" name="coordinator" onChange={handleChange} />
+                  <TextField fullWidth multiline rows={2} label="Coordinator Comments" name="coordinator" value={(applicationFormState as any).formData?.coordinator || ''} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Recommended Amount" name="recommend" onChange={handleChange} />
+                  <TextField fullWidth label="Recommended Amount" name="recommend" value={(applicationFormState as any).formData?.recommend || ''} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Signature with Date" name="signDate" onChange={handleChange} />
+                  <TextField fullWidth label="Signature with Date" name="signDate" value={(applicationFormState as any).formData?.signDate || ''} onChange={handleChange} />
                 </Grid>
                 <Grid item md={6}>
                   <Button variant="contained" onClick={() => setForm1Signature(true)} startIcon={<AttachmentIcon />}>
@@ -1950,19 +2006,22 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
               {/* Office */}
               <Section title="Office Use Only">
                 <Grid item xs={6}>
-                  <TextField type="date" fullWidth label="Application Received On" InputLabelProps={{ shrink: true }} name="receivedDate" onChange={handleChange} />
+                  <TextField type="date" fullWidth
+                    label="Application Received On" InputLabelProps={{ shrink: true }} name="receivedDate" value={(applicationFormState as any).formData?.receivedDate || ''} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Amount Sanctioned" name="sanctioned" onChange={handleChange} />
+                  <TextField fullWidth label="Amount Sanctioned" name="sanctioned" value={(applicationFormState as any).formData?.sanctioned || ''} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField type="date" fullWidth label="Fund Release Date" InputLabelProps={{ shrink: true }} name="releaseDate" onChange={handleChange} />
+                  <TextField type="date" fullWidth label="Fund Release Date" InputLabelProps={{ shrink: true }}
+                    name="releaseDate" value={(applicationFormState as any).formData?.releaseDate || ''} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField type="date" fullWidth label="Applicant Informed Date" InputLabelProps={{ shrink: true }} name="informedDate" onChange={handleChange} />
+                  <TextField type="date" fullWidth label="Applicant Informed Date" InputLabelProps={{ shrink: true }}
+                    name="informedDate" value={(applicationFormState as any).formData?.informedDate || ''} onChange={handleChange} />
                 </Grid>
 
 
@@ -1992,6 +2051,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
 
             <form
               onSubmit={
+                forms.division &&
                 action === 'add' ?
                   AddApplication :
                   Number(applicationFormState.status) === ApplicationLifeCycleStates.REVERT_TO_DIVISION ||
@@ -2004,6 +2064,11 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                 type="submit"
                 variant="contained"
                 sx={{ backgroundColor: 'blue' }}
+                onClick={() => {
+                  if (!forms.division) {
+                    setErr(true);
+                  }
+                }}
               >
                 {action === 'add' ?
                   'Send to Hr' :
@@ -2031,121 +2096,125 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
               {/* Basic */}
               <Section title="Basic Information">
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Division" name="division" onChange={handleChange} />
+                  <TextField fullWidth label="Division" name="division" value={(applicationFormState as any).formData?.division || ''} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Marriage Aid No" name="aidNo" onChange={handleChange} />
+                  <TextField fullWidth label="Marriage Aid No" name="aidNo" value={(applicationFormState as any).formData?.aidNo || ''} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField select fullWidth label="For" name="forWhom" onChange={handleChange}>
-                    <MenuItem value="self">Self</MenuItem>
-                    <MenuItem value="son">Son</MenuItem>
-                    <MenuItem value="daughter">Daughter</MenuItem>
+                  <TextField select fullWidth label="For" name="forWhom" value={(applicationFormState as any).formData?.forWhom || ''} onChange={handleChange}>
+                    <MenuItem value="self" >Self</MenuItem>
+                    <MenuItem value="son" >Son</MenuItem>
+                    <MenuItem value="daughter" >Daughter</MenuItem>
                   </TextField>
                 </Grid>
+                {err && <Typography color="error">Please fill the required fields in the Basic Information section.</Typography>}
+
               </Section>
 
               {/* Personal */}
               <Section title="Personal Details">
                 <Grid item xs={12}>
-                  <TextField fullWidth label="Applicant Name" name="name" onChange={handleChange} />
+                  <TextField fullWidth label="Applicant Name" name="name" value={(applicationFormState as any).formData?.name || ''} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Worker Code" name="workerCode" onChange={handleChange} />
+                  <TextField fullWidth label="Worker Code" name="workerCode" value={(applicationFormState as any).formData?.workerCode || ''} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Welfare Scheme ID" name="schemeId" onChange={handleChange} />
+                  <TextField fullWidth label="Welfare Scheme ID" name="schemeId" value={(applicationFormState as any).formData?.schemeId || ''} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField type="date" fullWidth label="Joining Date" InputLabelProps={{ shrink: true }} name="joiningDate" onChange={handleChange} />
+                  <TextField type="date" fullWidth label="Joining Date"
+                    InputLabelProps={{ shrink: true }} name="joiningDate" value={(applicationFormState as any).formData?.joiningDate || ''} onChange={handleChange} />
                 </Grid>
               </Section>
 
               {/* Ministry */}
               <Section title="Ministry Details">
                 <Grid item xs={12}>
-                  <TextField fullWidth label="Ministry Details" name="ministryDetails" onChange={handleChange} />
+                  <TextField fullWidth label="Ministry Details" name="ministryDetails" value={(applicationFormState as any).formData?.ministryDetails || ''} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Present Ministry" name="ministry" onChange={handleChange} />
+                  <TextField fullWidth label="Present Ministry" name="ministry" value={(applicationFormState as any).formData?.ministry || ''} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Place of Ministry" name="place" onChange={handleChange} />
+                  <TextField fullWidth label="Place of Ministry" name="place" value={(applicationFormState as any).formData?.place || ''} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Mobile Number" name="mobile" onChange={handleChange} />
+                  <TextField fullWidth label="Mobile Number" name="mobile" value={(applicationFormState as any).formData?.mobile || ''} onChange={handleChange} />
                 </Grid>
               </Section>
 
               {/* Marriage */}
               <Section title="Marriage Details">
                 <Grid item xs={6}>
-                  <TextField type="date" fullWidth label="Marriage Date" InputLabelProps={{ shrink: true }} name="marriageDate" onChange={handleChange} />
+                  <TextField type="date" fullWidth label="Marriage Date"
+                    InputLabelProps={{ shrink: true }} name="marriageDate" value={(applicationFormState as any).formData?.marriageDate || ''} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Marriage Solemnised By" name="solemnisedBy" onChange={handleChange} />
+                  <TextField fullWidth label="Marriage Solemnised By" name="solemnisedBy" value={(applicationFormState as any).formData?.solemnisedBy || ''} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={12}>
-                  <TextField fullWidth label="Place & Church" name="church" onChange={handleChange} />
+                  <TextField fullWidth label="Place & Church" name="church" value={(applicationFormState as any).formData?.church || ''} onChange={handleChange} />
                 </Grid>
               </Section>
 
               {/* Documents */}
               <Section title="Documents Attached">
                 <Grid item xs={4}>
-                  <TextField fullWidth label="Invitation Card" name="invitation" onChange={handleChange} />
+                  <TextField fullWidth label="Invitation Card" name="invitation" value={(applicationFormState as any).formData?.invitation || ''} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={4}>
-                  <TextField fullWidth label="Marriage Photo" name="photo" onChange={handleChange} />
+                  <TextField fullWidth label="Marriage Photo" name="photo" value={(applicationFormState as any).formData?.photo || ''} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={4}>
-                  <TextField fullWidth label="Marriage Certificate" name="certificate" onChange={handleChange} />
+                  <TextField fullWidth label="Marriage Certificate" name="certificate" value={(applicationFormState as any).formData?.certificate || ''} onChange={handleChange} />
                 </Grid>
               </Section>
 
               {/* Financial */}
               <Section title="Financial Details">
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Total Expenses (Rs)" name="total" onChange={handleChange} />
+                  <TextField fullWidth label="Total Expenses (Rs)" name="total" value={(applicationFormState as any).formData?.total || ''} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Requested Amount (Rs)" name="requested" onChange={handleChange} />
+                  <TextField fullWidth label="Requested Amount (Rs)" name="requested" value={(applicationFormState as any).formData?.requested || ''} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={12}>
-                  <TextField fullWidth label="Funds Received (Church/Family/Loan)" name="received" onChange={handleChange} />
+                  <TextField fullWidth label="Funds Received (Church/Family/Loan)" name="received" value={(applicationFormState as any).formData?.received || ''} onChange={handleChange} />
                 </Grid>
               </Section>
 
               {/* Recommendations */}
               <Section title="Recommendations">
                 <Grid item xs={12}>
-                  <TextField fullWidth multiline rows={2} label="Supervisor Comments" name="supervisor" onChange={handleChange} />
+                  <TextField fullWidth multiline rows={2} label="Supervisor Comments" name="supervisor" value={(applicationFormState as any).formData?.supervisor || ''} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Supervisor Name & Signature" name="supervisorSign" onChange={handleChange} />
+                  <TextField fullWidth label="Supervisor Name & Signature" name="supervisorSign" value={(applicationFormState as any).formData?.supervisorSign || ''} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={12}>
-                  <TextField fullWidth multiline rows={2} label="Coordinator Comments" name="coordinator" onChange={handleChange} />
+                  <TextField fullWidth multiline rows={2} label="Coordinator Comments" name="coordinator" value={(applicationFormState as any).formData?.coordinator || ''} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Signature with Date" name="signDate" onChange={handleChange} />
+                  <TextField fullWidth label="Signature with Date" name="signDate" value={(applicationFormState as any).formData?.signDate || ''} onChange={handleChange} />
                 </Grid>
                 <Grid item md={6}>
                   <Button variant="contained" onClick={() => setForm1Signature(true)} startIcon={<AttachmentIcon />}>
@@ -2165,11 +2234,12 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                 </Grid> */}
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Name" name="declName" onChange={handleChange} />
+                  <TextField fullWidth label="Name" name="declName" value={(applicationFormState as any).formData?.declName || ''} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField type="date" fullWidth label="Date" InputLabelProps={{ shrink: true }} name="declDate" onChange={handleChange} />
+                  <TextField type="date" fullWidth label="Date"
+                    InputLabelProps={{ shrink: true }} name="declDate" value={(applicationFormState as any).formData?.declDate || ''} onChange={handleChange} />
                 </Grid>
                 <Grid item md={6}>
                   <Button variant="contained" onClick={() => setForm1Signature0(true)} startIcon={<AttachmentIcon />}>
@@ -2181,19 +2251,22 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
               {/* Office */}
               <Section title="Office Use Only">
                 <Grid item xs={6}>
-                  <TextField type="date" fullWidth label="Application Received On" InputLabelProps={{ shrink: true }} name="receivedDate" onChange={handleChange} />
+                  <TextField type="date" fullWidth label="Application Received On"
+                    InputLabelProps={{ shrink: true }} name="receivedDate" value={(applicationFormState as any).formData?.receivedDate || ''} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Amount Sanctioned" name="sanctioned" onChange={handleChange} />
+                  <TextField fullWidth label="Amount Sanctioned" name="sanctioned" value={(applicationFormState as any).formData?.sanctioned || ''} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField type="date" fullWidth label="Fund Release Date" InputLabelProps={{ shrink: true }} name="releaseDate" onChange={handleChange} />
+                  <TextField type="date" fullWidth
+                    label="Fund Release Date" InputLabelProps={{ shrink: true }} name="releaseDate" value={(applicationFormState as any).formData?.releaseDate || ''} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField type="date" fullWidth label="Applicant Informed Date" InputLabelProps={{ shrink: true }} name="informedDate" onChange={handleChange} />
+                  <TextField type="date" fullWidth
+                    label="Applicant Informed Date" InputLabelProps={{ shrink: true }} name="informedDate" value={(applicationFormState as any).formData?.informedDate || ''} onChange={handleChange} />
                 </Grid>
                 <Grid item md={6}>
                   <Button variant="contained" onClick={() => setForm1Signature3(true)} startIcon={<AttachmentIcon />}>
@@ -2217,6 +2290,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
 
             <form
               onSubmit={
+                forms.division &&
                 action === 'add' ?
                   AddApplication :
                   Number(applicationFormState.status) === ApplicationLifeCycleStates.REVERT_TO_DIVISION ||
@@ -2229,6 +2303,11 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                 type="submit"
                 variant="contained"
                 sx={{ backgroundColor: 'blue' }}
+                onClick={() => {
+                  if (!forms.division) {
+                    setErr(true);
+                  }
+                }}
               >
                 {action === 'add' ?
                   'Send to Hr' :
@@ -2255,17 +2334,17 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
 
                 {/* Division */}
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Division" name="division" onChange={handleChange} />
+                  <TextField fullWidth label="Division" name="division" value={(applicationFormState as any).formData?.division || ''} onChange={handleChange} />
                 </Grid>
 
                 {/* Ailment */}
                 <Grid item xs={3}>
-                  <TextField fullWidth label="Ailment No" name="ailmentNo" onChange={handleChange} />
+                  <TextField fullWidth label="Ailment No" name="ailmentNo" value={(applicationFormState as any).formData?.ailmentNo || ''} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={3}>
-                  <TextField select fullWidth label="For" name="ailmentType" onChange={handleChange}>
-                    <MenuItem value="self">Self</MenuItem>
+                  <TextField select fullWidth label="For" name="ailmentType" value={(applicationFormState as any).formData?.ailmentType || ''} onChange={handleChange}>
+                    <MenuItem value="self" >Self</MenuItem>
                     <MenuItem value="spouse">Spouse</MenuItem>
                     <MenuItem value="children">Children</MenuItem>
                   </TextField>
@@ -2277,27 +2356,28 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                 </Grid>
 
                 <Grid item xs={12}>
-                  <TextField fullWidth label="Name of Applicant" name="name" onChange={handleChange} />
+                  <TextField fullWidth label="Name of Applicant" name="name" value={(applicationFormState as any).formData?.name || ''} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Worker Code" name="workerCode" onChange={handleChange} />
+                  <TextField fullWidth label="Worker Code" name="workerCode" value={(applicationFormState as any).formData?.workerCode || ''} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Welfare Scheme ID" name="schemeId" onChange={handleChange} />
+                  <TextField fullWidth label="Welfare Scheme ID" name="schemeId" value={(applicationFormState as any).formData?.schemeId || ''} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField type="date" fullWidth label="Joining Date" InputLabelProps={{ shrink: true }} name="joiningDate" onChange={handleChange} />
+                  <TextField type="date" fullWidth label="Joining Date"
+                    InputLabelProps={{ shrink: true }} name="joiningDate" value={(applicationFormState as any).formData?.joiningDate || ''} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Name of Spouse" name="spouse" onChange={handleChange} />
+                  <TextField fullWidth label="Name of Spouse" name="spouse" value={(applicationFormState as any).formData?.spouse || ''} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Number of Children" name="children" onChange={handleChange} />
+                  <TextField fullWidth label="Number of Children" name="children" value={(applicationFormState as any).formData?.children || ''} onChange={handleChange} />
                 </Grid>
 
                 {/* MINISTRY */}
@@ -2306,19 +2386,19 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Present Ministry" name="ministry" onChange={handleChange} />
+                  <TextField fullWidth label="Present Ministry" name="ministry" value={(applicationFormState as any).formData?.ministry || ''} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Place of Ministry" name="place" onChange={handleChange} />
+                  <TextField fullWidth label="Place of Ministry" name="place" value={(applicationFormState as any).formData?.place || ''} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Mobile Number" name="mobile" onChange={handleChange} />
+                  <TextField fullWidth label="Mobile Number" name="mobile" value={(applicationFormState as any).formData?.mobile || ''} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Email ID" name="email" onChange={handleChange} />
+                  <TextField fullWidth label="Email ID" name="email" value={(applicationFormState as any).formData?.email || ''} onChange={handleChange} />
                 </Grid>
 
                 {/* MEDICAL */}
@@ -2327,19 +2407,20 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                 </Grid>
 
                 <Grid item xs={12}>
-                  <TextField fullWidth multiline rows={2} label="Details of Sickness" name="sickness" onChange={handleChange} />
+                  <TextField fullWidth multiline rows={2} label="Details of Sickness" name="sickness" value={(applicationFormState as any).formData?.sickness || ''} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField type="date" fullWidth label="Date Treatment Started" InputLabelProps={{ shrink: true }} name="treatmentDate" onChange={handleChange} />
+                  <TextField type="date" fullWidth label="Date Treatment Started" InputLabelProps={{ shrink: true }}
+                    name="treatmentDate" value={(applicationFormState as any).formData?.treatmentDate || ''} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Hospital Name" name="hospital" onChange={handleChange} />
+                  <TextField fullWidth label="Hospital Name" name="hospital" value={(applicationFormState as any).formData?.hospital || ''} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Doctor Name" name="doctor" onChange={handleChange} />
+                  <TextField fullWidth label="Doctor Name" name="doctor" value={(applicationFormState as any).formData?.doctor || ''} onChange={handleChange} />
                 </Grid>
 
                 {/* FINANCIAL */}
@@ -2348,52 +2429,52 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Bills Attached" name="bills" onChange={handleChange} />
+                  <TextField fullWidth label="Bills Attached" name="bills" value={(applicationFormState as any).formData?.bills || ''} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Doctor Fee (Rs)" name="doctorFee" onChange={handleChange} />
+                  <TextField fullWidth label="Doctor Fee (Rs)" name="doctorFee" value={(applicationFormState as any).formData?.doctorFee || ''} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Hospital Charges (Rs)" name="hospitalCharges" onChange={handleChange} />
+                  <TextField fullWidth label="Hospital Charges (Rs)" name="hospitalCharges" value={(applicationFormState as any).formData?.hospitalCharges || ''} onChange={handleChange} />
                 </Grid>
 
 
                 <Grid item xs={6}>
-                  <TextField select fullWidth label="Investigations (Rs)" name="investigation" onChange={handleChange}>
-                    <MenuItem value="self">Lab</MenuItem>
-                    <MenuItem value="son">Blood</MenuItem>
-                    <MenuItem value="daughter">X-ray</MenuItem>
-                    <MenuItem value="daughter">MRI</MenuItem>
-                    <MenuItem value="daughter">Others</MenuItem>
+                  <TextField select fullWidth label="Investigations (Rs)" name="investigation" value={(applicationFormState as any).formData?.investigation || ''} onChange={handleChange}>
+                    <MenuItem value="lab">Lab</MenuItem>
+                    <MenuItem value="blood">Blood</MenuItem>
+                    <MenuItem value="xray">X-ray</MenuItem>
+                    <MenuItem value="mri">MRI</MenuItem>
+                    <MenuItem value="others">Others</MenuItem>
                   </TextField>
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Medicines (Rs)" name="medicines" onChange={handleChange} />
+                  <TextField fullWidth label="Medicines (Rs)" name="medicines" value={(applicationFormState as any).formData?.medicines || ''} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Other Expenses (Rs)" name="other" onChange={handleChange} />
+                  <TextField fullWidth label="Other Expenses (Rs)" name="other" value={(applicationFormState as any).formData?.other || ''} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Total Expenses (Rs)" name="total" onChange={handleChange} />
+                  <TextField fullWidth label="Total Expenses (Rs)" name="total" value={(applicationFormState as any).formData?.total || ''} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Requested Amount (Rs)" name="requested" onChange={handleChange} />
+                  <TextField fullWidth label="Requested Amount (Rs)" name="requested" value={(applicationFormState as any).formData?.requested || ''} onChange={handleChange} />
                 </Grid>
 
 
                 <Grid item xs={6}>
-                  <TextField select fullWidth label="Funds Received From" name="received" onChange={handleChange}>
-                    <MenuItem value="self">Church</MenuItem>
-                    <MenuItem value="son">Family</MenuItem>
-                    <MenuItem value="daughter">Friends</MenuItem>
-                    <MenuItem value="daughter">NGO</MenuItem>
-                    <MenuItem value="daughter">Gvt</MenuItem>
+                  <TextField select fullWidth label="Funds Received From" name="received" value={(applicationFormState as any).formData?.received || ''} onChange={handleChange}>
+                    <MenuItem value="church" >Church</MenuItem>
+                    <MenuItem value="family">Family</MenuItem>
+                    <MenuItem value="friends">Friends</MenuItem>
+                    <MenuItem value="ngo">NGO</MenuItem>
+                    <MenuItem value="gvt">Gvt</MenuItem>
                   </TextField>
                 </Grid>
 
@@ -2403,19 +2484,19 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                 </Grid>
 
                 <Grid item xs={12}>
-                  <TextField fullWidth multiline rows={2} label="Supervisor Comments" name="supervisor" onChange={handleChange} />
+                  <TextField fullWidth multiline rows={2} label="Supervisor Comments" name="supervisor" value={(applicationFormState as any).formData?.supervisor || ''} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Name & Signature" name="supervisorSign" onChange={handleChange} />
+                  <TextField fullWidth label="Name & Signature" name="supervisorSign" value={(applicationFormState as any).formData?.supervisorSign || ''} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={12}>
-                  <TextField fullWidth multiline rows={2} label="Coordinator Comments" name="coordinator" onChange={handleChange} />
+                  <TextField fullWidth multiline rows={2} label="Coordinator Comments" name="coordinator" value={(applicationFormState as any).formData?.coordinator || ''} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Recommendation Amount (Rs)" name="recommend" onChange={handleChange} />
+                  <TextField fullWidth label="Recommendation Amount (Rs)" name="recommend" value={(applicationFormState as any).formData?.recommend || ''} onChange={handleChange} />
                 </Grid>
 
                 {/* <Grid item xs={3}>
@@ -2423,7 +2504,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                 </Grid> */}
 
                 <Grid item xs={3}>
-                  <TextField type="date" fullWidth label="Date" InputLabelProps={{ shrink: true }} name="date" onChange={handleChange} />
+                  <TextField type="date" fullWidth label="Date" InputLabelProps={{ shrink: true }} name="date" value={(applicationFormState as any).formData?.date || ''} onChange={handleChange} />
                 </Grid>
                 <Grid item md={6}>
                   <Button variant="contained" onClick={() => setForm1Signature(true)} startIcon={<AttachmentIcon />}>
@@ -2436,19 +2517,22 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField type="date" fullWidth label="Application Received On" InputLabelProps={{ shrink: true }} name="receivedDate" onChange={handleChange} />
+                  <TextField type="date" fullWidth
+                    label="Application Received On" InputLabelProps={{ shrink: true }} name="receivedDate" value={(applicationFormState as any).formData?.receivedDate || ''} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Amount Sanctioned" name="sanctioned" onChange={handleChange} />
+                  <TextField fullWidth label="Amount Sanctioned" name="sanctioned" value={(applicationFormState as any).formData?.sanctioned || ''} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField type="date" fullWidth label="Fund Release Date" InputLabelProps={{ shrink: true }} name="releaseDate" onChange={handleChange} />
+                  <TextField type="date" fullWidth
+                    label="Fund Release Date" InputLabelProps={{ shrink: true }} name="releaseDate" value={(applicationFormState as any).formData?.releaseDate || ''} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField type="date" fullWidth label="Applicant Informed Date" InputLabelProps={{ shrink: true }} name="informedDate" onChange={handleChange} />
+                  <TextField type="date" fullWidth
+                    label="Applicant Informed Date" InputLabelProps={{ shrink: true }} name="informedDate" value={(applicationFormState as any).formData?.informedDate || ''} onChange={handleChange} />
                 </Grid>
 
                 <Grid item md={6}>
@@ -2474,6 +2558,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
 
             <form
               onSubmit={
+                forms.division &&
                 action === 'add' ?
                   AddApplication :
                   Number(applicationFormState.status) === ApplicationLifeCycleStates.REVERT_TO_DIVISION ||
@@ -2486,6 +2571,11 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                 type="submit"
                 variant="contained"
                 sx={{ backgroundColor: 'blue' }}
+                onClick={() => {
+                  if (!forms.division) {
+                    setErr(true);
+                  }
+                }}
               >
                 {action === 'add' ?
                   'Send to Hr' :
@@ -2510,9 +2600,9 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
         ]}
         limits={{
           // types: [],
-          maxItemSize: 1 * MB,
-          maxItemCount: 3,
-          maxTotalSize: 3 * MB,
+          maxItemSize: 6 * MB,
+          maxItemCount: 10,
+          maxTotalSize: 30 * MB,
         }}
         // accept={['video/*']}
         open={showFileUploader}
@@ -2557,25 +2647,42 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
           'image/jpg',
         ]}
         limits={{
-          maxItemSize: 1 * MB,
-          maxItemCount: 3,
-          maxTotalSize: 3 * MB,
+        maxItemSize: 6 * MB,
+                  maxItemCount: 10,
+                  maxTotalSize: 30 * MB,
         }}
         open={form1Signature}
         onClose={() => setForm1Signature(false)}
 
-        getFiles={forms?.SupervisorSignature || []}
+        getFiles={forms?.SupervisorSignature || (applicationFormState as any).formData?.SupervisorSignature || []}
 
         uploadFile={(file, onProgress) =>
           FileUploaderServices.uploadFile(file, onProgress, 'Applications', file.name)
       .then((res) => {
+        // 1. Update `forms` — append new item to SupervisorSignature array
         setForms((prev: any) => ({
-          ...prev,
-          SupervisorSignature: [...(prev.SupervisorSignature || []), res.data],
+          ...prev, // keep all other fields
+          SupervisorSignature: [
+            ...(prev.SupervisorSignature || []), // keep existing array (or empty if null/undefined)
+            res.data, // append the new item
+          ],
         }));
+
+        // 2. Update `applicationsNames` — append only the filename
+        setApplicationFormState({
+          ...applicationFormState as any, // keep all top-level fields
+          formData: {
+            ...(applicationFormState as any).formData, // keep all existing formData fields
+            SupervisorSignature: [
+              ...((applicationFormState as any).formData?.SupervisorSignature || []), // keep existing files
+              res.data, // append new file
+            ],
+          },
+        });
         return res;
       })
         }
+
 
         // renameFile={(fileId, newName) => {
         //   setFormData((prev: any) => ({
@@ -2586,7 +2693,6 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
         //   });
         //   return FileUploaderServices.renameFile(fileId, newName);
         // }}
-
         deleteFile={(fileId) => {
           setForms((prev: any) => ({
             ...prev,
@@ -2607,14 +2713,14 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
           'image/jpg',
         ]}
         limits={{
-          maxItemSize: 1 * MB,
-          maxItemCount: 3,
-          maxTotalSize: 3 * MB,
+          maxItemSize: 6 * MB,
+          maxItemCount: 10,
+          maxTotalSize: 30 * MB,
         }}
-        open={form1Signature0}
+        open={form1Signature0 }
         onClose={() => setForm1Signature0(false)}
 
-        getFiles={forms?.Signature || []}
+        getFiles={forms?.Signature || (applicationFormState as any).formData?.Signature || []}
 
         uploadFile={(file, onProgress) =>
           FileUploaderServices.uploadFile(file, onProgress, 'Applications', file.name)
@@ -2657,14 +2763,14 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
           'image/jpg',
         ]}
         limits={{
-          maxItemSize: 1 * MB,
-          maxItemCount: 3,
-          maxTotalSize: 3 * MB,
+          maxItemSize: 6 * MB,
+          maxItemCount: 10,
+          maxTotalSize: 30 * MB,
         }}
         open={form1Signature2}
         onClose={() => setForm1Signature2(false)}
 
-        getFiles={forms?.signatureOfStudent || []}
+        getFiles={forms?.signatureOfStudent ||  (applicationFormState as any).formData?.signatureOfStudent || []}
 
         uploadFile={(file, onProgress) =>
           FileUploaderServices.uploadFile(file, onProgress, 'Applications', file.name)
@@ -2673,6 +2779,17 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
           ...prev,
           signatureOfStudent: [...(prev.signatureOfStudent || []), res.data],
         }));
+
+        setApplicationFormState({
+          ...applicationFormState as any, // keep all top-level fields
+          formData: {
+            ...(applicationFormState as any).formData, // keep all existing formData fields
+            signatureOfStudent: [
+              ...((applicationFormState as any).formData?.signatureOfStudent || []), // keep existing files
+              res.data, // append new file
+            ],
+          },
+        });
         return res;
       })
         }
@@ -2707,14 +2824,14 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
           'image/jpg',
         ]}
         limits={{
-          maxItemSize: 1 * MB,
-          maxItemCount: 3,
-          maxTotalSize: 3 * MB,
+          maxItemSize: 6 * MB,
+          maxItemCount: 10,
+          maxTotalSize: 30 * MB,
         }}
         open={form1Signature3}
         onClose={() => setForm1Signature3(false)}
 
-        getFiles={forms?.DealingPersonSignature || []}
+        getFiles={forms?.DealingPersonSignature ||  (applicationFormState as any).formData?.DealingPersonSignature || []}
 
         uploadFile={(file, onProgress) =>
           FileUploaderServices.uploadFile(file, onProgress, 'Applications', file.name)
@@ -2723,6 +2840,17 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
           ...prev,
           DealingPersonSignature: [...(prev.DealingPersonSignature || []), res.data],
         }));
+        // return res;
+        setApplicationFormState({
+          ...applicationFormState as any, // keep all top-level fields
+          formData: {
+            ...(applicationFormState as any).formData, // keep all existing formData fields
+            DealingPersonSignature: [
+              ...((applicationFormState as any).formData?.DealingPersonSignature || []), // keep existing files
+              res.data, // append new file
+            ],
+          },
+        });
         return res;
       })
         }
@@ -2757,14 +2885,14 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
           'image/jpg',
         ]}
         limits={{
-          maxItemSize: 1 * MB,
-          maxItemCount: 3,
-          maxTotalSize: 3 * MB,
+          maxItemSize: 6 * MB,
+          maxItemCount: 10,
+          maxTotalSize: 30 * MB,
         }}
         open={form1Signature4}
         onClose={() => setForm1Signature4(false)}
 
-        getFiles={forms?.AuthorizedPersonSignature || []}
+        getFiles={forms?.AuthorizedPersonSignature || (applicationFormState as any).formData?.AuthorizedPersonSignature || []}
 
         uploadFile={(file, onProgress) =>
           FileUploaderServices.uploadFile(file, onProgress, 'Applications', file.name)
@@ -2773,6 +2901,16 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
           ...prev,
           AuthorizedPersonSignature: [...(prev.AuthorizedPersonSignature || []), res.data],
         }));
+        setApplicationFormState({
+          ...applicationFormState as any, // keep all top-level fields
+          formData: {
+            ...(applicationFormState as any).formData, // keep all existing formData fields
+            AuthorizedPersonSignature: [
+              ...((applicationFormState as any).formData?.AuthorizedPersonSignature || []), // keep existing files
+              res.data, // append new file
+            ],
+          },
+        });
         return res;
       })
         }

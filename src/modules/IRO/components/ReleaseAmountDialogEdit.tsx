@@ -446,7 +446,7 @@ const ReleaseAmountDialogEdit = (props: ReleaseDialogProps) => {
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  label="Release Amount"
+                  label="Total Amount Sanctioned"
                   type="number"
                   value={releaseAmount?.releaseAmount != 0 ? releaseAmount?.releaseAmount?.toFixed(2) : ''}
                   onChange={(e) =>

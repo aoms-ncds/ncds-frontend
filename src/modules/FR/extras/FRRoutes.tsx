@@ -14,6 +14,8 @@ import ReopenedFr from '../ReopenedFr';
 import CustomFR from '../CustomFR';
 import NonSupport from '../Non-Support';
 import Resubmitted from '../Resubmitted';
+import WelfareFR from '../WelfareFR';
+import StudyHelp from '../StudyHelp';
 
 
 const divisionsPageRoutes: ModuleRoute = {
@@ -173,6 +175,14 @@ const divisionsPageRoutes: ModuleRoute = {
       icon: <RequestPageOutlinedIcon />,
     },
     {
+      title: 'Study Help',
+      path: '/studyHelp',
+      element: <StudyHelp/>,
+      private: true,
+      requiredAccessRights: ['WRITE_FR'],
+      icon: <RequestPageOutlinedIcon />,
+    },
+    {
       title: 'Support FR',
       path: '/support',
       element: <SupportFrPage/>,
@@ -187,6 +197,14 @@ const divisionsPageRoutes: ModuleRoute = {
       private: true,
       requiredAccessRights: ['HR_DPARTMENT_ACCESS'],
       icon: <RequestPageOutlinedIcon />,
+    },
+    {
+      title: 'Welfare FR',
+      path: '/welfareFR',
+      element: <WelfareFR/>,
+      private: true,
+      requiredAccessRights: ['MANAGE_FR'],
+      icon: <WelfareFR />,
     },
     {
       title: 'Custom FR',

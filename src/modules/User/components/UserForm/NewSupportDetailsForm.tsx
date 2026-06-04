@@ -150,6 +150,20 @@ const NewSupportDetailsForm = (
         </FormControl>
       </Grid>
       <Grid item xs={12} md={6} lg={4}>
+        <TextField
+          label="Church Name"
+          value={props.value?.churchName}
+          onChange={(e) =>
+            props.onChange({
+              ...props.value,
+              churchName: e.target.value,
+            })
+          }
+          variant={props.options?.textField.variant}
+          fullWidth
+        />
+      </Grid>
+      <Grid item xs={12} md={6} lg={4}>
         {props.options?.kind === 'worker' && <FormControlLabel
           label="Self Support"
           control={

@@ -801,7 +801,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       align: 'center',
       headerAlign: 'center',
       type: 'string',
-     renderCell: (params) => (
+      renderCell: (params) => (
         <DropdownButton
           useIconButton={true}
           id="IRO action"
@@ -954,6 +954,20 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
               },
 
             },
+            ...(params.row.reasonForRejectIRO || (params.row as any).reasonForRevertToDivision ?
+              [
+                {
+                  id: 'resaons',
+                  text: 'View Reasons',
+                  component: Link,
+                  // to: '/fr/view_FR/' + props.row._id,
+                  onClick: () => {
+                    setOpenReason(true);
+                    setSelectedIROData(params.row);
+                  },
+                  icon: EditNoteIcon,
+                },
+              ]:[]),
             ...(params.row.closedIroPdf ?
               [
                 {
@@ -1408,22 +1422,36 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
           width: 180,
           renderHeader: () => <b>Transferred Amount</b>,
 
-          valueGetter: (params: any) => {
-            if (params.row.sanctionedAmount !== undefined) {
-              return formatAmount(Number(params.row.sanctionedAmount));
-            }
+          renderCell: (params:any) => {
+            let value = 0;
+            console.log(params.row, 'opo');
+            const transferredAmountEach= params.row.releaseAmount?.transferredAmountEach;
+            // ✅ params.row._id is the key in parent's transferredAmountEach
+            const amountFromMap = (transferredAmountEach as any)?.[params.row._id];
 
-            if (Array.isArray(params.row.particulars)) {
-              const total = params.row.particulars.reduce(
-                (sum: number, item: any) =>
-                  sum + (Number(item.sanctionedAmount) || 0),
+            if (amountFromMap !== undefined) {
+              value = amountFromMap;
+            }
+            // check locally edited value for this row
+            // otherwise show sanctioned amount
+            else if (params.row?.sanctionedAmount) {
+              value = params.row.sanctionedAmount;
+            }
+            // otherwise calculate from particulars
+            else if (Array.isArray(params.row?.particulars)) {
+              value = params.row.particulars.reduce(
+                (sum:any, item:any) => sum + (item.sanctionedAmount || 0),
                 0,
               );
-
-              return formatAmount(total);
             }
 
-            return formatAmount(0);
+            return (
+              <span
+
+              >
+                {Number(value).toFixed(2)}
+              </span>
+            );
           },
           align: 'center' as const,
           headerAlign: 'center' as const,
@@ -1435,9 +1463,18 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
           width: 180,
           renderHeader: () => <b>Total Transferred Amount</b>,
           valueGetter: (params: any) => {
-            return formatAmount(
-              Number(params.row.releaseAmount?.transferredAmount) || 0,
-            );
+            if (params.row.releaseAmount?.transferredAmount !== 0) {
+              return formatAmount(params.row.releaseAmount?.transferredAmount as number);
+            } else {
+              if (Array.isArray(params.row.particulars)) {
+                return formatAmount(
+                  params.row.particulars.reduce(
+                    (sum:any, item:any) => sum + (Number(item.sanctionedAmount) || 0),
+                    0,
+                  ).toFixed(2));
+              }
+              return 0; // or return a suitable default value
+            }
           },
           align: 'center' as const,
           headerAlign: 'center' as const,
@@ -1613,6 +1650,8 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     // Check all searchable fields
     const searchMatch =
     (row.IROno && row.IROno.toLowerCase().includes(searchLower)) ||
+      (row.releaseAmount?.releaseAmount && row.releaseAmount?.releaseAmount.toString().toLowerCase().includes(searchLower)) ||
+    (row.releaseAmount?.transferredAmount && row.releaseAmount?.transferredAmount.toString().toLowerCase().includes(searchLower)) ||
     (row.IRODate && row.IRODate.format('DD/MM/YYYY').toLowerCase().includes(searchLower)) ||
     (row.division?.details.name && row.division?.details.name.toLowerCase().includes(searchLower)) ||
     (row.purposeSubdivision?.name && row.purposeSubdivision.name.toLowerCase().includes(searchLower)) ||

@@ -62,6 +62,13 @@ const applicationRoutes: ModuleRoute = {
       requiredAccessRights: [],
     },
     {
+      title: 'Welfare',
+      path: '/WelfarePr',
+      element: <ApplicationsListingPage action={'welfarePresident'} />,
+      private: true,
+      requiredAccessRights: [],
+    },
+    {
       title: 'RevertToHr',
       path: '/revertToHr',
       element: <ApplicationsListingPage action={'revertHr'} />,

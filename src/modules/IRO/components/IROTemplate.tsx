@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
     fontSize: 11,
   },
 });
-const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?: any; officeMngrSign?: any; president?: EsignaturePresident }) => {
+const IROTemplate = (props: { rowData?: any; prev?: boolean; current?: boolean;fr?: FR; mngrName?: any; officeMngrSign?: any; president?: EsignaturePresident }) => {
   let totalAmount = 0;
   let totalReqAmount = 0;
   let NewTot: any = 0;
@@ -176,7 +176,7 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
 
   let coordinatorName = '';
 
-  if (prev) {
+  if (prev && !props.current) {
     coordinatorName = rowData?.division?.details?.prevCoordinator?.name ?? '';
   } else {
     if (fr?.names?.coordinator !=null) {

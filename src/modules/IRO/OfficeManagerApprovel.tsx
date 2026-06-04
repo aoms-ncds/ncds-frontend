@@ -431,6 +431,8 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
 
     const searchMatch =
     (row.IROno && row.IROno.toLowerCase().includes(searchLower)) ||
+      (row.releaseAmount?.releaseAmount && row.releaseAmount?.releaseAmount.toString().toLowerCase().includes(searchLower)) ||
+    (row.releaseAmount?.transferredAmount && row.releaseAmount?.transferredAmount.toString().toLowerCase().includes(searchLower)) ||
     (row.IRODate && row.IRODate.format('DD/MM/YYYY').toLowerCase().includes(searchLower)) ||
     (row.division?.details.name && row.division?.details.name.toLowerCase().includes(searchLower)) ||
     (row.purposeSubdivision?.name && row.purposeSubdivision.name.toLowerCase().includes(searchLower)) ||
@@ -723,79 +725,122 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
         />
       ),
     },
-    // {
-    //   field: 'status',
-    //   renderHeader: () => <b>Status</b>,
-    //   width: 250,
-    //   align: 'center',
-    //   headerAlign: 'center',
-    //   cellClassName: (params) => {
-    //     const statusName = params.formattedValue;
-    //     if (params.value == null) {
-    //       return '';
-    //     }
-    //     switch (statusName) {
-    //     case 'WAITING FOR APPROVAL':
-    //       return clsx('yellow-light');
-    //     case 'WAITING FOR ACCOUNTS MNGR':
-    //       return clsx('yellow-dark');
-    //     case 'IRO APPROVED':
-    //       return clsx('orange-light');
-    //     case 'WAITING FOR RELEASE AMOUNT':
-    //       return clsx('orange-dark');
-    //     case 'AMOUNT RELEASED':
-    //       return clsx('green-light');
-    //     case 'RECONCILIATION DONE':
-    //       return clsx('green-medium');
-    //     case 'IRO CLOSED':
-    //       return clsx('green-dark');
-    //     case 'IRO DISAPPROVED':
-    //       return clsx('red-light');
-    //     case 'IRO IN PROCESS':
-    //       return clsx('dark-orange');
-    //     default:
-    //       // console.log('No class applied');
-    //       return '';
-    //     }
-    //   },
+    {
+      field: 'status',
+      headerClassName: 'status-header',
 
-    //   valueGetter: (params) => {
-    //     let statusName = IROLifeCycleStates.getStatusNameByCodeTransaction(params.value);
-    //     // Check if the status name needs to be changed
-    //     console.log(statusName, 'sjhivi');
-    //     switch (statusName) {
-    //     case 'SEND_BACK':
-    //       statusName = 'REVERTED';
-    //       break;
-    //     case 'FR_APPROVED':
-    //       statusName = 'FR VERIFIED'; // Change to whatever new name you want
-    //       break;
-    //     case 'FR_REJECTED':
-    //       statusName = 'IRO DISAPPROVED'; // Change to whatever new name you want
-    //       break;
-    //     case 'WAITING_FOR_OFFICE_MNGR':
-    //       statusName = 'WAITING FOR APPROVAL'; // Change to whatever new name you want
-    //       break;
-    //     case 'WAITING_FOR_ACCOUNTS_STATE':
-    //       statusName = 'IRO APPROVED'; // Change to whatever new name you want
-    //       break;
-    //     case 'IRO_IN_PROCESS':
-    //       statusName = 'IRO IN PROCESS'; // Change to whatever new name you want
-    //       break;
-    //       // case 'WAITING_FOR_ACCOUNTS_MNGR':
-    //       //   statusName = 'WAITING FOR ACCOUNTS MNGR';
-    //       //   if (props.action === 'release') {
-    //       //     statusName = 'WAITTING FOR RELEASE AMOUNT'; // Change to whatever new name you want
-    //       //   }
-    //       break;
-    //       // Add more cases for other status names you want to change
-    //     default:
-    //       statusName = statusName.replaceAll('_', ' ');
-    //       break;
-    //     }
-    //     return statusName;
-    //   },
-    // },
+      renderHeader: () => <b>Status</b>,
+      width: 250,
+      align: 'center' as const,
+      headerAlign: 'center' as const,
+
+      cellClassName: (params: any) => {
+        const statusName = params.formattedValue;
+
+        if (params.value == null) {
+          return '';
+        }
+
+        switch (statusName) {
+        case 'WAITING APPROV.':
+          return clsx('status-cell', 'yellow-light');
+
+        case 'WAITING FOR ACCOUNTS MNGR':
+          return clsx('status-cell', 'yellow-dark');
+
+        case 'IRO APPROVED':
+          return clsx('status-cell', 'orange-light');
+          // case 'RE-SUBMITTED':
+        case 'CUSTOM IRO':
+          return clsx('status-cell', 'status-cell', 're-sum');
+
+        case 'WAITING RELEASE.':
+          return clsx('status-cell', 'orange-dark');
+        case 'REOPENED':
+          return clsx('status-cell', 'status-cell', 're-color');
+
+        case 'AMT RELEASED':
+          return clsx('status-cell', 'green-light');
+
+        case 'RECONCILIATION DONE':
+          return clsx('status-cell', 'green-medium');
+
+        case 'IRO CLOSED':
+          return clsx('status-cell', 'green-dark');
+
+        case 'IRO DISAPPROVED':
+          return clsx('status-cell', 'status-cell', 'status-cell', 'red-light');
+
+        case 'IN PROCESS':
+          return clsx('status-cell', 'status-cell', 'dark-orange');
+
+        case 'REVERTED':
+          return clsx('status-cell', 'revert');
+        case 'DISAPPROVED':
+          return clsx('status-cell', 'DISAPPROVED');
+        case 'IRO PROCESS':
+          return clsx('status-cell', 'DISAPPROVED');
+
+        default:
+          return '';
+        }
+      },
+
+      valueGetter: (params: any) => {
+        let statusName =
+               IROLifeCycleStates.getStatusNameByCodeTransaction(params.value);
+
+        const iscustom = (params.row as any)?.isCustom;
+
+        if (iscustom === true) {
+          return 'CUSTOM IRO';
+        }
+
+        switch (statusName) {
+        case 'SEND_BACK':
+          statusName = 'REVERTED';
+          break;
+        case 'REVERTED_TO_DIVISION':
+          statusName = 'REVERTED';
+          break;
+        case 'REOPENED':
+          statusName = 'REOPENED';
+          break;
+
+        case 'FR_APPROVED':
+          statusName = 'FR VERIFIED';
+          break;
+
+        case 'FR_REJECTED':
+          statusName = 'DISAPPROVED';
+          break;
+
+        case 'WAITING_FOR_OFFICE_MNGR':
+          statusName = 'WAITING APPROV.';
+          break;
+        case 'WAITTING_FOR_RELEASE_AMOUNT':
+          statusName = 'WAITING RELEASE.';
+          break;
+
+        case 'WAITING_FOR_ACCOUNTS_STATE':
+          statusName = 'IRO APPROVED';
+          break;
+        case 'AMOUNT_RELEASED':
+          statusName = 'AMT RELEASED';
+          break;
+
+        case 'IRO_IN_PROCESS':
+          statusName = 'IRO PROCESS';
+          break;
+
+        default:
+          statusName = statusName?.replaceAll('_', ' ');
+          break;
+        }
+
+        return statusName;
+      },
+    },
     { field: 'IROno', headerName: 'IRO No', width: 130, renderHeader: (params) => <b style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</b>, align: 'center', headerAlign: 'center' },
     {
       field: 'IRODate',
@@ -1185,7 +1230,7 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
                 <br />
                 <Box
                   sx={{
-                    'height': 100,
+                    'height': 300,
                     'width': '100%',
                     '& .super-app-theme--cell': {
                       backgroundColor: '#f1f5fa',
@@ -1209,34 +1254,67 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
                       backgroundColor: '#fff',
                     },
                     '& .orange-light': {
-                      backgroundColor: '#ffa500', /* Light orange */
+                      backgroundColor: '#269811',
+                      // backgroundColor: '#3949AB',
+                      color: '#fff',
+                      fontWeight: '600',
                     },
                     '& .orange-dark': {
-                      backgroundColor: '#cc8400', /* Darker orange */
+                      backgroundColor: '#3949AB',
+                      color: '#fff',
+                      fontWeight: '600',
                     },
                     '& .yellow-light': {
-                      backgroundColor: '#ffffe0', /* Light yellow */
+                      backgroundColor: '#a964f4',
+                      color: '#fff',
+                      fontWeight: '600',
                     },
                     '& .yellow-dark ': {
-                      backgroundColor: '#ffd700', /* Darker yellow */
+                      backgroundColor: '#ffd700',
                     },
                     '& .green-light ': {
-                      backgroundColor: '#90ee90', /* Light green */
+                      backgroundColor: '#E2445C',
+                      color: '#fff',
+                      fontWeight: '600',
                     },
                     '& .green-medium': {
-                      backgroundColor: '#32cd32', /* Medium green */
+                      backgroundColor: '#32cd32',
                     },
                     '& .green-dark ': {
-                      backgroundColor: '#008000', /* Dark green */
+                      backgroundColor: '#3b32e6 ',
+                      color: '#fff',
+                      fontWeight: '600',
                     },
                     '&  .red-light ': {
-                      backgroundColor: '#ff7f7f', /* Light red */
+                      backgroundColor: '#ff7f7f',
                     },
                     '&   .red-dark ': {
-                      backgroundColor: '#ff0000', /* Darker red */
+                      backgroundColor: '#ff0000',
                     },
                     '&   .dark-orange': {
-                      backgroundColor: '#FFD243', /* Darker red */
+                      backgroundColor: '#00897B',
+                      color: '#fff',
+                      fontWeight: '600',
+                    },
+                    '&   .revert': {
+                      backgroundColor: '#F57C00',
+                      color: '#fff',
+                      fontWeight: '600',
+                    },
+                    '&   .DISAPPROVED': {
+                      backgroundColor: '#D32F2F',
+                      color: '#fff',
+                      fontWeight: '600',
+                    },
+                    '&   .InPro': {
+                      backgroundColor: '#FDAB3D',
+                      color: '#fff',
+                      fontWeight: '600',
+                    },
+                    '& .re-color': {
+                      backgroundColor: '#7B1FA2',
+                      color: '#fff',
+                      fontWeight: '600',
                     },
                   }}
                 >
