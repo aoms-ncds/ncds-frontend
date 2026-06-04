@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Grid } from '@mui/material';
-import CommonPageLayout from '../../components/CommonPageLayout';
-import WorkerServices from '../Workers/extras/WorkersServices';
-// import WorkerLifeCycleStates from '../Workers/extras/WorkerLifeCycleStates';
-import ButtonCard from '../../components/ButtonCard';
-import PermissionChecks from '../User/components/PermissionChecks';
-import StaffServices from '../HR/extras/StaffServices';
-
-const CustomReport = () => {
+import ButtonCard from '../../../components/ButtonCard';
+import CommonPageLayout from '../../../components/CommonPageLayout';
+import StaffServices from '../../HR/extras/StaffServices';
+import WorkerServices from '../../Workers/extras/WorkersServices';
+const ProfileReports = () => {
   const [staffCount, setStaffCount] = useState<number | null>(null);
   const [workersCount, setWorkerCount] = useState<number | null>(null);
   // eslint-disable-next-line no-unused-vars
@@ -33,16 +30,16 @@ const CustomReport = () => {
     <CommonPageLayout title="Custom Report Dashboard">
       <Grid container spacing={3}>
         <Grid item xs={12} md={4} xl={3}>
-          <ButtonCard secondaryText="FR Report" color={'#fff'} icon={<img src="/mod_icons/manageWorker.jpeg" alt="Logo" style={{ width: '70px', height: '70px' }} />}
-            targetRoute="/custom-report/custom-filter-fr" />
+          <ButtonCard secondaryText="Worker Details Report" color={'#fff'} icon={<img src="/mod_icons/manageWorker.jpeg" alt="Logo" style={{ width: '70px', height: '70px' }} />}
+            targetRoute="/custom-report/worker-details-report" />
         </Grid>
         <Grid item xs={12} md={4} xl={3}>
-          <ButtonCard secondaryText="IRO Report" color={'#fff'} icon={<img src="/mod_icons/manageWorker.jpeg" alt="Logo" style={{ width: '70px', height: '70px' }} />}
-            targetRoute="/custom-report/custom-filter-iro" />
+          <ButtonCard secondaryText="Spouse Details Report" color={'#fff'} icon={<img src="/mod_icons/manageWorker.jpeg" alt="Logo" style={{ width: '70px', height: '70px' }} />}
+            targetRoute="/custom-report/spouse-details-report" />
         </Grid>
         <Grid item xs={12} md={4} xl={3}>
-          <ButtonCard secondaryText=" Profile Reporters" color={'#fff'} icon={<img src="/mod_icons/manageWorker.jpeg" alt="Logo" style={{ width: '70px', height: '70px' }} />}
-            targetRoute="/custom-report/profile-reporters" />
+          <ButtonCard secondaryText="Child Details Reporter" color={'#fff'} icon={<img src="/mod_icons/manageWorker.jpeg" alt="Logo" style={{ width: '70px', height: '70px' }} />}
+            targetRoute="/custom-report/child-details-report" />
         </Grid>
         {/* <Grid item xs={12} md={4} xl={3}>
           <ButtonCard secondaryText="Custom Report FR" icon={<img src="/mod_icons/manageWorker.jpeg" alt="Logo" style={{ width: '70px', height: '70px' }} />}
@@ -58,4 +55,4 @@ const CustomReport = () => {
   );
 };
 
-export default CustomReport;
+export default ProfileReports;
