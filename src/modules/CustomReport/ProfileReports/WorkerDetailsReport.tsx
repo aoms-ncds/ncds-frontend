@@ -39,6 +39,7 @@ import { log } from 'console';
 import { BlobProvider } from '@react-pdf/renderer';
 import PDFTemplateCustomChild from '../components/PDFTemplateCustomChild';
 import PDFTemplateCustomUsers from '../components/PDFTemplateCustomUsers';
+import UserLifeCycleStates from '../../User/extras/UserLifeCycleStates';
 
 // ── Icons via Unicode/emoji since we can't import @mui/icons-material ──
 const Icon = ({ children, sx = {} }: { children: ReactNode; sx?: object }) => (
@@ -247,13 +248,13 @@ export default function UserFilterReportMUI() {
     dateOfLeavingFrom: '', dateOfLeavingTo: '',
     officialStatus: '', reasonForDeactivation: '',
     selfSupport: false, selfSupportEnabled: false,
-    noOfChurches: [0, 100],
+    noOfChurches: 0,
     designation: '', otherDesignation: '', department: '', typeOfFamily: '',
-    withChurch: false, percentSelfSupport: [0, 100],
-    totalAmount: [0, 100000], monthlyDeduction: [0, 20000],
-    yearsInMinistry: [0, 50],
-    basic: [0, 50000], HRA: [0, 20000],
-    telAllowance: [0, 5000], impactDeduction: [0, 5000], MUTDeduction: [0, 5000],
+    withChurch: false, percentSelfSupport: 0,
+    totalAmount: 0, monthlyDeduction: 0,
+    yearsInMinistry: 0,
+    basic: 0, HRA: 0,
+    telAllowance: 0, impactDeduction: 0, MUTDeduction: 0,
     supportEnabled: false,
     impactNo: '', nominee: '', relation: '',
   };
@@ -516,6 +517,19 @@ export default function UserFilterReportMUI() {
                       <MenuItem value="NCDS">NCDS</MenuItem>
                     </TextField>
                   </Grid>
+                  <Grid item xs={12} sm={6} md={3}>
+                    <TextField
+                      select
+                      fullWidth
+                      label="Status"
+                      name="status"
+                      value={filters.status}
+                      onChange={(e) => set('status')(e.target.value)}
+                    >
+                      <MenuItem value={UserLifeCycleStates.ACTIVE}>Active</MenuItem>
+                      <MenuItem value={UserLifeCycleStates.INACTIVE}>InActive</MenuItem>
+                    </TextField>
+                  </Grid>
                   {/* <Grid item xs={12} sm={6} md={3}>
                   <TextField fullWidth label="Organization" value={filters.organization} onChange={set('organization')} />
                 </Grid> */}
@@ -714,9 +728,8 @@ export default function UserFilterReportMUI() {
                   <Grid item xs={12} sm={6} md={3}>
                     <FormControlLabel control={<Switch checked={filters.selfSupport} onChange={setToggle('selfSupport')} color="primary" />} label="Self Support" />
                   </Grid>
-                  <Grid item xs={12} md={6}>
-                    <FieldLabel>No. of Churches</FieldLabel>
-                    <RangeSlider label="" value={filters.noOfChurches} onChange={setSlider('noOfChurches')} min={1} max={200} />
+                  <Grid item xs={12} sm={6} md={3}>
+                    <TextField fullWidth label="No. of Churches" value={filters.noOfChurches} onChange={set('noOfChurches')} />
                   </Grid>
                 </Grid>
               </AccordionDetails>
@@ -744,21 +757,17 @@ export default function UserFilterReportMUI() {
                   <Grid item xs={12} sm={6} md={3}>
                     <FormControlLabel control={<Switch checked={filters.withChurch} onChange={setToggle('withChurch')} color="primary" />} label="With Church" />
                   </Grid>
-                  <Grid item xs={12} md={4}>
-                    <FieldLabel>Years in Ministry</FieldLabel>
-                    <RangeSlider label="" value={filters.yearsInMinistry} onChange={setSlider('yearsInMinistry')} min={0} max={60} unit=" yrs" />
+                  <Grid item xs={12} sm={6} md={3}>
+                    <TextField fullWidth label="Years in Ministry" value={filters.yearsInMinistry} onChange={set('yearsInMinistry')} />
                   </Grid>
-                  <Grid item xs={12} md={4}>
-                    <FieldLabel>% Self Support</FieldLabel>
-                    <RangeSlider label="" value={filters.percentSelfSupport} onChange={setSlider('percentSelfSupport')} min={0} max={100} unit="%" />
+                  <Grid item xs={12} sm={6} md={3}>
+                    <TextField fullWidth label="Self Support" value={filters.selfSupport} onChange={set('selfSupport')} />
                   </Grid>
-                  <Grid item xs={12} md={4}>
-                    <FieldLabel>Total Amount (₹)</FieldLabel>
-                    <RangeSlider label="" value={filters.totalAmount} onChange={setSlider('totalAmount')} min={0} max={200000} unit="₹" />
+                  <Grid item xs={12} sm={6} md={3}>
+                    <TextField fullWidth label="Total Amount" value={filters.totalAmount} onChange={set('totalAmount')} />
                   </Grid>
-                  <Grid item xs={12} md={4}>
-                    <FieldLabel>Monthly Deduction (₹)</FieldLabel>
-                    <RangeSlider label="" value={filters.monthlyDeduction} onChange={setSlider('monthlyDeduction')} min={0} max={50000} unit="₹" />
+                  <Grid item xs={12} sm={6} md={3}>
+                    <TextField fullWidth label="Monthly Deduction" value={filters.monthlyDeduction} onChange={set('monthlyDeduction')} />
                   </Grid>
                 </Grid>
               </AccordionDetails>
@@ -774,25 +783,20 @@ export default function UserFilterReportMUI() {
                   <Grid item xs={12}>
                     <FormControlLabel control={<Switch checked={filters.supportEnabled} onChange={setToggle('supportEnabled')} color="primary" />} label="Support Enabled" />
                   </Grid>
-                  <Grid item xs={12} md={4}>
-                    <FieldLabel>Basic Salary (₹)</FieldLabel>
-                    <RangeSlider label="" value={filters.basic} onChange={setSlider('basic')} min={0} max={100000} unit="₹" />
+                 <Grid item xs={12} sm={6} md={3}>
+                    <TextField fullWidth label="Basic Salary" value={filters.basic} onChange={set('basic')} />
                   </Grid>
-                  <Grid item xs={12} md={4}>
-                    <FieldLabel>HRA (₹)</FieldLabel>
-                    <RangeSlider label="" value={filters.HRA} onChange={setSlider('HRA')} min={0} max={50000} unit="₹" />
+                  <Grid item xs={12} sm={6} md={3}>
+                    <TextField fullWidth label="HRA" value={filters.HRA} onChange={set('HRA')} />
                   </Grid>
-                  <Grid item xs={12} md={4}>
-                    <FieldLabel>Tel Allowance (₹)</FieldLabel>
-                    <RangeSlider label="" value={filters.telAllowance} onChange={setSlider('telAllowance')} min={0} max={10000} unit="₹" />
+                  <Grid item xs={12} sm={6} md={3}>
+                    <TextField fullWidth label="Tel Allowance" value={filters.telAllowance} onChange={set('telAllowance')} />
                   </Grid>
-                  <Grid item xs={12} md={4}>
-                    <FieldLabel>Impact Deduction (₹)</FieldLabel>
-                    <RangeSlider label="" value={filters.impactDeduction} onChange={setSlider('impactDeduction')} min={0} max={10000} unit="₹" />
+                 <Grid item xs={12} sm={6} md={3}>
+                    <TextField fullWidth label="Impact Deduction" value={filters.impactDeduction} onChange={set('impactDeduction')} />
                   </Grid>
-                  <Grid item xs={12} md={4}>
-                    <FieldLabel>MUT Deduction (₹)</FieldLabel>
-                    <RangeSlider label="" value={filters.MUTDeduction} onChange={setSlider('MUTDeduction')} min={0} max={10000} unit="₹" />
+                  <Grid item xs={12} sm={6} md={3}>
+                    <TextField fullWidth label="MUT Deduction" value={filters.MUTDeduction} onChange={set('MUTDeduction')} />
                   </Grid>
                 </Grid>
               </AccordionDetails>
@@ -1164,7 +1168,7 @@ export default function UserFilterReportMUI() {
 
           </Grid>
         </Card>
-<Dialog open={print} onClose={() => setPrint(false)} maxWidth="xs" fullWidth>
+        <Dialog open={print} onClose={() => setPrint(false)} maxWidth="xs" fullWidth>
           <DialogTitle> Print  Details </DialogTitle>
           <DialogContent>
             <Container>
