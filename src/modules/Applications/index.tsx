@@ -244,7 +244,7 @@ const APPDashboard = () => {
               permissions={['MANAGE_APPLICATION']}
               granted={(
                 <Grid item xs={12} md={4} xl={3}>
-                  <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '50px', height: '50px' }} />} primaryText="Application Approval HR" color='#fff' secondaryText="" targetRoute="/application/hr_approve" />
+                  <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '50px', height: '50px' }} />} primaryText="Applications Waiting HR Verification" color='#fff' secondaryText="" targetRoute="/application/hr_approve" />
                 </Grid>)} />
             <PermissionChecks
               permissions={['PRESIDENT_ACCESS']}
@@ -256,7 +256,7 @@ const APPDashboard = () => {
               permissions={[]}
               granted={(
                 <Grid item xs={12} md={4} xl={3}>
-                  <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '50px', height: '50px' }} />} primaryText="New Welfare Application" color='#fff' secondaryText="" targetRoute="/application/Welfare" />
+                  <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '50px', height: '50px' }} />} primaryText="Welfare Applications Waiting HR Verification" color='#fff' secondaryText="" targetRoute="/application/Welfare" />
                 </Grid>)} />
             <PermissionChecks
               permissions={['PRESIDENT_ACCESS']}

@@ -5,6 +5,7 @@ declare global {
   interface Application extends MongooseDocument {
   applicationCode: string;
   name: string;
+  asset?: boolean;
   reason: string;
   reasonForDeactivation?: string;
   status: string;

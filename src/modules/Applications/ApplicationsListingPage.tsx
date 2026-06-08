@@ -39,6 +39,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
   const [applications, setApplications] = useState<Application[] | null>(null);
   const [action, setAction] = useState<'add' | 'edit'>('add');
   const [showApplicationFormDialog, setShowApplicationFormDialog] = useState<boolean>(false);
+  const [showApplicationFormDialogAsset, setShowApplicationFormDialogAsset] = useState<boolean>(false);
   const [showApplicationFormDialog1, setShowApplicationFormDialog1] = useState<boolean>(false);
   const [reasonDialog, setReasonDialog] = useState(false);
   const [form, setForm] = useState(false);
@@ -57,6 +58,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
   const [statusId, setStatusId] = useState<string>();
   const [applicationsNames, setApplicationsNames] = useState<any >();
   const [appliedFor, setAppliedFor] = useState<any >();
+  const [appliedForAsset, setAppliedForAsset] = useState<any >();
   const [deleteModel, setDeleteModel] = useState(false);
   const [workers, setWorkers] = useState<any[] | any[]>();
   const [workersName, setWorkersName] = useState<IWorker[] | Staff[]>();
@@ -66,6 +68,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
   const [applicationFormState, setApplicationFormState] = useState<CreatableApplication>({
     applicationCode: '',
     name: '',
+    asset: false,
     reason: '',
     status: '',
     division: {
@@ -270,7 +273,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
 
   const [forms, setForms] = useState<any>({});
   console.log(forms, ' forms ');
-
+  const assetList=[{ name: 'For Fan' }, { name: 'For Bicycle' }, { name: 'For Laptop' }, { name: 'For Computer' }, { name: 'For Cooler' }, { name: 'For Air Conditioner' }, { name: 'For Motorcycle' }];
   const handleChange = (e: any) => {
   // e.target.name  = the input's name attribute (e.g., "email", "username")
   // e.target.value = what the user typed
@@ -412,7 +415,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
       ApplicationServices.getAll({ dateRange: dateRange, status: ApplicationLifeCycleStates.SENT_TO_PRESIDENT })
 
         .then((res) => {
-          setApplications(res.data.filter((res:any)=>res.welfare ==true));
+          setApplications(res.data.filter((res:any)=>res.welfare ==true ||res.asset ==true));
         })
         .catch((error) => {
           enqueueSnackbar({
@@ -1113,6 +1116,252 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                     disablePortal
                     id="application-name"
                     options={applicationsNames} // Array of available application names
+                    getOptionLabel={(option) => (option as any).name || ''} // Ensure labels are strings
+                    value={applicationsNames?.find((app: { name: string }) => app.name === applicationFormState.name) || null}
+                    onChange={(_e, newValue) => {
+                      setApplicationFormState((prev) => ({
+                        ...prev,
+                        name: newValue ? newValue.name : '', // Preserve appliedFor
+                      }));
+                    }}
+
+                    renderInput={(params) => (
+
+                      <TextField {...params} label="Application Name" fullWidth required />
+                    )}
+                  />
+                </Grid>
+
+                <Grid item md={12}>
+                  <Autocomplete
+                    disablePortal
+                    id="applied-for"
+                    options={appliedFor} // Array of selectable options
+                    getOptionLabel={(option) => (option as any).name || ''} // Ensure labels are strings
+                    value={appliedFor?.find((option: { name: string | undefined }) => option.name === applicationFormState.appliedFor) || null}
+                    onChange={(_e, newValue) => {
+                      setApplicationFormState((prevRequest) => ({
+                        ...prevRequest,
+                        appliedFor: newValue ? newValue.name : '', // Preserve name
+                      }));
+                    }}
+                    renderInput={(params) => (
+                      <TextField {...params} label="Applied For" fullWidth required />
+                    )}
+                  />
+                </Grid>
+                {applicationFormState.appliedFor =='Worker' &&(
+
+                  <>
+                    {/* 1. WORKER SELECTION */}
+                    <Grid item xs={12} md={12}>
+                      <Typography variant="body2" sx={{ color: '#666', mb: 0.5 }}>
+        Choose Worker *
+                      </Typography>
+                      <Autocomplete
+                        fullWidth
+                        options={workers || []}
+                        // Matches the label style from your images
+                        getOptionLabel={(worker) =>
+                          worker?.basicDetails ?
+                            `${worker.basicDetails.firstName} ${worker.basicDetails.lastName} (${worker.staffCode || worker.workerCode || ''})` :
+                            ''
+                        }
+                        // Ensures the field is never empty in Edit OR Add mode
+                        value={selectedWorker}
+                        isOptionEqualToValue={(option, value) => option._id === value?._id}
+                        onChange={(_e, newValue) => {
+                          setApplicationFormState((prev) => ({
+                            ...prev,
+                            // Save the ID to keep the state light for the backend
+                            workersName: newValue?._id || '',
+                          }));
+                        }}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            placeholder="Select a worker..."
+                            required
+                            sx={{
+                              '& .MuiOutlinedInput-root': {
+                                'borderRadius': '8px', // Matching Image 2 style
+                                'backgroundColor': '#fff',
+                                '& fieldset': { borderColor: '#e0e0e0' },
+                              },
+                            }}
+                          />
+                        )}
+                      />
+                    </Grid>
+
+                    {/* 2. AUTOMATIC WORKER CODE (READ ONLY) */}
+                    <Grid item xs={12} md={12}>
+                      <TextField
+                        label="Worker Code"
+                        // Uses the helper variable 'selectedWorker' to find the code easily
+                        value={selectedWorker?.staffCode || selectedWorker?.workerCode || ''}
+                        fullWidth
+                        disabled
+                        InputLabelProps={{ shrink: true }}
+                        sx={{
+                          '& .MuiInputBase-root': {
+                            backgroundColor: '#f5f5f5', // Visual cue that it's disabled
+                            borderRadius: '8px',
+                          },
+                        }}
+                      />
+                    </Grid>
+                  </>
+                )}
+                <Grid item md={12}>
+                  <TextField label="Applicant Name" value={applicationFormState.applicantName}
+                    onChange={(e)=>setApplicationFormState((prevRequest) => ({
+                      ...prevRequest,
+                      applicantName: e.target.value,
+                    }))}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    fullWidth />
+                </Grid>
+                <Grid item md={12}>
+                  <TextField type='number' label="Requested Amount" value={applicationFormState.requestedAmount}
+                    onChange={(e)=>setApplicationFormState((prevRequest) => ({
+                      ...prevRequest,
+                      requestedAmount: Number(e.target.value),
+                    }))}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    fullWidth />
+                </Grid>
+                {action == 'edit' && applicationFormState.presidentSanction&&(
+                  <><Grid item md={12}>
+                    <TextField type='number' label="Sanctioned Amount" value={applicationFormState.sanctionedAmount}
+                      onChange={(e) => setApplicationFormState((prevRequest) => ({
+                        ...prevRequest,
+                        sanctionedAmount: Number(e.target.value),
+                      }))}
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                      fullWidth />
+                  </Grid><Grid item md={12}>
+                    <TextField type='text' label="Enter Validity" value={applicationFormState.validityDate}
+                      onChange={(e) => setApplicationFormState((prevRequest) => ({
+                        ...prevRequest,
+                        validityDate: String(e.target.value),
+                      }))}
+                      fullWidth />
+                  </Grid><Grid item md={12}>
+                    <TextField type='text' label="President Remarks" value={applicationFormState.presidentRemark}
+                      onChange={(e) => setApplicationFormState((prevRequest) => ({
+                        ...prevRequest,
+                        presidentRemark: String(e.target.value),
+                      }))}
+                      fullWidth />
+                  </Grid></>
+                )}
+
+
+                <Grid item md={12}>
+                  <TextField
+                    label="Remark"
+                    value={applicationFormState.reason}
+                    onChange={(e) => {
+                      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                      setApplicationFormState(() => ({
+                        ...applicationFormState,
+                        reason: e.target.value,
+                      }));
+                    }}
+                    fullWidth
+                    multiline
+                    // required
+                  />
+                </Grid>
+                <Grid item md={6}>
+                  <Button variant="contained" onClick={() => setShowFileUploader(true)} startIcon={<AttachmentIcon />}>
+                    Attachments
+                  </Button>
+                </Grid>
+
+                {/* <WelfareForm/> */}
+
+              </Grid>
+            </Container>
+          </DialogContent>
+          <DialogActions>
+            <Grid item md={6}>
+              {Number(applicationFormState.status) !== ApplicationLifeCycleStates.REVERT_TO_HR &&(
+
+                <Button variant="contained" sx={{ backgroundColor: 'orange' }} onClick={() => {
+                  if (applicationFormState.name !=''&& applicationFormState.appliedFor!='') {
+                    if (Number(applicationFormState.status) == ApplicationLifeCycleStates.REVERT_TO_DIVISION) {
+                      ApplicationServices.active(editid as any)
+                       .then((res) => {
+                         // handleClose();
+                         window.location.reload();
+                         // closeSnackbar(snackbarId);
+                         setShowApplicationFormDialog(false);
+                         enqueueSnackbar({
+                           message: res.message,
+                           variant: 'success',
+                         });
+                       });
+                    } else {
+                      ApplicationServices.sentToPresident(applicationFormState)
+                         .then((res) => {
+                           // handleClose();
+                           window.location.reload();
+                           // closeSnackbar(snackbarId);
+                           setShowApplicationFormDialog(false);
+                           enqueueSnackbar({
+                             message: res.message,
+                             variant: 'success',
+                           });
+                         });
+                    }
+                  } else {
+                    enqueueSnackbar({
+                      message: 'Enter Required Fields',
+                      variant: 'info',
+                    });
+                  }
+                }}>
+                    Send to president
+                </Button>
+              )}
+            </Grid>
+            {/* <Button onClick={() => setShowApplicationFormDialog(false)}>Cancel</Button> */}
+            <Grid item md={6}>
+
+              <Button variant="contained" sx={{ backgroundColor: 'blue' }} type="submit">{action === 'add' ?
+                'Send to Hr' : Number(applicationFormState.status) == ApplicationLifeCycleStates.REVERT_TO_DIVISION ||
+                Number(applicationFormState.status) == ApplicationLifeCycleStates.REVERT_TO_HR? 'Submit': 'Edit'}</Button>
+            </Grid>
+          </DialogActions>
+        </form>
+      </Dialog>
+      <Dialog open={showApplicationFormDialogAsset} onClose={() => setShowApplicationFormDialogAsset(false)} PaperProps={{ style: { width: '500px' } }}>
+        {/* <Grid item md={2}>
+
+          <Typography sx={{ display: 'flex', justifyContent: 'flex-end', p: 1 }}>
+  X
+          </Typography>
+        </Grid> */}
+        <form onSubmit={action === 'add' ? AddApplication: Number(applicationFormState.status)==ApplicationLifeCycleStates.REVERT_TO_DIVISION ||
+          Number(applicationFormState.status)==ApplicationLifeCycleStates.REVERT_TO_DIVISION ? ApproveApplication: EditApplication}>
+          <DialogTitle>{action === 'add' ? 'Create New Application Asset' : 'Edit  Application:'}</DialogTitle>
+          <DialogContent>
+            <Container>
+              <Grid container spacing={2}>
+                <Grid item md={12}>
+  &ensp;
+                  <Autocomplete
+                    disablePortal
+                    id="application-name"
+                    options={assetList} // Array of available application names
                     getOptionLabel={(option) => (option as any).name || ''} // Ensure labels are strings
                     value={applicationsNames?.find((app: { name: string }) => app.name === applicationFormState.name) || null}
                     onChange={(_e, newValue) => {
@@ -2647,9 +2896,9 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
           'image/jpg',
         ]}
         limits={{
-        maxItemSize: 6 * MB,
-                  maxItemCount: 10,
-                  maxTotalSize: 30 * MB,
+          maxItemSize: 6 * MB,
+          maxItemCount: 10,
+          maxTotalSize: 30 * MB,
         }}
         open={form1Signature}
         onClose={() => setForm1Signature(false)}
@@ -2770,7 +3019,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
         open={form1Signature2}
         onClose={() => setForm1Signature2(false)}
 
-        getFiles={forms?.signatureOfStudent ||  (applicationFormState as any).formData?.signatureOfStudent || []}
+        getFiles={forms?.signatureOfStudent || (applicationFormState as any).formData?.signatureOfStudent || []}
 
         uploadFile={(file, onProgress) =>
           FileUploaderServices.uploadFile(file, onProgress, 'Applications', file.name)
@@ -2831,7 +3080,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
         open={form1Signature3}
         onClose={() => setForm1Signature3(false)}
 
-        getFiles={forms?.DealingPersonSignature ||  (applicationFormState as any).formData?.DealingPersonSignature || []}
+        getFiles={forms?.DealingPersonSignature || (applicationFormState as any).formData?.DealingPersonSignature || []}
 
         uploadFile={(file, onProgress) =>
           FileUploaderServices.uploadFile(file, onProgress, 'Applications', file.name)
@@ -2943,7 +3192,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
             <Grid container spacing={2} alignItems="center">
 
               {/* LEFT - SEARCH */}
-              <Grid item xs={12} md={6}>
+              <Grid item xs={12} md={5}>
                 <TextField
                   label="Search"
                   variant="outlined"
@@ -2952,7 +3201,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                   fullWidth
                 />
               </Grid>
-              <Grid item xs={6} >
+              <Grid item xs={7} >
                 <>
                   <PermissionChecks
                     permissions={['MANAGE_APPLICATION']}
@@ -3017,6 +3266,31 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                         }}
                       >
                       Add new
+                      </Button>
+                    )}
+                  />
+                  <PermissionChecks
+                    permissions={['WRITE_APPLICATION']}
+                    granted={(
+                      <Button
+                        style={{ display: props.action !== 'manage' ? 'none' : '' }}
+                        variant="contained"
+                        sx={{ float: 'right', m: 2 }}
+                        startIcon={<AddIcon />}
+                        onClick={() => {
+                          setShowApplicationFormDialogAsset(true);
+                          setAction('add');
+                          setApplicationFormState({
+                            applicationCode: '',
+                            name: '',
+                            reason: '',
+                            status: '',
+                            asset: true,
+                            attachment: [],
+                          });
+                        }}
+                      >
+                      Apply Asset
                       </Button>
                     )}
                   />
