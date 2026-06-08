@@ -262,7 +262,7 @@ const APPDashboard = () => {
               permissions={['PRESIDENT_ACCESS']}
               granted={(
                 <Grid item xs={12} md={4} xl={3}>
-                  <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '50px', height: '50px' }} />} primaryText="New Welfare Application For President" color='#fff' secondaryText="" targetRoute="/application/WelfarePr" />
+                  <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '50px', height: '50px' }} />} primaryText="Applications Approval General Secretary." color='#fff' secondaryText="" targetRoute="/application/WelfarePr" />
                 </Grid>)} />
             <PermissionChecks
               permissions={[]}
