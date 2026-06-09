@@ -415,7 +415,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
       ApplicationServices.getAll({ dateRange: dateRange, status: ApplicationLifeCycleStates.SENT_TO_PRESIDENT })
 
         .then((res) => {
-          setApplications(res.data.filter((res:any)=>res.welfare ==true ||res.asset ==true));
+          setApplications(res.data.filter((res:any)=>res.welfare ==true || res.name =='New Joining'));
         })
         .catch((error) => {
           enqueueSnackbar({
