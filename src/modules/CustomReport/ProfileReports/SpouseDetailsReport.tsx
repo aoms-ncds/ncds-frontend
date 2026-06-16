@@ -525,7 +525,7 @@ export default function SpouseFilterReportMUI() {
                       label="Title"
                       name="title"
                       value={filters.title}
-                      onChange={(e) => set('title')(e.target.value as string)}
+                      onChange={(e) => set('title')(e.target.value as any)}
                     >
                       <MenuItem value="Mr">Mr</MenuItem>
                       <MenuItem value="Mrs">Mrs</MenuItem>
@@ -581,10 +581,10 @@ export default function SpouseFilterReportMUI() {
                       multiple
                       options={LANGUAGES}
                       value={filters.knownLanguages}
-                      onChange={(_, v) => setFilters((f) => ({ ...f, knownLanguages: v }))}
+                      onChange={(_, v) => setFilters((f:any) => ({ ...f, knownLanguages: v }))}
                       renderInput={(params) => <TextField {...params} label="Known Languages" placeholder="Select languages..." />}
                       renderTags={(val, getProps) =>
-                        val.map((opt, i) => <Chip key={opt} label={opt} size="small" color="primary" variant="outlined" {...getProps({ index: i })} />)
+                        val.map((opt, i) => <Chip label={opt} size="small" color="primary" variant="outlined" {...getProps({ index: i })} key={opt} />)
                       }
                       ChipProps={{ size: 'small' }}
                     />
@@ -672,6 +672,11 @@ export default function SpouseFilterReportMUI() {
                   <Grid item xs={12} sm={4}>
                     <TextField fullWidth label="Relation" value={filters.relation} onChange={set('relation')} placeholder="e.g. Spouse, Parent..." />
                   </Grid>
+                </Grid>
+                <Grid item xs={12}>
+                  <Stack direction="row" flexWrap="wrap" gap={2}>
+                    <FormControlLabel control={<Switch checked={!!(filters as any).hasInsurance}
+                      onChange={setToggle('hasInsurance')} color="primary" />} label="Has Insurance" />                    </Stack>
                 </Grid>
               </AccordionDetails>
             </Accordion>

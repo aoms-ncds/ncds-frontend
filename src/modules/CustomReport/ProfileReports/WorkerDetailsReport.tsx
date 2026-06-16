@@ -40,6 +40,8 @@ import { BlobProvider } from '@react-pdf/renderer';
 import PDFTemplateCustomChild from '../components/PDFTemplateCustomChild';
 import PDFTemplateCustomUsers from '../components/PDFTemplateCustomUsers';
 import UserLifeCycleStates from '../../User/extras/UserLifeCycleStates';
+import DesignationServices from '../../HR/extras/DesignationServices';
+import DepartmentService from '../../Settings/extras/DepartmentService';
 
 // ── Icons via Unicode/emoji since we can't import @mui/icons-material ──
 const Icon = ({ children, sx = {} }: { children: ReactNode; sx?: object }) => (
@@ -162,7 +164,7 @@ const LANGUAGES = ['English', 'Hindi', 'Malayalam', 'Tamil', 'Telugu', 'Kannada'
 const FIELD = ['Urban', 'Rural', 'Semi-Urban', 'Tribal'];
 const DESIGNATIONS = ['Pastor', 'Evangelist', 'Elder', 'Deacon', 'Bishop', 'Missionary', 'Apostle'];
 const DEPARTMENTS = ['Youth', 'Women', 'Music', 'Outreach', 'Education', 'Administration', 'Media'];
-const FAMILY_TYPES = ['Nuclear', 'Joint', 'Extended'];
+const FAMILY_TYPES = ['Single', 'Family'];
 const OFFICIAL_STATUS = ['Active', 'OnLeave', 'Suspended', 'Retired', 'Resigned'];
 const LIFECYCLE = ['Active', 'Inactive', 'Pending', 'Suspended', 'Retired'];
 const DEACTIVATION = ['Resigned', 'Retired', 'Dismissed', 'Transferred', 'Deceased'];
@@ -179,9 +181,9 @@ const SECTION_ICONS = {
   'Support & Ministry': '⛪',
   'Support Structure': '💰',
   'Insurance': '🛡️',
-};
+} as const;
 
-const SectionTitle = ({ title }) => (
+const SectionTitle = ({ title } : { title: keyof typeof SECTION_ICONS }) => (
   <Stack direction="row" alignItems="center" spacing={1.5}>
     <Avatar sx={{ width: 30, height: 30, fontSize: 15, background: 'rgba(37,99,235,0.15)', border: '1px solid rgba(37,99,235,0.3)' }}>
       {SECTION_ICONS[title] || '📁'}
@@ -190,12 +192,12 @@ const SectionTitle = ({ title }) => (
   </Stack>
 );
 
-const FieldLabel = ({ children }) => (
+const FieldLabel = ({ children } : { children: React.ReactNode }) => (
   <Typography variant="subtitle2" sx={{ mb: 0.8, display: 'block' }}>{children}</Typography>
 );
 
 // ── Range Slider with inputs ───────────────────────────────────────────
-const RangeSlider = ({ label, value, onChange, min = 0, max = 100, unit = '' }) => (
+const RangeSlider = ({ label, value, onChange, min = 0, max = 100, unit = '' }:any) => (
   <Box>
     <FieldLabel>{label}</FieldLabel>
     <Box sx={{ px: 1 }}>
@@ -217,7 +219,7 @@ const RangeSlider = ({ label, value, onChange, min = 0, max = 100, unit = '' }) 
 );
 
 // ── Date Range ─────────────────────────────────────────────────────────
-const DateRange = ({ label, from, to, onFrom, onTo }) => (
+const DateRange = ({ label, from, to, onFrom, onTo }:any) => (
   <Box>
     <FieldLabel>{label}</FieldLabel>
     <Stack direction="row" spacing={1} alignItems="center">
@@ -256,18 +258,30 @@ export default function UserFilterReportMUI() {
     basic: 0, HRA: 0,
     telAllowance: 0, impactDeduction: 0, MUTDeduction: 0,
     supportEnabled: false,
-    impactNo: '', nominee: '', relation: '',
+    impactNo: '', nominee: '', relation: '', hasInsurance: false,
   };
   const navigate = useNavigate();
   const [filters, setFilters] = useState(init);
   const [viewData, setViewData] = useState(false);
   const [genders, setGenders] = useState([]);
-  const [expanded, setExpanded] = useState({ 'Basic Details': true, 'User Type & Lifecycle': true });
+  const [expanded, setExpanded] = useState<Record<string, boolean>>({ 'Basic Details': true, 'User Type & Lifecycle': true });
   const [dateRange, setDateRange] = useState<DateRange>({
     startDate: moment().startOf('M'),
     endDate: moment().endOf('M'),
     rangeType: 'months',
   });
+
+  const [designations, setDesignations] = useState<IDesignation[] | null>(null);
+
+  useEffect(() => {
+    DesignationServices.getAll()
+        .then((res) => setDesignations(res.data))
+        .catch((error) => {
+          // setDesignationsFetchError(error.message);
+          enqueueSnackbar({ variant: 'error', message: error.message });
+        });
+  }, []);
+
   const [data, setData] = useState<any[] | null>(null);
   const [searchText, setSearchText] = useState('');
   const [selectedData, setSelectedData] = useState<any[]>([
@@ -288,7 +302,7 @@ export default function UserFilterReportMUI() {
   const [print, setPrint] = useState<boolean>(false);
 
   const set = (key: string) => (e: { target: { value: any } }) => setFilters((f) => ({ ...f, [key]: e?.target ? e.target.value : e }));
-  const setSlider = (key) => (value) => {
+  const setSlider = (key: string) => (value : any) => {
     setFilters((prev) => ({
       ...prev,
       [key]: value,
@@ -298,7 +312,7 @@ export default function UserFilterReportMUI() {
   console.log(filters, 'filters');
   useEffect(()=>{
     GenderService.getAll()
-              .then((res2) => setGenders(res2.data))
+              .then((res2) => setGenders(res2.data as any))
               // .then((res) => console.log(res.data, 'sec'))
               .catch((error) =>
                 enqueueSnackbar({
@@ -307,6 +321,17 @@ export default function UserFilterReportMUI() {
                 }),
               );
   }, []);
+    const [department, setDepartment] = useState<Department[] | null>(null);
+
+   useEffect(() => {
+      DepartmentService.getAll()
+        .then((res) => setDepartment(res.data))
+        .catch((error) => {
+          // setDepartmentFetchError(error.message);
+          enqueueSnackbar({ variant: 'error', message: error.message });
+        });
+    }, []);
+
   const [selectedRow, setSelectedRow] = useState<number | null>(null);
   console.log(data, 'dta77');
 
@@ -334,13 +359,15 @@ export default function UserFilterReportMUI() {
     setFilters((f) => ({ ...f, [key]: def }));
   };
 
-  const SelectField = ({ label, id, options, value, onChange }) => (
+  const SelectField = ({ label, id, options, value, onChange }: { label: string; id: string; options: React.ReactNode[]; value: any; onChange: (e: any) => void }) => (
     <FormControl fullWidth size="small">
       <InputLabel id={id + '-label'}>{label}</InputLabel>
       <Select labelId={id + '-label'} id={id} value={value} label={label} onChange={onChange}
         sx={{ 'background': 'rgba(255,255,255,0.03)', '& .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255,255,255,0.1)' } }}>
         <MenuItem value=""><em>Any</em></MenuItem>
-        {options.map((o: boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | Key | null | undefined) => <MenuItem key={o} value={o}>{o}</MenuItem>)}
+        {options.map((o, idx) => (
+          <MenuItem key={String(idx)} value={o as any}>{o}</MenuItem>
+        ))}
       </Select>
     </FormControl>
   );
@@ -350,7 +377,7 @@ export default function UserFilterReportMUI() {
 
   const user = useAuth();
   useEffect(()=>{
-    DivisionsServices.getSubDivisionsByDivisionId(filters.division?._id ?? '')
+    DivisionsServices.getSubDivisionsByDivisionId((filters as any).division?._id ?? '')
               .then((res2) => setSubDivisions(res2.data))
               // .then((res) => console.log(res.data, 'sec'))
               .catch((error) =>
@@ -454,8 +481,8 @@ export default function UserFilterReportMUI() {
                       <InputLabel>Division</InputLabel>
                       <Select
                         label="Division"
-                        value={filters.division}
-                        onChange={(e) => set('division')(e.target.value)}
+                        value={(filters as any).division}
+                        onChange={(e) => set('division')(e.target.value as any)}
                       >
                         <MenuItem value="">All</MenuItem>
                         {divisions?.map((d) => (
@@ -471,7 +498,7 @@ export default function UserFilterReportMUI() {
                       <InputLabel>Sub Division</InputLabel>
                       <Select
                         label="Sub Division"
-                        value={filters.subDivision}
+                        value={(filters as any).subDivision}
                         onChange={(e) => set('subDivision')(e.target.value)}
                       >
                         <MenuItem value="">All</MenuItem>
@@ -510,7 +537,7 @@ export default function UserFilterReportMUI() {
                       label="Organization"
                       name="organization"
                       value={filters.organization}
-                      onChange={(e) => set('organization')(e.target.value)}
+                      onChange={(e) => set('organization')(e.target.value as any)}
                     >
                       <MenuItem value="IET">IET</MenuItem>
                       <MenuItem value="BCG">BCG</MenuItem>
@@ -524,7 +551,7 @@ export default function UserFilterReportMUI() {
                       label="Status"
                       name="status"
                       value={filters.status}
-                      onChange={(e) => set('status')(e.target.value)}
+                      onChange={(e) => set('status')(e.target.value as any)}
                     >
                       <MenuItem value={UserLifeCycleStates.ACTIVE}>Active</MenuItem>
                       <MenuItem value={UserLifeCycleStates.INACTIVE}>InActive</MenuItem>
@@ -554,7 +581,7 @@ export default function UserFilterReportMUI() {
                       label="Title"
                       name="title"
                       value={filters.title}
-                      onChange={(e) => set('title')(e.target.value)}
+                      onChange={(e) => set('title')(e.target.value as any)}
                     >
                       <MenuItem value="Mr">Mr</MenuItem>
                       <MenuItem value="Mrs">Mrs</MenuItem>
@@ -576,10 +603,10 @@ export default function UserFilterReportMUI() {
                       <Select
                         label="Gender"
                         value={filters.gender}
-                        onChange={(e) => set('gender')(e.target.value)}
+                        onChange={(e) => set('gender')(e.target.value as any)}
                       >
                         <MenuItem value="">All</MenuItem>
-                        {genders?.map((d) => (
+                        {genders?.map((d: any) => (
                           <MenuItem key={d.id} value={d}>
                             {d.gender}
                           </MenuItem>
@@ -610,10 +637,10 @@ export default function UserFilterReportMUI() {
                       multiple
                       options={LANGUAGES}
                       value={filters.knownLanguages}
-                      onChange={(_, v) => setFilters((f) => ({ ...f, knownLanguages: v }))}
+                      onChange={(_, v) => setFilters((f:any) => ({ ...f, knownLanguages: v }))}
                       renderInput={(params) => <TextField {...params} label="Known Languages" placeholder="Select languages..." />}
                       renderTags={(val, getProps) =>
-                        val.map((opt, i) => <Chip key={opt} label={opt} size="small" color="primary" variant="outlined" {...getProps({ index: i })} />)
+                        val.map((opt, i) => <Chip label={opt} size="small" color="primary" variant="outlined" {...getProps({ index: i })} key={opt} />)
                       }
                       ChipProps={{ size: 'small' }}
                     />
@@ -670,10 +697,10 @@ export default function UserFilterReportMUI() {
                   </Grid>
                   <Grid item xs={12}>
                     <Stack direction="row" flexWrap="wrap" gap={2}>
-                      <FormControlLabel control={<Switch checked={!!filters.hasPAN} onChange={setToggle('hasPAN')} color="primary" />} label="Has PAN" />
-                      <FormControlLabel control={<Switch checked={!!filters.hasAadhaar} onChange={setToggle('hasAadhaar')} color="primary" />} label="Has Aadhaar" />
-                      <FormControlLabel control={<Switch checked={!!filters.hasVoterId} onChange={setToggle('hasVoterId')} color="primary" />} label="Has Voter ID" />
-                      <FormControlLabel control={<Switch checked={!!filters.hasLicense} onChange={setToggle('hasLicense')} color="primary" />} label="Has License" />
+                      <FormControlLabel control={<Switch checked={!!(filters as any).hasPAN} onChange={setToggle('hasPAN')} color="primary" />} label="Has PAN" />
+                      <FormControlLabel control={<Switch checked={!!(filters as any).hasAadhaar} onChange={setToggle('hasAadhaar')} color="primary" />} label="Has Aadhaar" />
+                      <FormControlLabel control={<Switch checked={!!(filters as any).hasVoterId} onChange={setToggle('hasVoterId')} color="primary" />} label="Has Voter ID" />
+                      <FormControlLabel control={<Switch checked={!!(filters as any).hasLicense} onChange={setToggle('hasLicense')} color="primary" />} label="Has License" />
                     </Stack>
                   </Grid>
                 </Grid>
@@ -696,9 +723,9 @@ export default function UserFilterReportMUI() {
                       <Paper sx={{ p: 2, background: 'rgba(255,255,255,0.02)', borderColor: 'rgba(255,255,255,0.06)' }}>
                         <Typography variant="subtitle2" sx={{ mb: 1.5 }}>{label}</Typography>
                         <Stack spacing={1.5}>
-                          <TextField fullWidth label="City" value={filters[`${prefix}City`]} onChange={set(`${prefix}City`)} />
-                          <TextField fullWidth label="State" value={filters[`${prefix}State`]} onChange={set(`${prefix}State`)} />
-                          <TextField fullWidth label="Country" value={filters[`${prefix}Country`]} onChange={set(`${prefix}Country`)} />
+                          <TextField fullWidth label="City" value={(filters as any)[`${prefix}City`]} onChange={set(`${prefix}City`)} />
+                          <TextField fullWidth label="State" value={(filters as any)[`${prefix}State`]} onChange={set(`${prefix}State`)} />
+                          <TextField fullWidth label="Country" value={(filters as any)[`${prefix}Country`]} onChange={set(`${prefix}Country`)} />
                         </Stack>
                       </Paper>
                     </Grid>
@@ -743,14 +770,38 @@ export default function UserFilterReportMUI() {
               <AccordionDetails>
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm={6} md={3}>
-                    <SelectField label="Designation" id="desig" options={DESIGNATIONS} value={filters.designation} onChange={set('designation')} />
-                  </Grid>
+                    <Autocomplete
+                      options={designations ?? []}
+                      value={designations?.find((d) => d._id === filters.designation) ?? null}
+                      onChange={(e, newValue:any) => set('designation')(newValue?._id ?? '')}
+                      getOptionLabel={(option) => option.name}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          label="Designation"
+                          variant="outlined"
+                          fullWidth
+                        />
+                      )}
+                    />                  </Grid>
                   <Grid item xs={12} sm={6} md={3}>
                     <TextField fullWidth label="Other Designation" value={filters.otherDesignation} onChange={set('otherDesignation')} />
                   </Grid>
                   <Grid item xs={12} sm={6} md={3}>
-                    <SelectField label="Department" id="dept" options={DEPARTMENTS} value={filters.department} onChange={set('department')} />
-                  </Grid>
+  <Autocomplete
+                      options={department ?? []}
+                      value={department?.find((d) => d._id === filters.department) ?? null}
+                      onChange={(e, newValue:any) => set('department')(newValue?._id ?? '')}
+                      getOptionLabel={(option) => option.name}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          label="Department"
+                          variant="outlined"
+                          fullWidth
+                        />
+                      )}
+                    />                    </Grid>
                   <Grid item xs={12} sm={6} md={3}>
                     <SelectField label="Type of Family" id="family" options={FAMILY_TYPES} value={filters.typeOfFamily} onChange={set('typeOfFamily')} />
                   </Grid>
@@ -783,7 +834,7 @@ export default function UserFilterReportMUI() {
                   <Grid item xs={12}>
                     <FormControlLabel control={<Switch checked={filters.supportEnabled} onChange={setToggle('supportEnabled')} color="primary" />} label="Support Enabled" />
                   </Grid>
-                 <Grid item xs={12} sm={6} md={3}>
+                  <Grid item xs={12} sm={6} md={3}>
                     <TextField fullWidth label="Basic Salary" value={filters.basic} onChange={set('basic')} />
                   </Grid>
                   <Grid item xs={12} sm={6} md={3}>
@@ -792,7 +843,7 @@ export default function UserFilterReportMUI() {
                   <Grid item xs={12} sm={6} md={3}>
                     <TextField fullWidth label="Tel Allowance" value={filters.telAllowance} onChange={set('telAllowance')} />
                   </Grid>
-                 <Grid item xs={12} sm={6} md={3}>
+                  <Grid item xs={12} sm={6} md={3}>
                     <TextField fullWidth label="Impact Deduction" value={filters.impactDeduction} onChange={set('impactDeduction')} />
                   </Grid>
                   <Grid item xs={12} sm={6} md={3}>
@@ -818,6 +869,11 @@ export default function UserFilterReportMUI() {
                   <Grid item xs={12} sm={4}>
                     <TextField fullWidth label="Relation" value={filters.relation} onChange={set('relation')} placeholder="e.g. Spouse, Parent..." />
                   </Grid>
+                </Grid>
+                <Grid item xs={12}>
+                  <Stack direction="row" flexWrap="wrap" gap={2}>
+                    <FormControlLabel control={<Switch checked={!!(filters as any).hasInsurance}
+                      onChange={setToggle('hasInsurance')} color="primary" />} label="Has Insurance" />                    </Stack>
                 </Grid>
               </AccordionDetails>
             </Accordion>

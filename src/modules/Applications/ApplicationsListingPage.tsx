@@ -3,6 +3,7 @@ import {
   Edit as EditIcon, Preview as PreviewIcon, Add as AddIcon, Download as DownloadIcon,
   Attachment as AttachmentIcon,
   Delete,
+  LogoDevOutlined,
 } from '@mui/icons-material';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import CloseIcon from '@mui/icons-material/Close';
@@ -33,6 +34,7 @@ import WorkersServices from '../Workers/extras/WorkersServices';
 import WelfareForm from './WelfareForm';
 import Section from './Section';
 import { set } from 'mongoose';
+import TransactionLogDialog from '../FR/components/TransactionLogDialog';
 
 
 const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' |'welfare'| 'welfarePresident' | 'revertHr' | 'revertDivision'| 'allRevert'}) => {
@@ -297,6 +299,8 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
   // const handleChange = (e: any) => {
   //   setForm({ ...forms, [e.target.name]: e.target.value });
   // };
+    const [openLog, setOpenLog] = useState(false);
+
 
   const handleCheckbox = (e: any) => {
     setForm({ ...forms, [e.target.name]: e.target.checked });
@@ -768,6 +772,17 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
             setStatusId(params.id as string);
           }}
         />,
+        <GridLinkAction
+          key={5}
+          label="Log"
+          icon={<LogoDevOutlined />}
+          showInMenu
+          onClick={() => {
+                setOpenLog(true);
+            setStatusId(params.id as string);
+          }}
+        />,
+        
         props.action === 'hr' && hasPermissions(['MANAGE_APPLICATION']) &&
         <GridLinkAction
           key={4}
@@ -3596,6 +3611,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
           </Button>
         </DialogActions>
       </Dialog>
+      {statusId&&<TransactionLogDialog open={openLog} onClose={()=>setOpenLog(false)} TRId={statusId}/>}
 
     </CommonPageLayout>
   );

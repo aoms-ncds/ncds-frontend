@@ -180,9 +180,9 @@ const SECTION_ICONS = {
   'Support & Ministry': '⛪',
   'Support Structure': '💰',
   'Insurance': '🛡️',
-};
+} as Record<string, string>;
 
-const SectionTitle = ({ title }) => (
+const SectionTitle = ({ title }: { title: string }) => (
   <Stack direction="row" alignItems="center" spacing={1.5}>
     <Avatar sx={{ width: 30, height: 30, fontSize: 15, background: 'rgba(37,99,235,0.15)', border: '1px solid rgba(37,99,235,0.3)' }}>
       {SECTION_ICONS[title] || '📁'}
@@ -191,12 +191,12 @@ const SectionTitle = ({ title }) => (
   </Stack>
 );
 
-const FieldLabel = ({ children }) => (
+const FieldLabel = ({ children }: { children: React.ReactNode }) => (
   <Typography variant="subtitle2" sx={{ mb: 0.8, display: 'block' }}>{children}</Typography>
 );
 
 // ── Range Slider with inputs ───────────────────────────────────────────
-const RangeSlider = ({ label, value, onChange, min = 0, max = 100, unit = '' }) => (
+const RangeSlider = ({ label, value, onChange, min = 0, max = 100, unit = '' }:any) => (
   <Box>
     <FieldLabel>{label}</FieldLabel>
     <Box sx={{ px: 1 }}>
@@ -218,7 +218,7 @@ const RangeSlider = ({ label, value, onChange, min = 0, max = 100, unit = '' }) 
 );
 
 // ── Date Range ─────────────────────────────────────────────────────────
-const DateRange = ({ label, from, to, onFrom, onTo }) => (
+const DateRange = ({ label, from, to, onFrom, onTo }:any) => (
   <Box>
     <FieldLabel>{label}</FieldLabel>
     <Stack direction="row" spacing={1} alignItems="center">
@@ -256,7 +256,7 @@ export default function ChildFilterReportMUI() {
   const [filters, setFilters] = useState(init);
   const [viewData, setViewData] = useState(false);
   const [genders, setGenders] = useState([]);
-  const [expanded, setExpanded] = useState({ 'Basic Details': true, 'User Type & Lifecycle': true });
+  const [expanded, setExpanded] = useState<Record<string, boolean>>({ 'Basic Details': true, 'User Type & Lifecycle': true });
   const [dateRange, setDateRange] = useState<DateRange>({
     startDate: moment().startOf('M'),
     endDate: moment().endOf('M'),
@@ -283,7 +283,7 @@ export default function ChildFilterReportMUI() {
   const [print, setPrint] = useState<boolean>(false);
 
   const set = (key: string) => (e: { target: { value: any } }) => setFilters((f) => ({ ...f, [key]: e?.target ? e.target.value : e }));
-  const setSlider = (key) => (value) => {
+  const setSlider = (key:any) => (value:any) => {
     setFilters((prev) => ({
       ...prev,
       [key]: value,
@@ -293,7 +293,7 @@ export default function ChildFilterReportMUI() {
   console.log(filters, 'filters');
   useEffect(()=>{
     GenderService.getAll()
-              .then((res2) => setGenders(res2.data))
+              .then((res2) => setGenders(res2.data as any))
               // .then((res) => console.log(res.data, 'sec'))
               .catch((error) =>
                 enqueueSnackbar({
@@ -329,13 +329,17 @@ export default function ChildFilterReportMUI() {
     setFilters((f) => ({ ...f, [key]: def }));
   };
 
-  const SelectField = ({ label, id, options, value, onChange }) => (
+  const SelectField = ({ label, id, options, value, onChange }:any) => (
     <FormControl fullWidth size="small">
       <InputLabel id={id + '-label'}>{label}</InputLabel>
       <Select labelId={id + '-label'} id={id} value={value} label={label} onChange={onChange}
         sx={{ 'background': 'rgba(255,255,255,0.03)', '& .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255,255,255,0.1)' } }}>
         <MenuItem value=""><em>Any</em></MenuItem>
-        {options.map((o: boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | Key | null | undefined) => <MenuItem key={o} value={o}>{o}</MenuItem>)}
+        {options.map((o: any, i: number) => (
+          <MenuItem key={i} value={o}>
+            {typeof o === 'boolean' || typeof o === 'number' ? String(o) : o}
+          </MenuItem>
+        ))}
       </Select>
     </FormControl>
   );
@@ -345,7 +349,7 @@ export default function ChildFilterReportMUI() {
 
   const user = useAuth();
   useEffect(()=>{
-    DivisionsServices.getSubDivisionsByDivisionId(filters.division?._id ?? '')
+    DivisionsServices.getSubDivisionsByDivisionId((filters as any).division?._id ?? '')
               .then((res2) => setSubDivisions(res2.data))
               // .then((res) => console.log(res.data, 'sec'))
               .catch((error) =>
@@ -449,7 +453,7 @@ export default function ChildFilterReportMUI() {
                       <InputLabel>Division</InputLabel>
                       <Select
                         label="Division"
-                        value={filters.division}
+                        value={(filters as any).division}
                         onChange={(e) => set('division')(e.target.value)}
                       >
                         <MenuItem value="">All</MenuItem>
@@ -466,7 +470,7 @@ export default function ChildFilterReportMUI() {
                       <InputLabel>Sub Division</InputLabel>
                       <Select
                         label="Sub Division"
-                        value={filters.subDivision}
+                        value={(filters as any).subDivision}
                         onChange={(e) => set('subDivision')(e.target.value)}
                       >
                         <MenuItem value="">All</MenuItem>
@@ -521,33 +525,32 @@ export default function ChildFilterReportMUI() {
                       fullWidth
                       label="Title"
                       name="title"
-                      value={filters.title}
-                      onChange={(e) => set('title')(e.target.value)}
+                      value={(filters as any).title}
+                      onChange={(e) => set('title')(e.target.value as any)}
                     >
-                      <MenuItem value="Mr">Mr</MenuItem>
                       <MenuItem value="Mrs">Mrs</MenuItem>
                       <MenuItem value="Miss">Miss</MenuItem>
                     </TextField>
                   </Grid>
                   <Grid item xs={12} sm={6} md={3}>
-                    <TextField fullWidth label="First Name" value={filters.firstName} onChange={set('firstName')} />
+                    <TextField fullWidth label="First Name" value={(filters as any).firstName} onChange={set('firstName')} />
                   </Grid>
                   <Grid item xs={12} sm={6} md={3}>
-                    <TextField fullWidth label="Middle Name" value={filters.middleName} onChange={set('middleName')} />
+                    <TextField fullWidth label="Middle Name" value={(filters as any).middleName} onChange={set('middleName')} />
                   </Grid>
                   <Grid item xs={12} sm={6} md={3}>
-                    <TextField fullWidth label="Last Name" value={filters.lastName} onChange={set('lastName')} />
+                    <TextField fullWidth label="Last Name" value={(filters as any).lastName} onChange={set('lastName')} />
                   </Grid>
                   <Grid item xs={12} sm={6} md={3}>
                     <FormControl fullWidth>
                       <InputLabel>Gender</InputLabel>
                       <Select
                         label="Gender"
-                        value={filters.gender}
+                        value={(filters as any).gender}
                         onChange={(e) => set('gender')(e.target.value)}
                       >
                         <MenuItem value="">All</MenuItem>
-                        {genders?.map((d) => (
+                        {genders?.map((d:any) => (
                           <MenuItem key={d.id} value={d}>
                             {d.gender}
                           </MenuItem>
@@ -578,10 +581,10 @@ export default function ChildFilterReportMUI() {
                       multiple
                       options={LANGUAGES}
                       value={filters.knownLanguages}
-                      onChange={(_, v) => setFilters((f) => ({ ...f, knownLanguages: v }))}
+                      onChange={(_, v) => setFilters((f:any) => ({ ...f, knownLanguages: v }))}
                       renderInput={(params) => <TextField {...params} label="Known Languages" placeholder="Select languages..." />}
                       renderTags={(val, getProps) =>
-                        val.map((opt, i) => <Chip key={opt} label={opt} size="small" color="primary" variant="outlined" {...getProps({ index: i })} />)
+                        val.map((opt, i) => <Chip label={opt} size="small" color="primary" variant="outlined" {...getProps({ index: i })} key={opt} />)
                       }
                       ChipProps={{ size: 'small' }}
                     />
@@ -643,18 +646,17 @@ export default function ChildFilterReportMUI() {
                   <Grid item xs={12}>
                     <Stack direction="row" flexWrap="wrap" gap={2}>
 
-                      <FormControlLabel control={<Switch checked={!!filters.hasStudying} onChange={setToggle('hasStudying')} color="primary" />} label="Studying" />
-                      <FormControlLabel control={<Switch checked={!!filters.hasHigherEducation} onChange={setToggle('hasHigherEducation')} color="primary" />} label="Has Higher Education" />
-                      <FormControlLabel control={<Switch checked={!!filters.hasWorking} onChange={setToggle('hasWorking')} color="primary" />} label="Has Working" />
-                      <FormControlLabel control={<Switch checked={!!filters.hasAgeOverRide} onChange={setToggle('hasAgeOverRide')} color="primary" />} label="Has Age Override" />
-                      <FormControlLabel control={<Switch checked={!!filters.hasSupportEnabled} onChange={setToggle('hasSupportEnabled')} color="primary" />} label="Has Support Enabled" />
+                      <FormControlLabel control={<Switch checked={!!(filters as any).hasStudying} onChange={setToggle('hasStudying')} color="primary" />} label="Studying" />
+                      <FormControlLabel control={<Switch checked={!!(filters as any).hasHigherEducation} onChange={setToggle('hasHigherEducation')} color="primary" />} label="Has Higher Education" />
+                      <FormControlLabel control={<Switch checked={!!(filters as any).hasWorking} onChange={setToggle('hasWorking')} color="primary" />} label="Has Working" />
+                      <FormControlLabel control={<Switch checked={!!(filters as any).hasAgeOverRide} onChange={setToggle('hasAgeOverRide')} color="primary" />} label="Has Age Override" />
+                      <FormControlLabel control={<Switch checked={!!(filters as any).hasSupportEnabled} onChange={setToggle('hasSupportEnabled')} color="primary" />} label="Has Support Enabled" />
                     </Stack>
                   </Grid>
                 </Grid>
               </AccordionDetails>
             </Accordion>
 
-          
 
             {/* ════ SECTION 9: Insurance ════ */}
 
@@ -1005,7 +1007,7 @@ export default function ChildFilterReportMUI() {
 
           </Grid>
         </Card>
-  <Dialog open={print} onClose={() => setPrint(false)} maxWidth="xs" fullWidth>
+        <Dialog open={print} onClose={() => setPrint(false)} maxWidth="xs" fullWidth>
           <DialogTitle> Print  Details </DialogTitle>
           <DialogContent>
             <Container>

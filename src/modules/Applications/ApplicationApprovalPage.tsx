@@ -253,9 +253,9 @@ const ApplicationApprovalPage = () => {
                   View Form
               </Button>
               &nbsp;
-              <Button variant="outlined" onClick={handleEdit}>
+              {/* <Button variant="outlined" onClick={handleEdit}>
   Edit Form
-              </Button>
+              </Button> */}
               &nbsp;
               {Number(applications?.status) == ApplicationLifeCycleStates.REVERT_TO_DIVISION|| Number(applications?.status) == ApplicationLifeCycleStates.REVERT_TO_HR &&(
 

@@ -6,7 +6,7 @@ import IROReportFilter from '../CustomReportIROFilterPage';
 import CustomReportFRFilterPage from '../CustomReportFRFilterPage';
 import ProfileReports from '../ProfileReports';
 import UserFilterReportMUI from '../ProfileReports/WorkerDetailsReport';
-import ReportView from '../ProfileReports/WorkerDetailsReportView';
+// import ReportView from '../ProfileReports/WorkerDetailsReportView';
 import SpouseFilterReportMUI from '../ProfileReports/SpouseDetailsReport';
 import ChildFilterReportMUI from '../ProfileReports/ChildDetailsReport';
 
@@ -83,16 +83,16 @@ const customFrIroRoute: ModuleRoute = {
       // icon: <HomeIcon />,
       // icon: <img src="/mod_icons/Applications.png" alt="Logo" style={{ width: '30px', height: '30px' }} />,
     },
-    {
-      title: 'ReportView',
-      path: '/reportView',
-      element: <ReportView />,
-      private: true,
-      requiredAccessRights: ['READ_ACCESS'],
-      // showInDrawer: true,
-      // icon: <HomeIcon />,
-      // icon: <img src="/mod_icons/Applications.png" alt="Logo" style={{ width: '30px', height: '30px' }} />,
-    },
+    // {
+    //   title: 'ReportView',
+    //   path: '/reportView',
+    //   element: <ReportView />,
+    //   private: true,
+    //   requiredAccessRights: ['READ_ACCESS'],
+    //   // showInDrawer: true,
+    //   // icon: <HomeIcon />,
+    //   // icon: <img src="/mod_icons/Applications.png" alt="Logo" style={{ width: '30px', height: '30px' }} />,
+    // },
     // {
     //   title: 'Custom Report Table',
     //   path: '/custom-report-table',
