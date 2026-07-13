@@ -1155,22 +1155,56 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
               fullWidth
               type="number"
               value={transferInput}
-              onChange={(e) => setTransferInput(e.target.value)}
+              onChange={(e) => {
+                const rawValue = e.target.value;
+
+                // allow clearing the field
+                if (rawValue === '') {
+                  setTransferInput('');
+                  return;
+                }
+
+                const maxAllowed = Number(releaseAmount?.releaseAmount) || 0;
+                const numericValue = Number(rawValue);
+
+                if (isNaN(numericValue)) return;
+
+                // clamp instead of just flagging error
+                if (numericValue > maxAllowed) {
+                  setTransferInput(String(maxAllowed));
+                } else if (numericValue < 0) {
+                  setTransferInput('0');
+                } else {
+                  setTransferInput(rawValue);
+                }
+              }}
+              error={Number(transferInput) > (Number(releaseAmount?.releaseAmount) || 0)}
+              helperText={`Max allowed: ${Number(releaseAmount?.releaseAmount) || 0}`}
+              inputProps={{
+                max: Number(releaseAmount?.releaseAmount) || 0,
+                min: 0,
+              }}
             />
           </DialogContent>
 
           <DialogActions>
 
             <Button onClick={() => setOpenTransferDialog(false)}>
-                    Cancel
+      Cancel
             </Button>
 
             <Button
               variant="contained"
+              disabled={
+                transferInput === '' ||
+        isNaN(Number(transferInput)) ||
+        Number(transferInput) < 0 ||
+        Number(transferInput) > (Number(releaseAmount?.releaseAmount) || 0)
+              }
               onClick={() => {
-                const amount = Number(transferInput);
+                const maxAllowed = Number(releaseAmount?.releaseAmount) || 0;
+                const amount = Math.min(Math.max(Number(transferInput), 0), maxAllowed);
 
-                // ✅ Pre-fill ALL rows with their current displayed value before updating
                 const allRowAmounts = releaseAmount?.IRO?.reduce((acc: any, row: any) => {
                   if (acc[row._id] === undefined) {
                     acc[row._id] =
@@ -1188,25 +1222,22 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
                   [selectedRow._id]: amount,
                 };
 
-                // update row values
                 setTransferredAmounts(updatedAmounts);
 
-                // calculate total
                 const total = Object.values(updatedAmounts)
           .reduce((sum: any, val: any) => sum + Number(val || 0), 0);
 
-                // update release form in ONE call
                 setReleaseAmount((prev: any) => ({
                   ...prev,
                   transferredAmount: total,
                   transferredAmountEach: updatedAmounts,
-                  hasTransferred: true, // ✅ flag
+                  hasTransferred: true,
                 }));
 
                 setOpenTransferDialog(false);
               }}
             >
-              Save
+      Save
             </Button>
 
           </DialogActions>
