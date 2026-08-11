@@ -1057,213 +1057,233 @@ const ManageFrPage = () => {
               <Grid item xs={12} md={12}>
                 <Card sx={{ maxWidth: '78vw', height: '100vh', alignItems: 'center' }}>
                   <Grid container spacing={2} padding={1}>
-                    <Grid item xs={6}>
-                      {/* <div style={{ display: 'flex', alignItems: 'center' }}> */}
-                      <TextField
-                        label="Search"
-                        variant="outlined"
-                        value={searchText}
-                        placeholder='Enter FRno or FRDate or Division or SubCategory'
-                        onChange={handleSearchChange}
-                        fullWidth
+                    <Grid padding={2} container spacing={2}>
+                      <Grid item xs={5}>
+                        {/* <div style={{ display: 'flex', alignItems: 'center' }}> */}
+                        <TextField
+                          label="Search"
+                          variant="outlined"
+                          value={searchText}
+                          placeholder='Enter FRno or FRDate or Division or SubCategory'
+                          onChange={handleSearchChange}
+                          fullWidth
                         // style={{ height: '10%' }}
-                      />
-                      {/* </div> */}
-                    </Grid>
-                    <Grid item xs={3}>
-                      {hasPermissions(['MANAGE_IRO']) && (
-                        <Grid item xs={12} md="auto" sx={{
-                          display: 'flex',
-                          alignItems: 'center', // ✅ vertical center
-                        }}>
-                          <FormControl
-                            sx={{
-                              'minWidth': 200,
-                              '& .MuiOutlinedInput-root': {
+                        />
+                        {/* </div> */}
+                      </Grid>
+                      <Grid item xs={6}>
+                        {hasPermissions(['MANAGE_IRO']) && (
+                          <Grid item xs={12} md="auto" sx={{
+                            display: 'flex',
+                            alignItems: 'center', // ✅ vertical center
+                          }}>
+                            <FormControl
+                              sx={{
+                                'minWidth': 200,
+                                '& .MuiOutlinedInput-root': {
                                 // height: 45, // ✅ control select height
-                                fontSize: 13,
-                                borderRadius: 1.5,
-                              },
-                            }}
-                          >
-                            <InputLabel id="division-label">
-  Division
-                            </InputLabel>
-                            <Select
-                              multiple
-                              value={selectedDivisions}
-                              label="Division"
-                              onChange={handleDivisionChange}
-                              renderValue={(selected) =>
-                                selected.length === 0 ? 'None' : selected.join(', ')
-                              }
-                              MenuProps={{
-                                PaperProps: {
-                                  style: { maxHeight: 300, width: 250 },
+                                  fontSize: 13,
+                                  borderRadius: 1.5,
                                 },
                               }}
                             >
-                              <ListSubheader>
-                                <TextField
-                                  size="small"
-                                  placeholder="Search division..."
-                                  fullWidth
-                                  autoFocus
-                                  value={divisionSearch}
-                                  onChange={(e) => setDivisionSearch(e.target.value)}
-                                  onKeyDown={(e) => e.stopPropagation()}
-                                />
-                              </ListSubheader>
+                              <InputLabel id="division-label">
+  Division
+                              </InputLabel>
+                              <Select
+                                multiple
+                                value={selectedDivisions}
+                                label="Division"
+                                onChange={handleDivisionChange}
+                                renderValue={(selected) =>
+                                  selected.length === 0 ? 'None' : selected.join(', ')
+                                }
+                                MenuProps={{
+                                  PaperProps: {
+                                    style: { maxHeight: 300, width: 250 },
+                                  },
+                                }}
+                              >
+                                <ListSubheader>
+                                  <TextField
+                                    size="small"
+                                    placeholder="Search division..."
+                                    fullWidth
+                                    autoFocus
+                                    value={divisionSearch}
+                                    onChange={(e) => setDivisionSearch(e.target.value)}
+                                    onKeyDown={(e) => e.stopPropagation()}
+                                  />
+                                </ListSubheader>
 
-                              <MenuItem value="__ALL__">
-                                <Checkbox checked={selectedDivisions.length === 0} />
-                                <ListItemText primary="None" />
-                              </MenuItem>
-
-                              {filteredDivisions.map((name) => (
-                                <MenuItem key={name} value={name}>
-                                  <Checkbox checked={selectedDivisions.includes(name)} />
-                                  <ListItemText primary={name} />
+                                <MenuItem value="__ALL__">
+                                  <Checkbox checked={selectedDivisions.length === 0} />
+                                  <ListItemText primary="None" />
                                 </MenuItem>
-                              ))}
-                            </Select>
-                          </FormControl>
-                        </Grid>
-                      )}
-                    </Grid>
-                    <Grid item xs={3} sx={{ px: 2 }}>
-                      {/* <br /> */}
 
-                      <PermissionChecks
-                        permissions={['MANAGE_FR']}
-                        granted={
-                          <Button
-                            onClick={async () => {
-                              const sheet = FRRequests ?
-                                FRRequests.map((fr: FR) => [
-                                  fr.FRno,
-                                  fr.FRdate.format('DD/MM/YYYY'),
-                                  fr.division?.details.name,
-                                  fr.purposeSubdivision?.name,
-                                  fr?.mainCategory,
-                                  fr.particulars?.reduce((total, particular) => total + Number(particular.requestedAmount), 0),
-                                  fr.sanctionedAmount,
-                                  fr.sanctionedBank,
-                                  fr.sanctionedAsPer,
-                                  IROLifeCycleStates.getStatusNameByCodeTransaction(fr.status).replaceAll('_', ' '),
-                                ]) :
-                                [];
-                              const headers = ['FR No', 'Date', 'Division', 'Sub Division', 'Main Category', 'Requested Amt', 'Sanctioned Amt', 'Sanctioned Bank', 'Sanctioned As per', 'Status'];
-                              const worksheet = XLSX.utils.json_to_sheet(sheet);
-                              const workbook = XLSX.utils.book_new();
-                              XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet');
-                              XLSX.utils.sheet_add_aoa(worksheet, [headers], { origin: 'A1' });
-                              XLSX.writeFile(workbook, 'FRReport.xlsx', { compression: true });
-                            }}
-                            startIcon={<DownloadIcon />}
-                            color="primary"
-                            sx={{ float: 'right', marginBottom: 3, mr: 2 }}
-                            variant="contained"
-                          >
-                            Export
-                          </Button>
-                        }
-                      />
+                                {filteredDivisions.map((name) => (
+                                  <MenuItem key={name} value={name}>
+                                    <Checkbox checked={selectedDivisions.includes(name)} />
+                                    <ListItemText primary={name} />
+                                  </MenuItem>
+                                ))}
+                              </Select>
+                            </FormControl>
+                          </Grid>
+                        )}
+                      </Grid>
+                      <Grid item xs={12} sx={{ px: 2 }}>
+                        {/* <br /> */}
 
-                      <PermissionChecks
-                        permissions={['WRITE_FR']}
-                        granted={
-                          <>
+                        <PermissionChecks
+                          permissions={['MANAGE_FR']}
+                          granted={
                             <Button
+                              onClick={async () => {
+                                const sheet = FRRequests ?
+                                  FRRequests.map((fr: FR) => [
+                                    fr.FRno,
+                                    fr.FRdate.format('DD/MM/YYYY'),
+                                    fr.division?.details.name,
+                                    fr.purposeSubdivision?.name,
+                                    fr?.mainCategory,
+                                    fr.particulars?.reduce((total, particular) => total + Number(particular.requestedAmount), 0),
+                                    fr.sanctionedAmount,
+                                    fr.sanctionedBank,
+                                    fr.sanctionedAsPer,
+                                    IROLifeCycleStates.getStatusNameByCodeTransaction(fr.status).replaceAll('_', ' '),
+                                  ]) :
+                                  [];
+                                const headers = ['FR No', 'Date', 'Division', 'Sub Division', 'Main Category', 'Requested Amt', 'Sanctioned Amt', 'Sanctioned Bank', 'Sanctioned As per', 'Status'];
+                                const worksheet = XLSX.utils.json_to_sheet(sheet);
+                                const workbook = XLSX.utils.book_new();
+                                XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet');
+                                XLSX.utils.sheet_add_aoa(worksheet, [headers], { origin: 'A1' });
+                                XLSX.writeFile(workbook, 'FRReport.xlsx', { compression: true });
+                              }}
+                              startIcon={<DownloadIcon />}
+                              color="primary"
+                              sx={{ float: 'right', marginBottom: 3, mr: 2 }}
                               variant="contained"
-                              sx={{ float: 'right', marginBottom: 1, mr: 2 }}
-                              startIcon={<AddIcon />}
-                              component={Link}
-                              to="/fr/apply"
+                            >
+                            Export
+                            </Button>
+                          }
+                        />
+
+                        <PermissionChecks
+                          permissions={['WRITE_FR']}
+                          granted={
+                            <>
+                              <Button
+                                variant="contained"
+                                sx={{ float: 'right', marginBottom: 1, mr: 2 }}
+                                startIcon={<AddIcon />}
+                                component={Link}
+                                to="/fr/apply"
                               // onClick={() => {
                               // }}
-                            >
+                              >
                               Add new
-                            </Button>
-                          </>
-                        }
-                      />
-                    </Grid>
-                    <Grid container spacing={2}>
-                      <Grid item xs={12}>
-                        <Card elevation={2}>
-                          <CardContent>
-                            <Grid
-                              container
-                              spacing={2}
-                              alignItems="center"
-                            >
-                              {/* LEFT TOGGLE */}
-                              <Grid item xs={12} md={6} minWidth={0}>
-                                <ToggleButtonGroup
-                                  fullWidth
-                                  exclusive
-                                  size="small"
-                                  value={
-                                    statusFilter.includes(FRLifeCycleStates.WAITING_FOR_ACCOUNTS) ?
-                                      'WFA' :
-                                      statusFilter.includes(FRLifeCycleStates.FR_APPROVED) ?
-                                        'VRY' :
-                                        statusFilter.includes(FRLifeCycleStates.REJECTED) ?
-                                          'DIS' :
-                                          statusFilter.includes(FRLifeCycleStates.WAITING_FOR_PRESIDENT) ?
-                                            'PRES' :
-                                            statusFilter.includes(FRLifeCycleStates.FR_SEND_BACK) ?
-                                              'RVT' :
-                                              'ALL'
-                                  }
-                                  onChange={(_, val) => {
-                                    if (!val) return;
-                                    setStatusFilter(
-                                      val === 'WFA' ?
-                                        [FRLifeCycleStates.WAITING_FOR_ACCOUNTS] :
-                                        val === 'VRY' ?
-                                          [FRLifeCycleStates.FR_APPROVED] :
-                                          val === 'RVT' ?
-                                            [FRLifeCycleStates.FR_SEND_BACK] :
-                                            val === 'PRES' ?
-                                              [FRLifeCycleStates.WAITING_FOR_PRESIDENT] :
-                                              val === 'DIS' ?
-                                                [FRLifeCycleStates.REJECTED] :
-                                                [],
-                                    );
-                                  }}
-                                  sx={{ whiteSpace: 'nowrap' }}
-                                >
-                                  <ToggleButton value="ALL">All</ToggleButton>
-                                  <ToggleButton value="WFA">Pending</ToggleButton>
-                                  <ToggleButton value="RVT">Reverted</ToggleButton>
-                                  <ToggleButton value="VRY">Verified</ToggleButton>
-                                  <ToggleButton value="DIS">Disapprove</ToggleButton>
-                                  <ToggleButton value="PRES">Awaiting Approv.</ToggleButton>
-                                </ToggleButtonGroup>
-                              </Grid>
+                              </Button>
+                            </>
+                          }
+                        />
+                      </Grid>
+                      <Grid item xs={12} md={12} minWidth={0}>
+                        <Box
+                          sx={{
+                            'overflowX': 'auto',
+                            'overflowY': 'hidden',
+                            'WebkitOverflowScrolling': 'touch',
+                            'maxWidth': '100%',
+                            '&::-webkit-scrollbar': { height: 6 },
+                            '&::-webkit-scrollbar-thumb': {
+                              backgroundColor: '#c1c1c1',
+                              borderRadius: 3,
+                            },
+                          }}
+                        >
+                          <ToggleButtonGroup
+                            exclusive
+                            size="small"
+                            value={
+                              statusFilter.includes(FRLifeCycleStates.WAITING_FOR_ACCOUNTS) ?
+                                'WFA' :
+                                statusFilter.includes(FRLifeCycleStates.FR_APPROVED) ?
+                                  'VRY' :
+                                  statusFilter.includes(FRLifeCycleStates.REJECTED) ?
+                                    'DIS' :
+                                    statusFilter.includes(FRLifeCycleStates.WAITING_FOR_PRESIDENT) ?
+                                      'PRES' :
+                                      statusFilter.includes(FRLifeCycleStates.FR_SEND_BACK) ?
+                                        'RVT' :
+                                        'ALL'
+                            }
+                            onChange={(_, val) => {
+                              if (!val) return;
+                              setStatusFilter(
+                                val === 'WFA' ?
+                                  [FRLifeCycleStates.WAITING_FOR_ACCOUNTS] :
+                                  val === 'VRY' ?
+                                    [FRLifeCycleStates.FR_APPROVED] :
+                                    val === 'RVT' ?
+                                      [FRLifeCycleStates.FR_SEND_BACK] :
+                                      val === 'PRES' ?
+                                        [FRLifeCycleStates.WAITING_FOR_PRESIDENT] :
+                                        val === 'DIS' ?
+                                          [FRLifeCycleStates.REJECTED] :
+                                          [],
+                              );
+                            }}
+                            sx={{
+                              whiteSpace: 'nowrap',
+                              flexWrap: 'nowrap',
+                              width: 'max-content',
+                            }}
+                          >
+                            <ToggleButton value="ALL">All</ToggleButton>
+                            <ToggleButton value="WFA">Pending</ToggleButton>
+                            <ToggleButton value="RVT">Reverted</ToggleButton>
+                            <ToggleButton value="VRY">Verified</ToggleButton>
+                            <ToggleButton value="DIS">Disapprove</ToggleButton>
+                            <ToggleButton value="PRES">Awaiting Approv.</ToggleButton>
+                          </ToggleButtonGroup>
+                        </Box>
+                      </Grid>
 
-                              {/* RIGHT TOGGLE */}
-                              <Grid item xs={12} md={6} minWidth={0}>
-                                <ToggleButtonGroup
-                                  fullWidth
-                                  exclusive
-                                  size="small"
-                                  value={statusFilter1}
-                                  onChange={(_, val) => val && setStatusFilter1(val)}
-                                  sx={{ whiteSpace: 'nowrap' }}
-                                >
-                                  <ToggleButton value="Resubmitted">Re-Submitted</ToggleButton>
-                                  <ToggleButton value="Support">Support</ToggleButton>
-                                  <ToggleButton value="Expanse">Expense</ToggleButton>
-                                  <ToggleButton value="All">Both</ToggleButton>
-                                  <ToggleButton value="Custom">Custom FR</ToggleButton>
-                                </ToggleButtonGroup>
-                              </Grid>
-                            </Grid>
-                          </CardContent>
-                        </Card>
+                      <Grid item xs={12} md={12} minWidth={0}>
+                        <Box
+                          sx={{
+                            'overflowX': 'auto',
+                            'overflowY': 'hidden',
+                            'WebkitOverflowScrolling': 'touch',
+                            'maxWidth': '100%',
+                            '&::-webkit-scrollbar': { height: 6 },
+                            '&::-webkit-scrollbar-thumb': {
+                              backgroundColor: '#c1c1c1',
+                              borderRadius: 3,
+                            },
+                          }}
+                        >
+                          <ToggleButtonGroup
+                            exclusive
+                            size="small"
+                            value={statusFilter1}
+                            onChange={(_, val) => val && setStatusFilter1(val)}
+                            sx={{
+                              whiteSpace: 'nowrap',
+                              flexWrap: 'nowrap',
+                              width: 'max-content',
+                            }}
+                          >
+                            <ToggleButton value="Resubmitted">Re-Submitted</ToggleButton>
+                            <ToggleButton value="Support">Support</ToggleButton>
+                            <ToggleButton value="Expanse">Expense</ToggleButton>
+                            <ToggleButton value="All">Both</ToggleButton>
+                            <ToggleButton value="Custom">Custom FR</ToggleButton>
+                          </ToggleButtonGroup>
+                        </Box>
                       </Grid>
                     </Grid>
 

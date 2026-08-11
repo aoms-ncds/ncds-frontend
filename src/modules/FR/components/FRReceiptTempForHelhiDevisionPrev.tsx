@@ -314,8 +314,8 @@ const FRReceiptTempForHelhiDevisionPrev = (props: { rowData: FR; label: any;pres
             width: 50 }}
           src={(() => {
             const signData =
-    props.rowData?.division?.details?.coordinator?.sign ||
-    props.rowData?.division?.details?.prevCoordinator?.sign;
+            props.rowData?.division?.details?.prevCoordinator?.sign ??
+            props.rowData?.division?.details?.coordinator?.sign;
 
             return signData?.type && signData?.base64 ?
               `data:${signData.type};base64,${signData.base64}` :
@@ -358,7 +358,7 @@ const FRReceiptTempForHelhiDevisionPrev = (props: { rowData: FR; label: any;pres
           // }
           src={(() => {
             const signData =
-    props.rowData?.division?.details?.prevJuniorLeader1?.sign ||
+    props.rowData?.division?.details?.prevJuniorLeader1?.sign??
     props.rowData?.division?.details?.juniorLeader?.sign;
 
             return signData?.type && signData?.base64 ?
@@ -400,7 +400,7 @@ const FRReceiptTempForHelhiDevisionPrev = (props: { rowData: FR; label: any;pres
           // }
           src={(() => {
             const signData =
-    props.rowData?.division?.details?.prevJuniorLeader2?.sign ||
+    props.rowData?.division?.details?.prevJuniorLeader2?.sign ??
     props.rowData?.division?.details?.seniorLeader?.sign;
 
             return signData?.type && signData?.base64 ?

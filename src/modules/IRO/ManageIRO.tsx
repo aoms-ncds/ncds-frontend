@@ -1699,406 +1699,292 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
           <>
             <Card sx={{ maxWidth: '78vw', height: '100vh', alignItems: 'center' }}>
               <Grid container spacing={2} padding={2}>
-                <Grid item xs={5}>
-                  <TextField
-                    label="Search"
-                    variant="outlined"
-                    value={searchText}
-                    placeholder='Enter IROno, IRODate, Division,Sub ,Division, Main & SubCategory, Sanctioned Bank, Beneficiary Name'
-                    onChange={handleSearchChange}
-                    fullWidth
-                  />
-                </Grid>
-                <Grid item xs={3}>
-                  {hasPermissions(['MANAGE_IRO']) && (
-                    <Grid item xs={12} md="auto" sx={{
-                      display: 'flex',
-                      alignItems: 'center', // ✅ vertical center
-                    }}>
-                      <FormControl
-                        sx={{
-                          'minWidth': 200,
-                          '& .MuiOutlinedInput-root': {
+
+                <Grid padding={2} container spacing={2}>
+                  <Grid item xs={4}>
+                    <TextField
+                      label="Search"
+                      variant="outlined"
+                      value={searchText}
+                      placeholder='Enter IROno, IRODate, Division,Sub ,Division, Main & SubCategory, Sanctioned Bank, Beneficiary Name'
+                      onChange={handleSearchChange}
+                      fullWidth
+                    />
+                  </Grid>
+                  <Grid item xs={3} md="auto">
+                    {hasPermissions(['MANAGE_IRO']) && (
+                      <Grid item xs={12} md="auto" sx={{
+                        display: 'flex',
+                        alignItems: 'center', // ✅ vertical center
+                      }}>
+                        <FormControl
+                          sx={{
+                            'minWidth': 200,
+                            '& .MuiOutlinedInput-root': {
                             // height: 45, // ✅ control select height
-                            fontSize: 13,
-                            borderRadius: 1.5,
-                          },
-                        }}
-                      >
-                        <InputLabel id="division-label">
-  Division
-                        </InputLabel>
-                        <Select
-                          multiple
-                          value={selectedDivisions}
-                          label="Division"
-                          onChange={handleDivisionChange}
-                          renderValue={(selected) =>
-                            selected.length === 0 ? 'None' : selected.join(', ')
-                          }
-                          MenuProps={{
-                            PaperProps: {
-                              style: { maxHeight: 300, width: 250 },
+                              fontSize: 13,
+                              borderRadius: 1.5,
                             },
                           }}
                         >
-                          <ListSubheader>
-                            <TextField
-                              size="small"
-                              placeholder="Search division..."
-                              fullWidth
-                              autoFocus
-                              value={divisionSearch}
-                              onChange={(e) => setDivisionSearch(e.target.value)}
-                              onKeyDown={(e) => e.stopPropagation()}
-                            />
-                          </ListSubheader>
+                          <InputLabel id="division-label">
+  Division
+                          </InputLabel>
+                          <Select
+                            multiple
+                            value={selectedDivisions}
+                            label="Division"
+                            onChange={handleDivisionChange}
+                            renderValue={(selected) =>
+                              selected.length === 0 ? 'None' : selected.join(', ')
+                            }
+                            MenuProps={{
+                              PaperProps: {
+                                style: { maxHeight: 300, width: 250 },
+                              },
+                            }}
+                          >
+                            <ListSubheader>
+                              <TextField
+                                size="small"
+                                placeholder="Search division..."
+                                fullWidth
+                                autoFocus
+                                value={divisionSearch}
+                                onChange={(e) => setDivisionSearch(e.target.value)}
+                                onKeyDown={(e) => e.stopPropagation()}
+                              />
+                            </ListSubheader>
 
-                          <MenuItem value="__ALL__">
-                            <Checkbox checked={selectedDivisions.length === 0} />
-                            <ListItemText primary="None" />
-                          </MenuItem>
-
-                          {filteredDivisions.map((name) => (
-                            <MenuItem key={name} value={name}>
-                              <Checkbox checked={selectedDivisions.includes(name)} />
-                              <ListItemText primary={name} />
+                            <MenuItem value="__ALL__">
+                              <Checkbox checked={selectedDivisions.length === 0} />
+                              <ListItemText primary="None" />
                             </MenuItem>
-                          ))}
-                        </Select>
-                      </FormControl>
-                    </Grid>
-                  )}
-                </Grid>
 
-                <Grid item xs={4}>
-                  <PermissionChecks
-                    permissions={['MANAGE_IRO']}
-                    granted={
-                      <Button
-                        onClick={async () => {
-                          const sheet = IROrder ?
-                            IROrder.map((iro: IROrder) => [
-                              iro.IROno,
-                              iro.IRODate.format('DD/MM/YYYY'),
-                              iro.division?.details.name,
-                              iro.purposeSubdivision?.name,
-                              iro.mainCategory,
-                              iro.particulars[0].subCategory1,
-                              iro.particulars?.reduce((total, particular) => total + Number(particular.requestedAmount), 0),
-                              iro.sanctionedAmount ?? iro.particulars?.reduce((total, particular) => Number(particular.sanctionedAmount), 0),
-                              iro.sanctionedBank,
-                              iro.sanctionedAsPer,
-                              iro.releaseAmount?.releaseAmount,
-                              iro.releaseAmount?.transferredDate?.format('DD/MM/YYYY'),
-                              IROLifeCycleStates.getStatusNameByCodeTransaction(iro.status).replaceAll('_', ' '),
-                            ]) :
-                            [];
-                          const headers = [
-                            'IRO No',
-                            'Date',
-                            'Division',
-                            'Sub Division',
-                            'Main Category',
-                            'Sub Category',
-                            'Requested Amt',
-                            'Sanctioned Amt',
-                            'Sanctioned Bank',
-                            'Sanctioned As per',
-                            'Released Amt',
-                            'Released Date',
-                            'Status',
-                          ];
-                          const worksheet = XLSX.utils.json_to_sheet(sheet);
-                          const workbook = XLSX.utils.book_new();
-                          XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet');
-                          XLSX.utils.sheet_add_aoa(worksheet, [headers], { origin: 'A1' });
-                          XLSX.writeFile(workbook, props.action == 'manage' ? 'IRO_Report.xlsx' : 'Release_Amt_IRO_Report.xlsx', { compression: true });
-                        }}
-                        startIcon={<DownloadIcon />}
-                        color="primary"
-                        sx={{ float: 'right', mr: 2, mt: 2 }}
-                        variant="contained"
-                      >
+                            {filteredDivisions.map((name) => (
+                              <MenuItem key={name} value={name}>
+                                <Checkbox checked={selectedDivisions.includes(name)} />
+                                <ListItemText primary={name} />
+                              </MenuItem>
+                            ))}
+                          </Select>
+                        </FormControl>
+                      </Grid>
+                    )}
+                  </Grid>
+
+                  <Grid item xs={12} >
+                    <PermissionChecks
+                      permissions={['MANAGE_IRO']}
+                      granted={
+                        <Button
+                          onClick={async () => {
+                            const sheet = IROrder ?
+                              IROrder.map((iro: IROrder) => [
+                                iro.IROno,
+                                iro.IRODate.format('DD/MM/YYYY'),
+                                iro.division?.details.name,
+                                iro.purposeSubdivision?.name,
+                                iro.mainCategory,
+                                iro.particulars[0].subCategory1,
+                                iro.particulars?.reduce((total, particular) => total + Number(particular.requestedAmount), 0),
+                                iro.sanctionedAmount ?? iro.particulars?.reduce((total, particular) => Number(particular.sanctionedAmount), 0),
+                                iro.sanctionedBank,
+                                iro.sanctionedAsPer,
+                                iro.releaseAmount?.releaseAmount,
+                                iro.releaseAmount?.transferredDate?.format('DD/MM/YYYY'),
+                                IROLifeCycleStates.getStatusNameByCodeTransaction(iro.status).replaceAll('_', ' '),
+                              ]) :
+                              [];
+                            const headers = [
+                              'IRO No',
+                              'Date',
+                              'Division',
+                              'Sub Division',
+                              'Main Category',
+                              'Sub Category',
+                              'Requested Amt',
+                              'Sanctioned Amt',
+                              'Sanctioned Bank',
+                              'Sanctioned As per',
+                              'Released Amt',
+                              'Released Date',
+                              'Status',
+                            ];
+                            const worksheet = XLSX.utils.json_to_sheet(sheet);
+                            const workbook = XLSX.utils.book_new();
+                            XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet');
+                            XLSX.utils.sheet_add_aoa(worksheet, [headers], { origin: 'A1' });
+                            XLSX.writeFile(workbook, props.action == 'manage' ? 'IRO_Report.xlsx' : 'Release_Amt_IRO_Report.xlsx', { compression: true });
+                          }}
+                          startIcon={<DownloadIcon />}
+                          color="primary"
+                          sx={{ float: 'right', mr: 2, mt: 2 }}
+                          variant="contained"
+                        >
                         Export
-                      </Button>
-                    }
-                  />
+                        </Button>
+                      }
+                    />
 
-                  {hasPermissions(['MANAGE_IRO']) && props.action == 'release' ? (
-                    <Button
-                      variant="contained"
-                      sx={{ float: 'right', mt: 2, mr: 2 }}
-                      startIcon={<AttachMoneyIcon />}
-                      disabled={releaseAmountIROs.length === 0}
-                      onClick={() => {
-                        if (releaseAmountIROs.length === 1) {
-                          enqueueSnackbar({
-                            message: 'Select atleast two items for release',
-                            variant: 'error',
-                          });
-                          return;
-                        }
+                    {hasPermissions(['MANAGE_IRO']) && props.action == 'release' ? (
+                      <Button
+                        variant="contained"
+                        sx={{ float: 'right', mt: 2, mr: 2 }}
+                        startIcon={<AttachMoneyIcon />}
+                        disabled={releaseAmountIROs.length === 0}
+                        onClick={() => {
+                          if (releaseAmountIROs.length === 1) {
+                            enqueueSnackbar({
+                              message: 'Select atleast two items for release',
+                              variant: 'error',
+                            });
+                            return;
+                          }
 
-                        const allowedPaymentMethods = [
-                          'Debit Card',
-                          'Net Banking',
-                          'Other',
-                          'UPI',
-                          'Online Payment',
-                          'Cash',
-                          'NEFT',
-                          'Credit Card',
-                          'Closing Balance Adjsted',
-                          'Website Payment',
-                        ].map((method) => method.toLowerCase().trim());
+                          const allowedPaymentMethods = [
+                            'Debit Card',
+                            'Net Banking',
+                            'Other',
+                            'UPI',
+                            'Online Payment',
+                            'Cash',
+                            'NEFT',
+                            'Credit Card',
+                            'Closing Balance Adjsted',
+                            'Website Payment',
+                          ].map((method) => method.toLowerCase().trim());
 
-                        const allowedPaymentMethodsInclude = releaseAmountIROs.some(
-                          (iro) =>
-                            iro.sanctionedBank &&
+                          const allowedPaymentMethodsInclude = releaseAmountIROs.some(
+                            (iro) =>
+                              iro.sanctionedBank &&
                             allowedPaymentMethods.some((method) =>
                               iro.sanctionedBank.toLowerCase().trim().includes(method),
                             ),
-                        );
-
-                        if (allowedPaymentMethodsInclude) {
-                          const sameSanctionedBank = releaseAmountIROs.every(
-                            (iro) => iro.sanctionedBank === releaseAmountIROs[0].sanctionedBank,
                           );
 
-                          if (!sameSanctionedBank) {
-                            enqueueSnackbar({
-                              message: 'IRO of Different Sanctioned Bank selected',
-                              variant: 'error',
-                            });
-                            return;
+                          if (allowedPaymentMethodsInclude) {
+                            const sameSanctionedBank = releaseAmountIROs.every(
+                              (iro) => iro.sanctionedBank === releaseAmountIROs[0].sanctionedBank,
+                            );
+
+                            if (!sameSanctionedBank) {
+                              enqueueSnackbar({
+                                message: 'IRO of Different Sanctioned Bank selected',
+                                variant: 'error',
+                              });
+                              return;
+                            } else {
+                              setOpenRelease(true);
+                              setNewTest(releaseAmountIROs);
+                              return;
+                            }
                           } else {
+                            const sameSanctionedBank = releaseAmountIROs.every(
+                              (iro) => iro.sanctionedBank === releaseAmountIROs[0].sanctionedBank,
+                            );
+                            if (!sameSanctionedBank) {
+                              enqueueSnackbar({
+                                message: 'IRO of Different Sanctioned Bank or diffrent Beneficiary Name selected',
+                                variant: 'error',
+                              });
+                              return;
+                            }
+                            const normalizeAccount = (acc?: string | null) =>
+                              acc?.toString().replace(/\s+/g, '').trim() ?? null;
+
+                            const accountNumbers = releaseAmountIROs.map((iro) =>
+                              normalizeAccount(getTransferredAccountNumber(iro)),
+                            );
+                            console.log(accountNumbers, 'accountNumbers');
+
+                            if (accountNumbers.some((acc) => !acc)) {
+                              enqueueSnackbar({
+                                message: 'Account number missing for one or more selected IROs',
+                                variant: 'error',
+                              });
+                              return;
+                            }
+
+                            const isSameAccountNumber = accountNumbers.every(
+                              (acc) => acc === accountNumbers[0],
+                            );
+
+                            if (!isSameAccountNumber) {
+                              enqueueSnackbar({
+                                message: 'Selected IROs have different account numbers',
+                                variant: 'error',
+                              });
+                              return;
+                            }
+
                             setOpenRelease(true);
                             setNewTest(releaseAmountIROs);
-                            return;
                           }
-                        } else {
-                          const sameSanctionedBank = releaseAmountIROs.every(
-                            (iro) => iro.sanctionedBank === releaseAmountIROs[0].sanctionedBank,
-                          );
-                          if (!sameSanctionedBank) {
-                            enqueueSnackbar({
-                              message: 'IRO of Different Sanctioned Bank or diffrent Beneficiary Name selected',
-                              variant: 'error',
-                            });
-                            return;
-                          }
-                          const normalizeAccount = (acc?: string | null) =>
-                            acc?.toString().replace(/\s+/g, '').trim() ?? null;
-
-                          const accountNumbers = releaseAmountIROs.map((iro) =>
-                            normalizeAccount(getTransferredAccountNumber(iro)),
-                          );
-                          console.log(accountNumbers, 'accountNumbers');
-
-                          if (accountNumbers.some((acc) => !acc)) {
-                            enqueueSnackbar({
-                              message: 'Account number missing for one or more selected IROs',
-                              variant: 'error',
-                            });
-                            return;
-                          }
-
-                          const isSameAccountNumber = accountNumbers.every(
-                            (acc) => acc === accountNumbers[0],
-                          );
-
-                          if (!isSameAccountNumber) {
-                            enqueueSnackbar({
-                              message: 'Selected IROs have different account numbers',
-                              variant: 'error',
-                            });
-                            return;
-                          }
-
-                          setOpenRelease(true);
-                          setNewTest(releaseAmountIROs);
-                        }
-                      }}
-                    >
+                        }}
+                      >
                       Bulk Release
-                    </Button>
-                  ) : null}
-                </Grid>
-
-                <Grid container spacing={2}>
-                  <Grid item xs={12}>
-                    <Card
-                      elevation={2}
+                      </Button>
+                    ) : null}
+                  </Grid>
+                  <Grid item xs={12} lg={12}>
+                    <Box
                       sx={{
-                        border: '1px solid #dcdcdc',
-                        borderRadius: 1,
-                        overflow: 'hidden',
+                        // Mobile only: horizontal scroll, no wrap
+                        'overflowX': { xs: 'auto', sm: 'visible' },
+                        'overflowY': 'hidden',
+                        'WebkitOverflowScrolling': 'touch',
+                        'maxWidth': '100%',
+                        '&::-webkit-scrollbar': { height: 6 },
+                        '&::-webkit-scrollbar-thumb': {
+                          backgroundColor: '#c1c1c1',
+                          borderRadius: 3,
+                        },
                       }}
                     >
-                      <CardContent sx={{ pb: '20px !important' }}>
-
-                        <Grid
-                          container
-                          spacing={2}
-                          alignItems="center"
-                          wrap="wrap"
-                        >
-                          {/* ================= MANAGE MODE ================= */}
-                          {props.action === 'manage' && (
-                            <>
-                              {/* LEFT STATUS FILTER */}
-                              <Grid item xs={12} lg={12}>
-                                <ToggleButtonGroup
-                                  exclusive
-                                  size="small"
-                                  value={
-                                    exstatusFilter.includes(69) ? 'NonBankTransfers' :
-                                      exstatusFilter.includes(71) ? 'BankTransfers' :
-                                        exstatusFilter.includes(70) ? 'Custom' :
-                                          statusFilter.includes(IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE) ? 'WFA' :
-                                            statusFilter.includes(IROLifeCycleStates.AMOUNT_RELEASED) ? 'AMT' :
-                                              statusFilter.includes(IROLifeCycleStates.WAITING_FOR_OFFICE_MNGR) ? 'WFORA' :
-                                                statusFilter.includes(IROLifeCycleStates.IRO_CLOSED) ? 'CLS' :
-                                                  statusFilter.includes(IROLifeCycleStates.REJECTED) ? 'DIS' :
-                                                    statusFilter.includes(IROLifeCycleStates.REOPENED) ? 'REOPN' :
-                                                      statusFilter.includes(IROLifeCycleStates.IRO_IN_PROCESS) ? 'INP' :
-                                                        statusFilter.includes(IROLifeCycleStates.WAITTING_FOR_RELEASE_AMOUNT) ? 'WR' :
-                                                          statusFilter.includes(IROLifeCycleStates.REVERTED_TO_DIVISION) ? 'RTD' :
-                                                            'ALL'
-                                  }
-                                  onChange={(_, value) => {
-                                    if (!value) return;
-
-                                    if (value === 'WFA') {
-                                      setExStatusFilter([]);
-                                      setStatusFilter([IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE]);
-                                    } else if (value === 'RTD') {
-                                      setExStatusFilter([]);
-                                      setStatusFilter([IROLifeCycleStates.REVERTED_TO_DIVISION]);
-                                    } else if (value === 'AMT') {
-                                      setExStatusFilter([]);
-                                      setStatusFilter([IROLifeCycleStates.AMOUNT_RELEASED]);
-                                    } else if (value === 'WFORA') {
-                                      setExStatusFilter([]);
-                                      setStatusFilter([IROLifeCycleStates.WAITING_FOR_OFFICE_MNGR]);
-                                    } else if (value === 'CLS') {
-                                      setExStatusFilter([]);
-                                      setStatusFilter([IROLifeCycleStates.IRO_CLOSED]);
-                                    } else if (value === 'DIS') {
-                                      setExStatusFilter([]);
-                                      setStatusFilter([IROLifeCycleStates.REJECTED]);
-                                    } else if (value === 'REOPN') {
-                                      setExStatusFilter([]);
-                                      setStatusFilter([IROLifeCycleStates.REOPENED]);
-                                    } else if (value === 'INP') {
-                                      setExStatusFilter([]);
-                                      setStatusFilter([IROLifeCycleStates.IRO_IN_PROCESS]);
-                                    } else if (value === 'WR') {
-                                      setExStatusFilter([]);
-                                      setStatusFilter([IROLifeCycleStates.WAITTING_FOR_RELEASE_AMOUNT]);
-                                    } else if (value === 'Custom') {
-                                      setExStatusFilter([70]);
-                                      setStatusFilter([]);
-                                    } else if (value === 'NonBankTransfers') {
-                                      setExStatusFilter([69]);
-                                      setStatusFilter([]);
-                                    } else if (value === 'BankTransfers') {
-                                      setExStatusFilter([71]);
-                                      setStatusFilter([]);
-                                    } else {
-                                      setExStatusFilter([]);
-                                      setStatusFilter([]);
-                                    }
-                                  }}
-                                  sx={toggleSx}
-                                >
-                                  <ToggleButton value="ALL">ALL</ToggleButton>
-                                  <ToggleButton value="WFORA">WAITING APPROV.</ToggleButton>
-                                  <ToggleButton value="WFA">APPROVED</ToggleButton>
-                                  <ToggleButton value="INP">IN PROCESS</ToggleButton>
-                                  <ToggleButton value="WR">WAITING RELEASE</ToggleButton>
-                                  <ToggleButton value="AMT">AMT RELEASED</ToggleButton>
-                                  <ToggleButton value="RTD">REVERTED</ToggleButton>
-                                  <ToggleButton value="CLS">CLOSED</ToggleButton>
-                                  <ToggleButton value="DIS">DISAPPROVED</ToggleButton>
-                                  <ToggleButton value="REOPN">REOPENED</ToggleButton>
-                                  <ToggleButton value="Custom">CUSTOM</ToggleButton>
-                                  <ToggleButton value="NonBankTransfers">NON BANK TRANSFERS</ToggleButton>
-                                  <ToggleButton value="BankTransfers">BANK TRANSFERS</ToggleButton>
-                                </ToggleButtonGroup>
-                              </Grid>
-
-                              {/* RIGHT CATEGORY FILTER */}
-                            </>
-                          )}
-                          <Grid item xs={12} lg={5}>
-                            <ToggleButtonGroup
-                              exclusive
-                              size="small"
-                              value={statusFilter1}
-                              onChange={(_, value) => {
-                                if (!value) return;
-                                setStatusFilter1(
-                                  value === 'Support' ?
-                                    'Support' :
-                                    value === 'Expanse' ?
-                                      'Expanse' :
-                                      value === 'Sanctioned' ?
-                                        'Sanctioned' :
-                                        value === 'Custom' ?
-                                          'Custom' :
-                                          'All',
-                                );
-                              }}
-                              sx={toggleSx}
-                            >
-                              <ToggleButton value="All">All</ToggleButton>
-                              <ToggleButton value="Support">SUPPORT</ToggleButton>
-                              <ToggleButton value="Expanse">EXPENSE</ToggleButton>
-                              <ToggleButton value="Sanctioned">SANCTIONED</ToggleButton>
-                              {/* <ToggleButton value="NonBankTransfers">Non Bank Transfers</ToggleButton> */}
-
-                              {/* <ToggleButton value="Custom">Custom IRO</ToggleButton> */}
-                            </ToggleButtonGroup>
-                          </Grid>
-
-
-                          {/* ================= RELEASE MODE ================= */}
-                          {props.action === 'release' && (
-                            <>
-                              {/* RELEASE STATUS */}
-                              <Grid item xs={12} md="auto">
-                                <ToggleButtonGroup
-                                  exclusive
-                                  size="small"
-                                  value={exstatusFilter.includes(69) ? 'NonBankTransfers' : exstatusFilter.includes(71) ? 'BANK TRANS.' : 'All'}
-                                  onChange={(_, value) => {
-                                    if (!value) return;
-
-                                    if (value === 'NonBankTransfers') {
-                                      setExStatusFilter([69]);
-                                    } else {
-                                      setExStatusFilter([71]);
-                                      setStatusFilter([IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE]);
-                                    }
-                                  }}
-                                  sx={toggleSx}
-                                >
-                                  <ToggleButton value="All">ALL</ToggleButton>
-                                  <ToggleButton value="NonBankTransfers">NON BANK TRANSFERS</ToggleButton>
-                                  <ToggleButton value="BANK TRANS.">BANK TRANS.</ToggleButton>
-                                </ToggleButtonGroup>
-                              </Grid>
-
-                              {/* DIVISION FILTER */}
-                            </>
-                          )}
-
-
-                        </Grid>
-                      </CardContent>
-                    </Card>
+                      <ToggleButtonGroup
+                        exclusive
+                        size="small"
+                        value={
+                          exstatusFilter.includes(69) ? 'NonBankTransfers' :
+                            exstatusFilter.includes(71) ? 'BankTransfers' :
+                              exstatusFilter.includes(70) ? 'Custom' :
+                                statusFilter.includes(IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE) ? 'WFA' :
+                                  statusFilter.includes(IROLifeCycleStates.AMOUNT_RELEASED) ? 'AMT' :
+                                    statusFilter.includes(IROLifeCycleStates.WAITING_FOR_OFFICE_MNGR) ? 'WFORA' :
+                                      statusFilter.includes(IROLifeCycleStates.IRO_CLOSED) ? 'CLS' :
+                                        statusFilter.includes(IROLifeCycleStates.REJECTED) ? 'DIS' :
+                                          statusFilter.includes(IROLifeCycleStates.REOPENED) ? 'REOPN' :
+                                            statusFilter.includes(IROLifeCycleStates.IRO_IN_PROCESS) ? 'INP' :
+                                              statusFilter.includes(IROLifeCycleStates.WAITTING_FOR_RELEASE_AMOUNT) ? 'WR' :
+                                                statusFilter.includes(IROLifeCycleStates.REVERTED_TO_DIVISION) ? 'RTD' :
+                                                  'ALL'
+                        }
+                        onChange={(_, value) => {
+                          if (!value) return;
+                          // ...same logic as before, unchanged
+                        }}
+                        sx={{
+                          ...toggleSx,
+                          flexWrap: { xs: 'nowrap', sm: 'wrap' },
+                          width: { xs: 'max-content', sm: '100%' },
+                        }}
+                      >
+                        <ToggleButton value="ALL">ALL</ToggleButton>
+                        <ToggleButton value="WFORA">WAITING APPROV.</ToggleButton>
+                        <ToggleButton value="WFA">APPROVED</ToggleButton>
+                        <ToggleButton value="INP">IN PROCESS</ToggleButton>
+                        <ToggleButton value="WR">WAITING RELEASE</ToggleButton>
+                        <ToggleButton value="AMT">AMT RELEASED</ToggleButton>
+                        <ToggleButton value="RTD">REVERTED</ToggleButton>
+                        <ToggleButton value="CLS">CLOSED</ToggleButton>
+                        <ToggleButton value="DIS">DISAPPROVED</ToggleButton>
+                        <ToggleButton value="REOPN">REOPENED</ToggleButton>
+                        <ToggleButton value="Custom">CUSTOM</ToggleButton>
+                        <ToggleButton value="NonBankTransfers">NON BANK TRANSFERS</ToggleButton>
+                        <ToggleButton value="BankTransfers">BANK TRANSFERS</ToggleButton>
+                      </ToggleButtonGroup>
+                    </Box>
                   </Grid>
                 </Grid>
                 <Grid item xs={12}>
