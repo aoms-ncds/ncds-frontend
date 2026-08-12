@@ -91,7 +91,7 @@ const ChildeSupportPage = () => {
     // Other properties of newVal if any
   };
   const [pdfProps, setPdfProps] = useState<{ divisionId: string | null; childId: string | null }>({ divisionId: null, childId: null });
-  const [fileObj, setFileObj] = useState<FileObject | null>(null);
+  const [fileObj, setFileObj] = useState<any | null>(null);
   const [loading, setLoading] = useState<boolean | null>(false);
   const [loadingDiv, setLoadingDiv] = useState<boolean | null>(false);
   // const supportEnabledWorkers = childList?.filter((item) => item.supportStructure?.supportEnabled === true);
@@ -818,6 +818,7 @@ const ChildeSupportPage = () => {
                                         onClick={async () => {
                                           if (signBlob && supportBlob) {
                                             setLoading(true);
+                                            setFileObj(signBlob ? { filename: 'ChildrenSignatureSheet.pdf', type: 'application/pdf', size: signBlob.size, lastModified: Date.now(), blob: signBlob } : null);
                                             await attach(signBlob, supportBlob);
                                           }
                                         }}
@@ -1167,7 +1168,7 @@ const ChildeSupportPage = () => {
                       )} */}
                       </PDFDownloadLink>
                     )}
-                    {/* <Button
+                    <Button
                     variant="contained"
                     color="info"
                     onClick={()=> file && FileUploaderServices.uploadFile(file, undefined, 'FR', file.name).then((res) => {
@@ -1175,7 +1176,7 @@ const ChildeSupportPage = () => {
                     })}
                   >
                      Upload File
-                  </Button> */}
+                  </Button>
                   &nbsp;
                     <PermissionChecks
                       permissions={['WRITE_FR']}

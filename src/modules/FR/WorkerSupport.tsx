@@ -57,6 +57,8 @@ const WorkerSupportPage = () => {
   const navigate = useNavigate();
   const [workers, setWorkers] = useState<IWorker[] | null>(null);
   // const [allWorkers, setAllWorkers] = useState<IWorker[] | null>(null);
+  const [fileObj, setFileObj] = useState<any | null>(null);
+
   const [selectedWorker, setSelectedWorker] = useState<IWorker | null>(null);
   const [total, setTotal] = useState<TotalSupportStructure>({
     basic: 0,
@@ -1191,7 +1193,7 @@ const WorkerSupportPage = () => {
         mt: 2,
       }}>
 
-        
+
       </Card>
       <Card
         sx={{
@@ -1301,6 +1303,8 @@ const WorkerSupportPage = () => {
                                         onClick={async () => {
                                           if (signBlob && supportBlob) {
                                             setLoading(true);
+                                            setFileObj(signBlob ? { filename: 'WorkerSheet.pdf', type: 'application/pdf', size: signBlob.size, blob: signBlob } : null);
+
                                             attach(signBlob, supportBlob);
                                           }
                                         } }
@@ -1360,7 +1364,7 @@ const WorkerSupportPage = () => {
                   unitPrice: total.net,
                   quantity: supportEnabledWorkers?.length ?? 0,
                   year: requisition?.particulars[0].year,
-                  attachment: [],
+                  attachment: fileObj ? [fileObj] : [],
                 }] : [],
               }));
             } else {
@@ -1394,7 +1398,7 @@ const WorkerSupportPage = () => {
                     unitPrice: total.total,
                     quantity: 1, // Each entry represents one worker
                     year: requisition?.particulars?.[0]?.year,
-                    attachment: [],
+                    attachment: fileObj ? [fileObj] : [],
                     worker: worker, // Add worker reference if needed
                   })) :
                   [],
@@ -1720,7 +1724,7 @@ const WorkerSupportPage = () => {
           </CardContent>
         )}
       </Card>
-      
+
       <br />
       <Card>
         <Grid container spacing={2}>
