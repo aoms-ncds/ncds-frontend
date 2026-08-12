@@ -13,7 +13,7 @@ import { useLoader } from './hooks/Loader';
 // const serverURLOld = 'https://iet-apis.pro910.app';//old
 
 
-const serverURL = 'https://iet-apis.ietapps.org';// neww
+const serverURL = 'https://api.ncds.app';// neww
 
 axios.defaults.baseURL = serverURL;
 // window.location.hostname === 'localhost' ? 'http://localhost:8002' : 'https://iet-apis.pro910.app';
