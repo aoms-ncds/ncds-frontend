@@ -1168,7 +1168,7 @@ const ChildeSupportPage = () => {
                       )} */}
                       </PDFDownloadLink>
                     )}
-                    <Button
+                    {/* <Button
                     variant="contained"
                     color="info"
                     onClick={()=> file && FileUploaderServices.uploadFile(file, undefined, 'FR', file.name).then((res) => {
@@ -1176,7 +1176,7 @@ const ChildeSupportPage = () => {
                     })}
                   >
                      Upload File
-                  </Button>
+                  </Button> */}
                   &nbsp;
                     <PermissionChecks
                       permissions={['WRITE_FR']}

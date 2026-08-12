@@ -1962,7 +1962,47 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                         }
                         onChange={(_, value) => {
                           if (!value) return;
-                          // ...same logic as before, unchanged
+
+                          if (value === 'WFA') {
+                            setExStatusFilter([]);
+                            setStatusFilter([IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE]);
+                          } else if (value === 'RTD') {
+                            setExStatusFilter([]);
+                            setStatusFilter([IROLifeCycleStates.REVERTED_TO_DIVISION]);
+                          } else if (value === 'AMT') {
+                            setExStatusFilter([]);
+                            setStatusFilter([IROLifeCycleStates.AMOUNT_RELEASED]);
+                          } else if (value === 'WFORA') {
+                            setExStatusFilter([]);
+                            setStatusFilter([IROLifeCycleStates.WAITING_FOR_OFFICE_MNGR]);
+                          } else if (value === 'CLS') {
+                            setExStatusFilter([]);
+                            setStatusFilter([IROLifeCycleStates.IRO_CLOSED]);
+                          } else if (value === 'DIS') {
+                            setExStatusFilter([]);
+                            setStatusFilter([IROLifeCycleStates.REJECTED]);
+                          } else if (value === 'REOPN') {
+                            setExStatusFilter([]);
+                            setStatusFilter([IROLifeCycleStates.REOPENED]);
+                          } else if (value === 'INP') {
+                            setExStatusFilter([]);
+                            setStatusFilter([IROLifeCycleStates.IRO_IN_PROCESS]);
+                          } else if (value === 'WR') {
+                            setExStatusFilter([]);
+                            setStatusFilter([IROLifeCycleStates.WAITTING_FOR_RELEASE_AMOUNT]);
+                          } else if (value === 'Custom') {
+                            setExStatusFilter([70]);
+                            setStatusFilter([]);
+                          } else if (value === 'NonBankTransfers') {
+                            setExStatusFilter([69]);
+                            setStatusFilter([]);
+                          } else if (value === 'BankTransfers') {
+                            setExStatusFilter([71]);
+                            setStatusFilter([]);
+                          } else {
+                            setExStatusFilter([]);
+                            setStatusFilter([]);
+                          }
                         }}
                         sx={{
                           ...toggleSx,
