@@ -188,7 +188,7 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
       </Grid>
       <Grid item xs={12} md={4}>
         <FormControlLabel
-          label="IET's Division"
+          label="NCDS's Division"
           // disabled={props.action !== 'customEdit'}
           checked={props.value.isIT || false}
           onChange={(e: any) =>

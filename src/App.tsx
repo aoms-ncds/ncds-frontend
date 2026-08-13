@@ -8,12 +8,12 @@ import CommonHelpers from './extras/CommonHelpers';
 import Router from './extras/CommonRouter';
 import { useLoader } from './hooks/Loader';
 //
-// const serverURL = 'http://localhost:8002';
+const serverURL = 'http://localhost:8003';
 // const serverURL = 'https://iet-staging.apis.pro910.app/';
 // const serverURLOld = 'https://iet-apis.pro910.app';//old
 
 
-const serverURL = 'https://api.ncds.app';// neww
+// const serverURL = 'https://api.ncds.app';// neww
 
 axios.defaults.baseURL = serverURL;
 // window.location.hostname === 'localhost' ? 'http://localhost:8002' : 'https://iet-apis.pro910.app';

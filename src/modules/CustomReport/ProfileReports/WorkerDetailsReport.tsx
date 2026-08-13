@@ -539,7 +539,7 @@ export default function UserFilterReportMUI() {
                       value={filters.organization}
                       onChange={(e) => set('organization')(e.target.value as any)}
                     >
-                      <MenuItem value="IET">IET</MenuItem>
+                      <MenuItem value="NCDS">NCDS</MenuItem>
                       <MenuItem value="BCG">BCG</MenuItem>
                       <MenuItem value="NCDS">NCDS</MenuItem>
                     </TextField>

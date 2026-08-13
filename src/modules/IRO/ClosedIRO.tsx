@@ -404,25 +404,18 @@ const ClosedIRO = () => {
                   icon: PrintIcon,
                   onClick: async () => {
                     try {
-                      const [rowRes, delhiRes] = await Promise.all([
+                      const [rowRes] = await Promise.all([
                         IROServices.getByIdOptimized(props.row._id),
-                        DivisionsServices.getDivisionById('658270549efadc163550a28c'),
                       ]);
 
-                      const rowData = rowRes.data?.[0];
-                      const delhiHQ = delhiRes.data;
+                      const rowData = rowRes.data?.[0]; // expecting array
+                      console.log(rowRes, 'rowRes');
 
-                      if (rowData?.division?.details as any) {
+                      if (rowRes as any) {
                         setData({
                           ...props.row,
-                          division: {
-                            ...rowData.division as any,
-                            details: {
-                              ...rowData?.division?.details,
-                              seniorLeader: delhiHQ?.details?.seniorLeader,
-                              juniorLeader: delhiHQ?.details?.juniorLeader,
-                            },
-                          },
+                          rowData,
+
                         });
                       }
 
@@ -432,7 +425,6 @@ const ClosedIRO = () => {
                         setOpenPrintFr(false);
                       }, 2000);
 
-                      // optional cleanup safety
                       return undefined;
                     } catch (error) {
                       console.error('Failed to load IRO / Division data', error);

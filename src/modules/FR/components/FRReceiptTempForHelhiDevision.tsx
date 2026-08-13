@@ -149,7 +149,7 @@ const FRReceiptTempForHelhiDevision = (props: { rowData: any; label: any;preside
   // const month=moment(props.rowData.FRdate);
   // const monthName = month.format('MMMM');
   // const [imageData, setImageData] = React.useState('');
-  console.log(props.rowData, 'props here');
+  console.log(props.rowData.rowData, 'props here');
 
   let totalAmount=0;
   return (
@@ -312,10 +312,10 @@ const FRReceiptTempForHelhiDevision = (props: { rowData: any; label: any;preside
               fontFamily: 'Oswald',
             }}
           >
-            {props.rowData?.coordinatorName ??
-    `${props.rowData?.division?.details?.coordinator?.name?.basicDetails?.firstName ?? ''} ${
-      props.rowData?.division?.details?.coordinator?.name?.basicDetails?.lastName ?? ''
-    }`}
+            {
+              `${props.rowData.rowData?.FR?.signatureDelhiDiv?.coordinator?.basicDetails?.firstName ?? ''} ${
+                props.rowData.rowData?.FR?.signatureDelhiDiv?.coordinator?.basicDetails?.lastName ?? ''
+              }`}
           </Text>
 
 
@@ -325,10 +325,10 @@ const FRReceiptTempForHelhiDevision = (props: { rowData: any; label: any;preside
           <Image
             style={{ left: 480, top: 20, position: 'absolute', height: 20, width: 50 }}
             src={`data:${
-              props.rowData?.CoordinatorSign?.[0]?.type ??
+              props.rowData.rowData?.FR?.signatureDelhiDiv?.coordinator?.officialDetails.eSign?.type ??
     props.rowData?.division?.details?.coordinator?.sign?.type
             };base64,${
-              props.rowData?.CoordinatorSign?.[0]?.base64 ??
+              props.rowData.rowData?.FR?.signatureDelhiDiv?.coordinator?.officialDetails.eSign?.base64 ??
     props.rowData?.division?.details?.coordinator?.sign?.base64
             }`}
           />
@@ -356,10 +356,10 @@ const FRReceiptTempForHelhiDevision = (props: { rowData: any; label: any;preside
               fontFamily: 'Oswald',
             }}
           >
-            {props.rowData?.jrLeaderName ??
-    `${props.rowData?.division?.details?.juniorLeader?.name?.basicDetails?.firstName ?? ''} ${
-      props.rowData?.division?.details?.juniorLeader?.name?.basicDetails?.lastName ?? ''
-    }`}
+            {
+              `${props.rowData.rowData?.FR?.signatureDelhiDiv?.jrLeader?.basicDetails?.firstName ?? ''} ${
+                props.rowData.rowData?.FR?.signatureDelhiDiv?.jrLeader?.basicDetails?.lastName ?? ''
+              }`}
           </Text>
 
           <Text style={{ left: 460, top: 40, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>
@@ -368,10 +368,10 @@ const FRReceiptTempForHelhiDevision = (props: { rowData: any; label: any;preside
           <Image
             style={{ left: 480, top: 40, position: 'absolute', height: 20, width: 50 }}
             src={`data:${
-              props.rowData?.jrLeaderSign?.[0]?.type ??
+              props.rowData.rowData?.FR?.signatureDelhiDiv?.jrLeader?.officialDetails.eSign?.type ??
     props.rowData?.division?.details?.juniorLeader?.sign?.type
             };base64,${
-              props.rowData?.jrLeaderSign?.[0]?.base64 ??
+              props.rowData.rowData?.FR?.signatureDelhiDiv?.jrLeader?.officialDetails.eSign?.base64 ??
     props.rowData?.division?.details?.juniorLeader?.sign?.base64
             }`}
           />
@@ -399,10 +399,10 @@ const FRReceiptTempForHelhiDevision = (props: { rowData: any; label: any;preside
               fontFamily: 'Oswald',
             }}
           >
-            {props.rowData?.srLeaderName ??
-    `${props.rowData?.division?.details?.seniorLeader?.name?.basicDetails?.firstName ?? ''} ${
-      props.rowData?.division?.details?.seniorLeader?.name?.basicDetails?.lastName ?? ''
-    }`}
+            {
+              `${props.rowData.rowData?.FR?.signatureDelhiDiv?.srLeader?.basicDetails?.firstName ?? ''} ${
+                props.rowData.rowData?.FR?.signatureDelhiDiv?.srLeader?.basicDetails?.lastName ?? ''
+              }`}
           </Text>
 
 
@@ -412,10 +412,10 @@ const FRReceiptTempForHelhiDevision = (props: { rowData: any; label: any;preside
           <Image
             style={{ left: 480, top: 60, position: 'absolute', height: 20, width: 50 }}
             src={`data:${
-              props.rowData?.srLeaderSign?.[0]?.type ??
+              props.rowData.rowData?.FR?.signatureDelhiDiv.srLeader?.officialDetails.eSign?.type ??
     props.rowData?.division?.details?.seniorLeader?.sign?.type
             };base64,${
-              props.rowData?.srLeaderSign?.[0]?.base64 ??
+              props.rowData.rowData?.FR?.signatureDelhiDiv.srLeader?.officialDetails.eSign?.base64 ??
     props.rowData?.division?.details?.seniorLeader?.sign?.base64
             }`}
           />

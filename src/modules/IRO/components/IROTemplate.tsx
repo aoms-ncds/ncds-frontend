@@ -176,21 +176,13 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; current?: boolean;f
 
   let coordinatorName = '';
 
-  if (prev && !props.current) {
-    coordinatorName = rowData?.division?.details?.prevCoordinator?.name ?? '';
-  } else {
-    if (fr?.names?.coordinator !=null) {
-      const first = fr?.names?.coordinator?.basicDetails?.firstName?.trim() ?? '';
-      const middle = fr?.names?.coordinator?.basicDetails?.middleName?.trim() ?? '';
-      const last = fr?.names?.coordinator?.basicDetails?.lastName ?? '';
-      coordinatorName = [first, middle, last].filter(Boolean).join(' ');
-    } else {
-      const first = rowData?.division?.details.coordinator?.name?.basicDetails?.firstName?.trim() ?? '';
-      const middle = rowData?.division?.details.coordinator?.name?.basicDetails?.middleName?.trim() ?? '';
-      const last = rowData?.division?.details.coordinator?.name?.basicDetails?.lastName?.trim() ?? '';
-      coordinatorName = [first, middle, last].filter(Boolean).join(' ');
-    }
-  }
+
+  const first = (fr as any)?.signatureDelhiDiv?.coordinator?.basicDetails?.firstName?.trim() ?? '';
+  const middle = (fr as any)?.signatureDelhiDiv?.coordinator?.basicDetails?.middleName?.trim() ?? '';
+  const last = (fr as any)?.signatureDelhiDiv?.coordinator?.basicDetails?.lastName ?? '';
+  coordinatorName = [first, middle, last].filter(Boolean).join(' ');
+
+
   return (
     <Document >
       <Page size="A4" style={styles.page} >
@@ -629,7 +621,8 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; current?: boolean;f
                 }}>
                   <Image
                     style={{ height: 78, width: 128 }}
-                    src={`data:${props.prev ? props.officeMngrSign?.prevOfficeManagerSignature?.type : props.rowData?.sign?.officeMgr?.type ?? props.officeMngrSign?.officeManagerSignature?.type};base64, ${props.prev ? props.officeMngrSign?.prevOfficeManagerSignature?.base64 : props.rowData?.sign?.officeMgr?.base64 ?? props.officeMngrSign?.officeManagerSignature?.base64}`}
+                    src={`data:${
+                      (props.fr as any)?.signature?.officeMgr?.type};base64, ${ (props.fr as any)?.signature?.officeMgr?.base64}`}
                   />
                 </View>
                 <Text style={{
@@ -641,7 +634,7 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; current?: boolean;f
 
                   fontFamily: 'CourierPrime',
                 }}>
-                  {props.prev ? props.officeMngrSign?.prevOfficeManagerName : props.rowData.names?.officeMgr ?? props.officeMngrSign?.officeManagerName}
+                  { (props.fr as any)?.names?.officeMgr}
                 </Text>
                 <Text style={{
                   ...styles.text1,

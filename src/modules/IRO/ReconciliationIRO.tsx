@@ -678,25 +678,18 @@ const ReconciliationIRO = () => {
                   icon: PrintIcon,
                   onClick: async () => {
                     try {
-                      const [rowRes, delhiRes] = await Promise.all([
+                      const [rowRes] = await Promise.all([
                         IROServices.getByIdOptimized(props.row._id),
-                        DivisionsServices.getDivisionById('658270549efadc163550a28c'),
                       ]);
 
                       const rowData = rowRes.data?.[0]; // expecting array
-                      const delhiHQ = delhiRes.data;
+                      console.log(rowRes, 'rowRes');
 
-                      if (rowData?.division?.details as any) {
+                      if (rowRes as any) {
                         setData5({
                           ...props.row,
-                          division: {
-                            ...rowData?.division as any,
-                            details: {
-                              ...rowData?.division?.details,
-                              seniorLeader: delhiHQ?.details?.seniorLeader,
-                              juniorLeader: delhiHQ?.details?.juniorLeader,
-                            },
-                          },
+                          rowData,
+
                         });
                       }
 

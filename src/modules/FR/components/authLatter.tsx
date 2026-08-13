@@ -70,7 +70,7 @@ const SanctionLetter = (data:any) => {
           <Text style={styles.text1}>Date:{data.data.presidentApproveDate ? moment(data.data.presidentApproveDate).format('DD-MM-yyyy') : ''}</Text>
           <Text style={styles.text1}>
             {data.data.presidentApproveDate ?
-              `${moment(data.data.presidentApproveDate).format('DD-MM-yyyy')}/IET/${data.data.FRno}` :
+              `${moment(data.data.presidentApproveDate).format('DD-MM-yyyy')}/NCDS/${data.data.FRno}` :
               ''}
           </Text>
         </View>
@@ -163,7 +163,7 @@ const SanctionLetter = (data:any) => {
             src={`data:${data.data.signature?.president?.type};base64, ${data.data.signature?.president?.base64} `} />
           </View>
           <Text style={styles.signature}>{data.data.names?.president}</Text>
-          <Text>President, IET.</Text>
+          <Text>President, NCDS.</Text>
         </View>
 
         {/* Footer */}

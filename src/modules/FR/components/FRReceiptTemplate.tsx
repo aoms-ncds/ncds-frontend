@@ -237,52 +237,51 @@ const FRReceiptTemplate = (props: { rowData: FR; president: EsignaturePresident 
                 position: 'absolute',
                 height: 50,
                 width: 50 }}
-             src={`data:${
-  (props.rowData as any)?.names?.coordinator?.officialDetails?.eSign?.type ??
+              src={`data:${
+                (props.rowData as any)?.names?.coordinator?.officialDetails?.eSign?.type ??
   (props.rowData as any)?.division?.details?.coordinator?.sign?.type
-};base64,${
-  (props.rowData as any)?.names?.coordinator?.officialDetails?.eSign?.base64 ??
+              };base64,${
+                (props.rowData as any)?.names?.coordinator?.officialDetails?.eSign?.base64 ??
   (props.rowData as any)?.division?.details?.coordinator?.sign?.base64
-}`}
+              }`}
 
               />
 
 
               <Image
-  style={{ left: 260, position: 'absolute', height: 50, width: 50 }}
-  src={`data:${
-    (props.rowData as any)?.names?.srLeader?.officialDetails?.eSign?.type ??
+                style={{ left: 260, position: 'absolute', height: 50, width: 50 }}
+                src={`data:${
+                  (props.rowData as any)?.names?.srLeader?.officialDetails?.eSign?.type ??
     (props.rowData as any)?.signatureCustom?.jrLeaderCustom?.eSign?.type ??
     (props.rowData as any)?.signature?.srLeader?.type ??
     (props.rowData as any)?.division?.details?.seniorLeader?.sign?.type ??
     ''
-  };base64,${
-    (props.rowData as any)?.names?.srLeader?.officialDetails?.eSign?.base64 ??
+                };base64,${
+                  (props.rowData as any)?.names?.srLeader?.officialDetails?.eSign?.base64 ??
     (props.rowData as any)?.signatureCustom?.jrLeaderCustom?.eSign?.base64 ??
     (props.rowData as any)?.signature?.srLeader?.base64 ??
     (props.rowData as any)?.division?.details?.seniorLeader?.sign?.base64 ??
     ''
-  }`}
-/>
+                }`}
+              />
 
 
-             <Image
-  style={{ left: 460, height: 50, width: 50 }}
-  src={`data:${
-    (props.rowData as any)?.names?.jrLeader?.officialDetails?.eSign?.type ??
+              <Image
+                style={{ left: 460, height: 50, width: 50 }}
+                src={`data:${
+                  (props.rowData as any)?.names?.jrLeader?.officialDetails?.eSign?.type ??
     (props.rowData as any)?.signatureCustom?.srLeaderCustom?.eSign?.type ??
     (props.rowData as any)?.signature?.jrLeader?.type ??
     (props.rowData as any)?.division?.details?.juniorLeader?.sign?.type ??
     ''
-  };base64,${
-    (props.rowData as any)?.names?.jrLeader?.officialDetails?.eSign?.base64 ??
+                };base64,${
+                  (props.rowData as any)?.names?.jrLeader?.officialDetails?.eSign?.base64 ??
     (props.rowData as any)?.signatureCustom?.srLeaderCustom?.eSign?.base64 ??
     (props.rowData as any)?.signature?.jrLeader?.base64 ??
     (props.rowData as any)?.division?.details?.juniorLeader?.sign?.base64 ??
     ''
-  }`}
-/>
-
+                }`}
+              />
 
 
               {props.rowData?.specialsanction == 'Yes' ? (

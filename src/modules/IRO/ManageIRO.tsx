@@ -64,7 +64,6 @@ import DivisionsServices from '../Divisions/extras/DivisionsServices';
 import TransactionLogDialog from '../FR/components/TransactionLogDialog';
 import SanctionLetter from '../FR/components/authLatter';
 import formatAmount from '../Common/formatcode';
-import React from 'react';
 
 
 type BankDetails = {
@@ -1699,8 +1698,9 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
           <>
             <Card sx={{ maxWidth: '78vw', height: '100vh', alignItems: 'center' }}>
               <Grid container spacing={2} padding={2}>
+              
 
-                <Grid padding={2} container spacing={2}>
+                <Grid container spacing={2}>
                   <Grid item xs={4}>
                     <TextField
                       label="Search"
@@ -1772,7 +1772,6 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                       </Grid>
                     )}
                   </Grid>
-
                   <Grid item xs={12} >
                     <PermissionChecks
                       permissions={['MANAGE_IRO']}

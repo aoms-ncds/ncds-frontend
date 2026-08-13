@@ -1058,7 +1058,7 @@ const ManageFrPage = () => {
                 <Card sx={{ maxWidth: '78vw', height: '100vh', alignItems: 'center' }}>
                   <Grid container spacing={2} padding={1}>
                     <Grid padding={2} container spacing={2}>
-                      <Grid item xs={5}>
+                        <Grid item xs={5}>
                         {/* <div style={{ display: 'flex', alignItems: 'center' }}> */}
                         <TextField
                           label="Search"
