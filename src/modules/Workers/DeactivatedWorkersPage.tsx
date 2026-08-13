@@ -54,7 +54,7 @@ const DeactivatedWorkersPage = () => {
     }
   }, [currentTab]);
   return (
-    <CommonPageLayout title="Deactivated Workers">
+    <CommonPageLayout title="DeactivatedAssociates">
       <Grid container spacing={2}>
         <Grid item xs={12}>
         </Grid>

@@ -271,7 +271,7 @@ const HomePage = () => {
                   </Box>
 
                   <Box>
-                    <Typography fontWeight={700} sx={{ color: '#6b6f82' }} fontSize={17}>Workers</Typography>
+                    <Typography fontWeight={700} sx={{ color: '#6b6f82' }} fontSize={17}>Associates</Typography>
                     <Typography sx={{
                       fontSize: 22,
                       fontWeight: 700,
@@ -664,7 +664,7 @@ Total Sub-Div                          </Typography>
                               fontWeight: 500,
                             }}
                           >
-            Total Workers
+            Total Associates
                           </Typography>
 
                           <ArrowUpwardIcon

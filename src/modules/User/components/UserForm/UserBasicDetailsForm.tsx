@@ -123,7 +123,7 @@ const UserBasicDetailsForm = (
       <Grid item xs={12} md={6} lg={3}>
         <Autocomplete
           value={props?.value?.title ?? null}
-          options={['Mr', 'Mrs']}
+          options={['Mr', 'Mrs', 'Miss', 'Dr', 'Prof']}
           getOptionLabel={(option) => option}
           onChange={(e, newValue) =>
             props.onChange({ ...props.value, title: newValue??'' })

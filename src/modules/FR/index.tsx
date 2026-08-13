@@ -549,7 +549,7 @@ const frDashboard = () => {
                   {/* <PermissionChecks
                 permissions={['RAISE_WORKERS_FR']}
                 granted={(<Grid item xs={12} md={4} xl={2}>
-                  <DashboardCardButton primaryText="New Workers Support" secondaryText="Workers Support" color="#fff" targetRoute="/fr/worker_support" />
+                  <DashboardCardButton primaryText="New WrokersSupport" secondaryText="WrokersSupport" color="#fff" targetRoute="/fr/worker_support" />
                 </Grid>)} /> */}
                   {/* <PermissionChecks
                 permissions={['RAISE_WORKERS_FR']}

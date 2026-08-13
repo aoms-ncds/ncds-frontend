@@ -314,7 +314,7 @@
 //           {/* Header */}
 //           <div style={{ marginBottom: 24 }}>
 //             <div style={{ fontFamily: '\'Syne\', sans-serif', fontSize: 28, fontWeight: 800, color: theme.textPrimary, letterSpacing: '-0.5px' }}>
-//             Workers Records
+//             WrokersRecords
 //             </div>
 //             <div style={{ color: theme.textSecondary, fontSize: 14, marginTop: 3 }}>
 //             Sanction register · {filtered.length} of {ALL_DATA.length} entries

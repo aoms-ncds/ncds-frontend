@@ -37,7 +37,7 @@ const HRDashboard = () => {
             count={staffCount ? staffCount?.toString() : undefined} targetRoute="/hr/manage" />
         </Grid>
         <Grid item xs={12} md={4} xl={3}>
-          <ButtonCard secondaryText="Manage Workers" icon={<img src="/mod_icons/manageWorker.jpeg" alt="Logo" style={{ width: '70px', height: '70px' }} />}
+          <ButtonCard secondaryText="ManageAssociates" icon={<img src="/mod_icons/manageWorker.jpeg" alt="Logo" style={{ width: '70px', height: '70px' }} />}
             count={workersCount?.toString()} color="#fff" targetRoute="/workers" />
         </Grid>
         <Grid item xs={12} md={4} xl={3}>

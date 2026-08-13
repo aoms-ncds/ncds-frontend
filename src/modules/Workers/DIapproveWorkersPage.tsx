@@ -54,7 +54,7 @@ const DisapproveWorkersPage = () => {
     }
   }, [currentTab]);
   return (
-    <CommonPageLayout title="Disapprove Workers">
+    <CommonPageLayout title="DisapproveAssociates">
       <Grid container spacing={2}>
         <Grid item xs={12}>
         </Grid>

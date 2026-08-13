@@ -127,7 +127,7 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
       <Grid item xs={12} md={6} lg={4}>
         <FormControl variant="outlined" fullWidth>
           <TextField
-            label=" No. of Workers"
+            label=" No. of Associates"
             type="number"
             value={props.value.noOfWorkers}
             onChange={(e) => props.onChange({ ...props.value, noOfWorkers: Number(e.target.value) })}

@@ -249,7 +249,7 @@ const ChildeSupportSignSheetStudyHelp = (props: { frNo: any; data: Child[] | nul
         <div>
           <Image src="/3D Logo 3.png" style={styles.image} />
           <Text style={styles.title}>
-            {`Study Help to Workers Children's - ${div?.[0]}`}{props.data?.[0]?.childOf?.officialDetails?.divisionHistory?.at(-1)?.subDivision?.name ?
+            {`Study Help to WrokersChildren's - ${div?.[0]}`}{props.data?.[0]?.childOf?.officialDetails?.divisionHistory?.at(-1)?.subDivision?.name ?
               ' / ' + props.data?.[0].childOf?.officialDetails?.divisionHistory?.at(-1)?.subDivision.name :
               ''}
 

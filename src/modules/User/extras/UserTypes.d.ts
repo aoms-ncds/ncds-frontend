@@ -15,7 +15,7 @@ declare global {
 
     READ_WORKERS: boolean; // For reading workers
     WRITE_WORKERS: boolean; // For adding and editing worker details
-    MANAGE_WORKER: boolean;// For approving Workers
+    MANAGE_WORKER: boolean;// For approvingAssociates
 
     READ_STAFFS: boolean;// For reading staffs
     WRITE_STAFFS: boolean;// For adding and editing staff details

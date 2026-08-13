@@ -311,7 +311,7 @@ const LoginPage = () => {
                       fontSize: { xs: 12, sm: 14, md: 16 },
                     }}
                   >
-    INDIAN EVANGELICAL TEAM
+    {/* INDIAN EVANGELICAL TEAM */}
                   </Typography>
                 </Box>
                 <Typography
@@ -323,7 +323,7 @@ const LoginPage = () => {
                     letterSpacing: 1,
                   }}
                 >
-      AOMS LOGIN
+      NCDS LOGIN
                 </Typography>
 
                 <Grid container spacing={2}>

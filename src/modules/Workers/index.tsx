@@ -77,7 +77,7 @@ const WorkersDashboard = () => {
   }, [gender]);
 
   return (
-    <CommonPageLayout title="Workers Dashboard">
+    <CommonPageLayout title="Associates Dashboard">
 
       <Grid container spacing={3}>
         <Grid item xs={12} md={4} xl={3}>
@@ -92,12 +92,12 @@ const WorkersDashboard = () => {
             onFilter={(value) => setGender(value)}
             genderFilter={gender}
             count={gender =='male'?activeWorker: gender =='female'? activeSpouse : (activeWorker ?? 0) + (activeSpouse ?? 0)}
-            secondaryText="Total Workers"
+            secondaryText="Total Associates"
             color="#fff"
           />        </Grid>
         <Grid item xs={12} md={4} xl={3}>
           <FRCountCard icon={<img src="/mod_icons/Total Active Workers Counter Card.png"
-            alt="Logo" style={{ width: '70px', height: '70px' }} />} count={activeWorker?.toString()} secondaryText="Active Worker" color="#fff" />
+            alt="Logo" style={{ width: '70px', height: '70px' }} />} count={activeWorker?.toString()} secondaryText="Active Associates" color="#fff" />
         </Grid>
         <Grid item xs={12} md={4} xl={3}>
           <FRCountCard icon={<img src="/mod_icons/Total Active Spouse Counter Card.png"
@@ -126,7 +126,7 @@ const WorkersDashboard = () => {
 
           <Grid container spacing={3}>
             <Grid item xs={12} md={4} xl={3}>
-              <ButtonCard secondaryText="Manage Workers" icon={<img src="/mod_icons/manageWorker.jpeg" alt="Logo" style={{ width: '70px', height: '70px' }} />}
+              <ButtonCard secondaryText="ManageAssociates" icon={<img src="/mod_icons/manageWorker.jpeg" alt="Logo" style={{ width: '70px', height: '70px' }} />}
                 count={workersCount?.toString()} color="#fff" targetRoute="/workers/manage" />
             </Grid>
             <PermissionChecks permissions={['MANAGE_WORKER']} granted={
@@ -137,16 +137,16 @@ const WorkersDashboard = () => {
             }
             />
             <Grid item xs={12} md={4} xl={3}>
-              <ButtonCard secondaryText="In Process Workers" icon={<img src="/mod_icons/Process Worker.jpeg" alt="Logo" style={{ width: '70px', height: '70px' }} />}
+              <ButtonCard secondaryText="In ProcessAssociates" icon={<img src="/mod_icons/Process Worker.jpeg" alt="Logo" style={{ width: '70px', height: '70px' }} />}
                 count={rejectedWorkersCount?.toString()} color="#fff" targetRoute="/workers/reject" />
             </Grid>
 
             <Grid item xs={12} md={4} xl={3}>
-              <ButtonCard secondaryText="Deactivated Workers" icon={<img src="/mod_icons/Deactivated Workers.jpeg" alt="Logo" style={{ width: '70px', height: '70px' }} />}
+              <ButtonCard secondaryText="Deactivated Associates" icon={<img src="/mod_icons/Deactivated Workers.jpeg" alt="Logo" style={{ width: '70px', height: '70px' }} />}
                 count={deactivateWorkersCount?.toString()} color="#fff" targetRoute="/workers/deactivated" />
             </Grid>
             <Grid item xs={12} md={4} xl={3}>
-              <ButtonCard secondaryText="Disapprove Workers" icon={<img src="/mod_icons/Deactivated Workers.jpeg" alt="Logo" style={{ width: '70px', height: '70px' }} />}
+              <ButtonCard secondaryText="Disapprove Associates" icon={<img src="/mod_icons/Deactivated Workers.jpeg" alt="Logo" style={{ width: '70px', height: '70px' }} />}
                 count={disapproveWorkersCount?.toString()} color="#fff" targetRoute="/workers/disapprove" />
             </Grid>
           </Grid>

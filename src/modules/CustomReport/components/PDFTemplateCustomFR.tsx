@@ -801,7 +801,7 @@ const PDFTemplateCustomFR = (props:any) => {
             <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
             <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
             <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.bottomTableCell, fontWeight: 'bold' }}>Total No of Workers: </Text>
+            <Text style={{ ...styles.bottomTableCell, fontWeight: 'bold' }}>Total No ofAssociates: </Text>
             <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
             <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
             <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
