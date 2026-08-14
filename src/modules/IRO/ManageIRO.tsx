@@ -1772,7 +1772,6 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                       </Grid>
                     )}
                   </Grid>
-
                   <Grid item xs={12} >
                     <PermissionChecks
                       permissions={['MANAGE_IRO']}
