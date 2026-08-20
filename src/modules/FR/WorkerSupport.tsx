@@ -1364,7 +1364,7 @@ const WorkerSupportPage = () => {
                   unitPrice: total.net,
                   quantity: supportEnabledWorkers?.length ?? 0,
                   year: requisition?.particulars[0].year,
-                  attachment: fileObj ? [fileObj] : [],
+                  attachment: [],
                 }] : [],
               }));
             } else {
