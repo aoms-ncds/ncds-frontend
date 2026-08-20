@@ -1303,7 +1303,7 @@ const WorkerSupportPage = () => {
                                         onClick={async () => {
                                           if (signBlob && supportBlob) {
                                             setLoading(true);
-                                            setFileObj(signBlob ? { filename: 'WorkerSheet.pdf', type: 'application/pdf', size: signBlob.size, blob: signBlob } : null);
+                                            // setFileObj(signBlob ? { filename: 'WorkerSheet.pdf', type: 'application/pdf', size: signBlob.size, blob: signBlob } : null);
 
                                             attach(signBlob, supportBlob);
                                           }
@@ -1398,7 +1398,7 @@ const WorkerSupportPage = () => {
                     unitPrice: total.total,
                     quantity: 1, // Each entry represents one worker
                     year: requisition?.particulars?.[0]?.year,
-                    attachment: fileObj ? [fileObj] : [],
+                    attachment: [],
                     worker: worker, // Add worker reference if needed
                   })) :
                   [],
