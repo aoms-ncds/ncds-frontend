@@ -299,6 +299,76 @@ const EditIROForRevert = () => {
         IFSCCode: '',
         beneficiary: '',
       },
+      BeneficiaryBank21: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      BeneficiaryBank22: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      BeneficiaryBank23: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      BeneficiaryBank24: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      BeneficiaryBank25: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      BeneficiaryBank26: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      BeneficiaryBank27: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      BeneficiaryBank28: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      BeneficiaryBank29: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      BeneficiaryBank30: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
       createdAt: moment(),
       updatedAt: moment(),
     },
@@ -844,6 +914,61 @@ const EditIROForRevert = () => {
                         {IRO?.division?.BeneficiaryBank20?.bankName ? (
                           <MenuItem value={`Beneficiary Bank 20-${IRO?.division?.BeneficiaryBank20?.beneficiary}`}>
     Beneficiary Bank 20 - {IRO.division?.BeneficiaryBank20?.beneficiary}
+                          </MenuItem>
+                        ) : ''}
+                        {IRO?.division?.BeneficiaryBank21?.bankName ? (
+                          <MenuItem value={`Beneficiary Bank 21-${IRO?.division?.BeneficiaryBank21?.beneficiary}`}>
+    Beneficiary Bank 21 - {IRO.division?.BeneficiaryBank21?.beneficiary}
+                          </MenuItem>
+                        ) : ''}
+                        {IRO?.division?.BeneficiaryBank22?.bankName ? (
+                          <MenuItem value={`Beneficiary Bank 22-${IRO?.division?.BeneficiaryBank22?.beneficiary}`}>
+    Beneficiary Bank 22 - {IRO.division?.BeneficiaryBank22?.beneficiary}
+                          </MenuItem>
+                        ) : ''}
+                        {IRO?.division?.BeneficiaryBank23?.bankName ? (
+                          <MenuItem value={`Beneficiary Bank 23-${IRO?.division?.BeneficiaryBank23?.beneficiary}`}>
+    Beneficiary Bank 23 - {IRO.division?.BeneficiaryBank23?.beneficiary}
+                          </MenuItem>
+                        ) : ''}
+                        {IRO?.division?.BeneficiaryBank24?.bankName ? (
+                          <MenuItem value={`Beneficiary Bank 24-${IRO?.division?.BeneficiaryBank24?.beneficiary}`}>
+    Beneficiary Bank 24 - {IRO.division?.BeneficiaryBank24?.beneficiary}
+                          </MenuItem>
+                        ) : ''}
+                        {IRO?.division?.BeneficiaryBank25?.bankName ? (
+                          <MenuItem value={`Beneficiary Bank 25-${IRO?.division?.BeneficiaryBank25?.beneficiary}`}>
+    Beneficiary Bank 25 - {IRO.division?.BeneficiaryBank25?.beneficiary}
+                          </MenuItem>
+                        ) : ''}
+                        {IRO?.division?.BeneficiaryBank26?.bankName ? (
+                          <MenuItem value={`Beneficiary Bank 26-${IRO?.division?.BeneficiaryBank26?.beneficiary}`}>
+    Beneficiary Bank 26 - {IRO.division?.BeneficiaryBank26?.beneficiary}
+                          </MenuItem>
+                        ) : ''}
+                        {IRO?.division?.BeneficiaryBank26?.bankName ? (
+                          <MenuItem value={`Beneficiary Bank 26-${IRO?.division?.BeneficiaryBank26?.beneficiary}`}>
+    Beneficiary Bank 26 - {IRO.division?.BeneficiaryBank26?.beneficiary}
+                          </MenuItem>
+                        ) : ''}
+                        {IRO?.division?.BeneficiaryBank27?.bankName ? (
+                          <MenuItem value={`Beneficiary Bank 27-${IRO?.division?.BeneficiaryBank27?.beneficiary}`}>
+    Beneficiary Bank 27 - {IRO.division?.BeneficiaryBank27?.beneficiary}
+                          </MenuItem>
+                        ) : ''}
+                        {IRO?.division?.BeneficiaryBank28?.bankName ? (
+                          <MenuItem value={`Beneficiary Bank 28-${IRO?.division?.BeneficiaryBank28?.beneficiary}`}>
+    Beneficiary Bank 28 - {IRO.division?.BeneficiaryBank28?.beneficiary}
+                          </MenuItem>
+                        ) : ''}
+                        {IRO?.division?.BeneficiaryBank29?.bankName ? (
+                          <MenuItem value={`Beneficiary Bank 29-${IRO?.division?.BeneficiaryBank29?.beneficiary}`}>
+    Beneficiary Bank 29 - {IRO.division?.BeneficiaryBank29?.beneficiary}
+                          </MenuItem>
+                        ) : ''}
+                        {IRO?.division?.BeneficiaryBank30?.bankName ? (
+                          <MenuItem value={`Beneficiary Bank 30-${IRO?.division?.BeneficiaryBank30?.beneficiary}`}>
+    Beneficiary Bank 30 - {IRO.division?.BeneficiaryBank30?.beneficiary}
                           </MenuItem>
                         ) : ''}
                         {/* <MenuItem value={'FCRA'}>FCRA</MenuItem>

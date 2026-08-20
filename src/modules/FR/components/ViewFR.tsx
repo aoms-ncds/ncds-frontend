@@ -963,6 +963,56 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                             Beneficiary Bank 20 - {props.value.division?.BeneficiaryBank20?.beneficiary}
                           </MenuItem>
                         ) : ''}
+                        {props.value.division?.BeneficiaryBank21?.bankName ? (
+                          <MenuItem value={`Beneficiary Bank 21-${props.value.division?.BeneficiaryBank21?.beneficiary}`}>
+                            Beneficiary Bank 21 - {props.value.division?.BeneficiaryBank21?.beneficiary}
+                          </MenuItem>
+                        ) : ''}
+                        {props.value.division?.BeneficiaryBank22?.bankName ? (
+                          <MenuItem value={`Beneficiary Bank 22-${props.value.division?.BeneficiaryBank22?.beneficiary}`}>
+                            Beneficiary Bank 22 - {props.value.division?.BeneficiaryBank22?.beneficiary}
+                          </MenuItem>
+                        ) : ''}
+                        {props.value.division?.BeneficiaryBank23?.bankName ? (
+                          <MenuItem value={`Beneficiary Bank 23-${props.value.division?.BeneficiaryBank23?.beneficiary}`}>
+                            Beneficiary Bank 23 - {props.value.division?.BeneficiaryBank23?.beneficiary}
+                          </MenuItem>
+                        ) : ''}
+                        {props.value.division?.BeneficiaryBank24?.bankName ? (
+                          <MenuItem value={`Beneficiary Bank 24-${props.value.division?.BeneficiaryBank24?.beneficiary}`}>
+                            Beneficiary Bank 24 - {props.value.division?.BeneficiaryBank24?.beneficiary}
+                          </MenuItem>
+                        ) : ''}
+                        {props.value.division?.BeneficiaryBank25?.bankName ? (
+                          <MenuItem value={`Beneficiary Bank 25-${props.value.division?.BeneficiaryBank25?.beneficiary}`}>
+                            Beneficiary Bank 25 - {props.value.division?.BeneficiaryBank25?.beneficiary}
+                          </MenuItem>
+                        ) : ''}
+                        {props.value.division?.BeneficiaryBank26?.bankName ? (
+                          <MenuItem value={`Beneficiary Bank 26-${props.value.division?.BeneficiaryBank26?.beneficiary}`}>
+                            Beneficiary Bank 26 - {props.value.division?.BeneficiaryBank26?.beneficiary}
+                          </MenuItem>
+                        ) : ''}
+                        {props.value.division?.BeneficiaryBank27?.bankName ? (
+                          <MenuItem value={`Beneficiary Bank 27-${props.value.division?.BeneficiaryBank27?.beneficiary}`}>
+                            Beneficiary Bank 27 - {props.value.division?.BeneficiaryBank27?.beneficiary}
+                          </MenuItem>
+                        ) : ''}
+                        {props.value.division?.BeneficiaryBank28?.bankName ? (
+                          <MenuItem value={`Beneficiary Bank 28-${props.value.division?.BeneficiaryBank28?.beneficiary}`}>
+                            Beneficiary Bank 28 - {props.value.division?.BeneficiaryBank28?.beneficiary}
+                          </MenuItem>
+                        ) : ''}
+                        {props.value.division?.BeneficiaryBank29?.bankName ? (
+                          <MenuItem value={`Beneficiary Bank 29-${props.value.division?.BeneficiaryBank29?.beneficiary}`}>
+                            Beneficiary Bank 29 - {props.value.division?.BeneficiaryBank29?.beneficiary}
+                          </MenuItem>
+                        ) : ''}
+                        {props.value.division?.BeneficiaryBank30?.bankName ? (
+                          <MenuItem value={`Beneficiary Bank 30-${props.value.division?.BeneficiaryBank30?.beneficiary}`}>
+                            Beneficiary Bank 30 - {props.value.division?.BeneficiaryBank30?.beneficiary}
+                          </MenuItem>
+                        ) : ''}
                         {paymnetMethods.map((e) => (
                           <MenuItem key={e._id} value={e.paymentMethod}>{e.paymentMethod}</MenuItem>
                         ))}

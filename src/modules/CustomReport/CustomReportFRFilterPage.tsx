@@ -1248,6 +1248,56 @@ const CustomReportFRFilterPage = () => {
                         {filters.division?.BeneficiaryBank20?.beneficiary}
                       </MenuItem>
                     ) : ''}
+                    {filters.division?.BeneficiaryBank21?.bankName ? (
+                      <MenuItem value={`Beneficiary Bank 21-${filters.division?.BeneficiaryBank21?.beneficiary}`}>
+                        {filters.division?.BeneficiaryBank21?.beneficiary}
+                      </MenuItem>
+                    ) : ''}
+                    {filters.division?.BeneficiaryBank22?.bankName ? (
+                      <MenuItem value={`Beneficiary Bank 22-${filters.division?.BeneficiaryBank22?.beneficiary}`}>
+                        {filters.division?.BeneficiaryBank22?.beneficiary}
+                      </MenuItem>
+                    ) : ''}
+                    {filters.division?.BeneficiaryBank23?.bankName ? (
+                      <MenuItem value={`Beneficiary Bank 23-${filters.division?.BeneficiaryBank23?.beneficiary}`}>
+                        {filters.division?.BeneficiaryBank23?.beneficiary}
+                      </MenuItem>
+                    ) : ''}
+                    {filters.division?.BeneficiaryBank24?.bankName ? (
+                      <MenuItem value={`Beneficiary Bank 24-${filters.division?.BeneficiaryBank24?.beneficiary}`}>
+                        {filters.division?.BeneficiaryBank24?.beneficiary}
+                      </MenuItem>
+                    ) : ''}
+                    {filters.division?.BeneficiaryBank25?.bankName ? (
+                      <MenuItem value={`Beneficiary Bank 25-${filters.division?.BeneficiaryBank25?.beneficiary}`}>
+                        {filters.division?.BeneficiaryBank25?.beneficiary}
+                      </MenuItem>
+                    ) : ''}
+                    {filters.division?.BeneficiaryBank26?.bankName ? (
+                      <MenuItem value={`Beneficiary Bank 26-${filters.division?.BeneficiaryBank26?.beneficiary}`}>
+                        {filters.division?.BeneficiaryBank26?.beneficiary}
+                      </MenuItem>
+                    ) : ''}
+                    {filters.division?.BeneficiaryBank27?.bankName ? (
+                      <MenuItem value={`Beneficiary Bank 27-${filters.division?.BeneficiaryBank27?.beneficiary}`}>
+                        {filters.division?.BeneficiaryBank27?.beneficiary}
+                      </MenuItem>
+                    ) : ''}
+                    {filters.division?.BeneficiaryBank28?.bankName ? (
+                      <MenuItem value={`Beneficiary Bank 28-${filters.division?.BeneficiaryBank28?.beneficiary}`}>
+                        {filters.division?.BeneficiaryBank28?.beneficiary}
+                      </MenuItem>
+                    ) : ''}
+                    {filters.division?.BeneficiaryBank29?.bankName ? (
+                      <MenuItem value={`Beneficiary Bank 29-${filters.division?.BeneficiaryBank29?.beneficiary}`}>
+                        {filters.division?.BeneficiaryBank29?.beneficiary}
+                      </MenuItem>
+                    ) : ''}
+                    {filters.division?.BeneficiaryBank30?.bankName ? (
+                      <MenuItem value={`Beneficiary Bank 30-${filters.division?.BeneficiaryBank30?.beneficiary}`}>
+                        {filters.division?.BeneficiaryBank30?.beneficiary}
+                      </MenuItem>
+                    ) : ''}
 
 
                   </Select>
@@ -1369,6 +1419,58 @@ const CustomReportFRFilterPage = () => {
                         Beneficiary Bank 20
                       </MenuItem>
                     ) : ''}
+                    {filters.division?.BeneficiaryBank21?.bankName ? (
+                      <MenuItem value={`Beneficiary Bank 21-${filters.division?.BeneficiaryBank21?.beneficiary}`}>
+                        Beneficiary Bank 21
+                      </MenuItem>
+                    ) : ''}
+                    {filters.division?.BeneficiaryBank22?.bankName ? (
+                      <MenuItem value={`Beneficiary Bank 22-${filters.division?.BeneficiaryBank22?.beneficiary}`}>
+                        Beneficiary Bank 22
+                      </MenuItem>
+                    ) : ''}
+                    {filters.division?.BeneficiaryBank23?.bankName ? (
+                      <MenuItem value={`Beneficiary Bank 23-${filters.division?.BeneficiaryBank23?.beneficiary}`}>
+                        Beneficiary Bank 23
+                      </MenuItem>
+                    ) : ''}
+                    {filters.division?.BeneficiaryBank24?.bankName ? (
+                      <MenuItem value={`Beneficiary Bank 24-${filters.division?.BeneficiaryBank24?.beneficiary}`}>
+                        Beneficiary Bank 24
+                      </MenuItem>
+                    ) : ''}
+                    {filters.division?.BeneficiaryBank25?.bankName ? (
+                      <MenuItem value={`Beneficiary Bank 25-${filters.division?.BeneficiaryBank25?.beneficiary}`}>
+                        Beneficiary Bank 25
+                      </MenuItem>
+                    ) : ''}
+                    {filters.division?.BeneficiaryBank26?.bankName ? (
+                      <MenuItem value={`Beneficiary Bank 26-${filters.division?.BeneficiaryBank26?.beneficiary}`}>
+                        Beneficiary Bank 26
+                      </MenuItem>
+                    ) : ''}
+                    {filters.division?.BeneficiaryBank27?.bankName ? (
+                      <MenuItem value={`Beneficiary Bank 27-${filters.division?.BeneficiaryBank27?.beneficiary}`}>
+                        Beneficiary Bank 27
+                      </MenuItem>
+                    ) : ''}
+                    {filters.division?.BeneficiaryBank28?.bankName ? (
+                      <MenuItem value={`Beneficiary Bank 28-${filters.division?.BeneficiaryBank28?.beneficiary}`}>
+                        Beneficiary Bank 28
+                      </MenuItem>
+                    ) : ''}
+                    {filters.division?.BeneficiaryBank29?.bankName ? (
+                      <MenuItem value={`Beneficiary Bank 29-${filters.division?.BeneficiaryBank29?.beneficiary}`}>
+                        Beneficiary Bank 29
+                      </MenuItem>
+                    ) : ''}
+                    {filters.division?.BeneficiaryBank30?.bankName ? (
+                      <MenuItem value={`Beneficiary Bank 30-${filters.division?.BeneficiaryBank30?.beneficiary}`}>
+                        Beneficiary Bank 30
+                      </MenuItem>
+                    ) : ''}
+
+
 
 
                   </Select>

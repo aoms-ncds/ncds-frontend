@@ -265,6 +265,36 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
           return division?.BeneficiaryBank20;
         case 'Beneficiary Bank 21 ':
         case 'Beneficiary Bank 21':
+          return division?.BeneficiaryBank21;
+        case 'Beneficiary Bank 22 ':
+        case 'Beneficiary Bank 22':
+          return division?.BeneficiaryBank22;
+        case 'Beneficiary Bank 23 ':
+        case 'Beneficiary Bank 23':
+          return division?.BeneficiaryBank23;
+        case 'Beneficiary Bank 24 ':
+        case 'Beneficiary Bank 24':
+          return division?.BeneficiaryBank24;
+        case 'Beneficiary Bank 25 ':
+        case 'Beneficiary Bank 25':
+          return division?.BeneficiaryBank25;
+        case 'Beneficiary Bank 26 ':
+        case 'Beneficiary Bank 26':
+          return division?.BeneficiaryBank26;
+        case 'Beneficiary Bank 27 ':
+        case 'Beneficiary Bank 27':
+          return division?.BeneficiaryBank27;
+        case 'Beneficiary Bank 28 ':
+        case 'Beneficiary Bank 28':
+          return division?.BeneficiaryBank28;
+        case 'Beneficiary Bank 29 ':
+        case 'Beneficiary Bank 29':
+          return division?.BeneficiaryBank29;
+        case 'Beneficiary Bank 30 ':
+        case 'Beneficiary Bank 30':
+          return division?.BeneficiaryBank30;
+        case 'Beneficiary Bank 31 ':
+        case 'Beneficiary Bank 31':
           return null;
         default:
           return {

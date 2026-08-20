@@ -20,10 +20,14 @@ const DivisionDetailsPage = (props: DivisionFormPageProps) => {
   const [activeStep, setActiveStep] = useState(0);
   const [action, setAction] = useState<'add' | 'edit' | 'view'>('add');
   const [otherBankDetailsCount, setOtherBankDetailsCount] = useState(0);
+  console.log(otherBankDetailsCount, 'otherBankDetailsCount');
+  
   // const [count, setCount] = useState([]);
   const navigate = useNavigate();
   let count : number[] =[];
   let BenFicount : number[] =[];
+  console.log(BenFicount, 'BenFicount');
+  
   const addDivision = () => {
     // e.preventDefault();
     // event.preventDefault();
@@ -244,6 +248,78 @@ const DivisionDetailsPage = (props: DivisionFormPageProps) => {
       IFSCCode: '',
       beneficiary: '',
     },
+    BeneficiaryBank21: {
+      bankName: '',
+      branchName: '',
+      accountNumber: '',
+      IFSCCode: '',
+      beneficiary: '',
+    },
+    BeneficiaryBank22: {
+      bankName: '',
+      branchName: '',
+      accountNumber: '',
+      IFSCCode: '',
+      beneficiary: '',
+    },
+    BeneficiaryBank23: {
+      bankName: '',
+      branchName: '',
+      accountNumber: '',
+      IFSCCode: '',
+      beneficiary: '',
+    },
+    BeneficiaryBank24: {
+      bankName: '',
+      branchName: '',
+      accountNumber: '',
+      IFSCCode: '',
+      beneficiary: '',
+    },
+    BeneficiaryBank25: {
+      bankName: '',
+      branchName: '',
+      accountNumber: '',
+      IFSCCode: '',
+      beneficiary: '',
+
+    },
+    BeneficiaryBank26: {
+      bankName: '',
+      branchName: '',
+      accountNumber: '',
+      IFSCCode: '',
+      beneficiary: '',
+    },
+    BeneficiaryBank27: {
+      bankName: '',
+      branchName: '',
+      accountNumber: '',
+      IFSCCode: '',
+      beneficiary: '',
+    },
+    BeneficiaryBank28: {
+      bankName: '',
+      branchName: '',
+      accountNumber: '',
+      IFSCCode: '',
+      beneficiary: '',
+    },
+    BeneficiaryBank29: {
+
+      bankName: '',
+      branchName: '',
+      accountNumber: '',
+      IFSCCode: '',
+      beneficiary: '',
+    },
+    BeneficiaryBank30: {
+      bankName: '',
+      branchName: '',
+      accountNumber: '',
+      IFSCCode: '',
+      beneficiary: '',
+    },
     createdAt: moment(),
     updatedAt: moment(),
   });
@@ -279,7 +355,7 @@ const DivisionDetailsPage = (props: DivisionFormPageProps) => {
   useEffect(() => {
     if (action === 'edit' && divisionDetails) {
       let total = 0;
-      for (let i = 2; i <= 20; i++) {
+      for (let i = 2; i <= 30; i++) {
         const key = `BeneficiaryBank${i}` as keyof Division;
         const value = divisionDetails[key];
         if (value && typeof value === 'object' && 'bankName' in value && value.bankName) total++;
@@ -354,6 +430,36 @@ const DivisionDetailsPage = (props: DivisionFormPageProps) => {
   }
   if (divisionDetails?.BeneficiaryBank20?.bankName != null) {
     BenFicount.push(20);
+  }
+  if (divisionDetails?.BeneficiaryBank21?.bankName != null) {
+    BenFicount.push(21);
+  }
+  if (divisionDetails?.BeneficiaryBank22?.bankName != null) {
+    BenFicount.push(22);
+  }
+  if (divisionDetails?.BeneficiaryBank23?.bankName != null) {
+    BenFicount.push(23);
+  }
+  if (divisionDetails?.BeneficiaryBank24?.bankName != null) {
+    BenFicount.push(24);
+  }
+  if (divisionDetails?.BeneficiaryBank25?.bankName != null) {
+    BenFicount.push(25);
+  }
+  if (divisionDetails?.BeneficiaryBank26?.bankName != null) {
+    BenFicount.push(26);
+  }
+  if (divisionDetails?.BeneficiaryBank27?.bankName != null) {
+    BenFicount.push(27);
+  }
+  if (divisionDetails?.BeneficiaryBank28?.bankName != null) {
+    BenFicount.push(28);
+  }
+  if (divisionDetails?.BeneficiaryBank29?.bankName != null) {
+    BenFicount.push(29);
+  }
+  if (divisionDetails?.BeneficiaryBank30?.bankName != null) {
+    BenFicount.push(30);
   }
 
   // }, []);
@@ -580,7 +686,7 @@ const DivisionDetailsPage = (props: DivisionFormPageProps) => {
                 }
 
                 <Grid item xs={12}>
-                  {action !== 'view' && otherBankDetailsCount !=19 && (
+                  {action !== 'view' && otherBankDetailsCount !=29 && (
                     <Button variant="contained" onClick={() => setOtherBankDetailsCount((count) => count + 1)}>
                       Add More Banks
                     </Button>
