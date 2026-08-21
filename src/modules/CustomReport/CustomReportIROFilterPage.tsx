@@ -9,7 +9,8 @@ import { TextField, MenuItem, Button, Grid,
   TableCell,
   TableContainer,
   TableHead,
-  TableRow } from '@mui/material';
+  TableRow, 
+  Menu} from '@mui/material';
 import DivisionsServices from '../Divisions/extras/DivisionsServices';
 import { useAuth } from '../../hooks/Authentication';
 import { enqueueSnackbar } from 'notistack';
@@ -47,6 +48,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import PDFTemplateCustom from './components/PDFTemplateCustom';
 import PDFTemplateCustomAll from './components/PDFTemplateCustomAll';
 import formatAmount from '../Common/formatcode';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 const CustomFooter = () => (
   <Box sx={{ display: 'flex', justifyContent: 'space-between', padding: '10px', background: '#f0f0f0', fontWeight: 'bold', borderTop: '1px solid black' }}>
@@ -69,6 +71,9 @@ const IROReportFilter = () => {
     remark: '',
     transactionId: '',
   });
+  
+  const [anchorEl, setAnchorEl] = useState<Record<string, HTMLElement | null>>({});
+
   const [data, setData] = useState<any[] | null>(null);
   const [print, setPrint] = useState<boolean>(false);
   const [page, setPage] = useState<boolean>(false);
@@ -1818,6 +1823,7 @@ const IROReportFilter = () => {
                   <TableHead sx={{ height: 10, backgroundColor: '#f5f5f5' }}>
                     <TableRow>
                       <TableCell sx={{ fontWeight: 'bold' }}>Sl No</TableCell>
+                      <TableCell sx={{ fontWeight: 'bold' }}>Actions</TableCell>
                       {selectedData.includes('IRO No') &&<TableCell sx={{ fontWeight: 'bold' }}>IRO No</TableCell>}
                       {selectedData.includes('Date') &&<TableCell sx={{ fontWeight: 'bold' }}>IRO Date</TableCell>}
                       {selectedData.includes('Status') && <TableCell sx={{ fontWeight: 'bold' }}>Status</TableCell>}
@@ -1868,6 +1874,28 @@ const IROReportFilter = () => {
                         }}
                       >
                         <TableCell>{index +1}</TableCell>
+                        <TableCell align="center" onClick={(e) => e.stopPropagation()}>
+                          <IconButton
+                            size="small"
+                            onClick={(e) => setAnchorEl((prev) => ({ ...prev, [row.id]: e.currentTarget }))}
+                          >
+                            <MoreVertIcon fontSize="small" />
+                          </IconButton>
+                          <Menu
+                            anchorEl={anchorEl[row.id]}
+                            open={Boolean(anchorEl[row.id])}
+                            onClose={() => setAnchorEl((prev) => ({ ...prev, [row.id]: null }))}
+                          >
+                            <MenuItem
+                              onClick={() => {
+                                setAnchorEl((prev) => ({ ...prev, [row.id]: null }));
+                                window.open(`/iro/${row._id}`, '_blank');
+                              }}
+                            >
+                              View IRO
+                            </MenuItem>
+                          </Menu>
+                        </TableCell>
                         {selectedData.includes('IRO No') &&<TableCell>{row.IROno}</TableCell>}
                         {selectedData.includes('Date') && <TableCell>{moment(row.IRODate).format('DD/MM/YYYY')}</TableCell>}
                         {selectedData.includes('Status') &&<TableCell>{IROLifeCycleStates.getStatusNameByCodeTransaction(row.status).replaceAll('_', ' ')}</TableCell>}

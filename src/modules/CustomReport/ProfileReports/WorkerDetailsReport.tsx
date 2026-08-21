@@ -321,16 +321,16 @@ export default function UserFilterReportMUI() {
                 }),
               );
   }, []);
-    const [department, setDepartment] = useState<Department[] | null>(null);
+  const [department, setDepartment] = useState<Department[] | null>(null);
 
-   useEffect(() => {
-      DepartmentService.getAll()
+  useEffect(() => {
+    DepartmentService.getAll()
         .then((res) => setDepartment(res.data))
         .catch((error) => {
           // setDepartmentFetchError(error.message);
           enqueueSnackbar({ variant: 'error', message: error.message });
         });
-    }, []);
+  }, []);
 
   const [selectedRow, setSelectedRow] = useState<number | null>(null);
   console.log(data, 'dta77');
@@ -374,6 +374,8 @@ export default function UserFilterReportMUI() {
 
   const [divisions, setDivisions] = useState<any[] | null>(null);
   const [subDivisions, setSubDivisions] = useState<any[] | null>(null);
+  const [singleDivision, setSingleDivision] = useState<any | null>(null);
+  // console.log(singleDivision, 'singleDivision');
 
   const user = useAuth();
   useEffect(()=>{
@@ -396,7 +398,12 @@ export default function UserFilterReportMUI() {
       });
     }
   }, []);
-
+  useEffect(()=>{
+    DivisionsServices.getDivisionById((user?.user as any)?.division).then((res) => {
+      console.log(res.data, 'resrrsa');
+      setSingleDivision(res.data);
+    });
+  }, []);
   return (
     <>
 
@@ -484,10 +491,9 @@ export default function UserFilterReportMUI() {
                         value={(filters as any).division}
                         onChange={(e) => set('division')(e.target.value as any)}
                       >
-                        <MenuItem value="">All</MenuItem>
-                        {divisions?.map((d) => (
-                          <MenuItem key={d.id} value={d}>
-                            {d.details.name}
+                        {(divisions?.length ? divisions : [singleDivision])?.map((d: any) => (
+                          <MenuItem key={d?.id} value={d}>
+                            {d?.details?.name}
                           </MenuItem>
                         ))}
                       </Select>
@@ -788,7 +794,7 @@ export default function UserFilterReportMUI() {
                     <TextField fullWidth label="Other Designation" value={filters.otherDesignation} onChange={set('otherDesignation')} />
                   </Grid>
                   <Grid item xs={12} sm={6} md={3}>
-  <Autocomplete
+                    <Autocomplete
                       options={department ?? []}
                       value={department?.find((d) => d._id === filters.department) ?? null}
                       onChange={(e, newValue:any) => set('department')(newValue?._id ?? '')}
@@ -1114,6 +1120,7 @@ export default function UserFilterReportMUI() {
                 <Table stickyHeader> {/* Ensure header stays visible */}
                   <TableHead sx={{ height: 10, backgroundColor: '#f5f5f5' }}>
                     <TableRow>
+                      <TableCell sx={{ fontWeight: 'bold' }}>Sl No</TableCell>
                       <TableCell sx={{ fontWeight: 'bold' }}>Sl No</TableCell>
                       {selectedData.includes('Worker Code') && <TableCell sx={{ fontWeight: 'bold' }}>Worker Code</TableCell>}
                       {selectedData.includes('IRO No') && <TableCell sx={{ fontWeight: 'bold' }}>IRO No</TableCell>}

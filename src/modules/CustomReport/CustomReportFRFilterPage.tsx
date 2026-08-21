@@ -49,6 +49,8 @@ import PDFTemplateCustomFR from './components/PDFTemplateCustomFR';
 import PDFTemplateCustomFRAll from './components/PDFTemplateCustomFRAll';
 import formatAmount from '../Common/formatcode';
 import { ToWords } from 'to-words';
+import Menu from '@mui/material/Menu';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 const CustomFooter = () => (
   <Box sx={{ display: 'flex', justifyContent: 'space-between', padding: '10px', background: '#f0f0f0', fontWeight: 'bold', borderTop: '1px solid black' }}>
@@ -71,6 +73,8 @@ const CustomReportFRFilterPage = () => {
     remark: '',
     transactionId: '',
   });
+  const [anchorEl, setAnchorEl] = useState<Record<string, HTMLElement | null>>({});
+
   const [data, setData] = useState<any[] | null>(null);
   const [print, setPrint] = useState<boolean>(false);
   const [page, setPage] = useState<boolean>(false);
@@ -1471,8 +1475,6 @@ const CustomReportFRFilterPage = () => {
                     ) : ''}
 
 
-
-
                   </Select>
                 </FormControl>
               </Grid>
@@ -1803,6 +1805,7 @@ const CustomReportFRFilterPage = () => {
                   <TableHead sx={{ height: 10, backgroundColor: '#f5f5f5' }}>
                     <TableRow>
                       <TableCell sx={{ fontWeight: 'bold' }}>Sl No</TableCell>
+                      <TableCell sx={{ fontWeight: 'bold' }}>Actions</TableCell>
                       {selectedData.includes('FR No') && <TableCell sx={{ fontWeight: 'bold' }}>FR No</TableCell>}
                       {selectedData.includes('IRO No') && <TableCell sx={{ fontWeight: 'bold' }}>IRO No</TableCell>}
                       {selectedData.includes('Date') && <TableCell sx={{ fontWeight: 'bold' }}>FR Date</TableCell>}
@@ -1843,6 +1846,28 @@ const CustomReportFRFilterPage = () => {
                         }}
                       >
                         <TableCell>{index +1}</TableCell>
+                        <TableCell align="center" onClick={(e) => e.stopPropagation()}>
+                          <IconButton
+                            size="small"
+                            onClick={(e) => setAnchorEl((prev) => ({ ...prev, [row.id]: e.currentTarget }))}
+                          >
+                            <MoreVertIcon fontSize="small" />
+                          </IconButton>
+                          <Menu
+                            anchorEl={anchorEl[row.id]}
+                            open={Boolean(anchorEl[row.id])}
+                            onClose={() => setAnchorEl((prev) => ({ ...prev, [row.id]: null }))}
+                          >
+                            <MenuItem
+                              onClick={() => {
+                                setAnchorEl((prev) => ({ ...prev, [row.id]: null }));
+                                window.open(`/fr/${row._id}/view`, '_blank');
+                              }}
+                            >
+          View FR
+                            </MenuItem>
+                          </Menu>
+                        </TableCell>
                         {selectedData.includes('FR No') && <TableCell>{row.FRno}</TableCell>}
                         {selectedData.includes('IRO No') && <TableCell>{row.IROdata?.IROno}</TableCell>}
                         {selectedData.includes('Date') && <TableCell>{moment(row.FRdate).format('DD/MM/YYYY')}</TableCell>}

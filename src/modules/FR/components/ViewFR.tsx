@@ -44,7 +44,7 @@ import FRReceiptTemplate from './FRReceiptTemplate';
 import { monthNames, purposes } from '../extras/FRConfig';
 import { AttachFile as AttachmentIcon, Edit as EditIcon, History as HistoryIcon } from '@mui/icons-material';
 import MessageItem from '../../../components/MessageItem';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import IROLifeCycleStates from '../../IRO/extras/IROLifeCycleStates';
 import FRLifeCycleStates from '../extras/FRLifeCycleStates';
 import SanctionedAsPerService from '../../Settings/extras/SanctionedAsPerService';
@@ -64,6 +64,8 @@ import formatAmount from '../../Common/formatcode';
 
 
 const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boolean }>) => {
+  const { frID } = useParams();
+
   const navigate = useNavigate();
   const [openRemarks, toggleOpenRemarks] = useState(false);
   const [remarks, setRemarks] = useState<Remark[]>([]);
@@ -71,6 +73,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
     remark: '',
     transactionId: '',
   });
+  console.log( remarks, 'frload');
   const [paymnetMethods, setPaymentMethod] = useState<IPaymentMethod[]>([]);
   const [data2, setData2] = useState<FR | null>(null);
 
@@ -95,7 +98,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
   const totalRequestedAmount = props.value.particulars && props.value.particulars.reduce((total, item) => total + Number(item.requestedAmount), 0);
   const FRstatus = IROLifeCycleStates.getStatusNameByCodeTransaction(Number(props.value.status));
   const [showAddParticularDialog, setShowAddParticularDialog] = useState(false);
-  console.log(totalRequestedAmount, 'totalRequestedAmount');
+  console.log(props.value, 'totalRequestedAmount');
 
   const [newParticular, setNewParticular] = useState<CreatableParticular>({
     mainCategory: '',
@@ -149,7 +152,6 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
     }
   });
   console.log(total2, 'total2');
-  console.log(props.options?.FRLoaded, 'frload');
 
   const user = useAuth();
   const handleClickOpen = (particular: Particular, index: number) => {
@@ -209,6 +211,20 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
         setDivisions(res.data);
       });
     }
+  }, []);
+  useEffect(() => {
+    FRServices.getAllRemarksById(frID ?? '')
+    .then((res) =>
+      setRemarks(
+        res.data.filter((r: any) => r.createdBy?.supportDetails?.designation === '658db8a280aef40003c741dc') ?? [],
+      ),
+    )
+    .catch((error) => {
+      enqueueSnackbar({
+        variant: 'error',
+        message: error.message,
+      });
+    });
   }, []);
   const openDilog = () => {
     // e.preventDefault();
@@ -291,6 +307,11 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
   };
   return (
     <div>
+      {remarks[0]?.remark && (
+        <Typography sx={{ fontWeight: 'bold', p: 2, color: 'blue' }}>
+          Remark From President: {remarks[0]?.remark}
+        </Typography>
+      )}
       <Container>
         <CardContent>
           <form

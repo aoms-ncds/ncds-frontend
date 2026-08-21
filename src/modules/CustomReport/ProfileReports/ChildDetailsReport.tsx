@@ -279,6 +279,7 @@ export default function ChildFilterReportMUI() {
     setSearchText(event.target.value);
   };
   const [open, setOpen] = useState<boolean>(false);
+  const [singleDivision, setSingleDivision] = useState<any | null>(null);
 
   const [print, setPrint] = useState<boolean>(false);
 
@@ -368,7 +369,12 @@ export default function ChildFilterReportMUI() {
       });
     }
   }, []);
-
+  useEffect(()=>{
+    DivisionsServices.getDivisionById((user?.user as any)?.division).then((res) => {
+      console.log(res.data, 'resrrsa');
+      setSingleDivision(res.data);
+    });
+  }, []);
   return (
     <>
 
@@ -456,10 +462,10 @@ export default function ChildFilterReportMUI() {
                         value={(filters as any).division}
                         onChange={(e) => set('division')(e.target.value)}
                       >
-                        <MenuItem value="">All</MenuItem>
-                        {divisions?.map((d) => (
-                          <MenuItem key={d.id} value={d}>
-                            {d.details.name}
+                        {/* <MenuItem value="">All</MenuItem> */}
+                        {(divisions?.length ? divisions : [singleDivision])?.map((d: any) => (
+                          <MenuItem key={d?.id} value={d}>
+                            {d?.details?.name}
                           </MenuItem>
                         ))}
                       </Select>

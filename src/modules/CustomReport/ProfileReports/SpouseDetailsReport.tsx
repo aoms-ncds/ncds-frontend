@@ -345,6 +345,7 @@ export default function SpouseFilterReportMUI() {
 
   const [divisions, setDivisions] = useState<any[] | null>(null);
   const [subDivisions, setSubDivisions] = useState<any[] | null>(null);
+  const [singleDivision, setSingleDivision] = useState<any | null>(null);
 
   const user = useAuth();
   useEffect(()=>{
@@ -367,7 +368,12 @@ export default function SpouseFilterReportMUI() {
       });
     }
   }, []);
-
+  useEffect(()=>{
+    DivisionsServices.getDivisionById((user?.user as any)?.division).then((res) => {
+      console.log(res.data, 'resrrsa');
+      setSingleDivision(res.data);
+    });
+  }, []);
   return (
     <>
 
@@ -455,10 +461,10 @@ export default function SpouseFilterReportMUI() {
                         value={filters.division}
                         onChange={(e) => set('division')(e.target.value)}
                       >
-                        <MenuItem value="">All</MenuItem>
-                        {divisions?.map((d) => (
-                          <MenuItem key={d.id} value={d}>
-                            {d.details.name}
+                        {/* <MenuItem value="">All</MenuItem> */}
+                        {(divisions?.length ? divisions : [singleDivision])?.map((d: any) => (
+                          <MenuItem key={d?.id} value={d}>
+                            {d?.details?.name}
                           </MenuItem>
                         ))}
                       </Select>

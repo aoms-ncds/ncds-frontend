@@ -314,7 +314,7 @@ const ViewIRO = (props: any) => {
         IFSCCode: '',
         beneficiary: '',
       },
-       BeneficiaryBank21: {
+      BeneficiaryBank21: {
         bankName: '',
         branchName: '',
         accountNumber: '',
@@ -416,6 +416,7 @@ const ViewIRO = (props: any) => {
   const [releaseAmountIROs, setReleaseAmountIROs] = useState<IROrder[]>([]);
   const [newTest, setNewTest] = useState<IROrder[]>([]);
   const userPermissions = (user.user as User)?.permissions;
+  console.log(IRO, 'IRO');
 
 
   let total = 0;
@@ -469,17 +470,38 @@ const ViewIRO = (props: any) => {
       }); // TODO: Implement REST API Call
     } else {
       IROServices.getById(iroID).then((res) =>{
+        console.log(res.data, 'uiiu');
+
         setIRO(res.data);
+        FRServices.getAllRemarksById(res.data.FR ?? '')
+    .then((res) =>
+      setRemarks(
+        res.data.filter((r: any) => r.createdBy?.supportDetails?.designation === '658db8a280aef40003c741dc') ?? [],
+      ),
+    )
+    .catch((error) => {
+      enqueueSnackbar({
+        variant: 'error',
+        message: error.message,
+      });
+    });
       }); // TODO: Implement REST API Call
     }
+    console.log(IRO, 'dat66');
   }, [iroID]);
   return (
     <CommonPageLayout title="View And Manage IRO">
+
       <PermissionChecks
         permissions={['READ_IRO']}
         granted={
           <>
             <Card style={{ width: '100%' }}>
+              {remarks[0]?.remark && (
+                <Typography sx={{ fontWeight: 'bold', p: 2, color: 'blue' }}>
+                        Remark From President: {remarks[0]?.remark}
+                </Typography>
+              )}
               <Container>
                 <CardContent>
                   <form
