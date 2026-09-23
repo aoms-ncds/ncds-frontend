@@ -267,7 +267,6 @@ const ReopenedIRO = () => {
         IFSCCode: '',
         beneficiary: '',
       },
-<<<<<<< HEAD
        BeneficiaryBank21: {
         bankName: '',
         branchName: '',
@@ -338,8 +337,6 @@ const ReopenedIRO = () => {
         IFSCCode: '',
         beneficiary: '',
       },
-=======
->>>>>>> 41531d0484f2a91a6b8c421d26685b73d8e8c7f0
       createdAt: moment(),
       updatedAt: moment(),
     },
@@ -950,11 +947,7 @@ const ReopenedIRO = () => {
           (total, particular) => total + Number(particular.requestedAmount || 0), // Ensure we handle potential undefined values
           0,
         );
-<<<<<<< HEAD
         return formatAmount((particularAmount || 0).toFixed(2)); // Return 0 if the total is undefined
-=======
-        return particularAmount.toFixed(2) || 0; // Return 0 if the total is undefined
->>>>>>> 41531d0484f2a91a6b8c421d26685b73d8e8c7f0
       },
       renderCell: (params: GridCellParams) => {
         const frRequest = params.row as FR;
@@ -992,17 +985,12 @@ const ReopenedIRO = () => {
       headerAlign: 'center' as const,
     },
 
-<<<<<<< HEAD
      {
-=======
-    {
->>>>>>> 41531d0484f2a91a6b8c421d26685b73d8e8c7f0
       field: 'totalTransferred',
       headerName: 'Total Transferred Amount',
       width: 180,
       renderHeader: () => <b>Total Transferred Amount</b>,
       valueGetter: (params: any) => {
-<<<<<<< HEAD
         if (params.row.releaseAmount?.transferredAmount !== 0) {
           return formatAmount(params.row.releaseAmount?.transferredAmount as number);
         } else {
@@ -1018,11 +1006,6 @@ const ReopenedIRO = () => {
           }
           return 0; // or return a suitable default value
         }
-=======
-        return formatAmount(
-          Number(params.row.releaseAmount?.transferredAmount) || 0,
-        );
->>>>>>> 41531d0484f2a91a6b8c421d26685b73d8e8c7f0
       },
       align: 'center' as const,
       headerAlign: 'center' as const,
@@ -1169,38 +1152,25 @@ const ReopenedIRO = () => {
               <ToggleButtonGroup
                 exclusive
                 size="small"
-<<<<<<< HEAD
                 value={exstatusFilter.includes(69) ? 'NonBankTransfers' : exstatusFilter.includes(71) ? 'BankTransfers' : 'All'}
-=======
-                value={exstatusFilter.includes(69) ? 'NonBankTransfers' : 'All'}
->>>>>>> 41531d0484f2a91a6b8c421d26685b73d8e8c7f0
                 onChange={(_, value) => {
                   if (!value) return;
 
                   if (value === 'NonBankTransfers') {
                     setExStatusFilter([69]);
                   } else {
-<<<<<<< HEAD
                     setExStatusFilter([71]);
                     setStatusFilter([IROLifeCycleStates.AMOUNT_RELEASED]);
-=======
-                    setExStatusFilter([]);
-                    setStatusFilter([IROLifeCycleStates.REOPENED]);
->>>>>>> 41531d0484f2a91a6b8c421d26685b73d8e8c7f0
                   }
                 }}
                 sx={toggleSx}
               >
                 <ToggleButton value="All">ALL</ToggleButton>
                 <ToggleButton value="NonBankTransfers">
-<<<<<<< HEAD
                     NON BANK TRANSFERS
                 </ToggleButton>
                 <ToggleButton value="BankTransfers">
                      BANK TRANSFERS
-=======
-        NON BANK TRANSFERS
->>>>>>> 41531d0484f2a91a6b8c421d26685b73d8e8c7f0
                 </ToggleButton>
               </ToggleButtonGroup>
             </Grid>

@@ -511,11 +511,7 @@ const RevertedIRO = () => {
       valueGetter(params) {
         const IRORequest = params.row as IROrder;
         const particularAmount = IRORequest.particulars?.reduce((total, particular) => total + Number(particular.requestedAmount), 0);
-<<<<<<< HEAD
         return formatAmount(particularAmount.toFixed(2));
-=======
-        return particularAmount.toFixed(2);
->>>>>>> 41531d0484f2a91a6b8c421d26685b73d8e8c7f0
       },
     },
     // {
@@ -544,11 +540,7 @@ const RevertedIRO = () => {
           return params.row.sanctionedAmount;
         }
         if (Array.isArray(params.row.particulars)) {
-<<<<<<< HEAD
           return formatAmount(params.row.particulars.reduce((sum, item) => sum + Number(item.sanctionedAmount || 0), 0).toFixed(2));
-=======
-          return params.row.particulars.reduce((sum, item) => sum + (item.sanctionedAmount || 0), 0).toFixed(2);
->>>>>>> 41531d0484f2a91a6b8c421d26685b73d8e8c7f0
         }
         return 0; // or return a suitable default value
       }, headerAlign: 'center', renderHeader: () => (<b>Sanctioned Amount</b>), width: 150,
@@ -605,18 +597,12 @@ const RevertedIRO = () => {
       align: 'center' as const,
       headerAlign: 'center' as const,
     },
-<<<<<<< HEAD
  {
-=======
-
-    {
->>>>>>> 41531d0484f2a91a6b8c421d26685b73d8e8c7f0
       field: 'totalTransferred',
       headerName: 'Total Transferred Amount',
       width: 180,
       renderHeader: () => <b>Total Transferred Amount</b>,
       valueGetter: (params: any) => {
-<<<<<<< HEAD
         if (params.row.releaseAmount?.transferredAmount !== 0) {
           return formatAmount(params.row.releaseAmount?.transferredAmount as number);
         } else {
@@ -632,11 +618,6 @@ const RevertedIRO = () => {
           }
           return 0; // or return a suitable default value
         }
-=======
-        return formatAmount(
-          Number(params.row.releaseAmount?.transferredAmount) || 0,
-        );
->>>>>>> 41531d0484f2a91a6b8c421d26685b73d8e8c7f0
       },
       align: 'center' as const,
       headerAlign: 'center' as const,
@@ -840,38 +821,25 @@ const RevertedIRO = () => {
               <ToggleButtonGroup
                 exclusive
                 size="small"
-<<<<<<< HEAD
                 value={exstatusFilter.includes(69) ? 'NonBankTransfers' : exstatusFilter.includes(71) ? 'BankTransfers' : 'All'}
-=======
-                value={exstatusFilter.includes(69) ? 'NonBankTransfers' : 'All'}
->>>>>>> 41531d0484f2a91a6b8c421d26685b73d8e8c7f0
                 onChange={(_, value) => {
                   if (!value) return;
 
                   if (value === 'NonBankTransfers') {
                     setExStatusFilter([69]);
                   } else {
-<<<<<<< HEAD
                     setExStatusFilter([71]);
                     setStatusFilter([IROLifeCycleStates.AMOUNT_RELEASED]);
-=======
-                    setExStatusFilter([]);
-                    setStatusFilter([IROLifeCycleStates.REVERTED_TO_DIVISION]);
->>>>>>> 41531d0484f2a91a6b8c421d26685b73d8e8c7f0
                   }
                 }}
                 sx={toggleSx}
               >
                 <ToggleButton value="All">ALL</ToggleButton>
                 <ToggleButton value="NonBankTransfers">
-<<<<<<< HEAD
                     NON BANK TRANSFERS
                 </ToggleButton>
                 <ToggleButton value="BankTransfers">
                      BANK TRANSFERS
-=======
-        NON BANK TRANSFERS
->>>>>>> 41531d0484f2a91a6b8c421d26685b73d8e8c7f0
                 </ToggleButton>
               </ToggleButtonGroup>
             </Grid>

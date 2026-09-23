@@ -204,7 +204,6 @@ const ReleaseAmountDialogEdit = (props: ReleaseDialogProps) => {
           return division?.BeneficiaryBank20;
         case 'Beneficiary Bank 21 ':
         case 'Beneficiary Bank 21':
-<<<<<<< HEAD
           return division?.BeneficiaryBank21;
         case 'Beneficiary Bank 22 ':
         case 'Beneficiary Bank 22':
@@ -235,8 +234,6 @@ const ReleaseAmountDialogEdit = (props: ReleaseDialogProps) => {
           return division?.BeneficiaryBank30;
         case 'Beneficiary Bank 31 ':
         case 'Beneficiary Bank 31':
-=======
->>>>>>> 41531d0484f2a91a6b8c421d26685b73d8e8c7f0
           return null;
         default:
           return {
@@ -337,7 +334,6 @@ const ReleaseAmountDialogEdit = (props: ReleaseDialogProps) => {
 
       renderCell: (params) => {
         let value = 0;
-<<<<<<< HEAD
         console.log(params.row, 'opo');
         const transferredAmountEach= releaseAmount.transferredAmountEach;
         // ✅ params.row._id is the key in parent's transferredAmountEach
@@ -348,11 +344,6 @@ const ReleaseAmountDialogEdit = (props: ReleaseDialogProps) => {
         }
         // check locally edited value for this row
         else if (transferredAmounts?.[params.row._id] !== undefined) {
-=======
-
-        // check edited value for this row
-        if (transferredAmounts?.[params.row._id] !== undefined) {
->>>>>>> 41531d0484f2a91a6b8c421d26685b73d8e8c7f0
           value = transferredAmounts[params.row._id];
         }
         // otherwise show sanctioned amount
@@ -485,11 +476,7 @@ const ReleaseAmountDialogEdit = (props: ReleaseDialogProps) => {
               </Grid>
               <Grid item xs={12}>
                 <TextField
-<<<<<<< HEAD
                   label="Total Amount Sanctioned"
-=======
-                  label="Release Amount"
->>>>>>> 41531d0484f2a91a6b8c421d26685b73d8e8c7f0
                   type="number"
                   value={releaseAmount?.releaseAmount != 0 ? releaseAmount?.releaseAmount?.toFixed(2) : ''}
                   onChange={(e) =>
@@ -513,7 +500,6 @@ const ReleaseAmountDialogEdit = (props: ReleaseDialogProps) => {
 
               <Grid item xs={12} md={6}>
                 <TextField
-<<<<<<< HEAD
                   label="Total Amount Transferred"
                   type="number"
                   value={
@@ -526,16 +512,6 @@ const ReleaseAmountDialogEdit = (props: ReleaseDialogProps) => {
                       ...releaseAmount,
                       transferredAmount: Number(e.target.value),
                       hasTransferred: true,
-=======
-                  label="Amount Transferred"
-                  type="number"
-                  value={releaseAmount?.transferredAmount != 0 ? releaseAmount?.transferredAmount : ''}
-                  onChange={(e) =>
-                    Number(e.target.value) <= (releaseAmount.releaseAmount ?? 0) &&
-                    setReleaseAmount(() => ({
-                      ...releaseAmount,
-                      transferredAmount: Number(e.target.value),
->>>>>>> 41531d0484f2a91a6b8c421d26685b73d8e8c7f0
                     }))
                   }
                   fullWidth
@@ -547,7 +523,6 @@ const ReleaseAmountDialogEdit = (props: ReleaseDialogProps) => {
                     },
                   }}
                   variant="outlined"
-<<<<<<< HEAD
                   disabled={props.action !== 'add'}
                   sx={{
                     '& .MuiInputBase-input.Mui-disabled': {
@@ -562,9 +537,6 @@ const ReleaseAmountDialogEdit = (props: ReleaseDialogProps) => {
                       color: 'rgba(0,0,0,0.6)',
                     },
                   }}
-=======
-
->>>>>>> 41531d0484f2a91a6b8c421d26685b73d8e8c7f0
                   required
                 />
               </Grid>
@@ -920,7 +892,6 @@ const ReleaseAmountDialogEdit = (props: ReleaseDialogProps) => {
               fullWidth
               type="number"
               value={transferInput}
-<<<<<<< HEAD
               onChange={(e) => {
                 const rawValue = e.target.value;
 
@@ -950,25 +921,17 @@ const ReleaseAmountDialogEdit = (props: ReleaseDialogProps) => {
                 max: Number(releaseAmount?.releaseAmount) || 0,
                 min: 0,
               }}
-=======
-              onChange={(e) => setTransferInput(e.target.value)}
->>>>>>> 41531d0484f2a91a6b8c421d26685b73d8e8c7f0
             />
           </DialogContent>
 
           <DialogActions>
 
             <Button onClick={() => setOpenTransferDialog(false)}>
-<<<<<<< HEAD
       Cancel
-=======
-              Cancel
->>>>>>> 41531d0484f2a91a6b8c421d26685b73d8e8c7f0
             </Button>
 
             <Button
               variant="contained"
-<<<<<<< HEAD
               disabled={
                 transferInput === '' ||
         isNaN(Number(transferInput)) ||
@@ -994,13 +957,6 @@ const ReleaseAmountDialogEdit = (props: ReleaseDialogProps) => {
 
                 const updatedAmounts = {
                   ...allRowAmounts,
-=======
-              onClick={() => {
-                const amount = Number(transferInput);
-
-                const updatedAmounts = {
-                  ...transferredAmounts,
->>>>>>> 41531d0484f2a91a6b8c421d26685b73d8e8c7f0
                   [selectedRow._id]: amount,
                 };
 
@@ -1009,7 +965,6 @@ const ReleaseAmountDialogEdit = (props: ReleaseDialogProps) => {
 
                 // calculate total
                 const total = Object.values(updatedAmounts)
-<<<<<<< HEAD
           .reduce((sum: any, val: any) => sum + Number(val || 0), 0);
 
                 // update release form in ONE call
@@ -1018,24 +973,12 @@ const ReleaseAmountDialogEdit = (props: ReleaseDialogProps) => {
                   transferredAmount: total,
                   transferredAmountEach: updatedAmounts,
                   hasTransferred: true, // ✅ flag
-=======
-              .reduce((sum:any, val:any) => sum + Number(val || 0), 0);
-
-                // update release form
-                setReleaseAmount((prev:any) => ({
-                  ...prev,
-                  transferredAmount: total,
->>>>>>> 41531d0484f2a91a6b8c421d26685b73d8e8c7f0
                 }));
 
                 setOpenTransferDialog(false);
               }}
             >
-<<<<<<< HEAD
       Save
-=======
-        Save
->>>>>>> 41531d0484f2a91a6b8c421d26685b73d8e8c7f0
             </Button>
 
           </DialogActions>

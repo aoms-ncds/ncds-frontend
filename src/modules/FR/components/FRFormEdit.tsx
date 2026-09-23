@@ -724,7 +724,6 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
                      Beneficiary Bank 20 - {props.value.division?.BeneficiaryBank20?.beneficiary}
                         </MenuItem>
                       ) : ''}
-<<<<<<< HEAD
                       {props.value.division?.BeneficiaryBank21?.bankName ? (
                         <MenuItem value={`Beneficiary Bank 21-${props.value.division?.BeneficiaryBank21?.beneficiary}`}>
                           Beneficiary Bank 21 - {props.value.division?.BeneficiaryBank21?.beneficiary}
@@ -775,8 +774,6 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
                           Beneficiary Bank 30 - {props.value.division?.BeneficiaryBank30?.beneficiary}
                         </MenuItem>
                       ) : ''}
-=======
->>>>>>> 41531d0484f2a91a6b8c421d26685b73d8e8c7f0
 
 
                       {/* <MenuItem value={'Beneficiary Bank 2'}>Beneficiary Bank 2 - {IRO.division?.BeneficiaryBank2?.beneficiary}</MenuItem>

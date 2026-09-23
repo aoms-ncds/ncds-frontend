@@ -54,11 +54,7 @@ const DisapproveWorkersPage = () => {
     }
   }, [currentTab]);
   return (
-<<<<<<< HEAD
     <CommonPageLayout title="Disapprove Workers">
-=======
-    <CommonPageLayout title="Disapprove Associates">
->>>>>>> 41531d0484f2a91a6b8c421d26685b73d8e8c7f0
       <Grid container spacing={2}>
         <Grid item xs={12}>
         </Grid>
@@ -67,11 +63,7 @@ const DisapproveWorkersPage = () => {
         <Grid container spacing={0} justifyContent="space-between">
           <Grid item xs={12} lg={8}>
             <Tabs value={currentTab} onChange={switchTab} aria-label="basic tabs example">
-<<<<<<< HEAD
               <Tab label="Workers" {...a11yProps(0)} />
-=======
-              <Tab label="Associates" {...a11yProps(0)} />
->>>>>>> 41531d0484f2a91a6b8c421d26685b73d8e8c7f0
               <Tab label="Spouses" {...a11yProps(1)} />
               <Tab label="Children" {...a11yProps(2)} />
               {/* <Tab label="Files" {...a11yProps(4)} /> */}

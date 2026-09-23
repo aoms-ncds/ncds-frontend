@@ -289,7 +289,6 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
         IFSCCode: '',
         beneficiary: '',
       },
-<<<<<<< HEAD
        BeneficiaryBank21: {
         bankName: '',
         branchName: '',
@@ -360,8 +359,6 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
         IFSCCode: '',
         beneficiary: '',
       },
-=======
->>>>>>> 41531d0484f2a91a6b8c421d26685b73d8e8c7f0
       createdAt: moment(),
       updatedAt: moment(),
     },
@@ -811,7 +808,6 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
       align: 'center',
       headerAlign: 'center',
       type: 'string',
-<<<<<<< HEAD
       renderCell: (params) => (
         <DropdownButton
           useIconButton={true}
@@ -1076,160 +1072,6 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
           ]}
         />
       ),
-=======
-      renderCell: (params) => {
-        const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-        const open = Boolean(anchorEl);
-
-        // eslint-disable-next-line react/no-multi-comp
-        const Section = ({ title }: { title: string }) => (
-          <Typography
-            sx={{
-              px: 2,
-              pt: 1.5,
-              pb: 0.5,
-              fontSize: 12,
-              fontWeight: 700,
-              color: 'text.secondary',
-            }}
-          >
-            {title}
-          </Typography>
-        );
-
-        return (
-          <>
-            <IconButton size="small" onClick={(e) => setAnchorEl(e.currentTarget)}>
-              <MoreVertOutlined fontSize="small" />
-            </IconButton>
-
-            <Menu
-              anchorEl={anchorEl}
-              open={open}
-              onClose={() => setAnchorEl(null)}
-              PaperProps={{
-                sx: {
-                  width: 280,
-                  borderRadius: 2,
-                  boxShadow: '0 8px 24px rgba(0,0,0,0.12)',
-                },
-              }}
-            >
-
-              {/* VIEW */}
-              <Section title="VIEW" />
-
-              <MenuItem onClick={() => window.open(`/iro/${params.row._id}`, '_blank')}>
-                <ListItemIcon><PreviewIcon fontSize="small" /></ListItemIcon>
-                <ListItemText primary="View IRO" />
-              </MenuItem>
-
-              <MenuItem onClick={() => window.open(`/fr/${params.row.FR}/view`, '_blank')}>
-                <ListItemIcon><PreviewIcon fontSize="small" /></ListItemIcon>
-                <ListItemText primary="View FR" />
-              </MenuItem>
-
-              {params.row.status >= IROLifeCycleStates.AMOUNT_RELEASED && (
-                <MenuItem onClick={() => [setOpenRelease(true), setReleaseAmountIROs([params.row])]}>
-                  <ListItemIcon><PreviewIcon fontSize="small" /></ListItemIcon>
-                  <ListItemText primary="View Release Amount" />
-                </MenuItem>
-              )}
-
-              <MenuItem onClick={() => {
-                setSelectedIROId(params.row._id);
-                setOpenLog(true);
-              }}>
-                <ListItemIcon><PreviewIcon fontSize="small" /></ListItemIcon>
-                <ListItemText primary="IRO Log" />
-              </MenuItem>
-
-              <Divider />
-
-              {/* EDIT */}
-              <Section title="EDIT / UPDATE" />
-
-              {hasPermissions(['ACCOUNTS_MNGR_ACCESS']) && (
-                <MenuItem onClick={() => window.open(`/iro/${params.row._id}/edit`, '_blank')}>
-                  <ListItemIcon><EditIcon fontSize="small" /></ListItemIcon>
-                  <ListItemText primary="Edit" />
-                </MenuItem>
-              )}
-
-              <MenuItem onClick={() => [setOpenReleaseEdit(true), setReleaseAmountIROs([params.row])]}>
-                <ListItemIcon><EditIcon fontSize="small" /></ListItemIcon>
-                <ListItemText primary="Edit Release Amount" />
-              </MenuItem>
-
-              {(params.row.status == IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE ||
-      (IROLifeCycleStates.WAITING_FOR_ACCOUNTS_MNGR && props.action === 'release')) && (
-                <MenuItem onClick={() => [setOpenRelease(true), setReleaseAmountIROs([params.row])]}>
-                  <ListItemIcon><CurrencyRupeeIcon fontSize="small" /></ListItemIcon>
-                  <ListItemText primary="Release Amount" />
-                </MenuItem>
-              )}
-
-              <MenuItem onClick={() => {
-                toggleOpenRemarks(true);
-                setSelectedIROId(params.row._id);
-              }}>
-                <ListItemIcon><EditNoteIcon fontSize="small" /></ListItemIcon>
-                <ListItemText primary="Remarks" />
-              </MenuItem>
-
-              <MenuItem onClick={() => {
-                setViewFileUploader(true);
-                setSelectedIRO(params.row);
-              }}>
-                <ListItemIcon><AttachmentIcon fontSize="small" /></ListItemIcon>
-                <ListItemText primary="Attachments" />
-              </MenuItem>
-
-              <Divider />
-
-              {/* PRINT */}
-              {params.row.closedIroPdf && (
-                <>
-                  <Section title="PRINT" />
-
-                  <MenuItem onClick={() => {
-                    setSelectedIRO(params.row);
-                    setOpenPrintIro(true);
-                  }}>
-                    <ListItemIcon><PrintIcon fontSize="small" /></ListItemIcon>
-                    <ListItemText primary="Print IRO" />
-                  </MenuItem>
-                </>
-              )}
-
-              <Divider />
-
-              {/* SYSTEM */}
-              <Section title="SYSTEM" />
-
-              <MenuItem
-                sx={{ color: 'error.main' }}
-                onClick={() => handleCloseIRO(params.row)}
-              >
-                <ListItemIcon sx={{ color: 'error.main' }}>
-                  <CloseIcon fontSize="small" />
-                </ListItemIcon>
-                <ListItemText primary="Close IRO" />
-              </MenuItem>
-
-              <MenuItem onClick={() => {
-                setSelectedIROId(params.row._id);
-                toggleSendNotification(true);
-              }}>
-                <ListItemIcon><MessageIcon fontSize="small" /></ListItemIcon>
-                <ListItemText primary="Send Notification" />
-              </MenuItem>
-
-            </Menu>
-          </>
-        );
-      },
->>>>>>> 41531d0484f2a91a6b8c421d26685b73d8e8c7f0
     },
     // {
     //   field: 'status',
@@ -1489,7 +1331,6 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
       headerAlign: 'center',
     },
     {
-<<<<<<< HEAD
       field: 'tanfered',
       headerName: 'Transferred Amount',
       width: 180,
@@ -1528,32 +1369,6 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
 
       align: 'center',
       headerAlign: 'center',
-=======
-      field: 'Transferred',
-      headerName: 'Transferred Amount',
-      width: 180,
-      renderHeader: () => <b>Transferred Amount</b>,
-
-      valueGetter: (params: any) => {
-        if (params.row.sanctionedAmount !== undefined) {
-          return formatAmount(Number(params.row.sanctionedAmount));
-        }
-
-        if (Array.isArray(params.row.particulars)) {
-          const total = params.row.particulars.reduce(
-            (sum: number, item: any) =>
-              sum + (Number(item.sanctionedAmount) || 0),
-            0,
-          );
-
-          return formatAmount(total);
-        }
-
-        return formatAmount(0);
-      },
-      align: 'center' as const,
-      headerAlign: 'center' as const,
->>>>>>> 41531d0484f2a91a6b8c421d26685b73d8e8c7f0
     },
 
     {
@@ -1562,7 +1377,6 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
       width: 180,
       renderHeader: () => <b>Total Transferred Amount</b>,
       valueGetter: (params: any) => {
-<<<<<<< HEAD
         if (params.row.releaseAmount?.transferredAmount !== 0) {
           return formatAmount(params.row.releaseAmount?.transferredAmount as number);
         } else {
@@ -1578,11 +1392,6 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
           }
           return 0; // or return a suitable default value
         }
-=======
-        return formatAmount(
-          Number(params.row.releaseAmount?.transferredAmount) || 0,
-        );
->>>>>>> 41531d0484f2a91a6b8c421d26685b73d8e8c7f0
       },
       align: 'center' as const,
       headerAlign: 'center' as const,
@@ -1774,11 +1583,8 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
     // Check all searchable fields
     const searchMatch =
     (row.IROno && row.IROno.toLowerCase().includes(searchLower)) ||
-<<<<<<< HEAD
       (row.releaseAmount?.releaseAmount && row.releaseAmount?.releaseAmount.toString().toLowerCase().includes(searchLower)) ||
     (row.releaseAmount?.transferredAmount && row.releaseAmount?.transferredAmount.toString().toLowerCase().includes(searchLower)) ||
-=======
->>>>>>> 41531d0484f2a91a6b8c421d26685b73d8e8c7f0
     (row.IRODate && row.IRODate.format('DD/MM/YYYY').toLowerCase().includes(searchLower)) ||
     (row.division?.details.name && row.division?.details.name.toLowerCase().includes(searchLower)) ||
     (row.purposeSubdivision?.name && row.purposeSubdivision.name.toLowerCase().includes(searchLower)) ||

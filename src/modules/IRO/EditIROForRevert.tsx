@@ -299,7 +299,6 @@ const EditIROForRevert = () => {
         IFSCCode: '',
         beneficiary: '',
       },
-<<<<<<< HEAD
       BeneficiaryBank21: {
         bankName: '',
         branchName: '',
@@ -370,8 +369,6 @@ const EditIROForRevert = () => {
         IFSCCode: '',
         beneficiary: '',
       },
-=======
->>>>>>> 41531d0484f2a91a6b8c421d26685b73d8e8c7f0
       createdAt: moment(),
       updatedAt: moment(),
     },
@@ -919,7 +916,6 @@ const EditIROForRevert = () => {
     Beneficiary Bank 20 - {IRO.division?.BeneficiaryBank20?.beneficiary}
                           </MenuItem>
                         ) : ''}
-<<<<<<< HEAD
                         {IRO?.division?.BeneficiaryBank21?.bankName ? (
                           <MenuItem value={`Beneficiary Bank 21-${IRO?.division?.BeneficiaryBank21?.beneficiary}`}>
     Beneficiary Bank 21 - {IRO.division?.BeneficiaryBank21?.beneficiary}
@@ -975,8 +971,6 @@ const EditIROForRevert = () => {
     Beneficiary Bank 30 - {IRO.division?.BeneficiaryBank30?.beneficiary}
                           </MenuItem>
                         ) : ''}
-=======
->>>>>>> 41531d0484f2a91a6b8c421d26685b73d8e8c7f0
                         {/* <MenuItem value={'FCRA'}>FCRA</MenuItem>
                         <MenuItem value={'Local Bank'}>Local Bank</MenuItem>
                         <MenuItem value={'Other Bank'}>Other Bank</MenuItem>

@@ -31,10 +31,7 @@ import FRLifeCycleStates from '../FR/extras/FRLifeCycleStates';
 import TransactionLogDialog from '../FR/components/TransactionLogDialog';
 import DivisionsServices from '../Divisions/extras/DivisionsServices';
 import { hasPermissions } from '../User/components/PermissionChecks';
-<<<<<<< HEAD
 import formatAmount from '../Common/formatcode';
-=======
->>>>>>> 41531d0484f2a91a6b8c421d26685b73d8e8c7f0
 
 const DisapprovedIRO = () => {
   const [openRemarks, toggleOpenRemarks] = useState(false);
@@ -514,11 +511,7 @@ const DisapprovedIRO = () => {
       valueGetter(params) {
         const IRORequest = params.row as IROrder;
         const particularAmount = IRORequest.particulars?.reduce((total, particular) => total + Number(particular.requestedAmount), 0);
-<<<<<<< HEAD
         return formatAmount((particularAmount || 0).toFixed(2));
-=======
-        return particularAmount.toFixed(2);
->>>>>>> 41531d0484f2a91a6b8c421d26685b73d8e8c7f0
       },
     },
     // {
@@ -547,11 +540,7 @@ const DisapprovedIRO = () => {
           return params.row.sanctionedAmount;
         }
         if (Array.isArray(params.row.particulars)) {
-<<<<<<< HEAD
           return formatAmount(params.row.particulars.reduce((sum, item) => sum + Number(item.sanctionedAmount || 0), 0).toFixed(2));
-=======
-          return params.row.particulars.reduce((sum, item) => sum + (item.sanctionedAmount || 0), 0).toFixed(2);
->>>>>>> 41531d0484f2a91a6b8c421d26685b73d8e8c7f0
         }
         return 0; // or return a suitable default value
       }, headerAlign: 'center', renderHeader: () => (<b>Sanctioned Amount</b>), width: 150,
@@ -784,38 +773,25 @@ const DisapprovedIRO = () => {
               <ToggleButtonGroup
                 exclusive
                 size="small"
-<<<<<<< HEAD
                 value={exstatusFilter.includes(69) ? 'NonBankTransfers' : exstatusFilter.includes(71) ? 'BankTransfers' : 'All'}
-=======
-                value={exstatusFilter.includes(69) ? 'NonBankTransfers' : 'All'}
->>>>>>> 41531d0484f2a91a6b8c421d26685b73d8e8c7f0
                 onChange={(_, value) => {
                   if (!value) return;
 
                   if (value === 'NonBankTransfers') {
                     setExStatusFilter([69]);
                   } else {
-<<<<<<< HEAD
                     setExStatusFilter([71]);
                     setStatusFilter([IROLifeCycleStates.AMOUNT_RELEASED]);
-=======
-                    setExStatusFilter([]);
-                    setStatusFilter([IROLifeCycleStates.REJECTED]);
->>>>>>> 41531d0484f2a91a6b8c421d26685b73d8e8c7f0
                   }
                 }}
                 sx={toggleSx}
               >
                 <ToggleButton value="All">ALL</ToggleButton>
                 <ToggleButton value="NonBankTransfers">
-<<<<<<< HEAD
                      NON BANK TRANSFERS
                 </ToggleButton>
                 <ToggleButton value="BankTransfers">
                       BANK TRANSFERS
-=======
-        NON BANK TRANSFERS
->>>>>>> 41531d0484f2a91a6b8c421d26685b73d8e8c7f0
                 </ToggleButton>
               </ToggleButtonGroup>
             </Grid>

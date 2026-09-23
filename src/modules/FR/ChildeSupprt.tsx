@@ -23,10 +23,7 @@ import { AnyARecord } from 'dns';
 import { useNavigate } from 'react-router-dom';
 import ChildeSupportSignSheet from './components/ChildeSupportSignSheet';
 import IROReconciliationPdf from '../IRO/components/IROReconciliationPdf';
-<<<<<<< HEAD
 import { monthNames } from './extras/FRConfig';
-=======
->>>>>>> 41531d0484f2a91a6b8c421d26685b73d8e8c7f0
 
 interface TotalSupportStructure {
   basic?: number;
@@ -94,11 +91,7 @@ const ChildeSupportPage = () => {
     // Other properties of newVal if any
   };
   const [pdfProps, setPdfProps] = useState<{ divisionId: string | null; childId: string | null }>({ divisionId: null, childId: null });
-<<<<<<< HEAD
   const [fileObj, setFileObj] = useState<any | null>(null);
-=======
-  const [fileObj, setFileObj] = useState<FileObject | null>(null);
->>>>>>> 41531d0484f2a91a6b8c421d26685b73d8e8c7f0
   const [loading, setLoading] = useState<boolean | null>(false);
   const [loadingDiv, setLoadingDiv] = useState<boolean | null>(false);
   // const supportEnabledWorkers = childList?.filter((item) => item.supportStructure?.supportEnabled === true);
@@ -624,11 +617,7 @@ const ChildeSupportPage = () => {
         subCategory1: 'Children Welfare',
         subCategory2: 'Child Education Assistance',
         subCategory3: 'Select',
-<<<<<<< HEAD
         month: (requisition as any).month,
-=======
-        month: moment().format('MMMM'),
->>>>>>> 41531d0484f2a91a6b8c421d26685b73d8e8c7f0
         narration: 'Towards the Monthly Support of <DESIGNATION NAME> Mr/Ms/Mrs <NAME>for the month of <MONTH, YEAR>',
         requestedAmount: total,
         unitPrice: total,
@@ -706,20 +695,7 @@ const ChildeSupportPage = () => {
           mt: 2,
         }}
       >
-<<<<<<< HEAD
 
-=======
-        {toggleRaiseFR &&(
-          <FRForm
-            value={requisition}
-            onChange={(newReq) => setRequisition(newReq)}
-            action={'add'}
-            onSubmit={addFR}
-            disable= {true}
-            // Pass the addFR function to the onSubmit prop
-          />
-        )}
->>>>>>> 41531d0484f2a91a6b8c421d26685b73d8e8c7f0
         {confirmAttach?(
 
           <Card >
@@ -842,10 +818,7 @@ const ChildeSupportPage = () => {
                                         onClick={async () => {
                                           if (signBlob && supportBlob) {
                                             setLoading(true);
-<<<<<<< HEAD
                                             setFileObj(signBlob ? { filename: 'ChildrenSignatureSheet.pdf', type: 'application/pdf', size: signBlob.size, lastModified: Date.now(), blob: signBlob } : null);
-=======
->>>>>>> 41531d0484f2a91a6b8c421d26685b73d8e8c7f0
                                             await attach(signBlob, supportBlob);
                                           }
                                         }}
@@ -911,11 +884,7 @@ const ChildeSupportPage = () => {
                 subCategory1: 'Children Welfare',
                 subCategory2: 'Child Education Assistance',
                 subCategory3: 'Select',
-<<<<<<< HEAD
                 month: (requisition as any).month,
-=======
-                month: moment().format('MMMM'),
->>>>>>> 41531d0484f2a91a6b8c421d26685b73d8e8c7f0
                 narration: 'Towards the Monthly Support of <DESIGNATION NAME> Mr/Ms/Mrs <NAME>for the month of <MONTH, YEAR>',
                 requestedAmount: total,
                 unitPrice: total,
@@ -1115,7 +1084,6 @@ const ChildeSupportPage = () => {
                     fullWidth
                   />
                 </Grid>
-<<<<<<< HEAD
                 <Grid item xs={12} md={2}>
                   <Autocomplete
                     // disabled={props.disable==true}
@@ -1134,8 +1102,6 @@ const ChildeSupportPage = () => {
                     fullWidth
                   />
                 </Grid>
-=======
->>>>>>> 41531d0484f2a91a6b8c421d26685b73d8e8c7f0
 
                 {/* <Grid item xs={12} md={6} lg={4}>
                 <TextField
@@ -1284,7 +1250,6 @@ const ChildeSupportPage = () => {
             </CardContent>
           </form>
         )}
-<<<<<<< HEAD
       {toggleRaiseFR &&(
         <FRForm
           value={requisition}
@@ -1295,8 +1260,6 @@ const ChildeSupportPage = () => {
           // Pass the addFR function to the onSubmit prop
         />
       )}
-=======
->>>>>>> 41531d0484f2a91a6b8c421d26685b73d8e8c7f0
       </Card>
       <br />
       <Card>

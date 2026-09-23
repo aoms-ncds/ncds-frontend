@@ -27,7 +27,6 @@ export default {
           // Transform any other date fields if needed
         })),
     ),
-<<<<<<< HEAD
   workerDetails: (filter: any, dateRange?: any ) =>
     getStandardResponse<any[]>(axios.post('/custom-report/workerDetails/', { filter, dateRange }, { headers: { ...getAuthHeader() } }),
       (data) =>
@@ -61,8 +60,6 @@ export default {
           // Transform any other date fields if needed
         })),
     ),
-=======
->>>>>>> 41531d0484f2a91a6b8c421d26685b73d8e8c7f0
 
   // eslint-disable-next-line @typescript-eslint/naming-convention
 
