@@ -294,8 +294,8 @@
 
 //   const cols = [
 //     { field: 'id', label: 'Sl', width: 52 },
-//     { field: 'frNo', label: 'Worker ID', width: 120 },
-//     { field: 'frNo', label: 'Worker Name', width: 120 },
+//     { field: 'frNo', label: 'Associates ID', width: 120 },
+//     { field: 'frNo', label: 'Associates Name', width: 120 },
 //     { field: 'frDate', label: 'FR Date', width: 115 },
 //     { field: 'division', label: 'Division', width: 130 },
 //     { field: 'amount', label: 'Amount', width: 130 },
@@ -314,7 +314,7 @@
 //           {/* Header */}
 //           <div style={{ marginBottom: 24 }}>
 //             <div style={{ fontFamily: '\'Syne\', sans-serif', fontSize: 28, fontWeight: 800, color: theme.textPrimary, letterSpacing: '-0.5px' }}>
-//             Workers Records
+//             AssociatesRecords
 //             </div>
 //             <div style={{ color: theme.textSecondary, fontSize: 14, marginTop: 3 }}>
 //             Sanction register · {filtered.length} of {ALL_DATA.length} entries

@@ -30,7 +30,7 @@ const frDashboard = () => {
       route: '/fr/apply',
     },
     {
-      label: 'New Worker Support',
+      label: 'New Associates Support',
       bg: '#F0FDF4',
       accent: '#16A34A',
       border: '#BBF7D0',
@@ -549,7 +549,7 @@ const frDashboard = () => {
                   {/* <PermissionChecks
                 permissions={['RAISE_WORKERS_FR']}
                 granted={(<Grid item xs={12} md={4} xl={2}>
-                  <DashboardCardButton primaryText="New Workers Support" secondaryText="Workers Support" color="#fff" targetRoute="/fr/worker_support" />
+                  <DashboardCardButton primaryText="New AssociatesSupport" secondaryText="AssociatesSupport" color="#fff" targetRoute="/fr/worker_support" />
                 </Grid>)} /> */}
                   {/* <PermissionChecks
                 permissions={['RAISE_WORKERS_FR']}

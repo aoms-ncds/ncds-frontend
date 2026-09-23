@@ -286,7 +286,7 @@ export default function UserFilterReportMUI() {
   const [searchText, setSearchText] = useState('');
   const [selectedData, setSelectedData] = useState<any[]>([
     'Sl No',
-    'Worker Code',
+    'Associates Code',
     'Name',
     'Division',
     'SubDivision',
@@ -418,7 +418,7 @@ export default function UserFilterReportMUI() {
             <Toolbar sx={{ gap: 2 }}>
               <Avatar sx={{ width: 36, height: 36, background: 'linear-gradient(135deg, #1d4ed8, #0891b2)', fontSize: 18 }}>⚙</Avatar>
               <Box sx={{ flex: 1 }}>
-                <Typography variant="h5" sx={{ fontSize: '1rem', lineHeight: 1.2 }}>Worker & Staff Filter</Typography>
+                <Typography variant="h5" sx={{ fontSize: '1rem', lineHeight: 1.2 }}>Associates & Staff Filter</Typography>
                 <Typography variant="caption" color="text.secondary">Advanced personnel report builder</Typography>
               </Box>
               <Badge badgeContent={textFilters.length} color="primary" max={99}>
@@ -545,7 +545,7 @@ export default function UserFilterReportMUI() {
                       value={filters.organization}
                       onChange={(e) => set('organization')(e.target.value as any)}
                     >
-                      <MenuItem value="IET">IET</MenuItem>
+                      <MenuItem value="NCDS">NCDS</MenuItem>
                       <MenuItem value="BCG">BCG</MenuItem>
                       <MenuItem value="NCDS">NCDS</MenuItem>
                     </TextField>
@@ -627,7 +627,7 @@ export default function UserFilterReportMUI() {
                     <SelectField label="Religion" id="religion" options={RELIGION} value={filters.religion} onChange={set('religion')} />
                   </Grid>
                   <Grid item xs={12} sm={6} md={3}>
-                    <SelectField label="Worker Field" id="field" options={FIELD} value={filters.field} onChange={set('field')} />
+                    <SelectField label="Associates Field" id="field" options={FIELD} value={filters.field} onChange={set('field')} />
                   </Grid>
                   <Grid item xs={12} sm={6} md={4}>
                     <TextField fullWidth label="Highest Qualification" value={filters.highestQualification} onChange={set('highestQualification')} />
@@ -1047,7 +1047,7 @@ export default function UserFilterReportMUI() {
                       data.map((iro: any, index) => {
                         const row = [
                           index +1,
-                          selectedData.includes('Worker Code') ? iro.workerCode ?? iro.staffCode : undefined,
+                          selectedData.includes('Associates Code') ? iro.workerCode ?? iro.staffCode : undefined,
                           selectedData.includes('Name') && iro.basicDetails?.firstName + ' ' + iro.basicDetails?.lastName,
                           selectedData.includes('Division') && iro.divisionData?.details?.name,
                           selectedData.includes('SubDivision') && iro.officialDetails?.divisionHistory?.[0]?.subDivision?.name,
@@ -1122,7 +1122,7 @@ export default function UserFilterReportMUI() {
                     <TableRow>
                       <TableCell sx={{ fontWeight: 'bold' }}>Sl No</TableCell>
                       <TableCell sx={{ fontWeight: 'bold' }}>Sl No</TableCell>
-                      {selectedData.includes('Worker Code') && <TableCell sx={{ fontWeight: 'bold' }}>Worker Code</TableCell>}
+                      {selectedData.includes('Associates Code') && <TableCell sx={{ fontWeight: 'bold' }}>Associates Code</TableCell>}
                       {selectedData.includes('IRO No') && <TableCell sx={{ fontWeight: 'bold' }}>IRO No</TableCell>}
                       {selectedData.includes('Name') && <TableCell sx={{ fontWeight: 'bold' }}>Name</TableCell>}
                       {selectedData.includes('Status') && <TableCell sx={{ fontWeight: 'bold' }}>Status</TableCell>}
@@ -1162,7 +1162,7 @@ export default function UserFilterReportMUI() {
                         }}
                       >
                         <TableCell>{index +1}</TableCell>
-                        {selectedData.includes('Worker Code') && <TableCell>{row.workerCode??row.staffCode }</TableCell>}
+                        {selectedData.includes('Associates Code') && <TableCell>{row.workerCode??row.staffCode }</TableCell>}
                         {selectedData.includes('IRO No') && <TableCell>{row.IROdata?.IROno}</TableCell>}
                         {selectedData.includes('Name') && <TableCell>{row.basicDetails?.firstName + ' ' + row.basicDetails?.lastName}</TableCell>}
                         {selectedData.includes('Status') && <TableCell>{IROLifeCycleStates.getStatusNameByCodeTransaction(row.status).replaceAll('_', ' ')}</TableCell>}

@@ -145,7 +145,7 @@ const ApplicationApprovalPage = () => {
             {applications?.workersName &&(
 
               <><br /><Typography variant="body1" component="h2" align='left'>
-                <span style={{ fontWeight: 800 }}>Worker Name: </span>
+                <span style={{ fontWeight: 800 }}>Associates Name: </span>
                 {(((applications?.workersName as any)?.basicDetails?.firstName ?? '') + ((applications?.workersName as any)?.basicDetails?.lastName ?? ''))}
               </Typography></>
             )}
@@ -850,7 +850,7 @@ const ApplicationApprovalPage = () => {
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Worker Code" value={(applications as any)?.formData?.workerCode} name="workerCode" />
+                  <TextField fullWidth label="Associates Code" value={(applications as any)?.formData?.workerCode} name="workerCode" />
                 </Grid>
 
                 <Grid item xs={6}>
@@ -1100,7 +1100,7 @@ const ApplicationApprovalPage = () => {
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Worker Code" value={(applications as any)?.formData?.workerCode} name="workerCode" />
+                  <TextField fullWidth label="Associates Code" value={(applications as any)?.formData?.workerCode} name="workerCode" />
                 </Grid>
 
                 <Grid item xs={6}>
@@ -1320,7 +1320,7 @@ const ApplicationApprovalPage = () => {
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Worker Code" name="workerCode" value={(applications as any)?.formData?.workerCode} />
+                  <TextField fullWidth label="Associates Code" name="workerCode" value={(applications as any)?.formData?.workerCode} />
                 </Grid>
 
                 <Grid item xs={6}>
@@ -1527,7 +1527,7 @@ const ApplicationApprovalPage = () => {
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Worker Code" name="workerCode" value={(applications as any)?.formData?.workerCode} />
+                  <TextField fullWidth label="Associates Code" name="workerCode" value={(applications as any)?.formData?.workerCode} />
                 </Grid>
 
                 <Grid item xs={6}>

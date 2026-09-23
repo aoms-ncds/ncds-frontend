@@ -622,7 +622,7 @@ const IROTemplateCustom = (props: { rowData?: any; prev?: boolean; fr?: FR; offi
               color: 'grey',
               marginTop: 5,
             }}>
-              This document is electronically signed by an authorized person of the Indian Evangelical Team adding to the accuracy and
+              This document is electronically signed by an authorized person of the Navjeevan Community Development Society adding to the accuracy and
               content of the information submitted.
             </Text>
           </div>

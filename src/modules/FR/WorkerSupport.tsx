@@ -615,7 +615,7 @@ const WorkerSupportPage = () => {
       valueGetter: (params) => params.api.getAllRowIds().indexOf(params.id) + 1,
 
       align: 'center', headerAlign: 'center' },
-    { field: 'workerCode', width: 100, headerClassName: 'column-header', renderHeader: () => <b>{'Worker Code'}</b>, align: 'center', headerAlign: 'center' },
+    { field: 'workerCode', width: 100, headerClassName: 'column-header', renderHeader: () => <b>{'Associates Code'}</b>, align: 'center', headerAlign: 'center' },
     {
       field: 'firstName',
       width: 100,
@@ -1052,7 +1052,7 @@ const WorkerSupportPage = () => {
     {
       groupId: 'details',
       description: '',
-      renderHeaderGroup: () => <b>{'Worker Details'}</b>,
+      renderHeaderGroup: () => <b>{'Associates Details'}</b>,
       headerClassName: 'column-grp',
       children: [{ field: 'Slno' }, { field: 'workerCode' },
         { field: 'firstName' }, { field: 'lastName' }, { field: 'division' }, { field: 'sub_division' }, { field: 'designation' }],
@@ -1182,7 +1182,7 @@ const WorkerSupportPage = () => {
   }));
 
   return (
-    <CommonPageLayout title="Workers Support">
+    <CommonPageLayout title="AssociatesSupport">
       <Card sx={{
         width: {
           xs: '8%', // mobile

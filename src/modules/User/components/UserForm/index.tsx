@@ -254,7 +254,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
 
                 <Grid item xs={12} md={6} lg={3}>
                   <TextField
-                    label={props.options?.kind == 'worker' ? 'Worker Code' : 'Staff Code'}
+                    label={props.options?.kind == 'worker' ? 'Associates Code' : 'Staff Code'}
                     value={props.options?.kind == 'worker' ? (props.value as CreatableIWorker).workerCode : (props.value as CreatableStaff).staffCode}
                     variant={props.options?.textField.variant}
                     InputProps={{

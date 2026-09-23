@@ -424,7 +424,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                   </Grid>
                   <Grid item xs={12} md={6}>
                     <TextField
-                      label="Worker Code"
+                      label="Associates Code"
                       value={props.value.purposeWorker?.kind === 'staff' ? (props.value.purposeWorker as Staff | undefined)?.staffCode : (props.value.purposeWorker as unknown as IWorker)?.workerCode}
                       fullWidth
                       disabled
@@ -472,7 +472,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                   </Grid>
                   <Grid item xs={12} md={6}>
                     <TextField
-                      label="Worker Code"
+                      label="Associates Code"
                       value={(props.value.workerName as any)?.kind === 'staff' ? (props.value.workerName as Staff | undefined)?.staffCode : (props.value.workerName as unknown as IWorker)?.workerCode}
                       fullWidth
                       disabled

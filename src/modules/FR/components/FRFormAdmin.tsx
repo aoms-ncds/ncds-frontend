@@ -506,7 +506,7 @@ const FRFormAdmin = (props: FormComponentProps<any>) => {
                   </Grid>
                   <Grid item xs={12} md={6}>
                     <TextField
-                      label="Worker Code"
+                      label="Associates Code"
                       value={props.value.purposeWorker?.kind === 'staff' ? (props.value.purposeWorker as Staff | undefined)?.staffCode : (props.value.purposeWorker as unknown as IWorker)?.workerCode}
                       fullWidth
                       disabled

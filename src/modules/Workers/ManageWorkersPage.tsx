@@ -123,7 +123,7 @@ const ManageWorkerPage = () => {
     }
   };
   return (
-    <CommonPageLayout title="Manage Workers">
+    <CommonPageLayout title="Manage Associates ">
       <Grid container spacing={0}>
         <Grid item xs={12} sx={{ alignItems: 'center' }}>
           {/* {loading && (
@@ -166,7 +166,7 @@ const ManageWorkerPage = () => {
     <Card sx={{ px: 2, py: 1, borderRadius: 3, boxShadow: 2 }}>
       <Box display="flex" alignItems="center" gap={1}>
         <Typography variant="body2" color="text.secondary">
-          Workers Count
+          AssociatesCount
         </Typography>
 
         <Typography variant="h6" fontWeight={700}>
@@ -239,7 +239,7 @@ const ManageWorkerPage = () => {
                     ]);
 
                     const headers = [
-                      'Workers Code',
+                      'AssociatesCode',
                       'First Name',
                       'Last Name',
                       'Division',

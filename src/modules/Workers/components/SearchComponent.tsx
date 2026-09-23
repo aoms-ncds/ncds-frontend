@@ -21,7 +21,7 @@ const SearchComponent: React.FC<SearchComponentProps> = ({ onSearch }) => {
     <Grid container spacing={2} justifyContent="flex-start" alignItems="center" padding={2}>
       <Grid item xs={6}>
         {/* Text field for entering search text */}
-        <TextField label="Search" placeholder='Worker name, workerCode, Phone, Email, Division, Sub div, Designation' variant="outlined" value={searchText} onChange={handleSearchChange} fullWidth sx={{ marginTop: '10px' }} />
+        <TextField label="Search" placeholder='Associates name, workerCode, Phone, Email, Division, Sub div, Designation' variant="outlined" value={searchText} onChange={handleSearchChange} fullWidth sx={{ marginTop: '10px' }} />
       </Grid>
       <Grid item xs={3}>
         {/* Button to trigger the search action */}

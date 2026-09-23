@@ -579,7 +579,7 @@ const EditForCustom = (props: any) => {
                           </Grid>
                           <Grid item xs={12} md={6}>
                             <TextField
-                              label="Worker Code"
+                              label="Associates Code"
                               value={IRO.purposeWorker?.kind === 'staff' ? (IRO.purposeWorker as Staff | undefined)?.staffCode : (IRO.purposeWorker as unknown as IWorker)?.workerCode}
 
                               fullWidth
@@ -1189,7 +1189,7 @@ const EditForCustom = (props: any) => {
                           </Button>
                           &nbsp;
                           {/* { IRO.status < IROLifeCycleStates.ACCOUNTS_MNGR_APPROVED ?(
-                            <>Indian Evangelical Team
+                            <>Navjeevan Community Development Society
                             View And Manage IRO
                             Last Login: 11:05 AM 03/02/2025
 

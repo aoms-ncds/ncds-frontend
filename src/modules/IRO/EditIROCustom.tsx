@@ -822,7 +822,7 @@ const EditIROCustom = () => {
                       </Grid>
                       <Grid item xs={12} md={6}>
                         <TextField
-                          label="Worker Code"
+                          label="Associates Code"
                           value={IRO.purposeWorker?.kind === 'staff' ? (IRO.purposeWorker as Staff | undefined)?.staffCode : (IRO.purposeWorker as unknown as IWorker)?.workerCode}
 
                           fullWidth

@@ -1,5 +1,5 @@
 export default {
-  appName: 'Indian Evangelical Team',
+  appName: 'Navjeevan Community Development Society',
 };
 
 // const languages = ['English', 'Hindi', 'Malayalam'] as const;

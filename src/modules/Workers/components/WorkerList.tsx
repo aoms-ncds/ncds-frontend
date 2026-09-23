@@ -161,7 +161,7 @@ const UserCard: React.FC<UserCardProps> = ({ user, reason, removeUser }) => {
             Email: {user.basicDetails.email}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            Worker Code: {user.workerCode}
+            Associates Code: {user.workerCode}
           </Typography>
           <Typography variant="body2" color="text.secondary">
             Division: {user.division?.details.name}
@@ -398,7 +398,7 @@ const UserCard: React.FC<UserCardProps> = ({ user, reason, removeUser }) => {
           <Typography sx={{ color: 'red' }}>Are you sure you want to delete this User?</Typography>
         </DialogContent> */}
         <DialogContent>
-          <Typography sx={{ color: 'red' }}>If this Worker is a coordinator, please change the coordinator in the division before deleting</Typography>
+          <Typography sx={{ color: 'red' }}>If this Associates is a coordinator, please change the coordinator in the division before deleting</Typography>
         </DialogContent>
 
         <DialogActions>
@@ -429,7 +429,7 @@ const UserCard: React.FC<UserCardProps> = ({ user, reason, removeUser }) => {
           <Typography sx={{ color: 'red' }}>Are you sure you want to delete this User?</Typography>
         </DialogContent> */}
         <DialogContent>
-          <Typography sx={{ color: 'red' }}>If this Worker is a coordinator, please change the coordinator in the division before deactivating</Typography>
+          <Typography sx={{ color: 'red' }}>If this Associates is a coordinator, please change the coordinator in the division before deactivating</Typography>
         </DialogContent>
 
         <DialogActions>

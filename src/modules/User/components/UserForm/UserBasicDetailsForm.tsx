@@ -91,7 +91,7 @@ const UserBasicDetailsForm = (
       <Grid item xs={12} md={6} lg={4}>
         <Autocomplete
           value={props?.value?.organization ?? null}
-          options={['IET', 'BCG', 'NCDS']}
+          options={['NCDS', 'BCG', 'NCDS']}
           getOptionLabel={(option) => option}
           onChange={(e, newValue) =>
             props.onChange({ ...props.value, organization: newValue??'' })
@@ -105,7 +105,7 @@ const UserBasicDetailsForm = (
           )}
         />
       </Grid>
-      {props?.value?.organization =='IET' &&(
+      {props?.value?.organization =='NCDS' &&(
 
         <Grid item xs={12} md={6} lg={3}>
           <TextField

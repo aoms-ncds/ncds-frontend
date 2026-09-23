@@ -31,7 +31,7 @@ const UsersLogDialog = (props:{open:boolean;onClose:()=>void;userId:string}) => 
             // eslint-disable-next-line react/jsx-no-comment-textnodes
             <li key={index}>
               <Typography variant="body1" color="initial" >
-                {`Worker ${log.userCode} ${log.field} changed by 
+                {`Associates ${log.userCode} ${log.field} changed by 
                 ${log.doneBy.basicDetails.firstName} ${log.doneBy.basicDetails.middleName?log.doneBy.basicDetails.middleName+' ':''}${log.doneBy.basicDetails.lastName}
                  on ${moment(log.createdAt).format('DD/MM/YYYY hh:mm:ss a')}` }
               </Typography>

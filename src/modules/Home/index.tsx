@@ -664,7 +664,7 @@ Total Sub-Div                          </Typography>
                               fontWeight: 500,
                             }}
                           >
-            Total Workers
+            Total Associates 
                           </Typography>
 
                           <ArrowUpwardIcon
@@ -881,7 +881,7 @@ Total Sub-Div                          </Typography>
                       <img src="/mod_icons/division.png" width="20" />
                     </Box>
 
-                    <Typography fontSize={15}>IET Divisions</Typography>
+                    <Typography fontSize={15}>NCDSDivisions</Typography>
                   </Box>
 
                   <Box display="flex" alignItems="center" gap={1}>
@@ -917,7 +917,7 @@ Total Sub-Div                          </Typography>
                       <img src="/mod_icons/division.png" width="20" />
                     </Box>
 
-                    <Typography fontSize={15}>IET Sub-Divisions</Typography>
+                    <Typography fontSize={15}>NCDSSub-Divisions</Typography>
                   </Box>
 
                   <Box display="flex" alignItems="center" gap={1}>

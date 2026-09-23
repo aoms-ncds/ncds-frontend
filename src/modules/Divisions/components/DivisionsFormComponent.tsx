@@ -127,7 +127,7 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
       <Grid item xs={12} md={6} lg={4}>
         <FormControl variant="outlined" fullWidth>
           <TextField
-            label=" No. of Workers"
+            label=" No. ofAssociates "
             type="number"
             value={props.value.noOfWorkers}
             onChange={(e) => props.onChange({ ...props.value, noOfWorkers: Number(e.target.value) })}
@@ -188,7 +188,7 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
       </Grid>
       <Grid item xs={12} md={4}>
         <FormControlLabel
-          label="IET's Division"
+          label="NCDS's Division"
           // disabled={props.action !== 'customEdit'}
           checked={props.value.isIT || false}
           onChange={(e: any) =>

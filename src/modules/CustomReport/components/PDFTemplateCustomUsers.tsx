@@ -405,7 +405,7 @@ const PDFTemplateCustomUsers = (props:any) => {
               <Text style={styles.tableHead}>{index +1}</Text>
               <div style={styles.grid}></div>
 
-              {props.headers.includes('Worker Code') && (
+              {props.headers.includes('Associates Code') && (
                 <>
                   <Text style={styles.tableHead}>{row.workerCode}</Text>
                   <div style={styles.grid}></div>

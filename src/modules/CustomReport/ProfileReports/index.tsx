@@ -30,7 +30,7 @@ const ProfileReports = () => {
     <CommonPageLayout title="Custom Report Dashboard">
       <Grid container spacing={3}>
         <Grid item xs={12} md={4} xl={3}>
-          <ButtonCard secondaryText="Worker Details Report" color={'#fff'} icon={<img src="/mod_icons/manageWorker.jpeg" alt="Logo" style={{ width: '70px', height: '70px' }} />}
+          <ButtonCard secondaryText="Associates Details Report" color={'#fff'} icon={<img src="/mod_icons/manageWorker.jpeg" alt="Logo" style={{ width: '70px', height: '70px' }} />}
             targetRoute="/custom-report/worker-details-report" />
         </Grid>
         <Grid item xs={12} md={4} xl={3}>

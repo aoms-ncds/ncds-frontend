@@ -186,7 +186,7 @@ const ApproveWorkerPage = () => {
           false,
         ].filter((action) => action !== false) as JSX.Element[],
     },
-    { field: 'workerCode', width: 170, renderHeader: () => <b>{'Worker Code'}</b>, align: 'center', headerAlign: 'center' },
+    { field: 'workerCode', width: 170, renderHeader: () => <b>{'Associates Code'}</b>, align: 'center', headerAlign: 'center' },
     {
       field: 'firstName',
       width: 130,
@@ -207,7 +207,7 @@ const ApproveWorkerPage = () => {
     { field: 'division', width: 130, align: 'center', headerAlign: 'center', renderHeader: () => <b>Division</b>, valueGetter: (params) => params.row.division?.details.name },
   ];
   return (
-    <CommonPageLayout title="New Workers for Approval">
+    <CommonPageLayout title="New Associatesfor Approval">
       <Card sx={{ height: '90vh' }}>
         <Grid container spacing={2} padding={2}>
           <Grid item xs={6}>
@@ -256,7 +256,7 @@ const ApproveWorkerPage = () => {
                   ]) :
                   [];
                 const headers = [
-                  'Workers Code',
+                  'AssociatesCode',
                   'First Name',
                   'Last Name',
                   'Division',

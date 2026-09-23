@@ -1241,7 +1241,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                     {/* 1. WORKER SELECTION */}
                     <Grid item xs={12} md={12}>
                       <Typography variant="body2" sx={{ color: '#666', mb: 0.5 }}>
-        Choose Worker *
+        Choose Associates *
                       </Typography>
                       <Autocomplete
                         fullWidth
@@ -1282,7 +1282,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                     {/* 2. AUTOMATIC WORKER CODE (READ ONLY) */}
                     <Grid item xs={12} md={12}>
                       <TextField
-                        label="Worker Code"
+                        label="Associates Code"
                         // Uses the helper variable 'selectedWorker' to find the code easily
                         value={selectedWorker?.staffCode || selectedWorker?.workerCode || ''}
                         fullWidth
@@ -1487,7 +1487,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                     {/* 1. WORKER SELECTION */}
                     <Grid item xs={12} md={12}>
                       <Typography variant="body2" sx={{ color: '#666', mb: 0.5 }}>
-        Choose Worker *
+        Choose Associates *
                       </Typography>
                       <Autocomplete
                         fullWidth
@@ -1528,7 +1528,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                     {/* 2. AUTOMATIC WORKER CODE (READ ONLY) */}
                     <Grid item xs={12} md={12}>
                       <TextField
-                        label="Worker Code"
+                        label="Associates Code"
                         // Uses the helper variable 'selectedWorker' to find the code easily
                         value={selectedWorker?.staffCode || selectedWorker?.workerCode || ''}
                         fullWidth
@@ -1733,7 +1733,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                     {/* 1. WORKER SELECTION */}
                     <Grid item xs={12} md={12}>
                       <Typography variant="body2" sx={{ color: '#666', mb: 0.5 }}>
-        Choose Worker *
+        Choose Associates *
                       </Typography>
                       <Autocomplete
                         fullWidth
@@ -1774,7 +1774,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                     {/* 2. AUTOMATIC WORKER CODE (READ ONLY) */}
                     <Grid item xs={12} md={12}>
                       <TextField
-                        label="Worker Code"
+                        label="Associates Code"
                         // Uses the helper variable 'selectedWorker' to find the code easily
                         value={selectedWorker?.staffCode || selectedWorker?.workerCode || ''}
                         fullWidth
@@ -1919,7 +1919,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Worker Code" name="workerCode" value={(applicationFormState as any).formData?.workerCode} onChange={handleChange} />
+                  <TextField fullWidth label="Associates Code" name="workerCode" value={(applicationFormState as any).formData?.workerCode} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
@@ -2205,7 +2205,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Worker Code" name="workerCode" value={(applicationFormState as any).formData?.workerCode || ''} onChange={handleChange} />
+                  <TextField fullWidth label="Associates Code" name="workerCode" value={(applicationFormState as any).formData?.workerCode || ''} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
@@ -2455,7 +2455,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Worker Code" name="workerCode" value={(applicationFormState as any).formData?.workerCode || ''} onChange={handleChange} />
+                  <TextField fullWidth label="Associates Code" name="workerCode" value={(applicationFormState as any).formData?.workerCode || ''} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
@@ -2694,7 +2694,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                 </Grid>
 
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Worker Code" name="workerCode" value={(applicationFormState as any).formData?.workerCode || ''} onChange={handleChange} />
+                  <TextField fullWidth label="Associates Code" name="workerCode" value={(applicationFormState as any).formData?.workerCode || ''} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>

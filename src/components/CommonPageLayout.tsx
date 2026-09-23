@@ -124,7 +124,7 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string;
   }, [loader.count]);
 
   useEffect(() => {
-    document.title = 'IET-AOMS';
+    document.title = 'NCDS-AOMS';
   }, [props.title]);
 
 
@@ -325,7 +325,7 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string;
             <img src="/favicon.ico" alt="" style={{ height: 50 }} />
           </div>
           <Typography variant="h6" noWrap component="div" sx={{ padding: '10px', fontSize: '17px', marginRight: '15px' }}>
-            {'IET - AOMS'}
+            {'NCDS - AOMS'}
           </Typography>
           &nbsp;&nbsp;&nbsp;  &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;
           {/* <Divider /> */}

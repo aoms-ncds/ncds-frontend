@@ -658,7 +658,7 @@ const ViewIRO = (props: any) => {
 
                           <Grid item xs={12} md={6}>
                             <TextField
-                              label="Worker Code"
+                              label="Associates Code"
                               value={IRO.purposeWorker?.kind === 'staff' ? (IRO.purposeWorker as Staff | undefined)?.staffCode : (IRO.purposeWorker as unknown as IWorker)?.workerCode}
 
                               fullWidth
@@ -1576,7 +1576,7 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
                           </Button>
                           &nbsp;
                           {/* { IRO.status < IROLifeCycleStates.ACCOUNTS_MNGR_APPROVED ?(
-                            <>Indian Evangelical Team
+                            <>Navjeevan Community Development Society
                             View And Manage IRO
                             Last Login: 11:05 AM 03/02/2025
 

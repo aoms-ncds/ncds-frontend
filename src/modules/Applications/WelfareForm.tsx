@@ -61,7 +61,7 @@ const WelfareForm = () => {
           </Grid>
 
           <Grid item xs={6}>
-            <TextField fullWidth label="Worker Code" name="workerCode" onChange={handleChange} />
+            <TextField fullWidth label="Associates Code" name="workerCode" onChange={handleChange} />
           </Grid>
           <Grid item xs={6}>
             <TextField fullWidth label="Welfare Scheme ID" name="schemeId" onChange={handleChange} />

@@ -1,6 +1,6 @@
 {
-  "short_name": "IET App",
-  "name": "IET - AOMS",
+  "short_name": "NCDSApp",
+  "name": "NCDS - AOMS",
   "icons": [
     {
       "src": "icons/icon-72x72.png",

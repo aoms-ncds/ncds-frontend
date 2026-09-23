@@ -571,7 +571,7 @@ export default function SpouseFilterReportMUI() {
                     <SelectField label="Religion" id="religion" options={RELIGION} value={filters.religion} onChange={set('religion')} />
                   </Grid>
                   <Grid item xs={12} sm={6} md={3}>
-                    <SelectField label="Worker Field" id="field" options={FIELD} value={filters.field} onChange={set('field')} />
+                    <SelectField label="Associates Field" id="field" options={FIELD} value={filters.field} onChange={set('field')} />
                   </Grid>
                   <Grid item xs={12} sm={6} md={4}>
                     <TextField fullWidth label="Highest Qualification" value={filters.highestQualification} onChange={set('highestQualification')} />
