@@ -7,7 +7,11 @@ import { useMemo } from 'react';
 import CommonHelpers from './extras/CommonHelpers';
 import Router from './extras/CommonRouter';
 import { useLoader } from './hooks/Loader';
+<<<<<<< HEAD
 //
+=======
+
+>>>>>>> 41531d0484f2a91a6b8c421d26685b73d8e8c7f0
 const serverURL = 'http://localhost:8002';
 // const serverURL = 'https://iet-staging.apis.pro910.app/';
 // const serverURLOld = 'https://iet-apis.pro910.app';//old

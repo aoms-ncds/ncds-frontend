@@ -72,7 +72,11 @@ const ReleaseAmountAudit = (props: { action: 'manage' | 'release' }) => {
   const user = useAuth();
   const [searchText, setSearchText] = useState('');
   const [mngrName, setMngrName] = useState('');
+<<<<<<< HEAD
   const [statusFilter, setStatusFilter] = useState<any>([]); // default WFA: Waiting for access or Reverted
+=======
+  const [statusFilter, setStatusFilter] = useState([]); // default WFA: Waiting for access or Reverted
+>>>>>>> 41531d0484f2a91a6b8c421d26685b73d8e8c7f0
   const [exstatusFilter, setExStatusFilter] = useState<any>([]); // default WFA: Waiting for access or Reverted
   const [openLog, setOpenLog] = useState(false);
   const [divisions, setDivisions] = useState<string[]>([]);
@@ -308,6 +312,7 @@ const ReleaseAmountAudit = (props: { action: 'manage' | 'release' }) => {
         IFSCCode: '',
         beneficiary: '',
       },
+<<<<<<< HEAD
        BeneficiaryBank21: {
         bankName: '',
         branchName: '',
@@ -378,6 +383,8 @@ const ReleaseAmountAudit = (props: { action: 'manage' | 'release' }) => {
         IFSCCode: '',
         beneficiary: '',
       },
+=======
+>>>>>>> 41531d0484f2a91a6b8c421d26685b73d8e8c7f0
       createdAt: moment(),
       updatedAt: moment(),
     },
@@ -1001,7 +1008,11 @@ const ReleaseAmountAudit = (props: { action: 'manage' | 'release' }) => {
       valueGetter(params) {
         const IRORequest = params.row as IROrder;
         const particularAmount = IRORequest.particulars?.reduce((total, particular) => total + Number(particular.requestedAmount), 0);
+<<<<<<< HEAD
         return formatAmount(particularAmount.toFixed(2));
+=======
+        return particularAmount.toFixed(2);
+>>>>>>> 41531d0484f2a91a6b8c421d26685b73d8e8c7f0
       },
     },
     // {
@@ -1048,13 +1059,18 @@ const ReleaseAmountAudit = (props: { action: 'manage' | 'release' }) => {
           return params.row.sanctionedAmount;
         }
         if (Array.isArray(params.row.particulars)) {
+<<<<<<< HEAD
           return formatAmount(params.row.particulars.reduce((sum, item) => sum + Number(item.sanctionedAmount || 0), 0).toFixed(2));
+=======
+          return params.row.particulars.reduce((sum, item) => sum + (item.sanctionedAmount || 0), 0).toFixed(2);
+>>>>>>> 41531d0484f2a91a6b8c421d26685b73d8e8c7f0
         }
         return 0; // or return a suitable default value
       }, align: 'center',
       headerAlign: 'center',
     },
     {
+<<<<<<< HEAD
       field: 'tanfered',
       headerName: 'Transferred Amount',
       width: 180,
@@ -1093,6 +1109,32 @@ const ReleaseAmountAudit = (props: { action: 'manage' | 'release' }) => {
 
       align: 'center',
       headerAlign: 'center',
+=======
+      field: 'Transferred',
+      headerName: 'Transferred Amount',
+      width: 180,
+      renderHeader: () => <b>Transferred Amount</b>,
+
+      valueGetter: (params: any) => {
+        if (params.row.sanctionedAmount !== undefined) {
+          return formatAmount(Number(params.row.sanctionedAmount));
+        }
+
+        if (Array.isArray(params.row.particulars)) {
+          const total = params.row.particulars.reduce(
+            (sum: number, item: any) =>
+              sum + (Number(item.sanctionedAmount) || 0),
+            0,
+          );
+
+          return formatAmount(total);
+        }
+
+        return formatAmount(0);
+      },
+      align: 'center' as const,
+      headerAlign: 'center' as const,
+>>>>>>> 41531d0484f2a91a6b8c421d26685b73d8e8c7f0
     },
 
     {
@@ -1101,6 +1143,7 @@ const ReleaseAmountAudit = (props: { action: 'manage' | 'release' }) => {
       width: 180,
       renderHeader: () => <b>Total Transferred Amount</b>,
       valueGetter: (params: any) => {
+<<<<<<< HEAD
         if (params.row.releaseAmount?.transferredAmount !== 0) {
           return formatAmount(params.row.releaseAmount?.transferredAmount as number);
         } else {
@@ -1116,6 +1159,11 @@ const ReleaseAmountAudit = (props: { action: 'manage' | 'release' }) => {
           }
           return 0; // or return a suitable default value
         }
+=======
+        return formatAmount(
+          Number(params.row.releaseAmount?.transferredAmount) || 0,
+        );
+>>>>>>> 41531d0484f2a91a6b8c421d26685b73d8e8c7f0
       },
       align: 'center' as const,
       headerAlign: 'center' as const,
@@ -1307,8 +1355,11 @@ const ReleaseAmountAudit = (props: { action: 'manage' | 'release' }) => {
     // Check all searchable fields
     const searchMatch =
     (row.IROno && row.IROno.toLowerCase().includes(searchLower)) ||
+<<<<<<< HEAD
       (row.releaseAmount?.releaseAmount && row.releaseAmount?.releaseAmount.toString().toLowerCase().includes(searchLower)) ||
     (row.releaseAmount?.transferredAmount && row.releaseAmount?.transferredAmount.toString().toLowerCase().includes(searchLower)) ||
+=======
+>>>>>>> 41531d0484f2a91a6b8c421d26685b73d8e8c7f0
     (row.IRODate && row.IRODate.format('DD/MM/YYYY').toLowerCase().includes(searchLower)) ||
     (row.division?.details.name && row.division?.details.name.toLowerCase().includes(searchLower)) ||
     (row.purposeSubdivision?.name && row.purposeSubdivision.name.toLowerCase().includes(searchLower)) ||
@@ -1467,25 +1518,38 @@ const ReleaseAmountAudit = (props: { action: 'manage' | 'release' }) => {
                     <ToggleButtonGroup
                       exclusive
                       size="small"
+<<<<<<< HEAD
                       value={exstatusFilter.includes(69) ? 'NonBankTransfers' : exstatusFilter.includes(71) ? 'BankTransfers' : 'All'}
+=======
+                      value={exstatusFilter.includes(69) ? 'NonBankTransfers' : 'All'}
+>>>>>>> 41531d0484f2a91a6b8c421d26685b73d8e8c7f0
                       onChange={(_, value) => {
                         if (!value) return;
 
                         if (value === 'NonBankTransfers') {
                           setExStatusFilter([69]);
                         } else {
+<<<<<<< HEAD
                           setExStatusFilter([71]);
                           setStatusFilter([IROLifeCycleStates.AMOUNT_RELEASED]);
+=======
+                          setExStatusFilter([]);
+                          setStatusFilter([]);
+>>>>>>> 41531d0484f2a91a6b8c421d26685b73d8e8c7f0
                         }
                       }}
                       sx={toggleSx}
                     >
                       <ToggleButton value="All">ALL</ToggleButton>
                       <ToggleButton value="NonBankTransfers">
+<<<<<<< HEAD
                         NON BANK TRANSFERS
                       </ToggleButton>
                       <ToggleButton value="BankTransfers">
                          BANK TRANSFERS
+=======
+        NON BANK TRANSFERS
+>>>>>>> 41531d0484f2a91a6b8c421d26685b73d8e8c7f0
                       </ToggleButton>
                     </ToggleButtonGroup>
                   </Grid>

@@ -40,10 +40,13 @@ const CustomReport = () => {
           <ButtonCard secondaryText="IRO Report" color={'#fff'} icon={<img src="/mod_icons/manageWorker.jpeg" alt="Logo" style={{ width: '70px', height: '70px' }} />}
             targetRoute="/custom-report/custom-filter-iro" />
         </Grid>
+<<<<<<< HEAD
         <Grid item xs={12} md={4} xl={3}>
           <ButtonCard secondaryText=" Profile Reporters" color={'#fff'} icon={<img src="/mod_icons/manageWorker.jpeg" alt="Logo" style={{ width: '70px', height: '70px' }} />}
             targetRoute="/custom-report/profile-reporters" />
         </Grid>
+=======
+>>>>>>> 41531d0484f2a91a6b8c421d26685b73d8e8c7f0
         {/* <Grid item xs={12} md={4} xl={3}>
           <ButtonCard secondaryText="Custom Report FR" icon={<img src="/mod_icons/manageWorker.jpeg" alt="Logo" style={{ width: '70px', height: '70px' }} />}
             count={workersCount?.toString()} color="#fff" targetRoute="/workers" />

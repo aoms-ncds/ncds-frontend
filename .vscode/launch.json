@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {
   // Use IntelliSense to learn about possible attributes.
   // Hover to view descriptions of existing attributes.
@@ -25,4 +26,33 @@
       "configurations": ["Start backend", "Start frontend"]
     }
   ]
+=======
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "command": "npm start",
+      "name": "Start backend",
+      "request": "launch",
+      "type": "node-terminal",
+      "cwd": "${workspaceFolder}/"
+    },
+    {
+      "command": "npm start",
+      "name": "Start frontend",
+      "request": "launch",
+      "type": "node-terminal",
+      "cwd": "${workspaceFolder}/"
+    }
+  ],
+  "compounds": [
+    {
+      "name": "start MERN app",
+      "configurations": ["Start backend", "Start frontend"]
+    }
+  ]
+>>>>>>> 41531d0484f2a91a6b8c421d26685b73d8e8c7f0
 }

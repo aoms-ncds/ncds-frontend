@@ -9,8 +9,12 @@ import { TextField, MenuItem, Button, Grid,
   TableCell,
   TableContainer,
   TableHead,
+<<<<<<< HEAD
   TableRow, 
   Menu} from '@mui/material';
+=======
+  TableRow } from '@mui/material';
+>>>>>>> 41531d0484f2a91a6b8c421d26685b73d8e8c7f0
 import DivisionsServices from '../Divisions/extras/DivisionsServices';
 import { useAuth } from '../../hooks/Authentication';
 import { enqueueSnackbar } from 'notistack';
@@ -48,7 +52,10 @@ import CircularProgress from '@mui/material/CircularProgress';
 import PDFTemplateCustom from './components/PDFTemplateCustom';
 import PDFTemplateCustomAll from './components/PDFTemplateCustomAll';
 import formatAmount from '../Common/formatcode';
+<<<<<<< HEAD
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+=======
+>>>>>>> 41531d0484f2a91a6b8c421d26685b73d8e8c7f0
 
 const CustomFooter = () => (
   <Box sx={{ display: 'flex', justifyContent: 'space-between', padding: '10px', background: '#f0f0f0', fontWeight: 'bold', borderTop: '1px solid black' }}>
@@ -71,9 +78,12 @@ const IROReportFilter = () => {
     remark: '',
     transactionId: '',
   });
+<<<<<<< HEAD
   
   const [anchorEl, setAnchorEl] = useState<Record<string, HTMLElement | null>>({});
 
+=======
+>>>>>>> 41531d0484f2a91a6b8c421d26685b73d8e8c7f0
   const [data, setData] = useState<any[] | null>(null);
   const [print, setPrint] = useState<boolean>(false);
   const [page, setPage] = useState<boolean>(false);
@@ -1264,6 +1274,7 @@ const IROReportFilter = () => {
                         {filters.division?.BeneficiaryBank20?.beneficiary}
                       </MenuItem>
                     ) : ''}
+<<<<<<< HEAD
                     {filters.division?.BeneficiaryBank21?.bankName ? (
                       <MenuItem value={`Beneficiary Bank 21-${filters.division?.BeneficiaryBank21?.beneficiary}`}>
                         {filters.division?.BeneficiaryBank21?.beneficiary}
@@ -1314,6 +1325,8 @@ const IROReportFilter = () => {
                         {filters.division?.BeneficiaryBank30?.beneficiary}
                       </MenuItem>
                     ) : ''}
+=======
+>>>>>>> 41531d0484f2a91a6b8c421d26685b73d8e8c7f0
 
 
                   </Select>
@@ -1435,6 +1448,7 @@ const IROReportFilter = () => {
                         Beneficiary Bank 20
                       </MenuItem>
                     ) : ''}
+<<<<<<< HEAD
                     {filters.division?.BeneficiaryBank21?.bankName ? (
                       <MenuItem value={`Beneficiary Bank 21-${filters.division?.BeneficiaryBank21?.beneficiary}`}>
                         {filters.division?.BeneficiaryBank21?.beneficiary}
@@ -1485,6 +1499,8 @@ const IROReportFilter = () => {
                         {filters.division?.BeneficiaryBank30?.beneficiary}
                       </MenuItem>
                     ) : ''}
+=======
+>>>>>>> 41531d0484f2a91a6b8c421d26685b73d8e8c7f0
 
 
                   </Select>
@@ -1823,7 +1839,10 @@ const IROReportFilter = () => {
                   <TableHead sx={{ height: 10, backgroundColor: '#f5f5f5' }}>
                     <TableRow>
                       <TableCell sx={{ fontWeight: 'bold' }}>Sl No</TableCell>
+<<<<<<< HEAD
                       <TableCell sx={{ fontWeight: 'bold' }}>Actions</TableCell>
+=======
+>>>>>>> 41531d0484f2a91a6b8c421d26685b73d8e8c7f0
                       {selectedData.includes('IRO No') &&<TableCell sx={{ fontWeight: 'bold' }}>IRO No</TableCell>}
                       {selectedData.includes('Date') &&<TableCell sx={{ fontWeight: 'bold' }}>IRO Date</TableCell>}
                       {selectedData.includes('Status') && <TableCell sx={{ fontWeight: 'bold' }}>Status</TableCell>}
@@ -1874,6 +1893,7 @@ const IROReportFilter = () => {
                         }}
                       >
                         <TableCell>{index +1}</TableCell>
+<<<<<<< HEAD
                         <TableCell align="center" onClick={(e) => e.stopPropagation()}>
                           <IconButton
                             size="small"
@@ -1896,6 +1916,8 @@ const IROReportFilter = () => {
                             </MenuItem>
                           </Menu>
                         </TableCell>
+=======
+>>>>>>> 41531d0484f2a91a6b8c421d26685b73d8e8c7f0
                         {selectedData.includes('IRO No') &&<TableCell>{row.IROno}</TableCell>}
                         {selectedData.includes('Date') && <TableCell>{moment(row.IRODate).format('DD/MM/YYYY')}</TableCell>}
                         {selectedData.includes('Status') &&<TableCell>{IROLifeCycleStates.getStatusNameByCodeTransaction(row.status).replaceAll('_', ' ')}</TableCell>}
